@@ -1,0 +1,21 @@
+{
+  "name": "wp-webmcp-agentops",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Development and browser-test tooling for the WP WebMCP AgentOps plugin.",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "lint:js": "eslint plugin/wmcp-agentops/assets/js tests/Browser",
+    "lint:css": "stylelint 'plugin/wmcp-agentops/assets/css/**/*.css'",
+    "test:js": "node --test tests/JavaScript/**/*.test.js",
+    "test:browser": "playwright test",
+    "test": "npm run test:js",
+    "verify": "npm run lint:js && npm run lint:css && npm run test:js",
+    "build": "./bin/build-plugin.sh"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {}
+}
+

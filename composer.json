@@ -1,0 +1,37 @@
+{
+  "name": "wp-webmcp/agentops",
+  "description": "WebMCP storefront workflows, AgentOps analytics, and safe governance for WordPress.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.1"
+  },
+  "require-dev": {
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpunit/phpunit": "^10.5",
+    "squizlabs/php_codesniffer": "^3.13",
+    "wp-coding-standards/wpcs": "^3.2",
+    "yoast/phpunit-polyfills": "^3.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "WPWebMCP\\AgentOps\\": "plugin/wmcp-agentops/src/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "optimize-autoloader": true,
+    "sort-packages": true
+  },
+  "scripts": {
+    "lint": "phpcs",
+    "test": "phpunit",
+    "verify": [
+      "@lint",
+      "@test"
+    ]
+  }
+}
+

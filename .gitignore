@@ -1,0 +1,13 @@
+/.env
+/.phpunit.cache
+/.phpunit.result.cache
+/.playwright/
+/artifacts/
+/coverage/
+/dist/*.zip
+/node_modules/
+/plugin/wmcp-agentops/vendor/
+/vendor/
+
+!.gitkeep
+
