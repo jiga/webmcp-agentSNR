@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Minimal dependency-free PSR-4 autoloader for release packages.
  *
@@ -33,4 +34,3 @@ final class Autoloader
         );
     }
 }
-

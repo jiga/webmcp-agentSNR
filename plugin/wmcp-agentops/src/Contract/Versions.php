@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Public contract versions shared across persistence and browser boundaries.
  *
@@ -16,4 +17,3 @@ final class Versions
     public const DATABASE = '1';
     public const ATTRIBUTION = '1.0';
 }
-

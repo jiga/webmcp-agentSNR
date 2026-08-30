@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">TrailCover backpack rain shell illustration</title>
+  <rect width="480" height="480" fill="#cfd8d0"/>
+  <path d="M70 86 38 146M128 65 96 125M402 79l-32 60M447 143l-32 60M75 292l-32 60M420 307l-32 60" stroke="#2d6f65" stroke-width="11" stroke-linecap="round"/>
+  <path d="M155 137c9-40 37-62 85-62s76 22 85 62l42 220c5 28-14 46-46 46H159c-32 0-51-18-46-46Z" fill="#d7f238" stroke="#18201c" stroke-width="9"/>
+  <path d="M155 137c36 25 134 25 170 0" fill="none" stroke="#173d2c" stroke-width="10"/>
+  <path d="M130 256c68 43 152 43 220 0" fill="none" stroke="#f24b18" stroke-width="13"/>
+  <path d="M150 313c60 34 120 34 180 0" fill="none" stroke="#173d2c" stroke-width="9" stroke-dasharray="13 10"/>
+  <path d="M138 172c-31 35-40 95-28 158M342 172c31 35 40 95 28 158" fill="none" stroke="#18201c" stroke-width="12"/>
+  <circle cx="240" cy="204" r="20" fill="#f2eedf" stroke="#18201c" stroke-width="7"/>
+  <path d="m232 204 7 7 13-16" fill="none" stroke="#173d2c" stroke-width="6"/>
+</svg>

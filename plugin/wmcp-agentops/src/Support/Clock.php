@@ -1,4 +1,5 @@
 <?php
+
 /**
  * UTC time helpers.
  *
@@ -16,7 +17,7 @@ final class Clock
 {
     public static function mysql(): string
     {
-        return self::now()->format('Y-m-d H:i:s.u');
+        return self::now()->format('Y-m-d H:i:s');
     }
 
     public static function iso8601(): string
@@ -34,4 +35,3 @@ final class Clock
         return new DateTimeImmutable('now', new DateTimeZone('UTC'));
     }
 }
-

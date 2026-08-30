@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Lexicographically sortable identifiers and request UUIDs.
  *
@@ -59,4 +60,3 @@ final class IdGenerator
         );
     }
 }
-

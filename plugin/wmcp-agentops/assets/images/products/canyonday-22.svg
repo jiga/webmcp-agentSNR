@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">CanyonDay 22 daypack illustration</title>
+  <rect width="480" height="480" fill="#e8d2b9"/>
+  <path d="M0 330c67-51 124-55 173-12 50 44 103 42 161-5 59-48 108-39 146 8v159H0Z" fill="#b75b31" opacity=".3"/>
+  <path d="M0 385c75-39 143-39 205 0s135 38 219-4l56-28v127H0Z" fill="#173d2c" opacity=".2"/>
+  <path d="M174 120c7-29 29-45 66-45s59 16 66 45l27 233c3 28-15 44-45 44h-96c-30 0-48-16-45-44Z" fill="#ad5934" stroke="#18201c" stroke-width="8"/>
+  <path d="M171 171h138v67H171Z" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M167 267h146v79H167Z" fill="#d7f238" stroke="#18201c" stroke-width="8"/>
+  <path d="M191 293h98" stroke="#173d2c" stroke-width="8"/>
+  <path d="M149 164c-28 31-36 100-24 168M331 164c28 31 36 100 24 168" fill="none" stroke="#173d2c" stroke-width="11"/>
+  <path d="m392 72 18 30-18 30-18-30Z" fill="#f24b18" stroke="#18201c" stroke-width="5"/>
+</svg>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin deactivation lifecycle.
  *
@@ -13,12 +14,9 @@ final class Deactivator
 {
     public static function deactivate(): void
     {
-        $timestamp = wp_next_scheduled('wmcp_agentops_cleanup');
-        if (false !== $timestamp) {
-            wp_unschedule_event($timestamp, 'wmcp_agentops_cleanup');
-        }
+        wp_clear_scheduled_hook('wmcp_agentops_cleanup');
+        wp_clear_scheduled_hook('wmcp_agentops_cleanup_session');
 
         flush_rewrite_rules(false);
     }
 }
-

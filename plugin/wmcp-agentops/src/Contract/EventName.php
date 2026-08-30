@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Stable analytics event identifiers.
  *
@@ -54,4 +55,3 @@ final class EventName
         );
     }
 }
-

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin activation lifecycle.
  *
@@ -34,6 +35,7 @@ final class Activator
 
         DatabaseMigrator::migrate();
         self::grant_capabilities();
+        self::schedule_cleanup();
 
         add_option('wmcp_agentops_enabled', false, '', false);
         add_option('wmcp_agentops_delete_data_on_uninstall', false, '', false);
@@ -58,5 +60,18 @@ final class Activator
     {
         return substr(strtoupper(bin2hex(random_bytes(16))), 0, 26);
     }
-}
 
+    private static function schedule_cleanup(): void
+    {
+        if (false !== wp_next_scheduled('wmcp_agentops_cleanup')) {
+            return;
+        }
+
+        $scheduled = wp_schedule_event(time() + HOUR_IN_SECONDS, 'daily', 'wmcp_agentops_cleanup', array(), true);
+        if (is_wp_error($scheduled)) {
+            throw new RuntimeException(
+                esc_html(sprintf('Unable to schedule demo cleanup: %s', $scheduled->get_error_code()))
+            );
+        }
+    }
+}

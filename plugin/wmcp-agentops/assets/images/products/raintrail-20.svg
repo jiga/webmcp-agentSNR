@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">RainTrail 20 rain backpack illustration</title>
+  <rect width="480" height="480" fill="#e7d6c0"/>
+  <path d="M0 88h480M0 184h480M0 280h480M0 376h480" stroke="#173d2c" stroke-width="2" opacity=".18"/>
+  <path d="M171 102h138l31 246c4 29-15 47-46 47H186c-31 0-50-18-46-47Z" fill="#f24b18" stroke="#18201c" stroke-width="8"/>
+  <path d="m171 102 40-38h58l40 38" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M161 189h158v150H161Z" fill="#173d2c" stroke="#18201c" stroke-width="8"/>
+  <path d="M185 217h110v73H185Z" fill="#d7f238" stroke="#18201c" stroke-width="7"/>
+  <path d="M143 151c-29 34-38 101-25 171M337 151c29 34 38 101 25 171" fill="none" stroke="#18201c" stroke-width="11"/>
+  <path d="m63 63 21 37-20 36M105 63l21 37-20 36M347 52l21 37-20 36" fill="none" stroke="#173d2c" stroke-width="8" opacity=".55"/>
+  <circle cx="240" cy="315" r="13" fill="#f2eedf" stroke="#18201c" stroke-width="6"/>
+</svg>

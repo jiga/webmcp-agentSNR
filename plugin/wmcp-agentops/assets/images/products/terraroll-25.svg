@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">TerraRoll 25 roll-top backpack illustration</title>
+  <rect width="480" height="480" fill="#d8d0bd"/>
+  <path d="M44 80h392M44 400h392M80 44v392M400 44v392" stroke="#173d2c" stroke-width="3" opacity=".2"/>
+  <path d="M164 140h152l23 216c3 28-15 44-45 44H186c-30 0-48-16-45-44Z" fill="#8b6848" stroke="#18201c" stroke-width="8"/>
+  <path d="M166 78h148v83H166Z" fill="#173d2c" stroke="#18201c" stroke-width="8"/>
+  <path d="M185 100h110v26H185Z" fill="#f24b18"/>
+  <path d="M163 209h154v139H163Z" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M190 239h100v77H190Z" fill="#d7f238" stroke="#18201c" stroke-width="7"/>
+  <path d="M143 178c-28 33-36 100-24 164M337 178c28 33 36 100 24 164" fill="none" stroke="#18201c" stroke-width="11"/>
+  <path d="m370 360 49 49M419 360l-49 49" stroke="#f24b18" stroke-width="12"/>
+</svg>

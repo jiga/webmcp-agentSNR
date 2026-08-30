@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Stable public WebMCP tool identifiers.
  *
@@ -69,4 +70,3 @@ final class ToolName
         );
     }
 }
-

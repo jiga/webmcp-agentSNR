@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">HarborLite 16 lightweight backpack illustration</title>
+  <rect width="480" height="480" fill="#cadbd8"/>
+  <path d="M0 328h480v152H0Z" fill="#2d6f65" opacity=".22"/>
+  <path d="M0 345c42-28 84-28 126 0s84 28 126 0 84-28 126 0 76 28 102 2" fill="none" stroke="#173d2c" stroke-width="7" opacity=".35"/>
+  <circle cx="386" cy="93" r="45" fill="#f24b18"/>
+  <path d="M184 134c6-26 25-40 56-40s50 14 56 40l22 213c3 29-14 45-42 45h-72c-28 0-45-16-42-45Z" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M181 173h118v54H181Z" fill="#173d2c" stroke="#18201c" stroke-width="8"/>
+  <path d="M178 252h124v89H178Z" fill="#d7f238" stroke="#18201c" stroke-width="8"/>
+  <path d="M199 280h82" stroke="#173d2c" stroke-width="7"/>
+  <path d="M161 175c-24 35-29 91-19 147M319 175c24 35 29 91 19 147" fill="none" stroke="#f24b18" stroke-width="10"/>
+  <path d="M217 341v51M263 341v51" stroke="#18201c" stroke-width="7"/>
+</svg>

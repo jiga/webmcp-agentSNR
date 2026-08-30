@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Strict JSON encoding helpers.
  *
@@ -28,6 +29,11 @@ final class Json
      */
     public static function decode_object(string $json): array
     {
+        $trimmed = ltrim($json);
+        if ('' === $trimmed || '{' !== $trimmed[0]) {
+            throw new JsonException('Expected a JSON object.');
+        }
+
         $decoded = json_decode($json, true, 32, JSON_THROW_ON_ERROR);
         if (! is_array($decoded)) {
             throw new JsonException('Expected a JSON object.');
@@ -36,4 +42,3 @@ final class Json
         return $decoded;
     }
 }
-

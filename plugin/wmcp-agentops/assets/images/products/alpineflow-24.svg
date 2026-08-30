@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">AlpineFlow 24 field backpack illustration</title>
+  <rect width="480" height="480" fill="#d7ded1"/>
+  <path d="M72 395 183 70l60 77L314 45l94 350Z" fill="#173d2c" opacity=".12"/>
+  <path d="M171 118c9-28 31-44 69-44s60 16 69 44l27 226c3 30-13 48-43 48H187c-30 0-46-18-43-48Z" fill="#173d2c" stroke="#18201c" stroke-width="8"/>
+  <path d="M176 139h128l-11-40H187Z" fill="#d7f238" stroke="#18201c" stroke-width="8"/>
+  <path d="M171 202h138v126H171Z" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M191 239h98M191 268h98" stroke="#173d2c" stroke-width="7"/>
+  <path d="M151 166c-31 26-35 113-19 179M329 166c31 26 35 113 19 179" fill="none" stroke="#f24b18" stroke-width="12"/>
+  <path d="M204 329v63M276 329v63" stroke="#18201c" stroke-width="8"/>
+  <circle cx="240" cy="174" r="13" fill="#f24b18" stroke="#18201c" stroke-width="6"/>
+  <path d="m391 94 13 25 28 4-20 20 5 28-26-13-26 13 5-28-20-20 28-4Z" fill="#d7f238" stroke="#18201c" stroke-width="5"/>
+</svg>

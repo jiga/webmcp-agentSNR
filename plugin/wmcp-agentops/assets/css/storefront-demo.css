@@ -1,0 +1,639 @@
+/* Compound component states intentionally override their base component rules. */
+/* stylelint-disable no-descending-specificity */
+.wmcp-storefront {
+	background: var(--wmcp-bone);
+}
+
+.wmcp-store-header {
+	grid-template-columns: minmax(210px, 1fr) auto;
+	position: relative;
+}
+
+.wmcp-store-nav {
+	align-items: center;
+	display: flex;
+	font: 700 10px/1 var(--wmcp-mono);
+	gap: clamp(15px, 3vw, 46px);
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+}
+
+.wmcp-store-nav a {
+	text-decoration: none;
+}
+
+.wmcp-store-nav > a:not(.wmcp-cart-link):hover {
+	color: var(--wmcp-orange);
+}
+
+.wmcp-cart-link {
+	align-items: center;
+	display: inline-flex;
+	gap: 9px;
+}
+
+.wmcp-cart-link strong {
+	align-items: center;
+	background: var(--wmcp-acid);
+	border: 1px solid var(--wmcp-ink);
+	border-radius: 50%;
+	display: inline-flex;
+	height: 27px;
+	justify-content: center;
+	min-width: 27px;
+}
+
+.wmcp-store-hero {
+	align-items: end;
+	background:
+		linear-gradient(120deg, transparent 69%, rgb(242 75 24 / 10%) 69%, rgb(242 75 24 / 10%) 70%, transparent 70%),
+		var(--wmcp-paper);
+	border-bottom: 2px solid var(--wmcp-ink);
+	display: grid;
+	gap: clamp(50px, 8vw, 130px);
+	grid-template-columns: minmax(0, 1.45fr) minmax(300px, 0.55fr);
+	min-height: 590px;
+	padding: clamp(70px, 8vw, 130px) clamp(25px, 5vw, 86px) 75px;
+}
+
+.wmcp-store-hero h1 {
+	font-size: clamp(58px, 7.8vw, 126px);
+}
+
+.wmcp-store-prompt {
+	background: var(--wmcp-forest);
+	box-shadow: var(--wmcp-shadow);
+	color: var(--wmcp-paper);
+	margin-bottom: -115px;
+	min-height: 330px;
+	padding: 30px;
+	transform: rotate(-1deg);
+	z-index: 3;
+}
+
+.wmcp-store-prompt p {
+	font-family: var(--wmcp-serif);
+	font-size: clamp(21px, 2vw, 29px);
+	line-height: 1.35;
+	margin-bottom: 35px;
+}
+
+.wmcp-signal-strip {
+	align-items: center;
+	background: var(--wmcp-forest-deep);
+	color: var(--wmcp-paper);
+	display: grid;
+	font-size: 11px;
+	gap: 1px;
+	grid-template-columns: minmax(180px, 0.7fr) repeat(3, minmax(140px, 1fr));
+	padding: 18px clamp(25px, 5vw, 86px);
+}
+
+.wmcp-signal-strip .wmcp-status-chip {
+	background: transparent;
+	border-color: var(--wmcp-line-dark);
+	justify-self: start;
+}
+
+.wmcp-signal-strip > div:not(.wmcp-status-chip) {
+	border-left: 1px solid var(--wmcp-line-dark);
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-height: 43px;
+	padding: 4px 18px;
+}
+
+.wmcp-signal-strip > div > span {
+	color: #aab9ad;
+	font: 650 9px/1 var(--wmcp-mono);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.wmcp-signal-strip > div > strong {
+	color: var(--wmcp-acid);
+	font-size: 11px;
+	font-weight: 650;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.wmcp-store-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1.4fr) minmax(420px, 0.6fr);
+}
+
+.wmcp-specimen-catalog {
+	background: var(--wmcp-bone);
+	border-right: 2px solid var(--wmcp-ink);
+	padding: clamp(100px, 10vw, 165px) clamp(25px, 4.5vw, 78px) 90px;
+}
+
+.wmcp-specimen-catalog .wmcp-section-heading {
+	grid-template-columns: minmax(210px, 0.55fr) minmax(0, 1fr);
+}
+
+.wmcp-product-grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wmcp-product-card {
+	background: var(--wmcp-paper);
+	border: 1px solid var(--wmcp-ink);
+	display: flex;
+	flex-direction: column;
+	min-height: 505px;
+	position: relative;
+	transition: background 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.wmcp-product-card:nth-child(3n + 2) {
+	transform: translateY(24px);
+}
+
+.wmcp-product-card:nth-child(4n) .wmcp-product-figure {
+	background: #d8dfd2;
+}
+
+.wmcp-product-card:nth-child(4n + 2) .wmcp-product-figure {
+	background: #e8d7c1;
+}
+
+.wmcp-product-card:nth-child(4n + 3) .wmcp-product-figure {
+	background: #ccd8d5;
+}
+
+.wmcp-product-card:hover {
+	box-shadow: 7px 7px 0 rgb(24 32 28 / 18%);
+	transform: translate(-3px, -3px);
+	z-index: 3;
+}
+
+.wmcp-product-card:nth-child(3n + 2):hover {
+	transform: translate(-3px, 21px);
+}
+
+.wmcp-product-card.wmcp-is-match {
+	box-shadow: inset 0 0 0 5px var(--wmcp-orange);
+	z-index: 2;
+}
+
+.wmcp-product-card.wmcp-is-compared {
+	background: var(--wmcp-acid);
+	box-shadow: inset 0 0 0 5px var(--wmcp-forest);
+}
+
+.wmcp-product-figure {
+	align-items: center;
+	background: #d8d4c4;
+	border-bottom: 1px solid var(--wmcp-ink);
+	display: flex;
+	height: 245px;
+	justify-content: center;
+	overflow: hidden;
+	position: relative;
+}
+
+.wmcp-product-figure img {
+	display: block;
+	height: 100%;
+	object-fit: contain;
+	transition: transform 220ms ease;
+	width: 100%;
+}
+
+.wmcp-product-card:hover img {
+	transform: scale(1.04) rotate(1deg);
+}
+
+.wmcp-product-index {
+	font: 700 9px/1 var(--wmcp-mono);
+	left: 12px;
+	position: absolute;
+	top: 12px;
+	z-index: 2;
+}
+
+.wmcp-match-flag {
+	background: var(--wmcp-orange);
+	border: 1px solid var(--wmcp-ink);
+	bottom: 10px;
+	color: var(--wmcp-ink);
+	font: 750 9px/1 var(--wmcp-mono);
+	letter-spacing: 0.07em;
+	padding: 8px 9px;
+	position: absolute;
+	right: 10px;
+	text-transform: uppercase;
+}
+
+.wmcp-product-copy {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 20px;
+}
+
+.wmcp-product-copy > div:first-child {
+	display: flex;
+	gap: 12px;
+	justify-content: space-between;
+}
+
+.wmcp-product-copy h3 {
+	font-family: var(--wmcp-serif);
+	font-size: 21px;
+	font-weight: 400;
+	line-height: 1.08;
+	margin-bottom: 18px;
+}
+
+.wmcp-product-price {
+	font: 750 11px/1 var(--wmcp-mono);
+	white-space: nowrap;
+}
+
+.wmcp-product-copy dl {
+	border-bottom: 1px solid var(--wmcp-line);
+	border-top: 1px solid var(--wmcp-line);
+	display: grid;
+	font-size: 10px;
+	grid-template-columns: repeat(3, 1fr);
+	margin: 0 0 14px;
+	padding: 10px 0;
+}
+
+.wmcp-product-copy dl div {
+	border-right: 1px solid var(--wmcp-line);
+	padding: 0 7px;
+	text-align: center;
+}
+
+.wmcp-product-copy dl div:last-child {
+	border: 0;
+}
+
+.wmcp-product-copy dt {
+	color: var(--wmcp-ink-muted);
+	font: 650 8px/1.2 var(--wmcp-mono);
+	letter-spacing: 0.06em;
+	margin-bottom: 5px;
+	text-transform: uppercase;
+}
+
+.wmcp-product-copy dd {
+	font: 700 9px/1.2 var(--wmcp-mono);
+	margin: 0;
+}
+
+.wmcp-stock-line {
+	color: var(--wmcp-ink-muted);
+	font: 650 9px/1.3 var(--wmcp-mono);
+	margin-bottom: 17px;
+	text-transform: uppercase;
+}
+
+.wmcp-product-copy .wmcp-text-link {
+	align-self: flex-start;
+	margin-top: auto;
+}
+
+.wmcp-operation-dock {
+	background: var(--wmcp-paper);
+	padding: 70px clamp(25px, 3.5vw, 58px);
+}
+
+.wmcp-operation-head {
+	align-items: end;
+	display: flex;
+	gap: 20px;
+	justify-content: space-between;
+	margin-bottom: 45px;
+}
+
+.wmcp-operation-head h2 {
+	font-size: clamp(42px, 4vw, 64px);
+	margin: 0;
+}
+
+.wmcp-progress-rail {
+	list-style: none;
+	margin: 0 0 42px;
+	padding: 0;
+}
+
+.wmcp-progress-rail li {
+	align-items: center;
+	border-top: 1px solid var(--wmcp-line);
+	display: grid;
+	gap: 13px;
+	grid-template-columns: 31px minmax(80px, 0.35fr) minmax(140px, 1fr);
+	min-height: 55px;
+	position: relative;
+}
+
+.wmcp-progress-rail li::before {
+	background: var(--wmcp-line);
+	content: "";
+	height: 100%;
+	left: 15px;
+	position: absolute;
+	top: 50%;
+	width: 1px;
+	z-index: -1;
+}
+
+.wmcp-progress-rail li:last-child {
+	border-bottom: 1px solid var(--wmcp-line);
+}
+
+.wmcp-progress-rail li:last-child::before {
+	display: none;
+}
+
+.wmcp-progress-rail li > span {
+	align-items: center;
+	background: var(--wmcp-paper);
+	border: 1px solid var(--wmcp-line);
+	border-radius: 50%;
+	display: flex;
+	font: 650 8px/1 var(--wmcp-mono);
+	height: 31px;
+	justify-content: center;
+	width: 31px;
+}
+
+.wmcp-progress-rail li strong {
+	font-family: var(--wmcp-serif);
+	font-size: 17px;
+	font-weight: 400;
+}
+
+.wmcp-progress-rail li small {
+	color: var(--wmcp-ink-muted);
+	font: 600 9px/1.25 var(--wmcp-mono);
+	text-transform: uppercase;
+}
+
+.wmcp-progress-rail li.wmcp-is-active > span {
+	background: var(--wmcp-orange);
+	border-color: var(--wmcp-ink);
+	color: var(--wmcp-ink);
+}
+
+.wmcp-progress-rail li.wmcp-is-complete > span {
+	background: var(--wmcp-acid);
+	border-color: var(--wmcp-forest);
+}
+
+.wmcp-progress-rail li.wmcp-is-complete small {
+	color: var(--wmcp-forest);
+}
+
+.wmcp-progress-rail li.wmcp-is-active.wmcp-is-complete > span {
+	background: var(--wmcp-orange);
+	color: var(--wmcp-ink);
+}
+
+.wmcp-operation-panels {
+	display: grid;
+	gap: 12px;
+}
+
+.wmcp-operation-panel {
+	background: var(--wmcp-bone);
+	border: 1px solid var(--wmcp-ink);
+	padding: 24px;
+}
+
+.wmcp-operation-panel.wmcp-is-updated {
+	animation: wmcp-panel-signal 600ms ease both;
+}
+
+.wmcp-operation-panel h3 {
+	font-family: var(--wmcp-serif);
+	font-size: 25px;
+	font-weight: 400;
+	line-height: 1.1;
+	margin-bottom: 18px;
+}
+
+.wmcp-result-list {
+	display: grid;
+	gap: 1px;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wmcp-result-list li {
+	align-items: center;
+	background: var(--wmcp-paper);
+	display: grid;
+	font-size: 11px;
+	gap: 10px;
+	grid-template-columns: minmax(0, 1fr) auto;
+	padding: 11px;
+}
+
+.wmcp-result-list strong {
+	font-family: var(--wmcp-serif);
+	font-size: 15px;
+	font-weight: 400;
+}
+
+.wmcp-result-list span {
+	font: 700 9px/1 var(--wmcp-mono);
+}
+
+.wmcp-comparison-table {
+	border-collapse: collapse;
+	font-size: 10px;
+	width: 100%;
+}
+
+.wmcp-comparison-table th,
+.wmcp-comparison-table td {
+	border-bottom: 1px solid var(--wmcp-line);
+	padding: 9px 7px;
+	text-align: left;
+}
+
+.wmcp-comparison-table th {
+	font: 700 8px/1.2 var(--wmcp-mono);
+	text-transform: uppercase;
+}
+
+.wmcp-policy-evidence {
+	border-left: 5px solid var(--wmcp-orange);
+	font-family: var(--wmcp-serif);
+	font-size: 16px;
+	line-height: 1.45;
+	padding-left: 15px;
+}
+
+.wmcp-policy-evidence small {
+	display: block;
+	font: 650 9px/1.4 var(--wmcp-mono);
+	margin-top: 12px;
+	text-transform: uppercase;
+}
+
+.wmcp-policy-evidence .wmcp-text-link {
+	margin-top: 16px;
+}
+
+.wmcp-cart-items {
+	list-style: none;
+	margin: 0 0 15px;
+	padding: 0;
+}
+
+.wmcp-cart-items li {
+	border-bottom: 1px solid var(--wmcp-line);
+	display: grid;
+	font-size: 11px;
+	gap: 12px;
+	grid-template-columns: minmax(0, 1fr) auto auto;
+	padding: 10px 0;
+}
+
+.wmcp-cart-total {
+	display: flex;
+	font: 750 11px/1.3 var(--wmcp-mono);
+	justify-content: space-between;
+}
+
+.wmcp-checkout-panel {
+	background: var(--wmcp-forest);
+	color: var(--wmcp-paper);
+}
+
+.wmcp-checkout-panel .wmcp-button {
+	margin-top: 10px;
+}
+
+.wmcp-gap-panel {
+	background: var(--wmcp-acid);
+}
+
+@keyframes wmcp-panel-signal {
+	0% {
+		box-shadow: inset 7px 0 0 var(--wmcp-orange);
+		transform: translateX(5px);
+	}
+
+	100% {
+		box-shadow: inset 0 0 0 transparent;
+		transform: translateX(0);
+	}
+}
+
+@media (width >= 1201px) {
+	.wmcp-operation-dock {
+		align-self: start;
+		max-height: calc(100vh - 20px);
+		overflow-y: auto;
+		position: sticky;
+		top: 10px;
+	}
+}
+
+@media (width <= 1200px) {
+	.wmcp-store-layout {
+		grid-template-columns: 1fr;
+	}
+
+	.wmcp-specimen-catalog {
+		border-bottom: 0;
+		border-right: 0;
+		grid-row: 2;
+	}
+
+	.wmcp-operation-dock {
+		border-bottom: 2px solid var(--wmcp-ink);
+		grid-row: 1;
+		padding-left: clamp(25px, 5vw, 70px);
+		padding-right: clamp(25px, 5vw, 70px);
+	}
+
+	.wmcp-operation-panels {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (width <= 920px) {
+	.wmcp-store-hero {
+		align-items: start;
+		grid-template-columns: 1fr;
+		padding-bottom: 65px;
+	}
+
+	.wmcp-store-prompt {
+		margin: 0;
+		min-height: auto;
+	}
+
+	.wmcp-product-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.wmcp-product-card:nth-child(3n + 2) {
+		transform: none;
+	}
+}
+
+@media (width <= 760px) {
+	.wmcp-store-header {
+		align-items: start;
+		grid-template-columns: 1fr;
+	}
+
+	.wmcp-store-nav {
+		flex-wrap: wrap;
+		justify-content: space-between;
+		width: 100%;
+	}
+
+	.wmcp-signal-strip {
+		grid-template-columns: repeat(2, 1fr);
+		padding-left: 18px;
+		padding-right: 18px;
+	}
+
+	.wmcp-signal-strip > div:not(.wmcp-status-chip) {
+		border: 0;
+		padding: 6px 0;
+	}
+
+	.wmcp-specimen-catalog,
+	.wmcp-operation-dock {
+		padding-left: 18px;
+		padding-right: 18px;
+	}
+
+	.wmcp-specimen-catalog .wmcp-section-heading {
+		display: block;
+	}
+
+	.wmcp-product-grid,
+	.wmcp-operation-panels {
+		grid-template-columns: 1fr;
+	}
+
+	.wmcp-product-card {
+		min-height: 470px;
+	}
+
+	.wmcp-operation-head {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.wmcp-progress-rail li {
+		grid-template-columns: 31px minmax(70px, 0.5fr) 1fr;
+	}
+}

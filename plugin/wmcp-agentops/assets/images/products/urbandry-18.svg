@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">UrbanDry 18 compact city backpack illustration</title>
+  <rect width="480" height="480" fill="#d6dddb"/>
+  <path d="M48 72h384v336H48Z" fill="none" stroke="#173d2c" stroke-width="3" opacity=".25"/>
+  <path d="M96 72v336M144 72v336M192 72v336M240 72v336M288 72v336M336 72v336M384 72v336M48 120h384M48 168h384M48 216h384M48 264h384M48 312h384M48 360h384" stroke="#173d2c" stroke-width="2" opacity=".15"/>
+  <path d="M178 122c5-28 26-45 62-45s57 17 62 45l27 230c3 30-15 47-45 47h-88c-30 0-48-17-45-47Z" fill="#18201c" stroke="#18201c" stroke-width="8"/>
+  <path d="M177 145h126v57H177Z" fill="#f2eedf" stroke="#f2eedf" stroke-width="6"/>
+  <path d="M172 230h136v114H172Z" fill="#f24b18" stroke="#f2eedf" stroke-width="6"/>
+  <path d="M195 260h90M195 286h90" stroke="#18201c" stroke-width="7"/>
+  <path d="M156 169c-27 33-34 96-23 157M324 169c27 33 34 96 23 157" fill="none" stroke="#d7f238" stroke-width="10"/>
+  <circle cx="240" cy="371" r="12" fill="#d7f238"/>
+</svg>

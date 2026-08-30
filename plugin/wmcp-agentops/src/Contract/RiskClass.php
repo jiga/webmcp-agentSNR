@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tool risk classes supported by the initial release.
  *
@@ -29,4 +30,3 @@ final class RiskClass
         );
     }
 }
-

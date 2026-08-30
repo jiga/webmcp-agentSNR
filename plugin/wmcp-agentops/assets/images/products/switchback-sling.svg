@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">Switchback cross-body sling illustration</title>
+  <rect width="480" height="480" fill="#d7d3c5"/>
+  <path d="M65 92c105 35 171 135 197 300" fill="none" stroke="#173d2c" stroke-width="28"/>
+  <path d="M70 91c108 36 174 136 198 301" fill="none" stroke="#d7f238" stroke-width="10" stroke-dasharray="18 14"/>
+  <path d="M183 182c53-41 131-22 168 33l35 52c20 29 8 61-25 74l-112 45c-31 13-59-2-66-34l-22-104c-6-27 1-49 22-66Z" fill="#f24b18" stroke="#18201c" stroke-width="9"/>
+  <path d="m190 231 160 48-18 57-136-38Z" fill="#f2eedf" stroke="#18201c" stroke-width="8"/>
+  <path d="M237 270h76" stroke="#173d2c" stroke-width="8" transform="rotate(16 275 270)"/>
+  <circle cx="194" cy="207" r="15" fill="#d7f238" stroke="#18201c" stroke-width="6"/>
+  <path d="m390 91 9 25 26 9-26 9-9 25-9-25-26-9 26-9Z" fill="#173d2c"/>
+</svg>

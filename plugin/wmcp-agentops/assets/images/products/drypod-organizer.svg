@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-labelledby="title">
+  <title id="title">DryPod waterproof organizer illustration</title>
+  <rect width="480" height="480" fill="#d5ddd8"/>
+  <circle cx="240" cy="240" r="176" fill="none" stroke="#173d2c" stroke-width="3" stroke-dasharray="7 12" opacity=".35"/>
+  <path d="M128 137h224c23 0 38 15 38 38v158c0 23-15 38-38 38H128c-23 0-38-15-38-38V175c0-23 15-38 38-38Z" fill="#173d2c" stroke="#18201c" stroke-width="9"/>
+  <path d="M91 208h298v72H91Z" fill="#f24b18" stroke="#18201c" stroke-width="8"/>
+  <path d="M119 227h242v34H119Z" fill="#f2eedf" stroke="#18201c" stroke-width="6"/>
+  <path d="M139 302h83v46h-83ZM258 302h83v46h-83Z" fill="#d7f238" stroke="#18201c" stroke-width="6"/>
+  <path d="M188 137V99h104v38" fill="none" stroke="#18201c" stroke-width="12"/>
+  <circle cx="240" cy="244" r="10" fill="#f24b18" stroke="#18201c" stroke-width="5"/>
+</svg>

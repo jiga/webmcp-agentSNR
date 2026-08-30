@@ -1,10 +1,13 @@
 <?php
+
 /**
  * Plugin Name:       WP WebMCP AgentOps
  * Description:       WebMCP storefront workflows, AgentOps analytics, and safe governance for WordPress.
  * Version:           0.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.1
+ * WC requires at least: 10.9
+ * WC tested up to:     11.0
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wmcp-agentops
@@ -27,6 +30,11 @@ require_once WMCP_AGENTOPS_PATH . 'src/Autoloader.php';
 
 WPWebMCP\AgentOps\Autoloader::register(WMCP_AGENTOPS_PATH . 'src');
 
+add_action(
+    'before_woocommerce_init',
+    array(WPWebMCP\AgentOps\WooCommerce\WooIntegration::class, 'declare_hpos_compatibility')
+);
+
 register_activation_hook(__FILE__, array(WPWebMCP\AgentOps\Activation\Activator::class, 'activate'));
 register_deactivation_hook(__FILE__, array(WPWebMCP\AgentOps\Activation\Deactivator::class, 'deactivate'));
 
@@ -36,4 +44,3 @@ add_action(
         WPWebMCP\AgentOps\Plugin::instance()->boot();
     }
 );
-
