@@ -1,5 +1,5 @@
 /*
- * WordPress WebMCP AgentOps browser runtime.
+ * WordPress WebMCP agent-monitoring browser runtime.
  *
  * This file intentionally has no runtime dependencies. It can be loaded as a
  * classic browser script and is also exported through CommonJS for the Node

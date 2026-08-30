@@ -170,6 +170,101 @@
 	text-overflow: ellipsis;
 }
 
+.wmcp-agent-journey {
+	background: var(--wmcp-forest-deep);
+	border: 2px solid var(--wmcp-ink);
+	color: var(--wmcp-paper);
+	display: grid;
+	grid-template-columns: minmax(190px, 0.55fr) minmax(0, 2fr);
+}
+
+.wmcp-agent-journey-head {
+	background: var(--wmcp-orange);
+	color: var(--wmcp-paper);
+	padding: 25px;
+}
+
+.wmcp-agent-journey-head .wmcp-kicker {
+	color: var(--wmcp-ink);
+}
+
+.wmcp-agent-journey-head h3,
+.wmcp-admin-wrap .wmcp-agent-journey-head h3 {
+	color: var(--wmcp-paper);
+	font: 400 clamp(27px, 2.6vw, 42px)/0.95 var(--wmcp-serif);
+	letter-spacing: -0.04em;
+	margin: 22px 0 0;
+}
+
+.wmcp-agent-journey ol {
+	display: grid;
+	grid-template-columns: repeat(5, minmax(0, 1fr));
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.wmcp-agent-journey li {
+	border-left: 1px solid var(--wmcp-line-dark);
+	display: flex;
+	flex-direction: column;
+	min-height: 155px;
+	padding: 22px 17px;
+	position: relative;
+}
+
+.wmcp-agent-journey li::after {
+	background: var(--wmcp-forest-deep);
+	border-right: 1px solid var(--wmcp-line-dark);
+	border-top: 1px solid var(--wmcp-line-dark);
+	content: "";
+	height: 12px;
+	position: absolute;
+	right: -7px;
+	top: calc(50% - 6px);
+	transform: rotate(45deg);
+	width: 12px;
+	z-index: 1;
+}
+
+.wmcp-agent-journey li:last-child {
+	background: var(--wmcp-acid);
+	color: var(--wmcp-ink);
+}
+
+.wmcp-agent-journey li:last-child::after {
+	display: none;
+}
+
+.wmcp-agent-journey li > span {
+	color: var(--wmcp-acid);
+	font: 750 9px/1 var(--wmcp-mono);
+	letter-spacing: 0.08em;
+}
+
+.wmcp-agent-journey li:last-child > span {
+	color: var(--wmcp-forest);
+}
+
+.wmcp-agent-journey li strong {
+	font: 400 clamp(17px, 1.6vw, 24px)/1 var(--wmcp-serif);
+	margin: auto 0 11px;
+}
+
+.wmcp-agent-journey li small {
+	color: #aab9ad;
+	font: 650 8px/1.35 var(--wmcp-mono);
+	text-transform: uppercase;
+}
+
+.wmcp-agent-journey li:last-child small {
+	color: var(--wmcp-forest);
+}
+
+.wmcp-agent-journey + .wmcp-metric-grid {
+	margin-top: 20px;
+}
+
 .wmcp-metric-grid {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -525,6 +620,124 @@
 	font-weight: 700;
 }
 
+.wmcp-signal-feed:empty {
+	display: none;
+}
+
+.wmcp-signal-list {
+	display: grid;
+	gap: 1px;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	margin-bottom: 42px;
+}
+
+.wmcp-signal-card {
+	background: var(--wmcp-paper);
+	border: 1px solid var(--wmcp-ink);
+	border-top: 7px solid var(--wmcp-forest);
+	display: flex;
+	flex-direction: column;
+	min-height: 190px;
+	padding: 20px;
+}
+
+.wmcp-signal-card.wmcp-signal-critical {
+	background: #ffe0d5;
+	border-top-color: var(--wmcp-danger);
+}
+
+.wmcp-signal-card.wmcp-signal-warning {
+	background: #f7f5d9;
+	border-top-color: var(--wmcp-orange);
+}
+
+.wmcp-signal-card.wmcp-signal-opportunity {
+	border-top-color: var(--wmcp-forest);
+}
+
+.wmcp-signal-type,
+.wmcp-signal-severity {
+	font: 750 8px/1.2 var(--wmcp-mono);
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.wmcp-signal-type {
+	color: var(--wmcp-ink-muted);
+}
+
+.wmcp-signal-severity {
+	border: 1px solid currentcolor;
+	margin-left: auto;
+	padding: 5px 7px;
+}
+
+.wmcp-signal-critical .wmcp-signal-severity {
+	color: var(--wmcp-danger);
+}
+
+.wmcp-signal-warning .wmcp-signal-severity {
+	color: var(--wmcp-orange-dark);
+}
+
+.wmcp-signal-opportunity .wmcp-signal-severity {
+	color: var(--wmcp-forest);
+}
+
+.wmcp-signal-card h3,
+.wmcp-admin-wrap .wmcp-signal-card h3 {
+	font: 400 25px/1.05 var(--wmcp-serif);
+	margin: 8px 0 28px;
+}
+
+.wmcp-signal-meta {
+	display: grid;
+	font: 650 8px/1.35 var(--wmcp-mono);
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	margin: auto 0 0;
+	text-transform: uppercase;
+}
+
+.wmcp-signal-meta div {
+	border-top: 1px solid var(--wmcp-line);
+	padding: 10px 5px 0;
+}
+
+.wmcp-signal-meta dt {
+	color: var(--wmcp-ink-muted);
+}
+
+.wmcp-signal-meta dd {
+	font-size: 10px;
+	margin: 5px 0 0;
+	overflow-wrap: anywhere;
+}
+
+.wmcp-capability-signal-head {
+	align-items: end;
+	border-bottom: 1px solid var(--wmcp-ink);
+	display: flex;
+	font-family: var(--wmcp-mono);
+	gap: 20px;
+	justify-content: space-between;
+	margin-bottom: 16px;
+	padding-bottom: 11px;
+}
+
+.wmcp-capability-signal-head span {
+	font-size: 10px;
+	font-weight: 750;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+}
+
+.wmcp-capability-signal-head small {
+	color: var(--wmcp-ink-muted);
+	font-size: 8px;
+	text-align: right;
+	text-transform: uppercase;
+}
+
 .wmcp-gap-list {
 	display: grid;
 	gap: 1px;
@@ -764,6 +977,10 @@
 }
 
 @media (width <= 1200px) {
+	.wmcp-agent-journey {
+		grid-template-columns: 1fr;
+	}
+
 	.wmcp-metric-grid {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}
@@ -774,6 +991,7 @@
 	}
 
 	.wmcp-gap-list,
+	.wmcp-signal-list,
 	.wmcp-public-tool-list,
 	.wmcp-attribution-strip {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -812,6 +1030,30 @@
 		flex-direction: column;
 	}
 
+	.wmcp-agent-journey ol {
+		grid-template-columns: 1fr;
+	}
+
+	.wmcp-agent-journey li {
+		border-left: 0;
+		border-top: 1px solid var(--wmcp-line-dark);
+		min-height: 105px;
+	}
+
+	.wmcp-agent-journey li::after {
+		inset: auto auto -7px calc(50% - 6px);
+		transform: rotate(135deg);
+	}
+
+	.wmcp-capability-signal-head {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.wmcp-capability-signal-head small {
+		text-align: left;
+	}
+
 	.wmcp-metric-grid {
 		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
@@ -835,6 +1077,7 @@
 
 	.wmcp-global-controls,
 	.wmcp-gap-list,
+	.wmcp-signal-list,
 	.wmcp-public-tool-list,
 	.wmcp-attribution-strip {
 		grid-template-columns: 1fr;

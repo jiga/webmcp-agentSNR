@@ -1,8 +1,8 @@
 {
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
   "meta": {
-    "title": "WP WebMCP AgentOps — Playground Demo",
-    "description": "A disposable WooCommerce storefront and AgentOps demo. WordPress Playground embeds WordPress in an iframe, so this package demonstrates portability and human/admin behavior; current ChatGPT Site Tools do not discover the embedded WebMCP tools.",
+    "title": "WebMCP Agent Experience Monitor — Playground Demo",
+    "description": "A disposable WooCommerce storefront and Agent Experience Monitoring demo. WordPress Playground embeds WordPress in an iframe, so this package demonstrates portability and human/admin behavior; current ChatGPT Site Tools do not discover the embedded WebMCP tools.",
     "author": "jignesh",
     "categories": [
       "demo",
@@ -49,7 +49,7 @@
         "activate": true,
         "onError": "throw",
         "targetFolderName": "wmcp-agentops",
-        "humanReadableName": "WP WebMCP AgentOps"
+        "humanReadableName": "WebMCP Agent Experience Monitor"
       }
     },
     {

@@ -8,8 +8,8 @@ Two consecutive clean builds produced identical bytes:
 
 | Artifact | SHA-256 |
 |---|---|
-| `wmcp-agentops-0.1.0.zip` | `b8a8af25878a942593355424ddc20aa163001725e08deb974aa69e8bd8957fd6` |
-| `wmcp-agentops-playground-0.1.0.zip` | `fbca318eda3521b18082a9dba7e9337b1e98d2a7aec59dee3f4a8adb43414711` |
+| `wmcp-agentops-0.1.0.zip` | `201f33232062e4639080e8886d7a54a26f9d6f3de2f4cf40191e1dc80d63670c` |
+| `wmcp-agentops-playground-0.1.0.zip` | `d5b0d2eaa2017d14e3e71029f007121e916028818c12dd7d630de9483779c552` |
 
 The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 12-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
 
@@ -21,13 +21,13 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 | PHPUnit, PHP 8.1 | 58 tests, 521 assertions |
 | PHPUnit, PHP 8.4 | 58 tests, 521 assertions |
 | WordPress Coding Standards | Zero errors; line-length warnings only |
-| JavaScript | 42 tests; ESLint passes |
+| JavaScript | 55 tests; ESLint passes |
 | CSS | Stylelint passes |
 | Dependency audit | Zero npm vulnerabilities |
 | REST/security smoke | Passes seven routes, 19 tools, shopper, analytics, governance, and reset |
 | Chromium acceptance | 12/12 pass serially, including two real classic-checkout orders |
 | Woo lifecycle | Unpaid, paid, partial/full refund, cancel, provenance-negative, and human-only cases pass |
-| Plugin Check 2.1.0 | Zero errors; 56 documented warnings |
+| Plugin Check 2.1.0 | Zero errors; 54 documented warnings; zero trademark findings |
 | Repository hygiene | Workflow YAML parses, shell syntax passes, and `git diff --check` is clean |
 
 ## Exact plugin ZIP matrix
@@ -46,12 +46,11 @@ The tag workflow runs that real Woo CRUD lifecycle in all three exact-artifact m
 
 Plugin Check reports no errors. The warnings fall into expected, reviewable categories:
 
-- namespaced/prefixed identifiers flagged by conservative global-prefix checks;
+- namespaced/template identifiers flagged by conservative global-prefix checks;
 - direct database queries and cache/schema operations used for the plugin-owned analytics ledger;
-- the working name's restricted “WP” prefix, which cannot be resolved until the human entrant selects the final public name;
 - the included `THIRD_PARTY_NOTICES.md` file.
 
-These warnings do not hide executable errors. If the plugin is later submitted to the WordPress.org directory, resolve the final name/slug first and re-review every remaining warning against that directory's requirements.
+These warnings do not hide executable errors. The descriptive public name produces no Plugin Check trademark warning. If the plugin is later submitted to the WordPress.org directory, re-review every remaining warning and the final owner-selected name/slug against that directory's requirements.
 
 ## Release enforcement
 

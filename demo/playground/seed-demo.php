@@ -22,7 +22,7 @@ if (! function_exists('wmcp_agentops_seed_playground_demo')) {
     function wmcp_agentops_seed_playground_demo(): array
     {
         if (! class_exists(Seeder::class)) {
-            throw new RuntimeException('WP WebMCP AgentOps must be active before seeding.');
+            throw new RuntimeException('WebMCP Agent Experience Monitor must be active before seeding.');
         }
 
         $result = (new Seeder())->seed();

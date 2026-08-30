@@ -62,7 +62,7 @@ final class DemoPages
             ),
             array(
                 'slug'    => 'agentops-demo',
-                'title'   => 'AgentOps Field Board',
+                'title'   => 'Agent Experience Monitor',
                 'content' => '[wmcp_agentops_demo]',
             ),
             array(

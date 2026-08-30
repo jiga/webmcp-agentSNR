@@ -373,7 +373,7 @@ test( "cacheable page HTML contains no session or credential state", async ( { r
 	expect( html ).not.toMatch( /data-workflow-id=["'][0-9A-HJKMNP-TV-Z]{26}/ );
 } );
 
-test( "registers every storefront and AgentOps tool with standard imperative fields", async ( { context, page } ) => {
+test( "registers every storefront and Agent Monitor tool with standard imperative fields", async ( { context, page } ) => {
 	await installModelContextMock( context );
 
 	for ( const surface of [
@@ -517,7 +517,7 @@ test( "skips direct registration inside an iframe", async ( { context, page } ) 
 	await expect( frame.locator( "span[data-wmcp-status]" ) ).toHaveText( "Embedded context" );
 } );
 
-test( "manually loads current-session storefront evidence into AgentOps", async ( { context, page } ) => {
+test( "manually loads current-session storefront evidence into Agent Monitor", async ( { context, page } ) => {
 	await installModelContextMock( context );
 	await page.goto( "/storefront-demo/" );
 	await waitForRuntime( page, STOREFRONT_TOOLS.length );

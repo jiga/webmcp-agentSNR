@@ -1,7 +1,7 @@
-WP WebMCP AgentOps — WordPress Playground bundle
+WebMCP Agent Experience Monitor — WordPress Playground bundle
 
 This disposable site runs WordPress 7.1 on PHP 8.3, downloads and activates
-WooCommerce 11.0.1, installs the bundled WP WebMCP AgentOps plugin ZIP, invokes
+WooCommerce 11.0.1, installs the bundled WebMCP Agent Experience Monitor plugin ZIP, invokes
 the plugin's canonical idempotent demo seeder, logs in as the Playground admin,
 and opens the judge landing page.
 

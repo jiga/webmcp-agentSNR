@@ -48,21 +48,13 @@ cp "${PLAYGROUND_SOURCE}/blueprint.json" "${BUILD_DIR}/blueprint.json"
 cp "${PLAYGROUND_SOURCE}/BUNDLE-README.txt" "${BUILD_DIR}/README.txt"
 cp "${PLAYGROUND_SOURCE}/seed-demo.php" "${BUILD_DIR}/seed-demo.php"
 
-# The plugin builder intentionally packages the exact source tree, but copied
-# repository files can inherit build-time mtimes. Normalize a bundle-local copy
-# so the outer Blueprint archive is reproducible without changing that builder.
-mkdir -p "${BUILD_DIR}/plugin"
-unzip -q "${PLUGIN_ARCHIVE}" -d "${BUILD_DIR}/plugin"
-if [[ ! -f "${BUILD_DIR}/plugin/wmcp-agentops/wmcp-agentops.php" ]]; then
+# Preserve exact-byte provenance: the Playground bundle contains the same
+# standalone plugin ZIP that release consumers download.
+if ! unzip -Z1 "${PLUGIN_ARCHIVE}" | grep -Fxq 'wmcp-agentops/wmcp-agentops.php'; then
   echo "Plugin archive does not contain the expected wmcp-agentops root." >&2
   exit 1
 fi
-
-find "${BUILD_DIR}/plugin/wmcp-agentops" -exec touch -t 198001010000 {} +
-(
-  cd "${BUILD_DIR}/plugin"
-  find wmcp-agentops -type f -print | LC_ALL=C sort | zip -X -q "${BUILD_DIR}/wmcp-agentops.zip" -@
-)
+cp "${PLUGIN_ARCHIVE}" "${BUILD_DIR}/wmcp-agentops.zip"
 
 (
   cd "${BUILD_DIR}"
@@ -100,6 +92,12 @@ fi
 
 unzip -tq "${ARCHIVE}" >/dev/null
 unzip -p "${ARCHIVE}" blueprint.json | node -e 'let source = ""; process.stdin.on("data", (chunk) => source += chunk); process.stdin.on("end", () => JSON.parse(source));'
+BUNDLED_PLUGIN_SHA="$(unzip -p "${ARCHIVE}" wmcp-agentops.zip | shasum -a 256 | awk '{print $1}')"
+STANDALONE_PLUGIN_SHA="$(shasum -a 256 "${PLUGIN_ARCHIVE}" | awk '{print $1}')"
+if [[ "${BUNDLED_PLUGIN_SHA}" != "${STANDALONE_PLUGIN_SHA}" ]]; then
+  echo "Playground bundle plugin bytes do not match the standalone plugin artifact." >&2
+  exit 1
+fi
 
 (
   cd "${DIST_DIR}"

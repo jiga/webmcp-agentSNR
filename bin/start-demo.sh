@@ -47,10 +47,10 @@ docker compose run --rm cli wp eval-file /workspace/bin/seed-demo.php
 docker compose run --rm cli wp rewrite structure '/%postname%/'
 
 echo
-echo "WP WebMCP AgentOps demo is ready:"
+echo "WebMCP Agent Experience Monitor demo is ready:"
 echo "  Judge start: ${SITE_URL}/"
 echo "  Storefront:  ${SITE_URL}/storefront-demo/"
-echo "  AgentOps:    ${SITE_URL}/agentops-demo/"
+echo "  Agent Monitor: ${SITE_URL}/agentops-demo/"
 echo "  Readiness:   ${SITE_URL}/webmcp-health/"
 echo "  Admin:       ${SITE_URL}/wp-admin/"
 echo "  User:        ${ADMIN_USER}"

@@ -2,7 +2,7 @@
 
 These actions need human identity, accounts, infrastructure, or judgment and are intentionally not fabricated by the repository.
 
-- [ ] Select the final product/repository name and demo brand after a human trademark/name check.
+- [ ] Select the final product/repository name and demo brand after a human trademark/name check; avoid the established AgentOps.ai product association.
 - [ ] Confirm the current Git author identity is appropriate for public history.
 - [ ] Create the public GitHub/GitLab/Bitbucket repository, set About/license metadata, add the remote, and push without squashing the submission-period commits.
 - [ ] Choose entrant type/team roster and confirm challenge eligibility and prize ownership.

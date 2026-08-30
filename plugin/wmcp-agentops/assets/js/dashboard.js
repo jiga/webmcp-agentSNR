@@ -8,6 +8,11 @@
 	const config = window.wmcpConfig || {};
 	let currentManifest = null;
 	let loading = false;
+	const monitorState = {
+		gaps: null,
+		overview: null,
+		toolHealth: null,
+	};
 
 	if ( ! root ) {
 		return;
@@ -109,7 +114,261 @@
 		}
 	}
 
+	function metricNumber( value ) {
+		if ( value === null || value === undefined || value === "" ) {
+			return null;
+		}
+		const number = Number( value );
+		return Number.isFinite( number ) && number >= 0 ? number : null;
+	}
+
+	function plural( value, singular, pluralForm = `${ singular }s` ) {
+		return `${ value } ${ Number( value ) === 1 ? singular : pluralForm }`;
+	}
+
+	function compareText( left, right ) {
+		const first = String( left );
+		const second = String( right );
+		return first === second ? 0 : first < second ? -1 : 1;
+	}
+
+	function outcomeEvidence( item, countField, rateField, noun ) {
+		const count = metricNumber( item[ countField ] );
+		const rate = metricNumber( item[ rateField ] );
+		const parts = [];
+		if ( count !== null ) {
+			parts.push( plural( count, `${ noun } call` ) );
+		}
+		if ( rate !== null ) {
+			parts.push( `${ percentage( rate ) } rate` );
+		}
+		return parts.join( " · " ) || `Recorded ${ noun } outcome`;
+	}
+
+	function topErrorEvidence( item ) {
+		const errors = list( item.top_errors ).map( record ).filter( ( error ) => typeof error.code === "string" && error.code !== "" );
+		errors.sort( ( left, right ) => {
+			const countDifference = ( metricNumber( right.count ) || 0 ) - ( metricNumber( left.count ) || 0 );
+			return countDifference || compareText( left.code, right.code );
+		} );
+		return errors.map( ( error ) => {
+			const count = metricNumber( error.count );
+			return count === null ? error.code : `${ error.code } × ${ count }`;
+		} ).join( " · " );
+	}
+
+	function failureSeverity( count, rate ) {
+		return ( count !== null && count >= 3 ) || ( rate !== null && rate >= 0.25 )
+			? { className: "wmcp-signal-critical", label: "Critical", rank: 0 }
+			: { className: "wmcp-signal-warning", label: "Warning", rank: 1 };
+	}
+
+	function resetMonitorState() {
+		monitorState.gaps = null;
+		monitorState.overview = null;
+		monitorState.toolHealth = null;
+		renderSignals();
+	}
+
+	function coverageMessage() {
+		const gaps = record( monitorState.gaps );
+		const health = record( monitorState.toolHealth );
+		const reasons = [];
+		if ( health.truncated === true ) {
+			reasons.push( "tool-health results were truncated" );
+		}
+		if ( gaps.has_more === true ) {
+			reasons.push( "more capability-gap groups are available" );
+		}
+		return reasons.join( "; " );
+	}
+
+	function toolSignals() {
+		const health = monitorState.toolHealth;
+		const items = health === null ? [] : list( health.items || health.tools );
+		const signals = [];
+		items.forEach( ( rawItem ) => {
+			const item = record( rawItem );
+			const tool = typeof item.tool_name === "string" && item.tool_name !== "" ? item.tool_name : "Unknown tool";
+			const failed = metricNumber( item.failed );
+			const failureRate = metricNumber( item.failure_rate );
+			const denied = metricNumber( item.denied );
+			const denialRate = metricNumber( item.denial_rate );
+			const codes = topErrorEvidence( item );
+			if ( ( failed !== null && failed > 0 ) || ( failureRate !== null && failureRate > 0 ) ) {
+				const severity = failureSeverity( failed, failureRate );
+				signals.push( {
+					affected: failed || 0,
+					className: severity.className,
+					fields: [
+						[ "Affected", outcomeEvidence( item, "failed", "failure_rate", "failed" ) ],
+						[ "Tool", tool ],
+						[ "Top terminal codes (all outcomes)", codes || "No terminal error code returned" ],
+						[ "Severity rule", "Critical at 3 failed calls or a 25% failure rate" ],
+					],
+					severity: severity.label,
+					severityRank: severity.rank,
+					sortKey: `0:${ tool }:${ codes }`,
+					title: `${ pretty( tool ) } recorded failures`,
+					type: "Reliability signal",
+					typeRank: 0,
+				} );
+			}
+			if ( ( denied !== null && denied > 0 ) || ( denialRate !== null && denialRate > 0 ) ) {
+				signals.push( {
+					affected: denied || 0,
+					className: "wmcp-signal-warning",
+					fields: [
+						[ "Affected", outcomeEvidence( item, "denied", "denial_rate", "denied" ) ],
+						[ "Tool", tool ],
+						[ "Top terminal codes (all outcomes)", codes || "No terminal error code returned" ],
+					],
+					severity: "Warning",
+					severityRank: 1,
+					sortKey: `1:${ tool }:${ codes }`,
+					title: `${ pretty( tool ) } recorded denied calls`,
+					type: "Denial signal",
+					typeRank: 1,
+				} );
+			}
+		} );
+
+		if ( signals.length === 0 && monitorState.overview !== null && ( health === null || items.length === 0 ) ) {
+			const calls = record( monitorState.overview.tool_calls );
+			const outcomes = [
+				[ "failed", "failure_rate", "Reliability signal", "Failures recorded across this scope", 0 ],
+				[ "denied", "denial_rate", "Denial signal", "Denied calls recorded across this scope", 1 ],
+			];
+			outcomes.forEach( ( [ countField, rateField, type, title, typeRank ] ) => {
+				const count = metricNumber( calls[ countField ] );
+				const rate = metricNumber( calls[ rateField ] );
+				if ( ( count !== null && count > 0 ) || ( rate !== null && rate > 0 ) ) {
+					const level = countField === "failed"
+						? failureSeverity( count, rate )
+						: { className: "wmcp-signal-warning", label: "Warning", rank: 1 };
+					const fields = [
+						[ "Affected", outcomeEvidence( calls, countField, rateField, countField ) ],
+						[ "Tool", "All tools in the loaded scope" ],
+						[ "Top terminal codes (all outcomes)", "Per-tool code detail not loaded" ],
+					];
+					if ( countField === "failed" ) {
+						fields.push( [ "Severity rule", "Critical at 3 failed calls or a 25% failure rate" ] );
+					}
+					signals.push( {
+						affected: count || 0,
+						className: level.className,
+						fields,
+						severity: level.label,
+						severityRank: level.rank,
+						sortKey: `2:${ countField }`,
+						title,
+						type,
+						typeRank,
+					} );
+				}
+			} );
+		}
+		return signals;
+	}
+
+	function opportunitySignals() {
+		if ( monitorState.gaps === null ) {
+			return [];
+		}
+		return list( monitorState.gaps.items || monitorState.gaps.gaps ).map( record ).filter( ( item ) => {
+			return ! [ "resolved", "dismissed" ].includes( String( item.status || "" ).toLowerCase() ) && ( metricNumber( item.requests ) || 0 ) > 0;
+		} ).map( ( item ) => {
+			const capability = typeof item.capability === "string" && item.capability !== "" ? item.capability : "Unspecified capability";
+			const requests = metricNumber( item.requests ) || 0;
+			const workflows = metricNumber( item.affected_workflows );
+			const affected = workflows === null
+				? plural( requests, "request" )
+				: `${ plural( requests, "request" ) } · ${ plural( workflows, "workflow" ) }`;
+			return {
+				affected: requests,
+				className: "wmcp-signal-opportunity",
+				fields: [
+					[ "Affected", affected ],
+					[ "Capability", capability ],
+					[ "Status", pretty( item.status || "open" ) ],
+				],
+				severity: "Opportunity",
+				severityRank: 2,
+				sortKey: `3:${ capability }:${ item.status || "" }`,
+				title: `${ pretty( capability ) } demand recorded`,
+				type: "Opportunity gap",
+				typeRank: 2,
+			};
+		} );
+	}
+
+	function renderSignals() {
+		const container = one( "[data-wmcp-signals]" );
+		if ( ! container ) {
+			return;
+		}
+		const signals = [ ...toolSignals(), ...opportunitySignals() ];
+		signals.sort( ( left, right ) => {
+			return left.severityRank - right.severityRank || left.typeRank - right.typeRank || right.affected - left.affected || compareText( left.sortKey, right.sortKey );
+		} );
+		container.replaceChildren();
+		const partialCoverage = coverageMessage();
+		if ( signals.length === 0 ) {
+			const empty = document.createElement( "p" );
+			empty.className = "wmcp-empty-state";
+			const complete = Object.values( monitorState ).every( ( value ) => value !== null );
+			if ( partialCoverage ) {
+				text( empty, `No recorded signals appear in the returned evidence. Coverage is partial: ${ partialCoverage }.` );
+			} else {
+				text( empty, complete ? "No recorded signals in this loaded scope." : "No recorded signals in the evidence loaded so far." );
+			}
+			container.append( empty );
+			return;
+		}
+
+		if ( partialCoverage ) {
+			const coverage = document.createElement( "p" );
+			coverage.className = "wmcp-empty-state wmcp-signal-coverage";
+			text( coverage, `Partial signal coverage: ${ partialCoverage }.` );
+			container.append( coverage );
+		}
+		const signalList = document.createElement( "div" );
+		signalList.className = "wmcp-signal-list";
+		signals.forEach( ( signal ) => {
+			const card = document.createElement( "article" );
+			card.className = `wmcp-signal-card ${ signal.className }`;
+			card.dataset.signalType = signal.type.toLowerCase().replaceAll( " ", "-" );
+			const label = document.createElement( "div" );
+			label.className = "wmcp-panel-label";
+			const type = document.createElement( "span" );
+			type.className = "wmcp-signal-type";
+			const severity = document.createElement( "span" );
+			severity.className = "wmcp-signal-severity";
+			text( type, signal.type );
+			text( severity, signal.severity );
+			label.append( type, severity );
+			const title = document.createElement( "h3" );
+			text( title, signal.title );
+			const metadata = document.createElement( "dl" );
+			metadata.className = "wmcp-signal-meta";
+			signal.fields.forEach( ( [ term, value ] ) => {
+				const field = document.createElement( "div" );
+				const name = document.createElement( "dt" );
+				const detail = document.createElement( "dd" );
+				text( name, term );
+				text( detail, value );
+				field.append( name, detail );
+				metadata.append( field );
+			} );
+			card.append( label, title, metadata );
+			signalList.append( card );
+		} );
+		container.append( signalList );
+	}
+
 	function renderOverview( result ) {
+		monitorState.overview = record( result );
+		renderSignals();
 		all( "[data-metric]" ).forEach( ( target ) => {
 			const path = target.dataset.metric;
 			let value = getPath( result, path );
@@ -150,8 +409,8 @@
 			text( one( "[data-funnel-count]", item ), count );
 			text( one( "[data-funnel-rate]", item ), percentage( stage.conversion_from_start ?? stage.conversion_rate ) );
 			text( one( "[data-funnel-previous]", item ), percentage( stage.conversion_from_previous ) );
-			const duration = stage.median_time_to_next_ms;
-			const timing = Number.isFinite( Number( duration ) ) ? ` · median ${ duration } ms` : "";
+			const duration = metricNumber( stage.median_time_to_next_ms );
+			const timing = duration === null ? "" : ` · median ${ duration } ms`;
 			text( one( "[data-funnel-reason]", item ), `${ pretty( stage.top_exit_reason || "No recorded exit" ) }${ timing }` );
 		} );
 	}
@@ -201,6 +460,17 @@
 			body.append( row );
 		} );
 
+		if ( result.has_more === true ) {
+			const row = document.createElement( "tr" );
+			row.className = "wmcp-table-note";
+			row.dataset.workflowCoverage = "partial";
+			const cell = document.createElement( "td" );
+			cell.colSpan = 5;
+			text( cell, `Showing the first ${ items.length } agent workflows. More are available in this scope.` );
+			row.append( cell );
+			body.append( row );
+		}
+
 		all( "[data-explain-workflow]", body ).forEach( ( button ) => {
 			button.addEventListener( "click", () => explainWorkflow( button.dataset.explainWorkflow, button.closest( "tr" ) ) );
 		} );
@@ -212,7 +482,12 @@
 		const timeline = list( result.timeline );
 		text( one( "#wmcp-timeline-title" ), workflow.workflow_id ? `Workflow ${ workflow.workflow_id.slice( 0, 8 ) }…` : "Workflow explanation" );
 		text( one( "[data-wmcp-explanation]" ), result.explanation || "The workflow explanation was returned without narrative text." );
-		text( one( "[data-wmcp-timeline-count]" ), `${ timeline.length } events` );
+		text(
+			one( "[data-wmcp-timeline-count]" ),
+			result.truncated === true
+				? `${ plural( timeline.length, "event" ) } shown · partial replay`
+				: `${ timeline.length } events`
+		);
 		const productIds = Array.from( new Set( timeline.flatMap( ( event ) => list( event.product_ids ).map( String ) ) ) );
 		const orders = list( result.commerce_outcome?.orders );
 		const orderSummary = orders.length
@@ -272,6 +547,8 @@
 	}
 
 	function renderToolHealth( result ) {
+		monitorState.toolHealth = record( result );
+		renderSignals();
 		const items = list( result.items || result.tools );
 		const body = one( "[data-wmcp-tool-health]" );
 		if ( ! body ) {
@@ -329,6 +606,8 @@
 	}
 
 	function renderGaps( result ) {
+		monitorState.gaps = record( result );
+		renderSignals();
 		const items = list( result.items || result.gaps );
 		const container = one( "[data-wmcp-gaps]" );
 		if ( ! container ) {
@@ -482,7 +761,7 @@
 		const payload = await requestJson(
 			config.manifestUrl,
 			{ cache: "no-store", credentials: "same-origin", headers: { Accept: "application/json" } },
-			"AgentOps manifest",
+			"Agent Monitor manifest",
 			262144
 		);
 		currentManifest = payload;
@@ -535,6 +814,7 @@
 			return;
 		}
 		loading = true;
+		resetMonitorState();
 		const button = one( "[data-wmcp-load-dashboard]" );
 		if ( button ) {
 			button.disabled = true;

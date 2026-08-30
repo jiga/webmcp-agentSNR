@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Plugin Name:       WP WebMCP AgentOps
- * Description:       WebMCP storefront workflows, AgentOps analytics, and safe governance for WordPress.
+ * Plugin Name:       WebMCP Agent Experience Monitor
+ * Description:       Privacy-safe workflow replay, outcomes, signals, and governance for website agents on WordPress.
  * Version:           0.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.1

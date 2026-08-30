@@ -1,8 +1,10 @@
-# WP WebMCP AgentOps
+# WebMCP Agent Experience Monitor
 
 > Working submission name. The final public product name must be selected by the human entrant before launch.
 
-An open-source AgentOps layer for WordPress: browser agents operate a real WooCommerce storefront through WebMCP, merchants see the path from tool call to paid order, and the same site tools help diagnose and govern that experience.
+Agent Experience Monitoring for WordPress: browser agents operate a real WooCommerce storefront through WebMCP, while merchants replay the privacy-safe workflow, see reliability and capability signals, connect human handoffs to paid/refunded outcomes, and govern the site-tool layer.
+
+The familiar investigation pattern resembles **LogRocket/Fullstory for website agents**, combined with Datadog-style tool health and Amplitude-style commerce outcomes. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model and MVP boundaries.
 
 ### v0.1 scope
 
@@ -25,7 +27,7 @@ flowchart LR
     B --> C[Search · compare · policy · cart]
     C --> D[Human-confirmed Woo checkout]
     D --> E[Order and refund evidence]
-    E --> F[AgentOps funnel · timeline · health]
+    E --> F[Agent Monitor · replay · signals]
     F --> G[Session-safe tool policy]
     G --> B
 ```
@@ -51,9 +53,9 @@ Notify me when the blue 24L version is back in stock.
 Merchant:
 
 ```text
-Show the commerce funnel for my current workflow, identify the slowest
-or failed tool call, explain what happened, and show any capabilities the
-shopper requested that this store does not support.
+Monitor my current agent session, replay its tool and commerce timeline,
+identify the slowest or failed invocation, connect it to the commerce outcome,
+show any capability signals this store does not support, and summarize current controls.
 ```
 
 Governance:
@@ -64,7 +66,7 @@ Disable product comparison for this demo session.
 
 ## What is included
 
-- Two independent top-level WebMCP surfaces: storefront and AgentOps.
+- Two independent top-level WebMCP surfaces: storefront and Agent Experience Monitor.
 - A single first-party catalog that generates WordPress Abilities and WebMCP manifests.
 - Product discovery, evidence-based comparison, published policy facts, reversible cart writes, checkout handoff, and capability-gap capture.
 - Workflow events, tool outcomes/latency, funnel analysis, order/refund linkage, deterministic attribution, and redacted explanations.
@@ -81,7 +83,7 @@ Prerequisites: Docker Desktop (or Docker Engine with Compose) and a free local p
 ./bin/start-demo.sh
 ```
 
-The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional TrailForge Lab store; and prints the dedicated storefront demo, AgentOps, readiness, and admin URLs. Local-only credentials are printed by the command.
+The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional TrailForge Lab store; and prints the dedicated storefront demo, Agent Experience Monitor, readiness, and admin URLs. Local-only credentials are printed by the command.
 
 Stop without deleting data:
 
@@ -169,7 +171,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The prepared repository passes 42 JavaScript tests, 58 PHP tests / 521 assertions on PHP 8.1 and 8.4, 12 Chromium scenarios (including real classic checkout), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented, including the intentionally unresolved human naming decision. See [submission/verification-report.md](submission/verification-report.md).
+The prepared repository passes 55 JavaScript tests, 58 PHP tests / 521 assertions on PHP 8.1 and 8.4, 12 Chromium scenarios (including real classic checkout), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

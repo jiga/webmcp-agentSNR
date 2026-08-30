@@ -1,6 +1,6 @@
 <?php
 /**
- * Public session-scoped and authenticated admin AgentOps shell.
+ * Public session-scoped and authenticated Agent Experience Monitor shell.
  *
  * @var array<string, mixed> $view
  * @package WPWebMCP\AgentOps
@@ -14,7 +14,7 @@ $governance = isset($view['governance']) && is_array($view['governance']) ? $vie
 $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 ?>
 <?php if (! $is_admin) : ?>
-	<a class="wmcp-skip-link" href="#wmcp-agentops-main"><?php esc_html_e('Skip to AgentOps board', 'wmcp-agentops'); ?></a>
+	<a class="wmcp-skip-link" href="#wmcp-agentops-main"><?php esc_html_e('Skip to Agent Experience Monitor', 'wmcp-agentops'); ?></a>
 	<div id="wmcp-agentops-main" class="wmcp-field wmcp-agentops alignfull" data-wmcp-surface="agentops" tabindex="-1">
 <?php else : ?>
 	<div id="wmcp-agentops-main" class="wrap wmcp-field wmcp-agentops wmcp-admin-wrap" data-wmcp-surface="agentops">
@@ -24,52 +24,65 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 <?php endif; ?>
 	<header class="wmcp-ops-header">
 		<div>
-			<p class="wmcp-kicker"><?php echo $is_admin ? esc_html__('Authenticated site operations', 'wmcp-agentops') : esc_html__('Current browser session / redacted', 'wmcp-agentops'); ?></p>
-			<h1><?php esc_html_e('AgentOps Field Board', 'wmcp-agentops'); ?></h1>
+			<p class="wmcp-kicker"><?php echo $is_admin ? esc_html__('Authenticated agent operations', 'wmcp-agentops') : esc_html__('Current browser evidence / redacted', 'wmcp-agentops'); ?></p>
+			<h1><?php esc_html_e('Agent Experience Monitor', 'wmcp-agentops'); ?></h1>
 			<p><?php echo $is_admin
-				? esc_html__('Observe agent workflows and set server-authoritative policies for this WordPress site.', 'wmcp-agentops')
-				: esc_html__('Follow the shopper signal from first tool call to commerce outcome, then close the loop with a safer next workflow.', 'wmcp-agentops'); ?></p>
+				? esc_html__('Monitor agent workflows, verified commerce outcomes, and server-authoritative policies for this WordPress site.', 'wmcp-agentops')
+				: esc_html__('Trace an agent-assisted shopping journey from first tool call to human checkpoint and verified commerce outcome.', 'wmcp-agentops'); ?></p>
 		</div>
 		<div class="wmcp-ops-header-actions">
-			<div class="wmcp-status-chip" <?php if ($dashboard_available) : ?>data-wmcp-status-chip data-state="checking"<?php else : ?>data-state="passed"<?php endif; ?>><span class="wmcp-status-light" aria-hidden="true"></span><span <?php if ($dashboard_available) : ?>data-wmcp-status<?php endif; ?>><?php echo $dashboard_available ? esc_html__('Checking WebMCP', 'wmcp-agentops') : esc_html__('Authenticated policy shell', 'wmcp-agentops'); ?></span></div>
+			<div class="wmcp-status-chip" <?php if ($dashboard_available) : ?>data-wmcp-status-chip data-state="checking"<?php else : ?>data-state="passed"<?php endif; ?>><span class="wmcp-status-light" aria-hidden="true"></span><span <?php if ($dashboard_available) : ?>data-wmcp-status<?php endif; ?>><?php echo $dashboard_available ? esc_html__('Checking agent tools', 'wmcp-agentops') : esc_html__('Authenticated policy shell', 'wmcp-agentops'); ?></span></div>
 			<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['storefront_url']); ?>"><?php esc_html_e('Open storefront', 'wmcp-agentops'); ?> <span aria-hidden="true">↗</span></a>
 		</div>
 	</header>
 
-	<nav class="wmcp-board-nav" aria-label="<?php esc_attr_e('AgentOps sections', 'wmcp-agentops'); ?>">
-		<a href="#wmcp-overview"><?php esc_html_e('Overview', 'wmcp-agentops'); ?></a>
-		<a href="#wmcp-funnel"><?php esc_html_e('Funnel', 'wmcp-agentops'); ?></a>
-		<a href="#wmcp-workflows"><?php esc_html_e('Workflows', 'wmcp-agentops'); ?></a>
-		<a href="#wmcp-tools"><?php esc_html_e('Tool health', 'wmcp-agentops'); ?></a>
-		<a href="#wmcp-gaps"><?php esc_html_e('Capability gaps', 'wmcp-agentops'); ?></a>
-		<a href="#wmcp-governance"><?php esc_html_e('Governance', 'wmcp-agentops'); ?></a>
+	<nav class="wmcp-board-nav" aria-label="<?php esc_attr_e('Agent Experience Monitor sections', 'wmcp-agentops'); ?>">
+		<a href="#wmcp-overview"><?php esc_html_e('Monitor', 'wmcp-agentops'); ?></a>
+		<a href="#wmcp-workflows"><?php esc_html_e('Agent Sessions', 'wmcp-agentops'); ?></a>
+		<a href="#wmcp-funnel"><?php esc_html_e('Journey', 'wmcp-agentops'); ?></a>
+		<a href="#wmcp-tools"><?php esc_html_e('Tools', 'wmcp-agentops'); ?></a>
+		<a href="#wmcp-gaps"><?php esc_html_e('Signals', 'wmcp-agentops'); ?></a>
+		<a href="#wmcp-governance"><?php esc_html_e('Controls', 'wmcp-agentops'); ?></a>
 	</nav>
 
 	<section class="wmcp-board-command" aria-labelledby="wmcp-board-command-title">
 		<div>
-			<span class="wmcp-panel-label"><span><?php esc_html_e('Field command', 'wmcp-agentops'); ?></span><span>LIVE</span></span>
-			<h2 id="wmcp-board-command-title"><?php esc_html_e('Load the evidence for this scope.', 'wmcp-agentops'); ?></h2>
+			<span class="wmcp-panel-label"><span><?php esc_html_e('Monitor scope', 'wmcp-agentops'); ?></span><span>SNAPSHOT</span></span>
+			<h2 id="wmcp-board-command-title"><?php esc_html_e('Load the current evidence window.', 'wmcp-agentops'); ?></h2>
 			<p><?php echo $is_admin
 				? esc_html__('The authenticated shell exposes persistent controls. In demo mode, browser analytics remain scoped to this session.', 'wmcp-agentops')
-				: esc_html__('Only this browser’s storefront workflow can appear here. Sample history is never silently mixed into the run.', 'wmcp-agentops'); ?></p>
+				: esc_html__('Only this browser’s storefront workflows can appear here. Sample history is never silently mixed into the monitor.', 'wmcp-agentops'); ?></p>
 			<?php if (! $dashboard_available) : ?><p class="wmcp-admin-scope-note"><?php esc_html_e('Site-wide authenticated analytics execution is not connected in production mode in this build. Persistent policy controls below remain available.', 'wmcp-agentops'); ?></p><?php endif; ?>
 		</div>
 		<div class="wmcp-board-command-actions">
-			<button class="wmcp-button wmcp-button-primary" type="button" data-wmcp-load-dashboard <?php disabled(! $dashboard_available); ?>><?php echo $dashboard_available ? esc_html__('Load current session', 'wmcp-agentops') : esc_html__('Analytics loader unavailable', 'wmcp-agentops'); ?> <span aria-hidden="true">↻</span></button>
+			<button class="wmcp-button wmcp-button-primary" type="button" data-wmcp-load-dashboard <?php disabled(! $dashboard_available); ?>><?php echo $dashboard_available ? esc_html__('Load monitor', 'wmcp-agentops') : esc_html__('Analytics loader unavailable', 'wmcp-agentops'); ?> <span aria-hidden="true">↻</span></button>
 			<button class="wmcp-button wmcp-button-quiet" type="button" data-wmcp-reset data-reset-surface="agentops" <?php disabled(empty($view['demo_mode'])); ?>><?php esc_html_e('Start fresh session', 'wmcp-agentops'); ?></button>
 		</div>
-		<p class="wmcp-live-message" role="status" aria-live="polite" data-wmcp-announcer><?php esc_html_e('Board ready. Load the current session or use the merchant prompt through your browser agent.', 'wmcp-agentops'); ?></p>
+		<p class="wmcp-live-message" role="status" aria-live="polite" data-wmcp-announcer><?php esc_html_e('Monitor ready. Load this scope or run the merchant prompt through your browser agent.', 'wmcp-agentops'); ?></p>
 		<p class="wmcp-reset-feedback" role="status" aria-live="polite" data-wmcp-reset-feedback></p>
 		<div class="wmcp-error-message" role="alert" data-wmcp-error hidden></div>
 	</section>
 
 	<section id="wmcp-overview" class="wmcp-board-section" aria-labelledby="wmcp-overview-title">
 		<div class="wmcp-board-section-head">
-			<div><p class="wmcp-kicker"><?php esc_html_e('01 / Signal summary', 'wmcp-agentops'); ?></p><h2 id="wmcp-overview-title"><?php esc_html_e('Overview', 'wmcp-agentops'); ?></h2></div>
+			<div><p class="wmcp-kicker"><?php esc_html_e('01 / Operating picture', 'wmcp-agentops'); ?></p><h2 id="wmcp-overview-title"><?php esc_html_e('Monitor', 'wmcp-agentops'); ?></h2></div>
 			<div class="wmcp-scope-stamp"><span><?php echo $is_admin ? esc_html__('Authenticated shell', 'wmcp-agentops') : esc_html__('Demo-session only', 'wmcp-agentops'); ?></span><strong class="wmcp-mono" data-wmcp-workflow>—</strong></div>
 		</div>
+		<div class="wmcp-agent-journey" aria-labelledby="wmcp-agent-journey-title">
+			<div class="wmcp-agent-journey-head">
+				<p class="wmcp-kicker"><?php esc_html_e('The monitored path', 'wmcp-agentops'); ?></p>
+				<h3 id="wmcp-agent-journey-title"><?php esc_html_e('Agent journey model', 'wmcp-agentops'); ?></h3>
+			</div>
+			<ol>
+				<li><span>01</span><strong><?php esc_html_e('Visitor session', 'wmcp-agentops'); ?></strong><small><?php esc_html_e('One redacted browser scope', 'wmcp-agentops'); ?></small></li>
+				<li><span>02</span><strong><?php esc_html_e('Agent workflow', 'wmcp-agentops'); ?></strong><small><?php esc_html_e('A goal-directed run', 'wmcp-agentops'); ?></small></li>
+				<li><span>03</span><strong><?php esc_html_e('Tool invocation', 'wmcp-agentops'); ?></strong><small><?php esc_html_e('Allowed call and result', 'wmcp-agentops'); ?></small></li>
+				<li><span>04</span><strong><?php esc_html_e('Human checkpoint', 'wmcp-agentops'); ?></strong><small><?php esc_html_e('Checkout stays with the person', 'wmcp-agentops'); ?></small></li>
+				<li><span>05</span><strong><?php esc_html_e('Verified outcome', 'wmcp-agentops'); ?></strong><small><?php esc_html_e('Recorded commerce evidence', 'wmcp-agentops'); ?></small></li>
+			</ol>
+		</div>
 		<div class="wmcp-metric-grid" data-wmcp-overview>
-			<article class="wmcp-metric wmcp-metric-lead"><span><?php esc_html_e('Workflows', 'wmcp-agentops'); ?></span><strong data-metric="workflows.total">—</strong><small><span data-metric="workflows.completed">—</span> <?php esc_html_e('completed', 'wmcp-agentops'); ?></small></article>
+			<article class="wmcp-metric wmcp-metric-lead"><span><?php esc_html_e('Agent workflows', 'wmcp-agentops'); ?></span><strong data-metric="workflows.total">—</strong><small><span data-metric="workflows.completed">—</span> <?php esc_html_e('completed', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('Tool calls', 'wmcp-agentops'); ?></span><strong data-metric="tool_calls.total">—</strong><small><span data-metric="tool_calls.success_rate">—</span> <?php esc_html_e('ok', 'wmcp-agentops'); ?> · <span data-metric="tool_calls.failure_rate">—</span> <?php esc_html_e('fail', 'wmcp-agentops'); ?> · <span data-metric="tool_calls.denial_rate">—</span> <?php esc_html_e('denied', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('p95 latency', 'wmcp-agentops'); ?></span><strong><span data-metric="tool_calls.p95_duration_ms">—</span><i>ms</i></strong><small><span data-metric="tool_calls.p50_duration_ms">—</span> <?php esc_html_e('ms p50', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('Product searches', 'wmcp-agentops'); ?></span><strong data-metric="commerce.product_searches">—</strong><small><?php esc_html_e('catalog signals', 'wmcp-agentops'); ?></small></article>
@@ -78,8 +91,8 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 			<article class="wmcp-metric"><span><?php esc_html_e('Paid orders', 'wmcp-agentops'); ?></span><strong data-metric="commerce.orders_paid">—</strong><small><?php esc_html_e('same-session outcomes', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric wmcp-metric-revenue"><span><?php esc_html_e('Net attributed', 'wmcp-agentops'); ?></span><strong data-metric="revenue.net">—</strong><small><span data-metric="revenue.orders">—</span> <?php esc_html_e('orders', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('Refund value', 'wmcp-agentops'); ?></span><strong data-metric="revenue.refunds">—</strong><small><?php esc_html_e('attributed by currency', 'wmcp-agentops'); ?></small></article>
-			<article class="wmcp-metric"><span><?php esc_html_e('Capability gaps', 'wmcp-agentops'); ?></span><strong data-metric="capability_gaps.requests">—</strong><small><?php esc_html_e('unsupported goals', 'wmcp-agentops'); ?></small></article>
-			<article class="wmcp-metric"><span><?php esc_html_e('Policy changes', 'wmcp-agentops'); ?></span><strong data-metric="policy_changes">—</strong><small><?php esc_html_e('governance signals', 'wmcp-agentops'); ?></small></article>
+			<article class="wmcp-metric"><span><?php esc_html_e('Capability signals', 'wmcp-agentops'); ?></span><strong data-metric="capability_gaps.requests">—</strong><small><?php esc_html_e('unsupported goals', 'wmcp-agentops'); ?></small></article>
+			<article class="wmcp-metric"><span><?php esc_html_e('Control changes', 'wmcp-agentops'); ?></span><strong data-metric="policy_changes">—</strong><small><?php esc_html_e('policy signals', 'wmcp-agentops'); ?></small></article>
 		</div>
 		<div class="wmcp-attribution-strip" aria-label="<?php esc_attr_e('Attributed revenue classes', 'wmcp-agentops'); ?>">
 			<?php foreach (array('direct' => __('Agent direct', 'wmcp-agentops'), 'assisted' => __('Agent assisted', 'wmcp-agentops'), 'influenced' => __('Agent influenced', 'wmcp-agentops')) as $class => $label) : ?>
@@ -88,9 +101,34 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 		</div>
 	</section>
 
+	<section id="wmcp-workflows" class="wmcp-board-section" aria-labelledby="wmcp-workflows-title">
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('02 / Structured workflow replay', 'wmcp-agentops'); ?></p><h2 id="wmcp-workflows-title"><?php esc_html_e('Agent sessions', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Replay redacted tool and commerce events from this browser scope. No raw prompts, payloads, addresses, or payment data.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-workflow-layout">
+			<div class="wmcp-table-scroll">
+				<table class="wmcp-data-table wmcp-workflow-table">
+					<caption class="wmcp-screen-reader-text"><?php esc_html_e('Agent workflows in the current browser session', 'wmcp-agentops'); ?></caption>
+					<thead><tr><th scope="col"><?php esc_html_e('Agent workflow', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Status', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Calls', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Last signal', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Net', 'wmcp-agentops'); ?></th></tr></thead>
+					<tbody data-wmcp-workflows><tr><td colspan="5" class="wmcp-table-empty"><?php esc_html_e('Load the monitor to inspect agent workflows in this browser session.', 'wmcp-agentops'); ?></td></tr></tbody>
+				</table>
+			</div>
+			<article class="wmcp-timeline-card" aria-labelledby="wmcp-timeline-title">
+				<div class="wmcp-panel-label"><span><?php esc_html_e('Workflow replay', 'wmcp-agentops'); ?></span><span data-wmcp-timeline-count>—</span></div>
+				<h3 id="wmcp-timeline-title" tabindex="-1"><?php esc_html_e('Select an agent workflow', 'wmcp-agentops'); ?></h3>
+				<p data-wmcp-explanation><?php esc_html_e('The structured timeline shows terminal outcomes, latency, first problem, recovery, commerce evidence, and capability signals.', 'wmcp-agentops'); ?></p>
+				<dl class="wmcp-workflow-evidence" data-wmcp-workflow-evidence>
+					<div><dt><?php esc_html_e('Status', 'wmcp-agentops'); ?></dt><dd data-evidence="status">—</dd></div>
+					<div><dt><?php esc_html_e('Products', 'wmcp-agentops'); ?></dt><dd data-evidence="products">—</dd></div>
+					<div><dt><?php esc_html_e('Orders / attribution', 'wmcp-agentops'); ?></dt><dd data-evidence="orders">—</dd></div>
+					<div><dt><?php esc_html_e('Capability signals', 'wmcp-agentops'); ?></dt><dd data-evidence="gaps">—</dd></div>
+				</dl>
+				<ol class="wmcp-timeline" data-wmcp-timeline></ol>
+			</article>
+		</div>
+	</section>
+
 	<section id="wmcp-funnel" class="wmcp-board-section wmcp-funnel-section" aria-labelledby="wmcp-funnel-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('02 / Conversion trace', 'wmcp-agentops'); ?></p><h2 id="wmcp-funnel-title"><?php esc_html_e('Commerce funnel', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Count and conversion are deterministic recorded stages, never inferred intent.', 'wmcp-agentops'); ?></p></div>
-		<ol class="wmcp-funnel" data-wmcp-funnel>
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('03 / Recorded progression', 'wmcp-agentops'); ?></p><h2 id="wmcp-funnel-title"><?php esc_html_e('Journey & outcomes', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Stage counts and conversion use recorded evidence, never inferred intent.', 'wmcp-agentops'); ?></p></div>
+		<ol class="wmcp-funnel" data-wmcp-funnel aria-label="<?php esc_attr_e('Recorded commerce journey', 'wmcp-agentops'); ?>">
 			<?php
 			$stages = array(
 				'workflow_started' => __('Workflow started', 'wmcp-agentops'),
@@ -98,7 +136,7 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 				'product_viewed' => __('Product viewed', 'wmcp-agentops'),
 				'comparison' => __('Comparison', 'wmcp-agentops'),
 				'cart_changed' => __('Cart mutation', 'wmcp-agentops'),
-				'checkout_handoff' => __('Checkout handoff', 'wmcp-agentops'),
+				'checkout_handoff' => __('Human checkout handoff', 'wmcp-agentops'),
 				'order_created' => __('Order created', 'wmcp-agentops'),
 				'order_paid' => __('Order paid', 'wmcp-agentops'),
 				'retained_after_refunds' => __('Retained after refunds', 'wmcp-agentops'),
@@ -110,36 +148,11 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 		</ol>
 	</section>
 
-	<section id="wmcp-workflows" class="wmcp-board-section" aria-labelledby="wmcp-workflows-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('03 / Flight recorder', 'wmcp-agentops'); ?></p><h2 id="wmcp-workflows-title"><?php esc_html_e('Workflow explorer', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Redacted properties only. No raw prompts, payloads, addresses, or payment data.', 'wmcp-agentops'); ?></p></div>
-		<div class="wmcp-workflow-layout">
-			<div class="wmcp-table-scroll">
-				<table class="wmcp-data-table wmcp-workflow-table">
-					<caption class="wmcp-screen-reader-text"><?php esc_html_e('Current session workflows', 'wmcp-agentops'); ?></caption>
-					<thead><tr><th scope="col"><?php esc_html_e('Workflow', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Status', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Calls', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Last signal', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Net', 'wmcp-agentops'); ?></th></tr></thead>
-					<tbody data-wmcp-workflows><tr><td colspan="5" class="wmcp-table-empty"><?php esc_html_e('Load this session to inspect its storefront workflow.', 'wmcp-agentops'); ?></td></tr></tbody>
-				</table>
-			</div>
-			<article class="wmcp-timeline-card" aria-labelledby="wmcp-timeline-title">
-				<div class="wmcp-panel-label"><span><?php esc_html_e('Deterministic explanation', 'wmcp-agentops'); ?></span><span data-wmcp-timeline-count>—</span></div>
-				<h3 id="wmcp-timeline-title" tabindex="-1"><?php esc_html_e('Select a workflow', 'wmcp-agentops'); ?></h3>
-				<p data-wmcp-explanation><?php esc_html_e('The timeline will show terminal outcomes, latency, first problem, recovery, commerce evidence, and capability gaps.', 'wmcp-agentops'); ?></p>
-				<dl class="wmcp-workflow-evidence" data-wmcp-workflow-evidence>
-					<div><dt><?php esc_html_e('Status', 'wmcp-agentops'); ?></dt><dd data-evidence="status">—</dd></div>
-					<div><dt><?php esc_html_e('Products', 'wmcp-agentops'); ?></dt><dd data-evidence="products">—</dd></div>
-					<div><dt><?php esc_html_e('Orders / attribution', 'wmcp-agentops'); ?></dt><dd data-evidence="orders">—</dd></div>
-					<div><dt><?php esc_html_e('Capability gaps', 'wmcp-agentops'); ?></dt><dd data-evidence="gaps">—</dd></div>
-				</dl>
-				<ol class="wmcp-timeline" data-wmcp-timeline></ol>
-			</article>
-		</div>
-	</section>
-
 	<section id="wmcp-tools" class="wmcp-board-section" aria-labelledby="wmcp-tools-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('04 / Tool telemetry', 'wmcp-agentops'); ?></p><h2 id="wmcp-tools-title"><?php esc_html_e('Tool health', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Latency and outcome rates use terminal tool events in the authorized scope.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('04 / Tool performance', 'wmcp-agentops'); ?></p><h2 id="wmcp-tools-title"><?php esc_html_e('Tools', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Availability, latency, and outcome rates use terminal tool events in the authorized scope.', 'wmcp-agentops'); ?></p></div>
 		<div class="wmcp-table-scroll">
 			<table class="wmcp-data-table">
-				<caption class="wmcp-screen-reader-text"><?php esc_html_e('WebMCP tool health', 'wmcp-agentops'); ?></caption>
+				<caption class="wmcp-screen-reader-text"><?php esc_html_e('WebMCP tool performance and state', 'wmcp-agentops'); ?></caption>
 				<thead><tr><th scope="col"><?php esc_html_e('Tool', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Calls / workflows', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Success / failure / denied', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('p50 / p95', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Top error', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Cart / handoff', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('Orders / attributed net', 'wmcp-agentops'); ?></th><th scope="col"><?php esc_html_e('State', 'wmcp-agentops'); ?></th></tr></thead>
 				<tbody data-wmcp-tool-health><tr><td colspan="8" class="wmcp-table-empty"><?php esc_html_e('No tool-health query has been run for this scope.', 'wmcp-agentops'); ?></td></tr></tbody>
 			</table>
@@ -147,12 +160,14 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 	</section>
 
 	<section id="wmcp-gaps" class="wmcp-board-section" aria-labelledby="wmcp-gaps-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('05 / Unmet demand', 'wmcp-agentops'); ?></p><h2 id="wmcp-gaps-title"><?php esc_html_e('Capability gaps', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Viewed-product value is opportunity context—not a claim of lost revenue.', 'wmcp-agentops'); ?></p></div>
-		<div class="wmcp-gap-list" data-wmcp-gaps><p class="wmcp-empty-state"><?php esc_html_e('Unsupported shopper requests will appear after the capability-gap tool records them.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('05 / Actionable evidence', 'wmcp-agentops'); ?></p><h2 id="wmcp-gaps-title"><?php esc_html_e('Signals', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Signals come from recorded failures, denials, and unsupported goals—not inferred sentiment.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-signal-feed" data-wmcp-signals></div>
+		<div class="wmcp-capability-signal-head"><span><?php esc_html_e('Capability requests', 'wmcp-agentops'); ?></span><small><?php esc_html_e('Viewed-product value is opportunity context, not a claim of lost revenue.', 'wmcp-agentops'); ?></small></div>
+		<div class="wmcp-gap-list" data-wmcp-gaps><p class="wmcp-empty-state"><?php esc_html_e('No unsupported-goal signals have been recorded for this scope.', 'wmcp-agentops'); ?></p></div>
 	</section>
 
 	<section id="wmcp-governance" class="wmcp-board-section wmcp-governance" aria-labelledby="wmcp-governance-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('06 / Close the loop', 'wmcp-agentops'); ?></p><h2 id="wmcp-governance-title"><?php esc_html_e('Governance', 'wmcp-agentops'); ?></h2></div><p><?php echo $is_admin ? esc_html__('Persistent site policy. Changes are authenticated and enforced server-side.', 'wmcp-agentops') : esc_html__('Public changes can only restrict storefront tools for this demo session.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('06 / Close the loop', 'wmcp-agentops'); ?></p><h2 id="wmcp-governance-title"><?php esc_html_e('Controls', 'wmcp-agentops'); ?></h2></div><p><?php echo $is_admin ? esc_html__('Persistent site policy. Changes are authenticated and enforced server-side.', 'wmcp-agentops') : esc_html__('Public controls can only restrict storefront tools for this demo session.', 'wmcp-agentops'); ?></p></div>
 
 		<?php if ($is_admin && ! empty($view['can_manage_policies']) && isset($view['settings']) && is_array($view['settings'])) : ?>
 			<form class="wmcp-policy-form" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="post">

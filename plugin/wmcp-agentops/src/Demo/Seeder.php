@@ -31,7 +31,7 @@ final class Seeder
 
         update_option('wmcp_agentops_enabled', true, false);
         update_option('blogname', 'TrailForge Lab');
-        update_option('blogdescription', 'Field-tested gear with observable agent workflows');
+        update_option('blogdescription', 'Field-tested gear with privacy-first agent experience monitoring');
         update_option('woocommerce_currency', 'USD');
         update_option('woocommerce_calc_taxes', 'no');
         update_option('woocommerce_ship_to_countries', 'disabled');
@@ -73,7 +73,7 @@ final class Seeder
         $definitions = array(
             'landing'    => array('WebMCP Field Lab', 'webmcp-field-lab', '[wmcp_judge_landing]'),
             'storefront' => array('Agent-ready Storefront', 'storefront-demo', '[wmcp_storefront_demo]'),
-            'agentops'   => array('AgentOps Field Board', 'agentops-demo', '[wmcp_agentops_demo]'),
+            'agentops'   => array('Agent Experience Monitor', 'agentops-demo', '[wmcp_agentops_demo]'),
             'health'     => array('WebMCP Readiness', 'webmcp-health', '[wmcp_health]'),
             'returns'    => array(
                 'Returns policy',
@@ -93,7 +93,7 @@ final class Seeder
             'privacy'    => array(
                 'Privacy policy',
                 'privacy-policy',
-                'The AgentOps demo stores allowlisted operational events and one-way session hashes. It does not store raw prompts, identities, addresses, cookies, nonces, authorization headers, or payment data.',
+                'The Agent Experience Monitor demo stores allowlisted operational events and one-way session hashes. It does not store raw prompts, identities, addresses, cookies, nonces, authorization headers, or payment data.',
             ),
             'cart'       => array('Cart', 'cart', '[woocommerce_cart]'),
             'checkout'   => array('Checkout', 'checkout', '[woocommerce_checkout]'),

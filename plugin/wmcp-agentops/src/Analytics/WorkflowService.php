@@ -81,7 +81,7 @@ final class WorkflowService
     /**
      * Reuse the sole active workflow for a demo session and surface, or start one.
      *
-     * The AgentOps surface deliberately receives its own audit workflow. Commerce
+     * The agent-monitoring surface deliberately receives its own audit workflow. Commerce
      * queries only include storefront workflows.
      *
      * @return array<string, mixed>

@@ -9,7 +9,7 @@
 defined('ABSPATH') || exit;
 
 $shopper_prompt = 'Find a waterproof backpack under $120, compare the two best choices, confirm that the return policy is at least 30 days, and add the best-value option to my cart.';
-$merchant_prompt = 'Show the commerce funnel for my current workflow, identify the slowest or failed tool call, explain what happened, and show any capabilities the shopper requested that this store does not support.';
+$merchant_prompt = 'Monitor my current agent session, replay its tool and commerce timeline, identify the slowest or failed invocation, connect it to the commerce outcome, show any capability signals this store does not support, and summarize current controls.';
 ?>
 <a class="wmcp-skip-link" href="#wmcp-field-main"><?php esc_html_e('Skip to field report', 'wmcp-agentops'); ?></a>
 <div id="wmcp-field-main" class="wmcp-field wmcp-landing alignfull" data-wmcp-surface="landing" tabindex="-1">
@@ -32,10 +32,10 @@ $merchant_prompt = 'Show the commerce funnel for my current workflow, identify t
 		<div class="wmcp-hero-copy">
 			<p class="wmcp-kicker"><?php esc_html_e('Closed-loop commerce telemetry', 'wmcp-agentops'); ?></p>
 			<h1 id="wmcp-landing-title"><?php esc_html_e('The storefront speaks.', 'wmcp-agentops'); ?><br><em><?php esc_html_e('The operator sees what happened.', 'wmcp-agentops'); ?></em></h1>
-			<p class="wmcp-deck"><?php esc_html_e('A WordPress field layer where browser agents can use a real shop, every step becomes inspectable evidence, and the merchant can govern what happens next.', 'wmcp-agentops'); ?></p>
+			<p class="wmcp-deck"><?php esc_html_e('A WordPress field layer where browser agents can use a real shop, recorded tool and commerce steps become inspectable evidence, and the merchant can govern what happens next.', 'wmcp-agentops'); ?></p>
 			<div class="wmcp-actions">
 				<a class="wmcp-button wmcp-button-primary" href="<?php echo esc_url((string) $view['storefront_url']); ?>"><?php esc_html_e('Open storefront', 'wmcp-agentops'); ?> <span aria-hidden="true">↗</span></a>
-				<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open AgentOps', 'wmcp-agentops'); ?></a>
+				<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open Agent Monitor', 'wmcp-agentops'); ?></a>
 			</div>
 		</div>
 

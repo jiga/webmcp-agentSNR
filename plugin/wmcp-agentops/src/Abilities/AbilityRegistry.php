@@ -41,8 +41,8 @@ final class AbilityRegistry
         wp_register_ability_category(
             'wmcp-agentops',
             array(
-                'label'       => __('WebMCP AgentOps', 'wmcp-agentops'),
-                'description' => __('Session-scoped analytics, diagnostics, and governance capabilities.', 'wmcp-agentops'),
+                'label'       => __('WebMCP Agent Monitor', 'wmcp-agentops'),
+                'description' => __('Session-scoped monitoring, diagnostics, outcomes, and governance capabilities.', 'wmcp-agentops'),
             )
         );
     }

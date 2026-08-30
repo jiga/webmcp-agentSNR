@@ -31,8 +31,8 @@ final class AdminMenu
     public function register(): void
     {
         add_menu_page(
-            __('WebMCP AgentOps', 'wmcp-agentops'),
-            __('AgentOps', 'wmcp-agentops'),
+            __('WebMCP Agent Experience Monitor', 'wmcp-agentops'),
+            __('Agent Monitor', 'wmcp-agentops'),
             'view_wmcp_analytics',
             'wmcp-agentops',
             array($this->dashboard, 'render'),

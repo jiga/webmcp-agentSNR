@@ -1,6 +1,6 @@
 {
   "name": "wp-webmcp/agentops",
-  "description": "WebMCP storefront workflows, AgentOps analytics, and safe governance for WordPress.",
+  "description": "WebMCP storefront workflows, agent experience monitoring, and safe governance for WordPress.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "require": {

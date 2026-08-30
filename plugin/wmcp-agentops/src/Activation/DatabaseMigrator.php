@@ -138,7 +138,7 @@ final class DatabaseMigrator
         );
 
         if (! self::schema_ready()) {
-            throw new RuntimeException('WP WebMCP AgentOps could not verify its database schema.');
+            throw new RuntimeException('WebMCP Agent Experience Monitor could not verify its database schema.');
         }
 
         update_option('wmcp_agentops_db_version', Versions::DATABASE, false);

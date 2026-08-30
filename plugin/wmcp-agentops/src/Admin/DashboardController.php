@@ -29,7 +29,7 @@ final class DashboardController
     public function render(): void
     {
         if (! current_user_can('view_wmcp_analytics')) {
-            wp_die(esc_html__('You do not have permission to view AgentOps analytics.', 'wmcp-agentops'), '', array('response' => 403));
+            wp_die(esc_html__('You do not have permission to view agent-monitoring analytics.', 'wmcp-agentops'), '', array('response' => 403));
         }
 
         $settings         = $this->settings->snapshot();
@@ -53,7 +53,7 @@ final class DashboardController
         $template         = (defined('WMCP_AGENTOPS_PATH') ? WMCP_AGENTOPS_PATH : dirname(__DIR__, 2) . '/') . 'templates/agentops-demo.php';
 
         if (! is_readable($template)) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('The AgentOps dashboard template is unavailable.', 'wmcp-agentops') . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . esc_html__('The Agent Experience Monitor template is unavailable.', 'wmcp-agentops') . '</p></div>';
             return;
         }
 

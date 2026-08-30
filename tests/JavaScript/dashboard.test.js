@@ -9,7 +9,10 @@ const {
 	MockDocument,
 	MockWindow,
 	element,
+	jsonResponse,
+	queuedFetch,
 	runBrowserScript,
+	waitFor,
 } = require( "./dom-harness.js" );
 
 const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentops/assets/js/dashboard.js" );
@@ -26,7 +29,7 @@ function attributionCard( document, attribution ) {
 	} );
 }
 
-function dashboardFixture() {
+function dashboardFixture( options = {} ) {
 	const document = new MockDocument();
 	const policyState = element( document, "span", { dataset: { policyState: "" }, text: "Site enabled" } );
 	const policyRow = element( document, "div", {
@@ -38,13 +41,32 @@ function dashboardFixture() {
 		className: "wmcp-field",
 		dataset: { wmcpSurface: "agentops" },
 		children: [
+			element( document, "button", { dataset: { wmcpLoadDashboard: "" } } ),
+			element( document, "li", {
+				dataset: { funnelStage: "workflow_started" },
+				children: [
+					element( document, "span", { dataset: { funnelCount: "" } } ),
+					element( document, "span", { dataset: { funnelRate: "" } } ),
+					element( document, "span", { dataset: { funnelPrevious: "" } } ),
+					element( document, "small", { dataset: { funnelReason: "" } } ),
+				],
+			} ),
 			element( document, "strong", { dataset: { metric: "revenue.net" } } ),
 			element( document, "strong", { dataset: { metric: "revenue.refunds" } } ),
 			element( document, "strong", { dataset: { metric: "policy_changes" }, text: "—" } ),
 			attributionCard( document, "direct" ),
 			attributionCard( document, "assisted" ),
 			attributionCard( document, "influenced" ),
+			element( document, "div", { dataset: { wmcpSignals: "" } } ),
 			element( document, "strong", { dataset: { wmcpWorkflow: "" } } ),
+			element( document, "h3", { id: "wmcp-timeline-title" } ),
+			element( document, "p", { dataset: { wmcpExplanation: "" } } ),
+			element( document, "span", { dataset: { wmcpTimelineCount: "" } } ),
+			element( document, "dd", { dataset: { evidence: "status" } } ),
+			element( document, "dd", { dataset: { evidence: "products" } } ),
+			element( document, "dd", { dataset: { evidence: "orders" } } ),
+			element( document, "dd", { dataset: { evidence: "gaps" } } ),
+			element( document, "ol", { dataset: { wmcpTimeline: "" } } ),
 			element( document, "tbody", { dataset: { wmcpWorkflows: "" } } ),
 			element( document, "tbody", { dataset: { wmcpToolHealth: "" } } ),
 			element( document, "div", { dataset: { wmcpGaps: "" } } ),
@@ -55,10 +77,11 @@ function dashboardFixture() {
 	} );
 	document.body.append( root );
 	const window = new MockWindow( document, {
-		wmcpConfig: {
+		fetch: options.fetch,
+		wmcpConfig: Object.assign( {
 			executionBaseUrl: "/wp-json/wmcp-agentops/v1",
 			manifestUrl: "/manifest",
-		},
+		}, options.wmcpConfig || {} ),
 	} );
 	runBrowserScript( SCRIPT, { document, window } );
 	return { document, policyRow, policyState, root, window };
@@ -80,6 +103,75 @@ function formattedMoney( value, currency ) {
 		style: "currency",
 	} ).format( value );
 }
+
+function signalCards( root ) {
+	return root.querySelectorAll( "[data-wmcp-signals] .wmcp-signal-card" );
+}
+
+test( "journey stages omit unknown median timing instead of displaying null", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_agent_conversion_funnel", {
+		stages: [ {
+			conversion_from_previous: 0,
+			conversion_from_start: 0,
+			median_time_to_next_ms: null,
+			stage: "workflow_started",
+			top_exit_reason: "no_recorded_exit",
+			workflow_count: 0,
+		} ],
+	} );
+
+	const reason = fixture.root.querySelector( '[data-funnel-stage="workflow_started"] [data-funnel-reason]' );
+	assert.equal( reason.textContent, "No Recorded Exit" );
+	assert.doesNotMatch( reason.textContent, /null|undefined/i );
+} );
+
+test( "Agent Sessions discloses when more workflows exist beyond the returned page", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "query_agent_workflows", {
+		has_more: true,
+		items: [ {
+			commerce: { by_currency: {} },
+			last_event: { event_name: "workflow.started" },
+			status: "active",
+			tool_count: 1,
+			workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE",
+		} ],
+	} );
+
+	const note = fixture.root.querySelector( '[data-workflow-coverage="partial"]' );
+	assert.match( note.textContent, /first 1 agent workflows/ );
+	assert.match( note.textContent, /More are available/ );
+} );
+
+test( "Workflow Replay discloses a truncated event timeline", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "explain_agent_workflow", {
+		capability_gaps: [],
+		commerce_outcome: { orders: [] },
+		explanation: "Returned evidence.",
+		timeline: [ {
+			duration_ms: 12,
+			event_name: "tool.call.succeeded",
+			occurred_at: "2026-08-30 12:00:00",
+			outcome: "success",
+			product_ids: [],
+		} ],
+		truncated: true,
+		workflow: {
+			status: "completed",
+			workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE",
+		},
+	} );
+
+	assert.equal(
+		fixture.root.querySelector( "[data-wmcp-timeline-count]" ).textContent,
+		"1 event shown · partial replay"
+	);
+} );
 
 test( "overview and attribution preserve separate totals for every returned currency", () => {
 	const fixture = dashboardFixture();
@@ -221,4 +313,288 @@ test( "session policy updates distinguish a session disable from a server policy
 	assert.equal( fixture.policyState.textContent, "Blocked by global or site policy" );
 	assert.equal( fixture.policyRow.classList.contains( "wmcp-policy-disabled" ), true );
 	assert.equal( fixture.root.querySelector( '[data-metric="policy_changes"]' ).textContent, "2" );
+} );
+
+test( "Signals queue renders tool errors with exact reliability evidence and severity", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_tool_health", {
+		items: [ {
+			calls: 8,
+			denied: 0,
+			denial_rate: 0,
+			failed: 3,
+			failure_rate: 0.375,
+			tool_name: "search_products",
+			top_errors: [
+				{ code: "catalog_timeout", count: 2 },
+				{ code: "invalid_filter", count: 1 },
+			],
+		} ],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 1 );
+	assert.equal( cards[ 0 ].dataset.signalType, "reliability-signal" );
+	assert.equal( cards[ 0 ].classList.contains( "wmcp-signal-critical" ), true );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-type" ).textContent, "Reliability signal" );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-severity" ).textContent, "Critical" );
+	assert.match( cards[ 0 ].textContent, /3 failed calls · 37\.5% rate/ );
+	assert.match( cards[ 0 ].textContent, /search_products/ );
+	assert.match( cards[ 0 ].textContent, /catalog_timeout × 2 · invalid_filter × 1/ );
+} );
+
+test( "Signals queue labels denied calls neutrally instead of claiming policy causality", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_tool_health", {
+		items: [ {
+			calls: 4,
+			denied: 2,
+			denial_rate: 0.5,
+			failed: 0,
+			failure_rate: 0,
+			tool_name: "add_to_cart",
+			top_errors: [ { code: "policy_denied", count: 2 } ],
+		} ],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 1 );
+	assert.equal( cards[ 0 ].dataset.signalType, "denial-signal" );
+	assert.equal( cards[ 0 ].classList.contains( "wmcp-signal-warning" ), true );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-type" ).textContent, "Denial signal" );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-severity" ).textContent, "Warning" );
+	assert.match( cards[ 0 ].textContent, /2 denied calls · 50% rate/ );
+	assert.match( cards[ 0 ].textContent, /add_to_cart/ );
+	assert.match( cards[ 0 ].textContent, /policy_denied × 2/ );
+} );
+
+test( "Signals queue renders active grouped capability gaps as opportunities", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_capability_gaps", {
+		items: [
+			{
+				affected_workflows: 2,
+				capability: "back_in_stock_notification",
+				requests: 4,
+				status: "open",
+			},
+			{
+				affected_workflows: 1,
+				capability: "gift_wrapping",
+				requests: 1,
+				status: "resolved",
+			},
+		],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 1 );
+	assert.equal( cards[ 0 ].dataset.signalType, "opportunity-gap" );
+	assert.equal( cards[ 0 ].classList.contains( "wmcp-signal-opportunity" ), true );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-type" ).textContent, "Opportunity gap" );
+	assert.equal( cards[ 0 ].querySelector( ".wmcp-signal-severity" ).textContent, "Opportunity" );
+	assert.match( cards[ 0 ].textContent, /4 requests · 2 workflows/ );
+	assert.match( cards[ 0 ].textContent, /back_in_stock_notification/ );
+	assert.doesNotMatch( cards[ 0 ].textContent, /gift_wrapping/ );
+} );
+
+test( "Signals queue reports a clear empty state after all monitoring evidence loads", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_agent_analytics_overview", {
+		tool_calls: { denied: 0, denial_rate: 0, failed: 0, failure_rate: 0 },
+	} );
+	render( fixture.window, "get_tool_health", { items: [] } );
+	render( fixture.window, "get_capability_gaps", { items: [] } );
+
+	const signals = fixture.root.querySelector( "[data-wmcp-signals]" );
+	assert.equal( signalCards( fixture.root ).length, 0 );
+	assert.equal( signals.querySelector( ".wmcp-empty-state" ).textContent, "No recorded signals in this loaded scope." );
+} );
+
+test( "Signals queue renders hostile tool, code, and capability values only as text", () => {
+	const fixture = dashboardFixture();
+	const hostileTool = '<img src=x onerror="stealSession()">';
+	const hostileCode = "</dd><script>stealSession()</script>";
+	const hostileCapability = '<svg onload="stealSession()">';
+
+	render( fixture.window, "get_capability_gaps", {
+		items: [ { affected_workflows: 1, capability: hostileCapability, requests: 1, status: "open" } ],
+	} );
+	render( fixture.window, "get_tool_health", {
+		items: [ {
+			calls: 1,
+			denied: 0,
+			failure_rate: 1,
+			failed: 1,
+			tool_name: hostileTool,
+			top_errors: [ { code: hostileCode, count: 1 } ],
+		} ],
+	} );
+
+	const signals = fixture.root.querySelector( "[data-wmcp-signals]" );
+	assert.equal( signalCards( fixture.root ).length, 2 );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value === hostileTool ) );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value.includes( hostileCode ) ) );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value === hostileCapability ) );
+	assert.equal( signals.querySelectorAll( "img" ).length, 0 );
+	assert.equal( signals.querySelectorAll( "script" ).length, 0 );
+	assert.equal( signals.querySelectorAll( "svg" ).length, 0 );
+	assert.equal( fixture.document.innerHTMLWrites.length, 0 );
+} );
+
+test( "Signals queue labels mixed failure and denial codes as tool-level terminal evidence", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_tool_health", {
+		items: [ {
+			calls: 4,
+			denied: 1,
+			denial_rate: 0.25,
+			failed: 1,
+			failure_rate: 0.25,
+			tool_name: "checkout_handoff",
+			top_errors: [
+				{ code: "catalog_timeout", count: 1 },
+				{ code: "policy_denied", count: 1 },
+			],
+		} ],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 2 );
+	cards.forEach( ( card ) => {
+		assert.match( card.textContent, /Top terminal codes \(all outcomes\)/ );
+		assert.match( card.textContent, /catalog_timeout × 1 · policy_denied × 1/ );
+	} );
+} );
+
+test( "Signals queue orders critical evidence before warnings using one disclosed classifier", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_tool_health", {
+		items: [
+			{
+				calls: 20,
+				denied: 0,
+				failed: 2,
+				failure_rate: 0.1,
+				tool_name: "warning_tool",
+				top_errors: [ { code: "warning_code", count: 2 } ],
+			},
+			{
+				calls: 1,
+				denied: 0,
+				failed: 1,
+				failure_rate: 1,
+				tool_name: "critical_tool",
+				top_errors: [ { code: "critical_code", count: 1 } ],
+			},
+		],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 2 );
+	assert.match( cards[ 0 ].textContent, /critical_tool/ );
+	assert.equal( cards[ 0 ].classList.contains( "wmcp-signal-critical" ), true );
+	assert.match( cards[ 0 ].textContent, /Critical at 3 failed calls or a 25% failure rate/ );
+	assert.match( cards[ 1 ].textContent, /warning_tool/ );
+	assert.equal( cards[ 1 ].classList.contains( "wmcp-signal-warning" ), true );
+} );
+
+test( "Signals queue reaches the same deterministic order regardless of response arrival order", () => {
+	const first = dashboardFixture();
+	const second = dashboardFixture();
+	const overview = { tool_calls: { denied: 1, denial_rate: 0.2, failed: 1, failure_rate: 0.2 } };
+	const health = {
+		items: [ {
+			denied: 1,
+			denial_rate: 0.2,
+			failed: 1,
+			failure_rate: 0.2,
+			tool_name: "compare_products",
+			top_errors: [ { code: "policy_denied", count: 1 } ],
+		} ],
+	};
+	const gaps = {
+		items: [ { affected_workflows: 1, capability: "gift_wrapping", requests: 2, status: "open" } ],
+	};
+
+	render( first.window, "get_agent_analytics_overview", overview );
+	render( first.window, "get_tool_health", health );
+	render( first.window, "get_capability_gaps", gaps );
+	render( second.window, "get_capability_gaps", gaps );
+	render( second.window, "get_tool_health", health );
+	render( second.window, "get_agent_analytics_overview", overview );
+
+	const firstCards = signalCards( first.root );
+	const secondCards = signalCards( second.root );
+	assert.deepEqual( firstCards.map( ( card ) => card.dataset.signalType ), [ "reliability-signal", "denial-signal", "opportunity-gap" ] );
+	assert.deepEqual( secondCards.map( ( card ) => card.dataset.signalType ), firstCards.map( ( card ) => card.dataset.signalType ) );
+	assert.deepEqual( secondCards.map( ( card ) => card.textContent ), firstCards.map( ( card ) => card.textContent ) );
+} );
+
+test( "Signals queue discloses truncated and paginated evidence instead of claiming complete scope", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_agent_analytics_overview", {
+		tool_calls: { denied: 0, denial_rate: 0, failed: 0, failure_rate: 0 },
+	} );
+	render( fixture.window, "get_tool_health", { items: [], truncated: true } );
+	render( fixture.window, "get_capability_gaps", { has_more: true, items: [] } );
+
+	const signals = fixture.root.querySelector( "[data-wmcp-signals]" );
+	assert.equal( signalCards( fixture.root ).length, 0 );
+	assert.match( signals.textContent, /No recorded signals appear in the returned evidence/ );
+	assert.match( signals.textContent, /tool-health results were truncated/ );
+	assert.match( signals.textContent, /more capability-gap groups are available/ );
+	assert.doesNotMatch( signals.textContent, /No recorded signals in this loaded scope/ );
+} );
+
+test( "Signals queue clears the previous snapshot before a refresh with a failed source", async () => {
+	const toolNames = [
+		"get_agent_analytics_overview",
+		"get_agent_conversion_funnel",
+		"query_agent_workflows",
+		"get_tool_health",
+		"get_capability_gaps",
+	];
+	const fetch = queuedFetch( [
+		jsonResponse( {
+			manifest_revision: "revision-2",
+			schema_version: "1",
+			session: { csrf_token: "csrf" },
+			tools: toolNames.map( ( name ) => ( { name } ) ),
+			workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE",
+		} ),
+		jsonResponse( { ok: true, result: { tool_calls: { denied: 0, failed: 0 } } } ),
+		jsonResponse( { ok: true, result: { stages: [] } } ),
+		jsonResponse( { ok: true, result: { items: [] } } ),
+		jsonResponse( { error: { message: "Health unavailable" }, ok: false }, { status: 503 } ),
+		jsonResponse( { ok: true, result: { items: [] } } ),
+	] );
+	const fixture = dashboardFixture( { fetch } );
+
+	render( fixture.window, "get_tool_health", {
+		items: [ {
+			failed: 4,
+			failure_rate: 1,
+			tool_name: "stale_tool",
+			top_errors: [ { code: "stale_code", count: 4 } ],
+		} ],
+	} );
+	assert.match( fixture.root.querySelector( "[data-wmcp-signals]" ).textContent, /stale_tool/ );
+
+	const button = fixture.root.querySelector( "[data-wmcp-load-dashboard]" );
+	button.click();
+	assert.equal( signalCards( fixture.root ).length, 0 );
+	assert.doesNotMatch( fixture.root.querySelector( "[data-wmcp-signals]" ).textContent, /stale_tool|stale_code/ );
+
+	await waitFor( () => fetch.calls.length === 6 && button.disabled === false, "dashboard refresh did not settle" );
+	assert.equal( signalCards( fixture.root ).length, 0 );
+	assert.doesNotMatch( fixture.root.querySelector( "[data-wmcp-signals]" ).textContent, /stale_tool|stale_code/ );
+	assert.match( fixture.root.querySelector( "[data-wmcp-error]" ).textContent, /1 dashboard query could not be completed/ );
 } );

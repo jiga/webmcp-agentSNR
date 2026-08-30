@@ -68,7 +68,7 @@ defined('ABSPATH') || exit;
 
 	<div class="wmcp-health-actions">
 		<a class="wmcp-button wmcp-button-primary" href="<?php echo esc_url((string) $view['storefront_url']); ?>"><?php esc_html_e('Open storefront', 'wmcp-agentops'); ?> <span aria-hidden="true">↗</span></a>
-		<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open AgentOps', 'wmcp-agentops'); ?></a>
+		<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open Agent Monitor', 'wmcp-agentops'); ?></a>
 		<button class="wmcp-button wmcp-button-quiet" type="button" data-wmcp-download-health><?php esc_html_e('Download public report', 'wmcp-agentops'); ?></button>
 	</div>
 

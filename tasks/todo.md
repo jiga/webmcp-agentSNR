@@ -66,9 +66,19 @@ Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon En
 Implementation and the definitive local verification matrix are complete. Independent staff review approved the code with no remaining P0/P1 blocker; the exact final artifact passed every configured matrix target.
 
 - PHP: 58 tests / 521 assertions pass on PHP 8.1 and 8.4; Coding Standards has zero errors.
-- Browser code: 42 JavaScript tests, 12 Chromium scenarios, lint, and dependency audit pass.
+- Browser code: 55 JavaScript tests, 12 Chromium scenarios, lint, and dependency audit pass.
 - WordPress/Woo: the exact ZIP passes WordPress 6.9, 7.0.4, and 7.1 with WooCommerce 10.9.4/11.0.1, legacy storage and HPOS; real paid/refund/cancel attribution checks pass in both storage modes.
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
-- Packaging: Plugin Check has zero errors; the remaining warnings and human-selected naming caveat are documented.
+- Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and final owner-selected branding action are documented.
 
 Remaining work is exclusively owner/external: choose the final public name, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate real clients, rerun against WooCommerce 11.1 if released, capture media, replace URLs, submit, and freeze.
+
+## Agent Experience Monitoring iteration
+
+- [x] Compare established session replay, digital experience monitoring, and agent observability products.
+- [x] Define the primary operator, category position, core monitoring objects, and explicit privacy boundary.
+- [x] Reframe the AgentOps surface around Monitor, Agent Sessions, Journey, Tools, Signals, and Controls.
+- [x] Add an agent journey model strip and a truthful loaded-snapshot Signals view using existing redacted evidence.
+- [x] Rename the public surface away from the existing AgentOps.ai market association without changing internal compatibility identifiers.
+- [x] Update product positioning and judge-facing documentation.
+- [x] Run JavaScript/PHP/browser checks and complete independent review; commit the iteration.

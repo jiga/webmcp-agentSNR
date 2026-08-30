@@ -35,7 +35,7 @@ npm run test:browser
 
 Run the complete host-independent static/unit/build slice with `./bin/verify.sh`. The REST, Woo lifecycle, and browser checks require the local demo started by `./bin/start-demo.sh`.
 
-The automated suites currently contain 42 JavaScript contract tests, 58 PHP tests with 521 assertions, and 12 isolated Chromium scenarios. The REST smoke harness covers seven public routes, 19 tools, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
+The automated suites currently contain 55 JavaScript contract tests, 58 PHP tests with 521 assertions, and 12 isolated Chromium scenarios. The REST smoke harness covers seven public routes, 19 tools, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
 
 The WooCommerce lifecycle gate uses public Woo CRUD APIs and explicit provenance fixtures in the configured storage mode. It proves unpaid exclusion, paid attribution, partial and full refund recomputation, cancellation removal, provenance-negative line handling, and human-only exclusion. Every fixture is tagged and deleted before the test exits.
 
@@ -52,7 +52,7 @@ Branch CI validates Composer metadata, WordPress Coding Standards, PHP/JavaScrip
 5. Ask for a blue 24L back-in-stock notification. Confirm the agent records a capability gap and explicitly says no notification was created.
 6. Run checkout handoff. Confirm it does not create an order or navigate automatically.
 7. Click the human checkout CTA, review the prefilled fictional demo fields, choose **Demo payment — no charge**, and place the order.
-8. Open AgentOps and run the merchant prompt. Confirm the funnel, timeline, tool health, capability gap, paid order, attribution class, gross revenue, refunds, and net revenue refer only to this demo session.
+8. Open Agent Experience Monitor and run the merchant prompt. Confirm the journey, Workflow Replay, Signals, tool health, capability gap, paid order, attribution class, gross revenue, refunds, and net revenue refer only to this demo session.
 9. Ask to disable comparison for this demo session. Confirm the server blocks it immediately and the local/cross-tab manifest refresh removes it without affecting a second isolated browser profile.
 10. Reset the current demo. Confirm a fresh scope appears and another browser profile remains unchanged.
 

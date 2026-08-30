@@ -17,9 +17,9 @@ Notify me when the blue 24L version is back in stock.
 ## Merchant investigation
 
 ```text
-Show the commerce funnel for my current workflow, identify the slowest
-or failed tool call, explain what happened, and show any capabilities the
-shopper requested that this store does not support.
+Monitor my current agent session, replay its tool and commerce timeline,
+identify the slowest or failed invocation, connect it to the commerce outcome,
+show any capability signals this store does not support, and summarize current controls.
 ```
 
 ## Session governance
