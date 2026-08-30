@@ -8,8 +8,8 @@ Two consecutive clean builds produced identical bytes:
 
 | Artifact | SHA-256 |
 |---|---|
-| `wmcp-agentops-0.1.0.zip` | `1891a27aa823fcecdf13844978eddb16dc647191e80b4f31d475dba75f555174` |
-| `wmcp-agentops-playground-0.1.0.zip` | `5fdcb23b3ba23c4c76d080f8d1e24331822b2d31f7327fbf56be9c6256a822e6` |
+| `wmcp-agentops-0.1.0.zip` | `b8a8af25878a942593355424ddc20aa163001725e08deb974aa69e8bd8957fd6` |
+| `wmcp-agentops-playground-0.1.0.zip` | `fbca318eda3521b18082a9dba7e9337b1e98d2a7aec59dee3f4a8adb43414711` |
 
 The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 12-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
 
