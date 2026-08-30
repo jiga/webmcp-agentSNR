@@ -5,17 +5,24 @@
   "description": "Development and browser-test tooling for the WP WebMCP AgentOps plugin.",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "lint:js": "eslint plugin/wmcp-agentops/assets/js tests/Browser",
+    "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.js'",
     "lint:css": "stylelint 'plugin/wmcp-agentops/assets/css/**/*.css'",
     "test:js": "node --test tests/JavaScript/**/*.test.js",
     "test:browser": "playwright test",
     "test": "npm run test:js",
     "verify": "npm run lint:js && npm run lint:css && npm run test:js",
-    "build": "./bin/build-plugin.sh"
+    "build": "./bin/build-plugin.sh",
+    "build:playground": "./bin/build-playground-bundle.sh"
   },
   "engines": {
-    "node": ">=22"
+    "node": "^22.13.0 || >=24.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.1",
+    "eslint": "10.9.1",
+    "globals": "17.11.0",
+    "stylelint": "17.14.1",
+    "stylelint-config-standard": "40.0.0"
+  }
 }
-

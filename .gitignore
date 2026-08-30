@@ -2,12 +2,18 @@
 /.phpunit.cache
 /.phpunit.result.cache
 /.playwright/
+/.playwright-cli/
+/.release-test/
+/playwright-report/
+/test-results/
+/output/playwright/
 /artifacts/
 /coverage/
 /dist/*.zip
+/dist/*.sha256
+/dist/SHA256SUMS
 /node_modules/
 /plugin/wmcp-agentops/vendor/
 /vendor/
 
 !.gitkeep
-

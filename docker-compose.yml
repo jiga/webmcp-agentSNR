@@ -1,0 +1,57 @@
+name: wp-webmcp-agentops
+
+services:
+  database:
+    image: mariadb:11.8
+    environment:
+      MARIADB_DATABASE: ${WMCP_DB_NAME:-wordpress}
+      MARIADB_USER: ${WMCP_DB_USER:-wordpress}
+      MARIADB_PASSWORD: ${WMCP_DB_PASSWORD:-local-demo-password}
+      MARIADB_ROOT_PASSWORD: ${WMCP_DB_ROOT_PASSWORD:-local-demo-root-password}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    volumes:
+      - database_data:/var/lib/mysql
+
+  wordpress:
+    image: ${WMCP_WORDPRESS_IMAGE:-wordpress:7.1-php8.3-apache}
+    depends_on:
+      database:
+        condition: service_healthy
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${WMCP_DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${WMCP_DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${WMCP_DB_PASSWORD:-local-demo-password}
+      WORDPRESS_DEBUG: "1"
+    ports:
+      - "${WMCP_BIND_HOST:-127.0.0.1}:${WMCP_HTTP_PORT:-18080}:80"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentops}:/var/www/html/wp-content/plugins/wmcp-agentops:ro
+
+  cli:
+    image: ${WMCP_CLI_IMAGE:-wordpress:cli-2.12-php8.3}
+    depends_on:
+      database:
+        condition: service_healthy
+      wordpress:
+        condition: service_started
+    environment:
+      WORDPRESS_DB_HOST: database:3306
+      WORDPRESS_DB_NAME: ${WMCP_DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${WMCP_DB_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${WMCP_DB_PASSWORD:-local-demo-password}
+    user: "33:33"
+    volumes:
+      - wordpress_data:/var/www/html
+      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentops}:/var/www/html/wp-content/plugins/wmcp-agentops:ro
+      - ./bin:/workspace/bin:ro
+    working_dir: /var/www/html
+
+volumes:
+  database_data:
+  wordpress_data:

@@ -1,0 +1,72 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "meta": {
+    "title": "WP WebMCP AgentOps — Playground Demo",
+    "description": "A disposable WooCommerce storefront and AgentOps demo. WordPress Playground embeds WordPress in an iframe, so this package demonstrates portability and human/admin behavior; current ChatGPT Site Tools do not discover the embedded WebMCP tools.",
+    "author": "jignesh",
+    "categories": [
+      "demo",
+      "plugins",
+      "ecommerce"
+    ]
+  },
+  "preferredVersions": {
+    "php": "8.3",
+    "wp": "7.1"
+  },
+  "features": {
+    "networking": true
+  },
+  "landingPage": "/",
+  "steps": [
+    {
+      "step": "defineWpConfigConsts",
+      "consts": {
+        "WP_ENVIRONMENT_TYPE": "local",
+        "WMCP_AGENTOPS_DEMO_MODE": true
+      }
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "url",
+        "url": "https://downloads.wordpress.org/plugin/woocommerce.11.0.1.zip"
+      },
+      "options": {
+        "activate": true,
+        "onError": "throw",
+        "targetFolderName": "woocommerce",
+        "humanReadableName": "WooCommerce 11.0.1"
+      }
+    },
+    {
+      "step": "installPlugin",
+      "pluginData": {
+        "resource": "bundled",
+        "path": "/wmcp-agentops.zip"
+      },
+      "options": {
+        "activate": true,
+        "onError": "throw",
+        "targetFolderName": "wmcp-agentops",
+        "humanReadableName": "WP WebMCP AgentOps"
+      }
+    },
+    {
+      "step": "writeFile",
+      "path": "/wordpress/wp-content/wmcp-agentops-seed.php",
+      "data": {
+        "resource": "bundled",
+        "path": "/seed-demo.php"
+      }
+    },
+    {
+      "step": "runPHP",
+      "code": "<?php require '/wordpress/wp-load.php'; require '/wordpress/wp-content/wmcp-agentops-seed.php'; wmcp_agentops_seed_playground_demo();"
+    },
+    {
+      "step": "login",
+      "username": "admin"
+    }
+  ]
+}
