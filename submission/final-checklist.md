@@ -1,6 +1,6 @@
 # Final submission checklist
 
-Checked items are complete in the prepared repository. Unchecked items require the entrant's final name, accounts, public infrastructure, media, or a dependency release that was not yet available.
+Checked items are complete in the prepared repository. Unchecked items require the entrant's accounts, public infrastructure, formal trademark/domain clearance, media, or a dependency release that was not yet available.
 
 ## Code and artifacts
 
@@ -34,7 +34,8 @@ Checked items are complete in the prepared repository. Unchecked items require t
 
 ## Devpost and media
 
-- [ ] Human-selected final name appears consistently.
+- [x] Agent SNR appears consistently as the public product name.
+- [ ] Formal trademark and domain clearance for Agent SNR is complete.
 - [x] Description covers WebMCP fit, UX improvement, human-agent collaboration, and implementation.
 - [ ] Public source/license, live URL, test instructions, and any credentials are complete.
 - [ ] Public YouTube video has audio, shows actual WebMCP usage, and is under three minutes.

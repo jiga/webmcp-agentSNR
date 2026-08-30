@@ -1,10 +1,12 @@
-# Agent Experience Monitoring product direction
+# Agent SNR product direction
+
+**Agent outcome monitoring for WordPress.**
 
 ## Problem statement
 
 Website operators can inspect model traces in generic LLM tools or replay human browser sessions in digital-experience products, but neither view explains the complete website-agent journey: which WebMCP tools were available, what the agent invoked, what policy allowed or denied, where the human took over, and whether WooCommerce recorded a paid, cancelled, or refunded outcome.
 
-The product category is **Agent Experience Monitoring for websites**.
+Agent experience monitoring is the broader category. **Agent SNR** is the product: it turns WebMCP activity into verified operational and business signal while suppressing unactionable noise. SNR uses its established engineering meaning: **signal-to-noise ratio**.
 
 > See what agents could do, what they actually did, where humans intervened, and what happened next.
 
@@ -23,7 +25,7 @@ The recognizable workflow combines:
 - [Amplitude Agent Analytics](https://amplitude.com/docs/amplitude-ai/agent-analytics/taxonomy): agent session → turn → span, connected to business analysis;
 - [Sentry Replay Details](https://docs.sentry.io/product/session-replay/replay-details/): one investigation timeline with activity, errors, traces, and tags.
 
-This project differentiates through first-class WebMCP inventory and policy, browser/human handoffs, and deterministic WooCommerce order/refund attribution.
+Agent SNR differentiates through first-class WebMCP inventory and policy, browser/human handoffs, and deterministic WooCommerce order/refund attribution. Signal means evidence that changes an operator's decision—tool outcomes, policy denials, human handoffs, paid orders, refunds, and unsupported demand. Noise means high-volume activity that does not justify a decision; raw prompts, identities, arbitrary payloads, and speculative revenue attribution are intentionally excluded rather than promoted as business evidence.
 
 ## Core monitoring model
 

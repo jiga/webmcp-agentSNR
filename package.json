@@ -2,7 +2,7 @@
   "name": "wp-webmcp-agentops",
   "version": "0.1.0",
   "private": true,
-  "description": "Development and browser-test tooling for WebMCP Agent Experience Monitor.",
+  "description": "Development and browser-test tooling for Agent SNR, agent outcome monitoring for WordPress.",
   "license": "GPL-2.0-or-later",
   "scripts": {
     "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.js'",

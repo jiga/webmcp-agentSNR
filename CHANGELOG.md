@@ -4,9 +4,9 @@ All notable changes are documented here. This project follows semantic versionin
 
 ## [Unreleased]
 
-- Final human-selected product branding, public links, real-client results, and release provenance remain to be added before submission.
+- Public links, real-client results, formal trademark/domain clearance, and release provenance remain to be added before submission.
 - Reframed the monitoring surface around Agent Sessions, Workflow Replay, Signals, Tools, Outcomes, and Controls.
-- Renamed the descriptive public surface to Agent Experience Monitor while preserving internal compatibility identifiers.
+- Adopted **Agent SNR** as the public brand with the descriptor “Agent outcome monitoring for WordPress,” while preserving internal compatibility identifiers.
 
 ## [0.1.0] - Unreleased
 

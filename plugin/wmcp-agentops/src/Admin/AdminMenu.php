@@ -31,8 +31,8 @@ final class AdminMenu
     public function register(): void
     {
         add_menu_page(
-            __('WebMCP Agent Experience Monitor', 'wmcp-agentops'),
-            __('Agent Monitor', 'wmcp-agentops'),
+            __('Agent SNR — Agent outcome monitoring for WordPress', 'wmcp-agentops'),
+            __('Agent SNR', 'wmcp-agentops'),
             'view_wmcp_analytics',
             'wmcp-agentops',
             array($this->dashboard, 'render'),

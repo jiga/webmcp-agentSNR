@@ -195,14 +195,14 @@ final class Plugin
         }
 
         echo '<div class="notice notice-error"><p>';
-        echo esc_html__('WebMCP Agent Experience Monitor requires the WordPress Abilities API provided by WordPress 6.9 or newer.', 'wmcp-agentops');
+        echo esc_html__('Agent SNR requires the WordPress Abilities API provided by WordPress 6.9 or newer.', 'wmcp-agentops');
         echo '</p></div>';
     }
 
     public function render_migration_notice(): void
     {
         echo '<div class="notice notice-error"><p>';
-        echo esc_html__('WebMCP Agent Experience Monitor could not verify its database schema. Tools remain disabled; review the PHP/database logs and reactivate the plugin.', 'wmcp-agentops');
+        echo esc_html__('Agent SNR could not verify its database schema. Tools remain disabled; review the PHP/database logs and reactivate the plugin.', 'wmcp-agentops');
         echo '</p></div>';
     }
 }

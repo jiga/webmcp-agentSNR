@@ -1,8 +1,8 @@
-# WebMCP Agent Experience Monitor
+# Agent SNR
 
-> Working submission name. The final public product name must be selected by the human entrant before launch.
+**Agent outcome monitoring for WordPress.**
 
-Agent Experience Monitoring for WordPress: browser agents operate a real WooCommerce storefront through WebMCP, while merchants replay the privacy-safe workflow, see reliability and capability signals, connect human handoffs to paid/refunded outcomes, and govern the site-tool layer.
+Agent SNR separates trustworthy business signal from raw agent noise: browser agents operate a real WooCommerce storefront through WebMCP, while merchants replay the privacy-safe workflow, see reliability and capability signals, connect human handoffs to paid/refunded outcomes, and govern the site-tool layer. SNR uses its established engineering meaning: **signal-to-noise ratio**.
 
 The familiar investigation pattern resembles **LogRocket/Fullstory for website agents**, combined with Datadog-style tool health and Amplitude-style commerce outcomes. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model and MVP boundaries.
 
@@ -27,7 +27,7 @@ flowchart LR
     B --> C[Search · compare · policy · cart]
     C --> D[Human-confirmed Woo checkout]
     D --> E[Order and refund evidence]
-    E --> F[Agent Monitor · replay · signals]
+    E --> F[Agent SNR · replay · signals]
     F --> G[Session-safe tool policy]
     G --> B
 ```
@@ -66,7 +66,7 @@ Disable product comparison for this demo session.
 
 ## What is included
 
-- Two independent top-level WebMCP surfaces: storefront and Agent Experience Monitor.
+- Two independent top-level WebMCP surfaces: storefront and Agent SNR.
 - A single first-party catalog that generates WordPress Abilities and WebMCP manifests.
 - Product discovery, evidence-based comparison, published policy facts, reversible cart writes, checkout handoff, and capability-gap capture.
 - Workflow events, tool outcomes/latency, funnel analysis, order/refund linkage, deterministic attribution, and redacted explanations.
@@ -83,7 +83,7 @@ Prerequisites: Docker Desktop (or Docker Engine with Compose) and a free local p
 ./bin/start-demo.sh
 ```
 
-The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional TrailForge Lab store; and prints the dedicated storefront demo, Agent Experience Monitor, readiness, and admin URLs. Local-only credentials are printed by the command.
+The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional TrailForge Lab store; and prints the dedicated storefront demo, Agent SNR, readiness, and admin URLs. Local-only credentials are printed by the command.
 
 Stop without deleting data:
 

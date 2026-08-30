@@ -1,4 +1,4 @@
-=== WebMCP Agent Experience Monitor ===
+=== Agent SNR ===
 Contributors: owner-to-set
 Tags: webmcp, woocommerce, monitoring, analytics, ai
 Requires at least: 6.9
@@ -8,11 +8,11 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Expose safe WordPress and WooCommerce WebMCP workflows, measure their path to real commerce outcomes, and govern the tool layer locally.
+Agent outcome monitoring for WordPress: expose safe WebMCP workflows, measure verified commerce outcomes, and govern the tool layer locally.
 
 == Description ==
 
-WebMCP Agent Experience Monitor is an open-source, local-first monitoring layer for browser agents on WordPress. It registers narrowly scoped top-level WebMCP tools backed by WordPress Abilities, reconstructs privacy-safe workflow replays, surfaces reliability and capability signals, links same-session WooCommerce orders and refunds, and provides merchant controls.
+Agent SNR is an open-source, local-first outcome-monitoring layer for browser agents on WordPress. It registers narrowly scoped top-level WebMCP tools backed by WordPress Abilities, reconstructs privacy-safe workflow replays, surfaces reliability and capability signals, links same-session WooCommerce orders and refunds, and provides merchant controls.
 
 Workflow Replay is a redacted event-sourced tool and commerce timeline. It does not record or reconstruct the DOM, screen, video, raw prompt, or arbitrary payload.
 
@@ -24,7 +24,7 @@ The bundled public execution and analytics path requires an explicit server-side
 
 1. Upload the `wmcp-agentops` ZIP under Plugins > Add New > Upload Plugin.
 2. Activate on WordPress 6.9+ with PHP 8.1+.
-3. Review the Agent Monitor settings before enabling any tool.
+3. Review the Agent SNR settings before enabling any tool.
 4. WooCommerce is optional; commerce tools appear only while it is active.
 5. Serve public WebMCP pages over top-level HTTPS with the documented origin and permissions headers.
 

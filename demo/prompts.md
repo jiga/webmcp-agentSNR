@@ -1,4 +1,4 @@
-# Demonstration prompts
+# Agent SNR demonstration prompts
 
 ## Shopper workflow
 

@@ -119,7 +119,7 @@ final class WooIntegration
         }
 
         echo '<div class="notice notice-warning"><p>';
-        echo esc_html__('WooCommerce is not active. WebMCP Agent Experience Monitor remains available, but product, cart, checkout, order, and attribution features are disabled.', 'wmcp-agentops');
+        echo esc_html__('WooCommerce is not active. Agent SNR remains available, but product, cart, checkout, order, and attribution features are disabled.', 'wmcp-agentops');
         echo '</p></div>';
     }
 }

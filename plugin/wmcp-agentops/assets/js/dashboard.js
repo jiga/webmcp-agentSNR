@@ -761,7 +761,7 @@
 		const payload = await requestJson(
 			config.manifestUrl,
 			{ cache: "no-store", credentials: "same-origin", headers: { Accept: "application/json" } },
-			"Agent Monitor manifest",
+			"Agent SNR manifest",
 			262144
 		);
 		currentManifest = payload;

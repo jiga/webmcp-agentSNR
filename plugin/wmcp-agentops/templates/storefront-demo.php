@@ -18,7 +18,7 @@ if (null !== $cart_count) {
 <a class="wmcp-skip-link" href="#wmcp-storefront-main"><?php esc_html_e('Skip to storefront', 'wmcp-agentops'); ?></a>
 <div id="wmcp-storefront-main" class="wmcp-field wmcp-storefront alignfull" data-wmcp-surface="storefront" tabindex="-1">
 	<header class="wmcp-store-header">
-		<a class="wmcp-wordmark" href="<?php echo esc_url((string) $view['landing_url']); ?>" aria-label="<?php esc_attr_e('Return to WebMCP Field Lab', 'wmcp-agentops'); ?>">
+		<a class="wmcp-wordmark" href="<?php echo esc_url((string) $view['landing_url']); ?>" aria-label="<?php esc_attr_e('Return to Agent SNR', 'wmcp-agentops'); ?>">
 			<span class="wmcp-wordmark-mark" aria-hidden="true">TF</span>
 			<span>TrailForge<br><em>Field Supply</em></span>
 		</a>

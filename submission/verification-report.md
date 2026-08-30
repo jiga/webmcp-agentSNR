@@ -1,6 +1,6 @@
 # Repository verification report
 
-Prepared locally on August 30, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, or final naming decision.
+Prepared locally on August 30, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, or formal trademark/domain clearance.
 
 ## Reproducible artifacts
 
@@ -8,8 +8,8 @@ Two consecutive clean builds produced identical bytes:
 
 | Artifact | SHA-256 |
 |---|---|
-| `wmcp-agentops-0.1.0.zip` | `201f33232062e4639080e8886d7a54a26f9d6f3de2f4cf40191e1dc80d63670c` |
-| `wmcp-agentops-playground-0.1.0.zip` | `d5b0d2eaa2017d14e3e71029f007121e916028818c12dd7d630de9483779c552` |
+| `wmcp-agentops-0.1.0.zip` | `26544dd1bfc255936f8febbb424d534fc2a32bd65aca06856ec2f89646afcc52` |
+| `wmcp-agentops-playground-0.1.0.zip` | `92b194e974ae6ffbc414253fde9c0a2dd16cc0ddc1289793913465193c5993ee` |
 
 The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 12-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
 
@@ -50,7 +50,7 @@ Plugin Check reports no errors. The warnings fall into expected, reviewable cate
 - direct database queries and cache/schema operations used for the plugin-owned analytics ledger;
 - the included `THIRD_PARTY_NOTICES.md` file.
 
-These warnings do not hide executable errors. The descriptive public name produces no Plugin Check trademark warning. If the plugin is later submitted to the WordPress.org directory, re-review every remaining warning and the final owner-selected name/slug against that directory's requirements.
+These warnings do not hide executable errors. Plugin Check reports no trademark finding for the tested artifact, but that automated result is not legal clearance. Before a public launch or later WordPress.org submission, complete formal trademark/domain clearance for Agent SNR and re-review every remaining warning and the final slug against the directory's requirements.
 
 ## Release enforcement
 
@@ -66,7 +66,7 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 
 ## Intentionally open owner gates
 
-- Select and propagate the final public name/slug after a human name and trademark check.
+- Complete formal trademark/domain clearance for Agent SNR and confirm the public repository/product slug.
 - Confirm the Git author identity, create the public remote, and push the unsquashed history.
 - Deploy the release tag to stable top-level HTTPS WordPress hosting.
 - Validate the frozen public site in real ChatGPT desktop Site Tools and flag-enabled Chrome.

@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
 <a class="wmcp-skip-link" href="#wmcp-health-main"><?php esc_html_e('Skip to readiness report', 'wmcp-agentops'); ?></a>
 <div id="wmcp-health-main" class="wmcp-field wmcp-health alignfull" data-wmcp-surface="health" tabindex="-1">
 	<header class="wmcp-masthead">
-		<a class="wmcp-wordmark" href="<?php echo esc_url((string) $view['landing_url']); ?>" aria-label="<?php esc_attr_e('WebMCP Field Lab home', 'wmcp-agentops'); ?>"><span class="wmcp-wordmark-mark" aria-hidden="true">W//</span><span>WebMCP<br><em>Readiness</em></span></a>
+		<a class="wmcp-wordmark" href="<?php echo esc_url((string) $view['landing_url']); ?>" aria-label="<?php esc_attr_e('Agent SNR home', 'wmcp-agentops'); ?>"><span class="wmcp-wordmark-mark" aria-hidden="true">W//</span><span>Agent SNR<br><em>Readiness</em></span></a>
 		<div class="wmcp-masthead-meta"><span><?php esc_html_e('Compatibility sheet', 'wmcp-agentops'); ?></span><span><?php esc_html_e('Public / non-sensitive', 'wmcp-agentops'); ?></span></div>
 		<div class="wmcp-status-chip" data-wmcp-status-chip data-state="checking"><span class="wmcp-status-light" aria-hidden="true"></span><span data-wmcp-status><?php esc_html_e('Running checks', 'wmcp-agentops'); ?></span></div>
 	</header>
@@ -68,7 +68,7 @@ defined('ABSPATH') || exit;
 
 	<div class="wmcp-health-actions">
 		<a class="wmcp-button wmcp-button-primary" href="<?php echo esc_url((string) $view['storefront_url']); ?>"><?php esc_html_e('Open storefront', 'wmcp-agentops'); ?> <span aria-hidden="true">↗</span></a>
-		<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open Agent Monitor', 'wmcp-agentops'); ?></a>
+		<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open Agent SNR', 'wmcp-agentops'); ?></a>
 		<button class="wmcp-button wmcp-button-quiet" type="button" data-wmcp-download-health><?php esc_html_e('Download public report', 'wmcp-agentops'); ?></button>
 	</div>
 

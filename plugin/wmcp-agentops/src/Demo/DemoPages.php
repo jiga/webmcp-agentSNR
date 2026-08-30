@@ -52,7 +52,7 @@ final class DemoPages
         return array(
             array(
                 'slug'    => 'webmcp-field-lab',
-                'title'   => 'WebMCP Field Lab',
+                'title'   => 'Agent SNR — Overview',
                 'content' => '[wmcp_judge_landing]',
             ),
             array(
@@ -62,7 +62,7 @@ final class DemoPages
             ),
             array(
                 'slug'    => 'agentops-demo',
-                'title'   => 'Agent Experience Monitor',
+                'title'   => 'Agent SNR — Monitor',
                 'content' => '[wmcp_agentops_demo]',
             ),
             array(

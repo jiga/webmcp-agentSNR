@@ -1,10 +1,10 @@
 # Devpost description draft
 
-> Replace the working project name and bracketed links only after the human entrant selects the final brand and the frozen public resources exist.
+> Replace the bracketed links after the frozen public resources exist. Agent SNR still requires formal trademark and domain clearance before public launch.
 
 ## One-line pitch
 
-Agent Experience Monitoring for WordPress: browser agents operate a real WooCommerce storefront, while merchants replay privacy-safe workflows, investigate signals, connect human handoffs to verified outcomes, and govern the WebMCP tool layer.
+**Agent outcome monitoring for WordPress.** Browser agents operate a real WooCommerce storefront, while merchants replay privacy-safe workflows, investigate signals, connect human handoffs to verified outcomes, and govern the WebMCP tool layer.
 
 ## The problem
 
@@ -12,12 +12,12 @@ Most WordPress agent integrations stop at exposing actions. A merchant can see t
 
 ## The solution
 
-**[FINAL PROJECT NAME]** closes that loop locally inside WordPress:
+**Agent SNR** closes that loop locally inside WordPress. SNR retains its established meaning—**signal-to-noise ratio**—because the product separates verified business and reliability evidence from raw, unactionable agent noise:
 
 1. A top-level storefront exposes narrow WebMCP tools for product context, discovery, comparison, published policy evidence, reversible cart changes, checkout handoff, and unsupported-demand reporting.
 2. A redacted workflow ledger records one start and one terminal outcome for every authenticated tool request.
 3. WooCommerce order and refund hooks preserve same-session product evidence and classify eligible agent-linked orders as direct, assisted, or influenced without double-counting revenue. Orders without qualifying evidence are excluded from attributed reporting rather than claimed.
-4. A separate top-level Agent Experience Monitor exposes tools for the journey, Workflow Replay, tool health, capability signals, attributed revenue, diagnostics, and a restrictive session-only policy change.
+4. A separate top-level Agent SNR surface exposes tools for the journey, Workflow Replay, tool health, capability signals, attributed revenue, diagnostics, and a restrictive session-only policy change.
 
 The memorable loop is not “AI shopping.” It is a website observing and improving its own agent interface.
 
@@ -29,7 +29,7 @@ The workflows belong to the website. Prices, stock, product facts, policies, the
 
 The submission uses the current imperative API, `document.modelContext.registerTool()`, in the top-level document. A dynamic manifest is generated from the same first-party registry used to register WordPress Abilities. The browser sends structured inputs to a same-origin WordPress REST execution gateway and displays every meaningful result in shared human-visible state.
 
-WebMCP also makes the governance demonstration possible: the merchant asks the Agent Experience Monitor to disable product comparison for this demo session. The server applies the restriction immediately, invalidates the manifest, and the browser replaces the prior registration set. Another judge’s session is unaffected.
+WebMCP also makes the governance demonstration possible: the merchant asks Agent SNR to disable product comparison for this demo session. The server applies the restriction immediately, invalidates the manifest, and the browser replaces the prior registration set. Another judge’s session is unaffected.
 
 ## Human-agent collaboration
 
@@ -57,7 +57,7 @@ WordPress powers a large and diverse web. This challenge prototype proves a reus
 
 - Live judge start: **[PRIMARY_DEMO_URL]**
 - Storefront: **[STOREFRONT_URL]**
-- Agent Experience Monitor: **[AGENTOPS_URL]**
+- Agent SNR: **[AGENTOPS_URL]**
 - Readiness: **[HEALTH_URL]**
 - Public repository: **[REPOSITORY_URL]**
 - Frozen release and plugin ZIP: **[RELEASE_URL]**

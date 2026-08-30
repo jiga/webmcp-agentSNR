@@ -1,6 +1,6 @@
 <?php
 /**
- * Public session-scoped and authenticated Agent Experience Monitor shell.
+ * Public session-scoped and authenticated Agent SNR shell.
  *
  * @var array<string, mixed> $view
  * @package WPWebMCP\AgentOps
@@ -14,7 +14,7 @@ $governance = isset($view['governance']) && is_array($view['governance']) ? $vie
 $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 ?>
 <?php if (! $is_admin) : ?>
-	<a class="wmcp-skip-link" href="#wmcp-agentops-main"><?php esc_html_e('Skip to Agent Experience Monitor', 'wmcp-agentops'); ?></a>
+	<a class="wmcp-skip-link" href="#wmcp-agentops-main"><?php esc_html_e('Skip to Agent SNR', 'wmcp-agentops'); ?></a>
 	<div id="wmcp-agentops-main" class="wmcp-field wmcp-agentops alignfull" data-wmcp-surface="agentops" tabindex="-1">
 <?php else : ?>
 	<div id="wmcp-agentops-main" class="wrap wmcp-field wmcp-agentops wmcp-admin-wrap" data-wmcp-surface="agentops">
@@ -25,10 +25,10 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 	<header class="wmcp-ops-header">
 		<div>
 			<p class="wmcp-kicker"><?php echo $is_admin ? esc_html__('Authenticated agent operations', 'wmcp-agentops') : esc_html__('Current browser evidence / redacted', 'wmcp-agentops'); ?></p>
-			<h1><?php esc_html_e('Agent Experience Monitor', 'wmcp-agentops'); ?></h1>
+			<h1><?php esc_html_e('Agent SNR', 'wmcp-agentops'); ?></h1>
 			<p><?php echo $is_admin
-				? esc_html__('Monitor agent workflows, verified commerce outcomes, and server-authoritative policies for this WordPress site.', 'wmcp-agentops')
-				: esc_html__('Trace an agent-assisted shopping journey from first tool call to human checkpoint and verified commerce outcome.', 'wmcp-agentops'); ?></p>
+				? esc_html__('Agent outcome monitoring for WordPress: inspect workflows, verified commerce outcomes, and server-authoritative policies.', 'wmcp-agentops')
+				: esc_html__('Agent outcome monitoring for WordPress: trace a shopping journey from first tool call to human checkpoint and verified commerce outcome.', 'wmcp-agentops'); ?></p>
 		</div>
 		<div class="wmcp-ops-header-actions">
 			<div class="wmcp-status-chip" <?php if ($dashboard_available) : ?>data-wmcp-status-chip data-state="checking"<?php else : ?>data-state="passed"<?php endif; ?>><span class="wmcp-status-light" aria-hidden="true"></span><span <?php if ($dashboard_available) : ?>data-wmcp-status<?php endif; ?>><?php echo $dashboard_available ? esc_html__('Checking agent tools', 'wmcp-agentops') : esc_html__('Authenticated policy shell', 'wmcp-agentops'); ?></span></div>
@@ -36,7 +36,7 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 		</div>
 	</header>
 
-	<nav class="wmcp-board-nav" aria-label="<?php esc_attr_e('Agent Experience Monitor sections', 'wmcp-agentops'); ?>">
+	<nav class="wmcp-board-nav" aria-label="<?php esc_attr_e('Agent SNR sections', 'wmcp-agentops'); ?>">
 		<a href="#wmcp-overview"><?php esc_html_e('Monitor', 'wmcp-agentops'); ?></a>
 		<a href="#wmcp-workflows"><?php esc_html_e('Agent Sessions', 'wmcp-agentops'); ?></a>
 		<a href="#wmcp-funnel"><?php esc_html_e('Journey', 'wmcp-agentops'); ?></a>

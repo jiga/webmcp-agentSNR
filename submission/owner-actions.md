@@ -2,7 +2,7 @@
 
 These actions need human identity, accounts, infrastructure, or judgment and are intentionally not fabricated by the repository.
 
-- [ ] Select the final product/repository name and demo brand after a human trademark/name check; avoid the established AgentOps.ai product association.
+- [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains; avoid the established AgentOps.ai product association.
 - [ ] Confirm the current Git author identity is appropriate for public history.
 - [ ] Create the public GitHub/GitLab/Bitbucket repository, set About/license metadata, add the remote, and push without squashing the submission-period commits.
 - [ ] Choose entrant type/team roster and confirm challenge eligibility and prize ownership.
@@ -12,7 +12,7 @@ These actions need human identity, accounts, infrastructure, or judgment and are
 - [ ] Run and record exact versions for real ChatGPT desktop Site Tools and Chrome WebMCP testing.
 - [ ] Capture the original screenshots from the frozen site.
 - [ ] Narrate/record the actual workflow, publish the audio-enabled video publicly on YouTube, and confirm duration below three minutes.
-- [ ] Replace bracketed URLs and working name in README/submission files; verify every link logged out.
+- [ ] Replace bracketed URLs in README/submission files and verify every link logged out.
 - [ ] Configure a private security-reporting contact before public launch.
 - [ ] Tag `v0.1.0-hackathon`, publish checksummed ZIP/Playground artifacts, and verify hosted provenance matches the tag.
 - [ ] Complete Devpost fields in English, accept the official rules, submit before September 3, 2026 at 1:00 p.m. PDT, and name the freeze/operations owner.

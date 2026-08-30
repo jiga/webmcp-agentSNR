@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="WebMCP Agent Experience Monitor">
+<ruleset name="Agent SNR">
   <description>PSR-12 plus WordPress security/API rules and PHP 8.1 compatibility.</description>
 
   <file>plugin/wmcp-agentops</file>

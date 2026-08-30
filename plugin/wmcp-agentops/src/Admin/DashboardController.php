@@ -53,7 +53,7 @@ final class DashboardController
         $template         = (defined('WMCP_AGENTOPS_PATH') ? WMCP_AGENTOPS_PATH : dirname(__DIR__, 2) . '/') . 'templates/agentops-demo.php';
 
         if (! is_readable($template)) {
-            echo '<div class="notice notice-error"><p>' . esc_html__('The Agent Experience Monitor template is unavailable.', 'wmcp-agentops') . '</p></div>';
+            echo '<div class="notice notice-error"><p>' . esc_html__('The Agent SNR monitor template is unavailable.', 'wmcp-agentops') . '</p></div>';
             return;
         }
 

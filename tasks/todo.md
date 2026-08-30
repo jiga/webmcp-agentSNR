@@ -59,7 +59,7 @@ Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon En
 - [x] Build and validate the WordPress Playground Blueprint bundle.
 - [x] Add CI and tagged-release automation.
 - [x] Finish README, SECURITY, CONTRIBUTING, TESTING, notices, changelog, Devpost copy, judge instructions, screenshots plan, video script, and final checklist.
-- [x] Mark all external owner actions explicitly: final name, public Git host/slug, live HTTPS deployment, real-client validation, screenshots, public YouTube upload, and Devpost submission/freeze.
+- [x] Mark all external owner actions explicitly: formal name clearance, public Git host/slug, live HTTPS deployment, real-client validation, screenshots, public YouTube upload, and Devpost submission/freeze.
 
 ## Review
 
@@ -69,9 +69,9 @@ Implementation and the definitive local verification matrix are complete. Indepe
 - Browser code: 55 JavaScript tests, 12 Chromium scenarios, lint, and dependency audit pass.
 - WordPress/Woo: the exact ZIP passes WordPress 6.9, 7.0.4, and 7.1 with WooCommerce 10.9.4/11.0.1, legacy storage and HPOS; real paid/refund/cancel attribution checks pass in both storage modes.
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
-- Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and final owner-selected branding action are documented.
+- Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and formal Agent SNR clearance action are documented.
 
-Remaining work is exclusively owner/external: choose the final public name, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate real clients, rerun against WooCommerce 11.1 if released, capture media, replace URLs, submit, and freeze.
+Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate real clients, rerun against WooCommerce 11.1 if released, capture media, replace URLs, submit, and freeze.
 
 ## Agent Experience Monitoring iteration
 
@@ -82,3 +82,19 @@ Remaining work is exclusively owner/external: choose the final public name, conf
 - [x] Rename the public surface away from the existing AgentOps.ai market association without changing internal compatibility identifiers.
 - [x] Update product positioning and judge-facing documentation.
 - [x] Run JavaScript/PHP/browser checks and complete independent review; commit the iteration.
+
+## Agent SNR brand finalization
+
+- [x] Select Agent SNR as the final public submission brand.
+- [x] Replace public product-name references across plugin UI, package metadata, documentation, and submission copy.
+- [x] Preserve internal `wmcp-agentops`, `WPWebMCP\AgentOps`, REST, option, database, route, shortcode, and tool compatibility identifiers.
+- [x] Rebuild deterministic artifacts and refresh exact Plugin Check/checksum evidence.
+- [x] Run the full verification matrix and review the final diff.
+- [x] Commit the brand finalization.
+
+### Agent SNR finalization review
+
+- Public identity is consistently Agent SNR, with the descriptor “Agent outcome monitoring for WordPress” and SNR retaining its established signal-to-noise ratio meaning.
+- Judge navigation exposes unique **Agent SNR — Overview** and **Agent SNR — Monitor** labels; the monitor retains the exact **Agent SNR** product H1.
+- Final deterministic artifacts: plugin `26544dd1bfc255936f8febbb424d534fc2a32bd65aca06856ec2f89646afcc52`; Playground `92b194e974ae6ffbc414253fde9c0a2dd16cc0ddc1289793913465193c5993ee`.
+- Exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS Woo lifecycle, smoke/security, 12 Chromium scenarios, Playground execution, and Plugin Check all pass. Plugin Check reports 0 errors, 54 documented warnings, and 0 trademark findings.

@@ -352,6 +352,13 @@ test.afterEach( async ( { page }, testInfo ) => {
 
 test( "keeps the ordinary storefront usable when WebMCP is unavailable", async ( { context, page } ) => {
 	await installMissingModelContext( context );
+	await page.goto( "/" );
+	await expect( page ).toHaveTitle( /Agent SNR/ );
+	await expect( page.locator( "#wmcp-landing-title" ) ).toContainText( "Agent SNR" );
+	await expect( page.locator( ".wmcp-wordmark" ).first() ).toContainText( /Agent\s*SNR/ );
+	await expect( page.getByRole( "link", { exact: true, name: "Agent SNR — Overview" } ).first() ).toBeVisible();
+	await expect( page.getByRole( "link", { exact: true, name: "Agent SNR — Monitor" } ).first() ).toBeVisible();
+
 	await page.goto( "/storefront-demo/" );
 
 	await expect
@@ -373,7 +380,7 @@ test( "cacheable page HTML contains no session or credential state", async ( { r
 	expect( html ).not.toMatch( /data-workflow-id=["'][0-9A-HJKMNP-TV-Z]{26}/ );
 } );
 
-test( "registers every storefront and Agent Monitor tool with standard imperative fields", async ( { context, page } ) => {
+test( "registers every storefront and Agent SNR tool with standard imperative fields", async ( { context, page } ) => {
 	await installModelContextMock( context );
 
 	for ( const surface of [
@@ -517,7 +524,7 @@ test( "skips direct registration inside an iframe", async ( { context, page } ) 
 	await expect( frame.locator( "span[data-wmcp-status]" ) ).toHaveText( "Embedded context" );
 } );
 
-test( "manually loads current-session storefront evidence into Agent Monitor", async ( { context, page } ) => {
+test( "manually loads current-session storefront evidence into Agent SNR", async ( { context, page } ) => {
 	await installModelContextMock( context );
 	await page.goto( "/storefront-demo/" );
 	await waitForRuntime( page, STOREFRONT_TOOLS.length );
@@ -539,6 +546,8 @@ test( "manually loads current-session storefront evidence into Agent Monitor", a
 	expect( gap.ok ).toBe( true );
 
 	await page.goto( "/agentops-demo/" );
+	await expect( page ).toHaveTitle( /Agent SNR/ );
+	await expect( page.getByRole( "heading", { exact: true, name: "Agent SNR" } ).first() ).toBeVisible();
 	await waitForRuntime( page, AGENTOPS_TOOLS.length );
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
 

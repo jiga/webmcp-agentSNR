@@ -26,11 +26,11 @@ final class Activator
     public static function activate(): void
     {
         if (version_compare(PHP_VERSION, '8.1', '<')) {
-            throw new RuntimeException(esc_html__('WebMCP Agent Experience Monitor requires PHP 8.1 or newer.', 'wmcp-agentops'));
+            throw new RuntimeException(esc_html__('Agent SNR requires PHP 8.1 or newer.', 'wmcp-agentops'));
         }
 
         if (version_compare(get_bloginfo('version'), '6.9', '<')) {
-            throw new RuntimeException(esc_html__('WebMCP Agent Experience Monitor requires WordPress 6.9 or newer.', 'wmcp-agentops'));
+            throw new RuntimeException(esc_html__('Agent SNR requires WordPress 6.9 or newer.', 'wmcp-agentops'));
         }
 
         DatabaseMigrator::migrate();
