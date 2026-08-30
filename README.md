@@ -171,7 +171,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The prepared repository passes 55 JavaScript tests, 58 PHP tests / 521 assertions on PHP 8.1 and 8.4, 12 Chromium scenarios (including real classic checkout), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
+The prepared repository passes 63 JavaScript tests, 58 PHP tests / 521 assertions on PHP 8.1 and 8.4, 13 Chromium scenarios (including real classic checkout and cross-tab cart synchronization), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

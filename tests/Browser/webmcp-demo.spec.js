@@ -449,6 +449,41 @@ test( "executes search, cart, and checkout handoff through registered callbacks"
 	await expect( checkoutLink ).toHaveAttribute( "href", /\/checkout\/?$/ );
 } );
 
+test( "hydrates and synchronizes the shared cart badge across storefront tabs", async ( { context, page } ) => {
+	await installModelContextMock( context );
+	const observerPage = await context.newPage();
+	let latePage;
+
+	try {
+		await page.goto( "/storefront-demo/" );
+		await observerPage.goto( "/storefront-demo/" );
+		await waitForRuntime( page, STOREFRONT_TOOLS.length );
+		await waitForRuntime( observerPage, STOREFRONT_TOOLS.length );
+
+		const observerBadge = observerPage.locator( "[data-wmcp-cart-count]" ).first();
+		await expect( observerBadge ).toHaveText( "0" );
+		await expect( observerBadge ).toHaveAttribute( "aria-label", "0 items in cart" );
+
+		await searchAndAddProduct( page );
+
+		await expect( observerBadge ).toHaveText( "1" );
+		await expect( observerBadge ).toHaveAttribute( "aria-label", "1 item in cart" );
+		await expect( observerPage.locator( "#wmcp-cart-title" ) ).toHaveText( "No cart signal yet" );
+
+		latePage = await context.newPage();
+		await latePage.goto( "/storefront-demo/" );
+		await waitForRuntime( latePage, STOREFRONT_TOOLS.length );
+		await expect( latePage.locator( "[data-wmcp-cart-count]" ).first() ).toHaveText( "1" );
+		await expect( latePage.locator( "[data-wmcp-cart-count]" ).first() ).toHaveAttribute(
+			"aria-label",
+			"1 item in cart"
+		);
+	} finally {
+		await latePage?.close();
+		await observerPage.close();
+	}
+} );
+
 test( "places a real classic-checkout demo order with direct agent attribution", async ( { context, page } ) => {
 	await installModelContextMock( context );
 	await page.goto( "/storefront-demo/" );

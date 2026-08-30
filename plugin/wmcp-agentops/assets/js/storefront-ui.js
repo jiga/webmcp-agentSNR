@@ -284,6 +284,18 @@
 		return result;
 	}
 
+	function renderCartCount( value ) {
+		if ( ! Number.isInteger( value ) || value < 0 ) {
+			return false;
+		}
+
+		all( "[data-wmcp-cart-count]" ).forEach( ( target ) => {
+			text( target, value );
+			target.setAttribute( "aria-label", `${ value } ${ value === 1 ? "item" : "items" } in cart` );
+		} );
+		return true;
+	}
+
 	function invalidateCheckout( message = "The cart changed. Prepare a new checkout handoff after reviewing it." ) {
 		const link = one( "[data-wmcp-checkout-link]" );
 		if ( link ) {
@@ -298,12 +310,12 @@
 		const cart = record( normalizeCart( value ) );
 		const items = list( cart.items );
 		const container = one( "[data-wmcp-cart]" );
-		text( one( "#wmcp-cart-title" ), items.length ? `${ cart.item_count ?? items.length } items in session cart` : "Session cart is empty" );
-		const itemCount = cart.item_count ?? items.reduce( ( total, item ) => total + Number( item.quantity || 0 ), 0 );
-		all( "[data-wmcp-cart-count]" ).forEach( ( target ) => {
-			text( target, itemCount );
-			target.setAttribute( "aria-label", `${ itemCount } ${ Number( itemCount ) === 1 ? "item" : "items" } in cart` );
-		} );
+		const calculatedItemCount = items.reduce( ( total, item ) => total + Number( item.quantity || 0 ), 0 );
+		const itemCount = Number.isInteger( cart.item_count ) && cart.item_count >= 0
+			? cart.item_count
+			: calculatedItemCount;
+		text( one( "#wmcp-cart-title" ), items.length ? `${ itemCount } items in session cart` : "Session cart is empty" );
+		renderCartCount( itemCount );
 		if ( invalidateHandoff || items.length === 0 ) {
 			invalidateCheckout( items.length === 0 ? "Add a purchasable product before preparing checkout." : undefined );
 		}
@@ -385,5 +397,10 @@
 		signalPanel( stage );
 	}
 
+	window.addEventListener( "wmcp:manifest-ready", ( event ) => {
+		const manifest = record( event.detail );
+		const cart = record( manifest.cart );
+		renderCartCount( cart.item_count );
+	} );
 	window.addEventListener( "wmcp:ui-update", ( event ) => renderUpdate( event.detail || {} ) );
 }() );

@@ -119,6 +119,7 @@ test( "late earlier-stage results do not regress the storefront workflow rail", 
 
 test( "a cart mutation revokes a previously prepared checkout handoff", () => {
 	const fixture = storefrontFixture();
+	const cartCount = fixture.root.querySelector( "[data-wmcp-cart-count]" );
 
 	render( fixture.window, "checkout_handoff", {
 		cart: cart( "cart-rev-1" ),
@@ -130,6 +131,8 @@ test( "a cart mutation revokes a previously prepared checkout handoff", () => {
 	assert.equal( fixture.checkoutLink.href, "https://storefront.test/checkout/" );
 	assert.equal( fixture.root.querySelector( "#wmcp-checkout-title" ).textContent, "Checkout handoff ready" );
 	assert.equal( fixture.stages.checkout.classList.contains( "wmcp-is-complete" ), true );
+	assert.equal( cartCount.textContent, "1" );
+	assert.equal( cartCount.getAttribute( "aria-label" ), "1 item in cart" );
 
 	render( fixture.window, "add_to_cart", {
 		cart: cart( "cart-rev-2", 2 ),
@@ -140,10 +143,44 @@ test( "a cart mutation revokes a previously prepared checkout handoff", () => {
 	assert.equal( fixture.root.querySelector( "#wmcp-checkout-title" ).textContent, "Checkout handoff required" );
 	assert.equal( fixture.stages.checkout.classList.contains( "wmcp-is-complete" ), false );
 	assert.equal( fixture.stages.cart.classList.contains( "wmcp-is-active" ), true );
+	assert.equal( cartCount.textContent, "2" );
+	assert.equal( cartCount.getAttribute( "aria-label" ), "2 items in cart" );
 	assert.equal(
 		fixture.root.querySelector( "[data-wmcp-checkout-message]" ).textContent,
 		"The cart changed. Prepare a new checkout handoff after reviewing it."
 	);
+} );
+
+test( "private manifest snapshots hydrate the cart badge and ignore invalid counts", () => {
+	const fixture = storefrontFixture();
+	const cartCount = fixture.root.querySelector( "[data-wmcp-cart-count]" );
+
+	fixture.window.dispatchEvent( new MockCustomEvent( "wmcp:manifest-ready", {
+		detail: { cart: { item_count: 1 } },
+	} ) );
+
+	assert.equal( cartCount.textContent, "1" );
+	assert.equal( cartCount.getAttribute( "aria-label" ), "1 item in cart" );
+
+	for ( const detail of [
+		{},
+		{ cart: {} },
+		{ cart: { item_count: -1 } },
+		{ cart: { item_count: 1.5 } },
+		{ cart: { item_count: "2" } },
+	] ) {
+		fixture.window.dispatchEvent( new MockCustomEvent( "wmcp:manifest-ready", { detail } ) );
+	}
+
+	assert.equal( cartCount.textContent, "1" );
+	assert.equal( cartCount.getAttribute( "aria-label" ), "1 item in cart" );
+
+	fixture.window.dispatchEvent( new MockCustomEvent( "wmcp:manifest-ready", {
+		detail: { cart: { item_count: 3 } },
+	} ) );
+
+	assert.equal( cartCount.textContent, "3" );
+	assert.equal( cartCount.getAttribute( "aria-label" ), "3 items in cart" );
 } );
 
 test( "policy evidence keeps malicious content as text and uses a fixed published-source label", () => {

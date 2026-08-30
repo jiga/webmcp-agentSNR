@@ -111,7 +111,7 @@ jq -e '.ok == true' "${SMOKE_TEMP_DIR}/fixation.json" >/dev/null
 STOREFRONT_MANIFEST="${SMOKE_TEMP_DIR}/storefront.json"
 AGENTOPS_MANIFEST="${SMOKE_TEMP_DIR}/agentops.json"
 fetch_manifest storefront "${STOREFRONT_MANIFEST}"
-jq -e '([.tools[].name] | length) == 11 and ([.tools[].name] | index("search_products")) != null' "${STOREFRONT_MANIFEST}" >/dev/null
+jq -e '([.tools[].name] | length) == 11 and ([.tools[].name] | index("search_products")) != null and .cart.item_count == 0' "${STOREFRONT_MANIFEST}" >/dev/null
 
 BAD_CSRF_PAYLOAD="$(jq -cn \
   --arg schema_version "$(jq -r '.schema_version' "${STOREFRONT_MANIFEST}")" \
@@ -155,6 +155,8 @@ invoke_tool "${STOREFRONT_MANIFEST}" add_to_cart \
   "${SMOKE_TEMP_DIR}/added.json"
 invoke_tool "${STOREFRONT_MANIFEST}" get_cart '{}' "${SMOKE_TEMP_DIR}/cart.json"
 jq -e '.result.item_count == 1' "${SMOKE_TEMP_DIR}/cart.json" >/dev/null
+fetch_manifest storefront "${SMOKE_TEMP_DIR}/storefront-cart.json"
+jq -e '.cart.item_count == 1' "${SMOKE_TEMP_DIR}/storefront-cart.json" >/dev/null
 
 STALE_CART_PAYLOAD="$(jq -cn \
   --arg schema_version "$(jq -r '.schema_version' "${STOREFRONT_MANIFEST}")" \
@@ -263,6 +265,7 @@ curl --fail-with-body --silent --show-error \
 jq -e '.ok == true and .manifest.surface == "storefront"' "${SMOKE_TEMP_DIR}/reset-manifest.json" >/dev/null
 
 jq '.manifest' "${SMOKE_TEMP_DIR}/reset-manifest.json" > "${SMOKE_TEMP_DIR}/after-reset.json"
+jq -e '.cart.item_count == 0' "${SMOKE_TEMP_DIR}/after-reset.json" >/dev/null
 invoke_tool "${SMOKE_TEMP_DIR}/after-reset.json" get_cart '{}' "${SMOKE_TEMP_DIR}/reset-cart.json"
 jq -e '.result.item_count == 0' "${SMOKE_TEMP_DIR}/reset-cart.json" >/dev/null
 

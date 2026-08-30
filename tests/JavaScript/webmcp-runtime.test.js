@@ -930,6 +930,80 @@ test( "explicit and cross-tab invalidations refresh matching catalogs", async ()
 	assert.equal( fetch.calls.length, 4 );
 } );
 
+test( "cross-transport invalidations dedupe matching nonces after scope filtering", async () => {
+	const fetch = fetchQueue( [
+		jsonResponse( manifest( "rev_1" ) ),
+		jsonResponse( manifest( "rev_2" ) ),
+		jsonResponse( manifest( "rev_3" ) ),
+		jsonResponse( manifest( "rev_4" ) ),
+	] );
+	const harness = runtimeHarness( { fetch } );
+	await harness.runtime.start();
+
+	const sharedMessage = {
+		nonce: "invalidation_shared",
+		reason: "cart_changed",
+		site_id: "site_test",
+		surface: "storefront",
+		type: EVENTS.manifestInvalidated,
+	};
+	harness.runtime.invalidationChannel.emit( sharedMessage );
+	harness.window.dispatchEvent( {
+		key: "runtime-tests:manifest",
+		newValue: JSON.stringify( sharedMessage ),
+		type: "storage",
+	} );
+	await harness.runtime.whenIdle();
+
+	assert.equal( harness.runtime.manifestRevision, "rev_2" );
+	assert.equal( fetch.calls.filter( ( call ) => call.options.method === "GET" ).length, 2 );
+
+	harness.runtime.invalidationChannel.emit( Object.assign( {}, sharedMessage, {
+		nonce: "invalidation_distinct",
+	} ) );
+	await harness.runtime.whenIdle();
+	assert.equal( harness.runtime.manifestRevision, "rev_3" );
+
+	const filteredMessage = Object.assign( {}, sharedMessage, {
+		nonce: "invalidation_filtered_first",
+		surface: "agentops",
+	} );
+	harness.runtime.invalidationChannel.emit( filteredMessage );
+	await harness.runtime.whenIdle();
+	assert.equal( fetch.calls.filter( ( call ) => call.options.method === "GET" ).length, 3 );
+
+	harness.window.dispatchEvent( {
+		key: "runtime-tests:manifest",
+		newValue: JSON.stringify( Object.assign( {}, filteredMessage, {
+			surface: "storefront",
+		} ) ),
+		type: "storage",
+	} );
+	await harness.runtime.whenIdle();
+	assert.equal( harness.runtime.manifestRevision, "rev_4" );
+	assert.equal( fetch.calls.filter( ( call ) => call.options.method === "GET" ).length, 4 );
+} );
+
+test( "accepted invalidation nonce memory remains bounded", () => {
+	const harness = runtimeHarness( { fetch: fetchQueue() } );
+	const message = {
+		reason: "cart_changed",
+		site_id: "site_test",
+		surface: "storefront",
+		type: EVENTS.manifestInvalidated,
+	};
+
+	for ( let index = 0; index < 65; index++ ) {
+		assert.equal( harness.runtime.acceptInvalidationMessage( Object.assign( {}, message, {
+			nonce: `invalidation_${ index }`,
+		} ) ), true );
+	}
+
+	assert.equal( harness.runtime.recentInvalidationNonces.size, 64 );
+	assert.equal( harness.runtime.recentInvalidationNonces.has( "invalidation_0" ), false );
+	assert.equal( harness.runtime.recentInvalidationNonces.has( "invalidation_64" ), true );
+} );
+
 test( "successful policy tools refresh locally and notify other tabs", async () => {
 	const fetch = fetchQueue( [
 		jsonResponse( manifest( "rev_1", [ "set_tool_enabled" ], { surface: "agentops" } ) ),
@@ -958,6 +1032,98 @@ test( "successful policy tools refresh locally and notify other tabs", async () 
 	assert.equal( harness.runtime.invalidationChannel.messages.length, 1 );
 	assert.equal( harness.runtime.invalidationChannel.messages[ 0 ].surface, null );
 	assert.equal( harness.window.localStorageWrites.length, 1 );
+} );
+
+test( "successful cart mutations refresh same-revision private manifests without duplicate registration", async ( t ) => {
+	for ( const toolName of [ "add_to_cart", "remove_from_cart", "update_cart_quantity" ] ) {
+		await t.test( toolName, async () => {
+			const fetch = fetchQueue( [
+				jsonResponse( manifest( "rev_1", [ toolName ], {
+					cart: { item_count: 0 },
+				} ) ),
+				jsonResponse( {
+					ok: true,
+					result: { cart: { item_count: 1 } },
+				} ),
+				jsonResponse( manifest( "rev_1", [ toolName ], {
+					cart: { item_count: 1 },
+				} ) ),
+			] );
+			const harness = runtimeHarness( { fetch } );
+			const readyEvents = [];
+			harness.window.addEventListener( EVENTS.manifestReady, ( event ) =>
+				readyEvents.push( event.detail )
+			);
+
+			await harness.runtime.start();
+			const registrationController = harness.runtime.registrationController;
+			const definition = harness.modelContext.active.get( toolName ).definition;
+
+			const result = await definition.execute(
+				{},
+				{ signal: new AbortController().signal }
+			);
+
+			assert.equal( result.ok, true );
+			await harness.runtime.whenIdle();
+			assert.equal( harness.runtime.manifestRevision, "rev_1" );
+			assert.equal( harness.runtime.activeManifest.cart.item_count, 1 );
+			assert.equal( readyEvents.length, 2 );
+			assert.equal( readyEvents[ 1 ].cart.item_count, 1 );
+			assert.equal( harness.runtime.registrationController, registrationController );
+			assert.equal( harness.modelContext.calls.length, 1 );
+			assert.equal( fetch.calls.filter( ( call ) => call.options.method === "GET" ).length, 2 );
+			const posts = fetch.calls.filter( ( call ) => call.options.method === "POST" );
+			assert.equal( posts.length, 1 );
+			assert.match( posts[ 0 ].url, new RegExp( `/tools/${ toolName }$` ) );
+			assert.equal( fetch.calls.some( ( call ) => /\/tools\/get_cart$/.test( call.url ) ), false );
+			assert.equal( harness.runtime.invalidationChannel.messages.length, 1 );
+			const message = harness.runtime.invalidationChannel.messages[ 0 ];
+			assert.equal( message.reason, "tool_result" );
+			assert.equal( message.surface, "storefront" );
+			assert.equal( Object.hasOwn( message, "cart" ), false );
+			assert.equal( harness.window.localStorageWrites.length, 1 );
+			assert.equal(
+				Object.hasOwn( JSON.parse( harness.window.localStorageWrites[ 0 ].value ), "cart" ),
+				false
+			);
+		} );
+	}
+} );
+
+test( "a successful cart mutation does not wait for its best-effort manifest refresh", async () => {
+	const refreshResponse = deferred();
+	const fetch = fetchQueue( [
+		jsonResponse( manifest( "rev_1", [ "add_to_cart" ], {
+			cart: { item_count: 0 },
+		} ) ),
+		jsonResponse( {
+			ok: true,
+			result: { cart: { item_count: 1 } },
+		} ),
+		() => refreshResponse.promise,
+	] );
+	const harness = runtimeHarness( { fetch } );
+
+	await harness.runtime.start();
+	const execution = harness.modelContext.active
+		.get( "add_to_cart" )
+		.definition.execute( {}, { signal: new AbortController().signal } );
+	await waitFor( () => fetch.calls.length === 3 );
+
+	const result = await Promise.race( [
+		execution,
+		new Promise( ( resolve ) => setImmediate( () => resolve( null ) ) ),
+	] );
+	assert.notEqual( result, null, "the successful mutation should resolve while refresh is pending" );
+	assert.equal( result.ok, true );
+	assert.equal( harness.runtime.invalidationChannel.messages.length, 1 );
+
+	refreshResponse.resolve( jsonResponse( manifest( "rev_1", [ "add_to_cart" ], {
+		cart: { item_count: 1 },
+	} ) ) );
+	await harness.runtime.whenIdle();
+	assert.equal( harness.runtime.activeManifest.cart.item_count, 1 );
 } );
 
 test( "credential expiry schedules a same-revision manifest refresh", async () => {

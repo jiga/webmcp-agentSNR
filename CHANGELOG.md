@@ -5,6 +5,7 @@ All notable changes are documented here. This project follows semantic versionin
 ## [Unreleased]
 
 - Public links, real-client results, formal trademark/domain clearance, and release provenance remain to be added before submission.
+- Hydrated and synchronized the accessible storefront cart badge across existing and newly opened tabs through private manifest snapshots, without adding session state to cacheable HTML.
 - Reframed the monitoring surface around Agent Sessions, Workflow Replay, Signals, Tools, Outcomes, and Controls.
 - Adopted **Agent SNR** as the public brand with the descriptor “Agent outcome monitoring for WordPress,” while preserving internal compatibility identifiers.
 

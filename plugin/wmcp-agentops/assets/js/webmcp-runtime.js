@@ -30,6 +30,12 @@
 
 	const TOOL_NAME_PATTERN = /^[A-Za-z0-9_.-]{1,128}$/;
 	const ERROR_CODE_PATTERN = /^[a-z0-9_.-]{1,64}$/;
+	const MAX_RECENT_INVALIDATION_NONCES = 64;
+	const CART_MUTATION_TOOLS = new Set( [
+		"add_to_cart",
+		"remove_from_cart",
+		"update_cart_quantity",
+	] );
 
 	class WebMCPRuntimeError extends Error {
 		constructor( code, message, options = {} ) {
@@ -84,6 +90,7 @@
 			this.refreshPromise = null;
 			this.refreshQueued = false;
 			this.refreshReasons = new Set();
+			this.recentInvalidationNonces = new Set();
 
 			this.handleInvalidationEvent = this.handleInvalidationEvent.bind( this );
 			this.handleBroadcastInvalidation = this.handleBroadcastInvalidation.bind( this );
@@ -145,6 +152,7 @@
 			this.sessionReady = false;
 			this.refreshQueued = false;
 			this.refreshReasons.clear();
+			this.recentInvalidationNonces.clear();
 
 			this.removeInvalidationListeners();
 			this.clearRegistrationDataset();
@@ -738,10 +746,15 @@
 
 				if ( this.toolResultInvalidatesManifest( toolName, envelope, effectiveManifest ) ) {
 					try {
-						await this.invalidate( "tool_result", {
+						const refresh = this.invalidate( "tool_result", {
 							broadcast: true,
 							surface: toolName === "set_tool_enabled" ? null : undefined,
 						} );
+						if ( CART_MUTATION_TOOLS.has( toolName ) ) {
+							refresh.catch( () => {} );
+						} else {
+							await refresh;
+						}
 					} catch {
 						// The server action succeeded. Do not turn it into a replay-prone failure.
 					}
@@ -1029,7 +1042,10 @@
 		}
 
 		toolResultInvalidatesManifest( toolName, envelope, manifest ) {
-			if ( toolName === "set_tool_enabled" ) {
+			if (
+				toolName === "set_tool_enabled" ||
+				CART_MUTATION_TOOLS.has( toolName )
+			) {
 				return true;
 			}
 
@@ -1111,7 +1127,7 @@
 		}
 
 		handleBroadcastInvalidation( event ) {
-			if ( ! this.invalidationMessageMatches( event?.data ) ) {
+			if ( ! this.acceptInvalidationMessage( event?.data ) ) {
 				return;
 			}
 
@@ -1132,7 +1148,7 @@
 				return;
 			}
 
-			if ( ! this.invalidationMessageMatches( message ) ) {
+			if ( ! this.acceptInvalidationMessage( message ) ) {
 				return;
 			}
 
@@ -1154,6 +1170,28 @@
 			}
 			if ( message.surface && surface && message.surface !== surface ) {
 				return false;
+			}
+
+			return true;
+		}
+
+		acceptInvalidationMessage( message ) {
+			if ( ! this.invalidationMessageMatches( message ) ) {
+				return false;
+			}
+
+			const nonce = message.nonce;
+			if ( typeof nonce !== "string" || nonce.length === 0 || nonce.length > 256 ) {
+				return true;
+			}
+			if ( this.recentInvalidationNonces.has( nonce ) ) {
+				return false;
+			}
+
+			this.recentInvalidationNonces.add( nonce );
+			if ( this.recentInvalidationNonces.size > MAX_RECENT_INVALIDATION_NONCES ) {
+				const oldest = this.recentInvalidationNonces.values().next().value;
+				this.recentInvalidationNonces.delete( oldest );
 			}
 
 			return true;

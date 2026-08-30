@@ -16,6 +16,7 @@ use WPWebMCP\AgentOps\Contract\Versions;
 use WPWebMCP\AgentOps\Policy\PolicyEngine;
 use WPWebMCP\AgentOps\Policy\SessionPolicyStore;
 use WPWebMCP\AgentOps\Support\Json;
+use WPWebMCP\AgentOps\WooCommerce\CartSession;
 
 final class ManifestService
 {
@@ -24,7 +25,8 @@ final class ManifestService
         private readonly PolicyEngine $policy,
         private readonly SessionPolicyStore $session_policies,
         private readonly WorkflowService $workflows,
-        private readonly CsrfToken $csrf
+        private readonly CsrfToken $csrf,
+        private readonly CartSession $cart_session
     ) {
     }
 
@@ -36,7 +38,7 @@ final class ManifestService
         $tools    = $this->public_tools($surface, $session_hash_hex);
         $workflow = $this->workflows->current($session_hash_hex, $surface);
 
-        return array(
+        $manifest = array(
             'schema_version'    => Versions::SCHEMA,
             'manifest_revision' => $this->revision_from_tools($surface, $session_hash_hex, $tools),
             'site_id'           => (string) get_option('wmcp_agentops_site_id', ''),
@@ -50,6 +52,12 @@ final class ManifestService
             'governance'        => $this->governance($session_hash_hex),
             'tools'             => $tools,
         );
+
+        if ('storefront' === $surface) {
+            $manifest['cart'] = $this->cart_snapshot();
+        }
+
+        return $manifest;
     }
 
     public function revision(string $surface, string $session_hash_hex): string
@@ -143,5 +151,26 @@ final class ManifestService
         }
 
         return array('session_overrides' => $overrides);
+    }
+
+    /**
+     * Return only the count needed to hydrate the shared storefront badge.
+     * The manifest is private/no-store, so cacheable page HTML stays session-neutral.
+     *
+     * @return array{item_count: int}|null
+     */
+    private function cart_snapshot(): ?array
+    {
+        try {
+            $cart = $this->cart_session->cart();
+        } catch (ToolException $exception) {
+            return null;
+        }
+
+        return array(
+            'item_count' => method_exists($cart, 'get_cart_contents_count')
+                ? max(0, (int) $cart->get_cart_contents_count())
+                : 0,
+        );
     }
 }

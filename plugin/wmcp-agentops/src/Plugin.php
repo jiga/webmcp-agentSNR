@@ -49,6 +49,7 @@ use WPWebMCP\AgentOps\WebMCP\RestResponseFactory;
 use WPWebMCP\AgentOps\WebMCP\RestRoutes;
 use WPWebMCP\AgentOps\WebMCP\SecurityHeaders;
 use WPWebMCP\AgentOps\WebMCP\SessionController;
+use WPWebMCP\AgentOps\WooCommerce\CartSession;
 use WPWebMCP\AgentOps\WooCommerce\WooIntegration;
 
 final class Plugin
@@ -115,7 +116,7 @@ final class Plugin
         );
         $funnel      = new FunnelService($wpdb, $schema);
         $gaps        = new CapabilityGapService($wpdb, $schema, new Redactor(), $events);
-        $manifests   = new ManifestService($catalog, $policy, $overrides, $workflows, $csrf);
+        $manifests   = new ManifestService($catalog, $policy, $overrides, $workflows, $csrf, new CartSession());
 
         (new CoreAbilities(
             $queries,
