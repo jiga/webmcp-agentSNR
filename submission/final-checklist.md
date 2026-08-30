@@ -10,6 +10,8 @@ Checked items are complete in the prepared repository. Unchecked items require t
 - [x] ZIP contains one plugin root, local runtime assets, license/notices, and no development/private files.
 - [x] Playground bundle validates, installs, activates, seeds, and reports its iframe limitation accurately.
 - [x] Docker one-command bootstrap succeeds with a new named volume.
+- [x] Isolated `agent-snr-showcase` rehearsal runs the verified release ZIP without touching development volumes.
+- [x] Editable architecture/demo presentation and seven real local-flow reference screenshots are included.
 - [ ] Release tag, ZIP checksum, hosted plugin version, and repository commit match.
 
 ## Judged workflow
@@ -37,9 +39,10 @@ Checked items are complete in the prepared repository. Unchecked items require t
 - [x] Agent SNR appears consistently as the public product name.
 - [ ] Formal trademark and domain clearance for Agent SNR is complete.
 - [x] Description covers WebMCP fit, UX improvement, human-agent collaboration, and implementation.
+- [x] Local reference screenshots contain only fictional demo data and original project assets.
 - [ ] Public source/license, live URL, test instructions, and any credentials are complete.
 - [ ] Public YouTube video has audio, shows actual WebMCP usage, and is under three minutes.
-- [ ] Original screenshots contain no secrets/private data/unapproved assets.
+- [ ] Frozen hosted-release screenshots contain no secrets/private data/unapproved assets and replace or supplement the local reference captures.
 - [ ] Repository/About license is detectable; timestamped history is unsquashed.
 - [ ] Every link is verified from a logged-out external device.
 - [ ] Submission is accepted before the deadline and all submitted resources are frozen.

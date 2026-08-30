@@ -21,7 +21,8 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 | PHPUnit, PHP 8.1 | 65 tests, 597 assertions |
 | PHPUnit, PHP 8.4 | 65 tests, 597 assertions |
 | WordPress Coding Standards | Zero errors; line-length warnings only |
-| JavaScript | 66 tests; ESLint passes |
+| JavaScript | 79 tests, including fail-closed showcase origin/redirect/credential/output configuration; ESLint passes |
+| Showcase launcher guards | Automated invalid-port, reset-confirmation, project/loopback, checksum, symlink-entry, and extracted-cache integrity/repair checks pass |
 | CSS | Stylelint passes |
 | Dependency audit | Zero npm vulnerabilities |
 | REST/security smoke | Passes seven routes, 19 tools, shopper, analytics, governance, and reset |
@@ -29,6 +30,16 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 | Woo lifecycle | Unpaid, paid, partial/full refund, cancel, provenance-negative, and human-only cases pass |
 | Plugin Check 2.1.0 | Zero errors; 54 documented warnings; zero trademark findings |
 | Repository hygiene | Workflow YAML parses, shell syntax passes, and `git diff --check` is clean |
+
+## Local showcase and media verification
+
+The following artifact-level checks were performed locally in addition to `npm run verify`:
+
+- `./bin/start-showcase.sh start` built a missing release ZIP when needed, mounted the verified artifact under the isolated `agent-snr-showcase` project on `127.0.0.1`, and verified WooCommerce 11.0.1, 12 products, and all four public pages.
+- `npm run showcase:capture` completed one eight-call TerraRoll capability-gap → human order → full-refund workflow with zero console errors. The machine-readable evidence is in `demo-screenshots/showcase-summary.json`.
+- `agent-snr-hackathon-demo.pptx` rendered as 11 editable slides; all 11 speaker-note source blocks were present and the presentation overflow check passed.
+
+The runtime capture and presentation render are recorded local artifact checks, not hidden steps inside `npm run verify`. The hosted HTTPS capture and real-client checks remain owner gates.
 
 ## Exact plugin ZIP matrix
 

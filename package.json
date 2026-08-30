@@ -5,14 +5,16 @@
   "description": "Development and browser-test tooling for Agent SNR, agent outcome monitoring for WordPress.",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.js'",
+    "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.{js,mjs}' 'demo/**/*.mjs'",
     "lint:css": "stylelint 'plugin/wmcp-agentops/assets/css/**/*.css'",
-    "test:js": "node --test tests/JavaScript/**/*.test.js",
+    "test:js": "node --test tests/JavaScript/**/*.test.js tests/JavaScript/**/*.test.mjs",
+    "test:showcase": "bash tests/Shell/showcase-launcher.test.sh",
     "test:browser": "playwright test",
     "test": "npm run test:js",
-    "verify": "npm run lint:js && npm run lint:css && npm run test:js",
+    "verify": "npm run lint:js && npm run lint:css && npm run test:showcase && npm run test:js",
     "build": "./bin/build-plugin.sh",
-    "build:playground": "./bin/build-playground-bundle.sh"
+    "build:playground": "./bin/build-playground-bundle.sh",
+    "showcase:capture": "node demo/showcase-capture.mjs"
   },
   "engines": {
     "node": "^22.13.0 || >=24.0.0"

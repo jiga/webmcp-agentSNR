@@ -15,6 +15,9 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 | Live HTTPS demo | Owner must deploy and add the public URL |
 | Public repository | Local Git history is ready; owner must create and push the public remote |
 | Video | Script and run sheet are included; owner must record and publish a sub-three-minute YouTube video |
+| Presentation | Editable 11-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
+| Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |
+| Captured proof | Seven real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |
 | Plugin artifact | Reproducibly built as `dist/wmcp-agentops-0.1.0.zip` with a SHA-256 sidecar |
 | Playground | Reproducibly built as `dist/wmcp-agentops-playground-0.1.0.zip` |
 | License | [GPL-2.0-or-later](LICENSE) |
@@ -47,7 +50,9 @@ option to my cart.
 Capability gap:
 
 ```text
-Notify me when the blue 24L version is back in stock.
+Find the blue TerraRoll 25 Pack and notify me when it is back in stock.
+If the store cannot do that, say so honestly, record the capability gap,
+and do not pretend a notification was created.
 ```
 
 Merchant:
@@ -74,10 +79,11 @@ Disable product comparison for this demo session.
 - Accessible visible state for every meaningful tool result; the human storefront still works when WebMCP is absent.
 - Twelve original fictional products and original SVG artwork.
 - Docker reproduction, installable ZIP, WordPress Playground packaging, browser tests, and submission materials.
+- A visually verified architecture/demo deck, isolated exact-artifact rehearsal, canonical runbook, and real evidence screenshots.
 
 ## Quick start
 
-Prerequisites: Docker Desktop (or Docker Engine with Compose) and a free local port 18080. Override it with `WMCP_HTTP_PORT` when needed.
+Prerequisites: Docker Desktop (or Docker Engine with Compose) and a free local port 18080. Override it with `WMCP_HTTP_PORT` when needed. The clean-clone showcase auto-build also needs `rsync` and `zip`; a supplied prebuilt ZIP does not.
 
 ```bash
 ./bin/start-demo.sh
@@ -95,6 +101,23 @@ Reset only this repository's named Docker volumes and rebuild:
 
 ```bash
 ./bin/reset-local-demo.sh --yes
+```
+
+### Isolated hackathon rehearsal
+
+Use the showcase launcher for recording or judge rehearsal. It runs the checksummed release ZIP—not a source bind mount—as the separate Compose project `agent-snr-showcase` on port `18084`, leaving the ordinary development stack and its data untouched. On a clean clone with no ignored `dist/*.zip`, `start` first builds the deterministic ZIP and checksum from the current checkout, then mounts that verified artifact.
+
+```bash
+./bin/start-showcase.sh start
+./bin/start-showcase.sh verify
+```
+
+Follow the single-session shopper → human checkout → Workflow Replay → governance → refund story in [demo/HACKATHON_RUNBOOK.md](demo/HACKATHON_RUNBOOK.md). The matching editable deck is [submission/agent-snr-hackathon-demo.pptx](submission/agent-snr-hackathon-demo.pptx), and the checked-in local reference captures are under [submission/demo-screenshots/](submission/demo-screenshots/).
+
+Stop the isolated project without deleting its data:
+
+```bash
+./bin/start-showcase.sh stop
 ```
 
 ## Build the plugin
@@ -167,11 +190,20 @@ npm run test:js
 ./bin/lint-php.sh
 ```
 
+With the isolated showcase already running, regenerate the seven local reference captures and run summary with:
+
+```bash
+npx playwright install chromium
+npm run showcase:capture
+```
+
+The capture is intentionally stateful: it creates and fully refunds one no-charge local WooCommerce order and records a session-only comparison-tool restriction inside its disposable browser scope. It publishes the image/summary set only after the entire run succeeds. It defaults to localhost; remote capture requires HTTPS, an explicit opt-in, and explicit operator credentials.
+
 PHP and WordPress integration suites run in containers so host PHP is not required. Browser-native WebMCP is injected/mocked in CI; real ChatGPT desktop and Chrome tests remain release-blocking manual checks.
 
 ### Verification snapshot
 
-The prepared repository passes 66 JavaScript tests, 65 PHP tests / 597 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios (including real classic checkout, cross-tab cart synchronization, and bounded large-workflow replay), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
+The prepared repository passes 79 JavaScript tests, 65 PHP tests / 597 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios (including real classic checkout, cross-tab cart synchronization, and bounded large-workflow replay), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

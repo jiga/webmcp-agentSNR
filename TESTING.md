@@ -24,6 +24,7 @@ Individual checks:
 ```bash
 npm run lint:js
 npm run lint:css
+npm run test:showcase
 npm run test:js
 npm run test:browser
 ./bin/lint-php.sh
@@ -35,7 +36,7 @@ npm run test:browser
 
 Run the complete host-independent static/unit/build slice with `./bin/verify.sh`. The REST, Woo lifecycle, and browser checks require the local demo started by `./bin/start-demo.sh`.
 
-The automated suites currently contain 66 JavaScript contract tests, 65 PHP tests with 597 assertions, and 14 isolated Chromium scenarios. The REST smoke harness covers seven public routes, 19 tools, bounded workflow replay, private cart-count manifest snapshots, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
+The automated suites currently contain 79 JavaScript contract/configuration tests, 65 PHP tests with 597 assertions, and 14 isolated Chromium scenarios. The JavaScript suite includes fail-closed showcase origin, redirect, credential, console-location, and output-directory checks. The REST smoke harness covers seven public routes, 19 tools, bounded workflow replay, private cart-count manifest snapshots, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
 
 The WooCommerce lifecycle gate uses public Woo CRUD APIs and explicit provenance fixtures in the configured storage mode. It proves unpaid exclusion, paid attribution, partial and full refund recomputation, cancellation removal, provenance-negative line handling, and human-only exclusion. Every fixture is tagged and deleted before the test exits.
 
@@ -49,7 +50,7 @@ Branch CI validates Composer metadata, WordPress Coding Standards, PHP/JavaScrip
 2. Confirm the page remains useful without a WebMCP API and reports **Unsupported browser** rather than failing.
 3. In a supported top-level WebMCP client, confirm the status progresses from **API detected** to **Tools ready** only after registration succeeds.
 4. Run the shopper prompt from `README.md`. Verify visible search results, comparison evidence, policy evidence, cart badge/summary, and workflow rail.
-5. Ask for a blue 24L back-in-stock notification. Confirm the agent records a capability gap and explicitly says no notification was created.
+5. Ask for a blue TerraRoll 25 Pack back-in-stock notification. Confirm the out-of-stock product is recorded as the related capability-gap evidence and the agent explicitly says no notification was created.
 6. Run checkout handoff. Confirm it does not create an order or navigate automatically.
 7. Click the human checkout CTA, review the prefilled fictional demo fields, choose **Demo payment — no charge**, and place the order.
 8. Open Agent SNR and run the merchant prompt. Confirm the journey, Workflow Replay, Signals, tool health, capability gap, paid order, attribution class, gross revenue, refunds, and net revenue refer only to this demo session.

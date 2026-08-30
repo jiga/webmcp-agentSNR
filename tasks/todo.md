@@ -132,3 +132,21 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - UI behavior: only the selected row becomes busy; failures clear stale evidence, show a visible and announced error, restore the button, and never emit false result/update events. Late rapid-click responses cannot replace the latest selection.
 - Verification: 66 JavaScript tests, 65 PHP tests / 597 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios, bounded-replay smoke coverage, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, Playground execution, and Plugin Check `0 errors / 54 documented warnings / 0 trademark findings` pass.
 - Final deterministic artifacts: plugin `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e`; Playground `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8`.
+
+## Publish-ready hackathon showcase
+
+- [x] Define the judge narrative, architecture, and coherent showcase scenarios.
+- [x] Create and visually verify an editable Agent SNR presentation deck.
+- [x] Build a separate clean showcase environment without modifying current development data.
+- [x] Capture real showcase screenshots and align the deck, demo script, and operator runbook.
+- [x] Verify the complete publishable package, independently review it, and commit.
+
+### Publish-ready hackathon showcase review
+
+- Story: the deck and runbook use one coherent order—evidence-first shopping, honest TerraRoll capability gap, checkout handoff, human no-charge order, Workflow Replay/attribution, session governance, and operator refund.
+- Architecture: the 11-slide editable deck shows the two top-level WebMCP surfaces, same-origin WordPress execution boundary, human checkpoint, verified WooCommerce outcomes, redacted ledger, and session-only control loop. All slides render without overflow and contain portable source notes.
+- Reproduction: `start-showcase.sh` auto-builds a missing deterministic ZIP, verifies its checksum/tree, binds only to loopback, uses the fixed `agent-snr-showcase` project, and preserves the development stack. Clean-clone auto-build reproduced SHA-256 `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e` byte-for-byte.
+- Evidence: the checked-in 1440×900 capture set records an eight-call workflow, out-of-stock TerraRoll 25 capability signal (`recorded=true`, `fulfilled=false`), human order, direct attribution, session control, full `$109.00` refund, `$0.00` net, and zero console errors.
+- Safety: capture credentials fail closed; remote capture requires HTTPS, explicit opt-in, explicit credentials, and same-origin admin redirects. Public cookies are restored from the exact pre-login snapshot. Output promotion is marker-gated, failure-atomic, and rejects broad or unmarked directories.
+- Verification: `npm run verify` passes 79 JavaScript/configuration tests plus launcher guard tests; exact artifact start/capture/verify/stop passes; Plugin ZIP and Playground checksums remain unchanged; the PPTX ZIP and slide-overflow checks pass; `git diff --check` is clean.
+- Remaining publication gates are still owner/external: formal Agent SNR clearance, public remote, hosted top-level HTTPS deployment, real-client validation, hosted recapture/video, Devpost submission, and freeze.
