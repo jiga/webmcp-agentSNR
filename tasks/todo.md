@@ -4,63 +4,71 @@ Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon En
 
 ## Phase 0 — Repository and contracts
 
-- [ ] Initialize Git without rewriting later submission history.
-- [ ] Add GPL-2.0-or-later license and hackathon disclosure.
-- [ ] Define shared tool names, event names, risk classes, manifest/REST envelopes, DB version, and attribution rule version.
-- [ ] Add dependency manifests, formatting/lint configuration, CI skeleton, and repository hygiene.
-- [ ] Separate local build-complete requirements from owner/external submission actions.
+- [x] Initialize Git without rewriting later submission history.
+- [x] Add GPL-2.0-or-later license and hackathon disclosure.
+- [x] Define shared tool names, event names, risk classes, manifest/REST envelopes, DB version, and attribution rule version.
+- [x] Add dependency manifests, formatting/lint configuration, CI skeleton, and repository hygiene.
+- [x] Separate local build-complete requirements from owner/external submission actions.
 
 ## Phase 1 — One complete WebMCP slice
 
-- [ ] Bootstrap/activate/deactivate/uninstall the plugin safely.
-- [ ] Register WordPress Abilities on the canonical hooks.
-- [ ] Create versioned, idempotent analytics schema migrations.
-- [ ] Bootstrap an isolated demo session with a short-lived CSRF token.
-- [ ] Serve a dynamic surface-scoped manifest.
-- [ ] Register top-level imperative tools with `document.modelContext.registerTool()`.
-- [ ] Execute through same-origin REST with permission, policy, validation, rate-limit, and event-integrity checks.
-- [ ] Reflect successful calls in visible UI state.
+- [x] Bootstrap/activate/deactivate/uninstall the plugin safely.
+- [x] Register WordPress Abilities on the canonical hooks.
+- [x] Create versioned, idempotent analytics schema migrations.
+- [x] Bootstrap an isolated demo session with a short-lived CSRF token.
+- [x] Serve a dynamic surface-scoped manifest.
+- [x] Register top-level imperative tools with `document.modelContext.registerTool()`.
+- [x] Execute through same-origin REST with permission, policy, validation, rate-limit, and event-integrity checks.
+- [x] Reflect successful calls in visible UI state.
 
 ## Phase 2 — Shopper workflow
 
-- [ ] Implement context, product search/get/compare, policy, cart read/write, checkout handoff, and capability-gap tools.
-- [ ] Seed deterministic fictional products, policy content, and original artwork.
-- [ ] Build judge landing, storefront workflow rail, result/comparison/policy/cart panels, and accessibility behavior.
-- [ ] Keep the human storefront usable without WebMCP.
+- [x] Implement context, product search/get/compare, policy, cart read/write, checkout handoff, and capability-gap tools.
+- [x] Seed deterministic fictional products, policy content, and original artwork.
+- [x] Build judge landing, storefront workflow rail, result/comparison/policy/cart panels, and accessibility behavior.
+- [x] Keep the human storefront usable without WebMCP.
 
 ## Phase 3 — Commerce and attribution
 
-- [ ] Initialize and scope WooCommerce sessions safely.
-- [ ] Add the explicit demo-only no-charge gateway.
-- [ ] Link created/paid/cancelled/refunded orders through WooCommerce CRUD and HPOS-safe hooks.
-- [ ] Implement direct/assisted/influenced attribution and gross/refund/net calculations.
-- [ ] Preserve evidence and prevent revenue double counting.
+- [x] Initialize and scope WooCommerce sessions safely.
+- [x] Add the explicit demo-only no-charge gateway.
+- [x] Link created/paid/cancelled/refunded orders through WooCommerce CRUD and HPOS-safe hooks.
+- [x] Implement direct/assisted/influenced attribution and gross/refund/net calculations.
+- [x] Preserve evidence and prevent revenue double counting.
 
 ## Phase 4 — AgentOps and governance
 
-- [ ] Implement overview, funnel, workflow explorer/explanation, tool health, and capability-gap queries.
-- [ ] Build public current-session AgentOps and authenticated admin surfaces.
-- [ ] Implement session-scoped `set_tool_enabled`, persistent admin policy, and global kill switch.
-- [ ] Refresh registrations after manifest invalidation and enforce changes server-side immediately.
+- [x] Implement overview, funnel, workflow explorer/explanation, tool health, and capability-gap queries.
+- [x] Build public current-session AgentOps and authenticated admin surfaces.
+- [x] Implement session-scoped `set_tool_enabled`, persistent admin policy, and global kill switch.
+- [x] Refresh registrations after manifest invalidation and enforce changes server-side immediately.
 
 ## Phase 5 — Verification and hardening
 
-- [ ] Unit-test deterministic core services.
-- [ ] Integration-test WordPress, REST, WooCommerce, HPOS on/off, isolation, and reset behavior.
-- [ ] Browser-test progressive enhancement, top-level/iframe behavior, cancellation, UI synchronization, and governance refresh.
-- [ ] Security-test schemas, CSRF/origin/replay, cross-session access, PII redaction, cache safety, and kill switch.
-- [ ] Run formatters, static analysis, tests, builds, and install-from-ZIP smoke checks.
-- [ ] Review the final diff and resolve all release-blocking findings.
+- [x] Unit-test deterministic core services.
+- [x] Integration-test WordPress, REST, WooCommerce, HPOS on/off, isolation, and reset behavior.
+- [x] Browser-test progressive enhancement, top-level/iframe behavior, cancellation, UI synchronization, and governance refresh.
+- [x] Security-test schemas, CSRF/origin/replay, cross-session access, PII redaction, cache safety, and kill switch.
+- [x] Run formatters, static analysis, tests, builds, and install-from-ZIP smoke checks.
+- [x] Resolve final-review failure paths, repeat the full verification matrix, and obtain approval.
 
 ## Phase 6 — Reproduction and submission package
 
-- [ ] Provide one-command Docker reproduction and idempotent bootstrap/reset scripts.
-- [ ] Build and validate the installable plugin ZIP.
-- [ ] Build and validate the WordPress Playground Blueprint bundle.
-- [ ] Add CI and tagged-release automation.
-- [ ] Finish README, SECURITY, CONTRIBUTING, TESTING, notices, changelog, Devpost copy, judge instructions, screenshots plan, video script, and final checklist.
-- [ ] Mark all external owner actions explicitly: final name, public Git host/slug, live HTTPS deployment, real-client validation, screenshots, public YouTube upload, and Devpost submission/freeze.
+- [x] Provide one-command Docker reproduction and idempotent bootstrap/reset scripts.
+- [x] Build and validate the installable plugin ZIP.
+- [x] Build and validate the WordPress Playground Blueprint bundle.
+- [x] Add CI and tagged-release automation.
+- [x] Finish README, SECURITY, CONTRIBUTING, TESTING, notices, changelog, Devpost copy, judge instructions, screenshots plan, video script, and final checklist.
+- [x] Mark all external owner actions explicitly: final name, public Git host/slug, live HTTPS deployment, real-client validation, screenshots, public YouTube upload, and Devpost submission/freeze.
 
 ## Review
 
-Pending implementation and verification.
+Implementation and the definitive local verification matrix are complete. Independent staff review approved the code with no remaining P0/P1 blocker; the exact final artifact passed every configured matrix target.
+
+- PHP: 58 tests / 521 assertions pass on PHP 8.1 and 8.4; Coding Standards has zero errors.
+- Browser code: 42 JavaScript tests, 12 Chromium scenarios, lint, and dependency audit pass.
+- WordPress/Woo: the exact ZIP passes WordPress 6.9, 7.0.4, and 7.1 with WooCommerce 10.9.4/11.0.1, legacy storage and HPOS; real paid/refund/cancel attribution checks pass in both storage modes.
+- Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
+- Packaging: Plugin Check has zero errors; the remaining warnings and human-selected naming caveat are documented.
+
+Remaining work is exclusively owner/external: choose the final public name, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate real clients, rerun against WooCommerce 11.1 if released, capture media, replace URLs, submit, and freeze.
