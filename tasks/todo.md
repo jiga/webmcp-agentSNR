@@ -65,8 +65,8 @@ Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon En
 
 Implementation and the definitive local verification matrix are complete. Independent staff review approved the code with no remaining P0/P1 blocker; the exact final artifact passed every configured matrix target.
 
-- PHP: 58 tests / 521 assertions pass on PHP 8.1 and 8.4; Coding Standards has zero errors.
-- Browser code: 63 JavaScript tests, 13 Chromium scenarios, lint, and dependency audit pass.
+- PHP: 65 tests / 597 assertions pass on PHP 8.1 and 8.4; Coding Standards has zero errors.
+- Browser code: 66 JavaScript tests, 14 Chromium scenarios, lint, and dependency audit pass.
 - WordPress/Woo: the exact ZIP passes WordPress 6.9, 7.0.4, and 7.1 with WooCommerce 10.9.4/11.0.1, legacy storage and HPOS; real paid/refund/cancel attribution checks pass in both storage modes.
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
 - Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and formal Agent SNR clearance action are documented.
@@ -96,8 +96,8 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 
 - Public identity is consistently Agent SNR, with the descriptor “Agent outcome monitoring for WordPress” and SNR retaining its established signal-to-noise ratio meaning.
 - Judge navigation exposes unique **Agent SNR — Overview** and **Agent SNR — Monitor** labels; the monitor retains the exact **Agent SNR** product H1.
-- Final deterministic artifacts: plugin `e25c4dee2fa1b5d6456002798da3fac5c27a8a8d99f2e20af4a8d2a6164bdee0`; Playground `d666f777259aaa2738171aab0db093ddbf019752ff838c84a8cf3b86510db2ea`.
-- Exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS Woo lifecycle, smoke/security, 13 Chromium scenarios, Playground execution, and Plugin Check all pass. Plugin Check reports 0 errors, 54 documented warnings, and 0 trademark findings.
+- Final deterministic artifacts: plugin `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e`; Playground `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8`.
+- Exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS Woo lifecycle, smoke/security, 14 Chromium scenarios, Playground execution, and Plugin Check all pass. Plugin Check reports 0 errors, 54 documented warnings, and 0 trademark findings.
 
 ## Storefront cart-badge synchronization
 
@@ -113,5 +113,22 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Root cause: cart tool results updated only the executing document, while cache-neutral HTML intentionally carried no per-session cart value.
 - Fix: the private/no-store storefront manifest now carries only `cart.item_count`; successful cart mutations trigger the existing same-surface refresh broadcast, and each tab refetches its own authoritative session snapshot.
 - Privacy/performance: no cart payload or session identifier is broadcast, observers execute no synthetic tools, successful mutations do not await refresh, and duplicate BroadcastChannel/storage messages are nonce-deduplicated with bounded memory.
-- Verification: 63 JavaScript tests, 58 PHP tests / 521 assertions on PHP 8.1 and 8.4, 13 Chromium scenarios, smoke cart snapshots `0 → 1 → 0`, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, Playground execution, and Plugin Check `0 errors / 54 documented warnings / 0 trademark findings` pass.
-- Final deterministic artifacts: plugin `e25c4dee2fa1b5d6456002798da3fac5c27a8a8d99f2e20af4a8d2a6164bdee0`; Playground `d666f777259aaa2738171aab0db093ddbf019752ff838c84a8cf3b86510db2ea`.
+- Verification: 66 JavaScript tests, 65 PHP tests / 597 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios, smoke cart snapshots `0 → 1 → 0`, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, Playground execution, and Plugin Check `0 errors / 54 documented warnings / 0 trademark findings` pass.
+- Final deterministic artifacts: plugin `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e`; Playground `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8`.
+
+## Agent Sessions replay reliability
+
+- [x] Reproduce the workflow rows that fail to open and capture their error state.
+- [x] Trace row activation, workflow explanation construction, and response-size enforcement.
+- [x] Add positive, boundary, and negative regression coverage.
+- [x] Implement bounded replay output with explicit truncation and visible failure feedback.
+- [x] Run the full source/exact-artifact matrix and complete independent review.
+- [x] Commit the Agent Sessions replay fix.
+
+### Agent Sessions replay review
+
+- Root cause: `explain_agent_workflow` allowed a 200-event timeline while every tool result had an intentional 8,192-byte ceiling; 18+ ordinary events crossed that limit, so larger rows selected but could not replace the prior replay.
+- Fix: replay results fit within 7,000 bytes, retain the first 8 and latest 12 displayed events, and query first problem, first later recovery, and latest commerce evidence across the full scoped workflow—including histories beyond 200 events. Any omission is disclosed as a partial replay.
+- UI behavior: only the selected row becomes busy; failures clear stale evidence, show a visible and announced error, restore the button, and never emit false result/update events. Late rapid-click responses cannot replace the latest selection.
+- Verification: 66 JavaScript tests, 65 PHP tests / 597 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios, bounded-replay smoke coverage, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, Playground execution, and Plugin Check `0 errors / 54 documented warnings / 0 trademark findings` pass.
+- Final deterministic artifacts: plugin `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e`; Playground `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8`.

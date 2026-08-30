@@ -217,6 +217,14 @@ fetch_manifest agentops "${AGENTOPS_MANIFEST}"
 jq -e '([.tools[].name] | length) == 8 and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
 invoke_tool "${AGENTOPS_MANIFEST}" get_agent_analytics_overview '{}' "${SMOKE_TEMP_DIR}/overview.json"
 jq -e '.result.workflows.total >= 1 and .result.tool_calls.total >= 1 and .result.capability_gaps.requests >= 1' "${SMOKE_TEMP_DIR}/overview.json" >/dev/null
+invoke_tool "${AGENTOPS_MANIFEST}" query_agent_workflows '{"limit":20}' "${SMOKE_TEMP_DIR}/workflows.json"
+WORKFLOW_ID="$(jq -r '.result.items[0].workflow_id' "${SMOKE_TEMP_DIR}/workflows.json")"
+test "${#WORKFLOW_ID}" = "26"
+invoke_tool "${AGENTOPS_MANIFEST}" explain_agent_workflow \
+  "{\"workflow_id\":\"${WORKFLOW_ID}\"}" \
+  "${SMOKE_TEMP_DIR}/workflow-replay.json"
+jq -e --arg workflow_id "${WORKFLOW_ID}" '.result.workflow.workflow_id == $workflow_id and (.result.timeline | length) >= 1 and (.result.truncated | type) == "boolean"' "${SMOKE_TEMP_DIR}/workflow-replay.json" >/dev/null
+test "$(jq -c '.result' "${SMOKE_TEMP_DIR}/workflow-replay.json" | wc -c | tr -d ' ')" -le 7001
 
 invoke_tool "${AGENTOPS_MANIFEST}" set_tool_enabled \
   '{"tool_name":"compare_products","enabled":false,"scope":"demo_session","reason":"Automated session-governance smoke test"}' \

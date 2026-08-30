@@ -8,6 +8,7 @@
 	const config = window.wmcpConfig || {};
 	let currentManifest = null;
 	let loading = false;
+	let explanationRequest = 0;
 	const monitorState = {
 		gaps: null,
 		overview: null,
@@ -443,10 +444,12 @@
 			row.dataset.workflowId = item.workflow_id;
 			const idCell = document.createElement( "td" );
 			const select = document.createElement( "button" );
+			const workflowLabel = `${ String( item.workflow_id ).slice( 0, 8 ) }…`;
 			select.type = "button";
 			select.dataset.explainWorkflow = item.workflow_id;
+			select.dataset.workflowLabel = workflowLabel;
 			select.title = `Explain workflow ${ item.workflow_id }`;
-			text( select, `${ String( item.workflow_id ).slice( 0, 8 ) }…` );
+			text( select, workflowLabel );
 			idCell.append( select );
 			const status = document.createElement( "td" );
 			status.append( stateTag( item.status ) );
@@ -529,6 +532,69 @@
 			text( outcome, `${ event.outcome || event.error_code || "event" }${ event.duration_ms === null || event.duration_ms === undefined ? "" : ` · ${ event.duration_ms } ms` }` );
 			item.append( time, label, outcome );
 			container.append( item );
+		} );
+	}
+
+	function resetExplanationEvidence( status, fallback ) {
+		text( one( '[data-evidence="status"]' ), status );
+		text( one( '[data-evidence="products"]' ), fallback );
+		text( one( '[data-evidence="orders"]' ), fallback );
+		text( one( '[data-evidence="gaps"]' ), fallback );
+		one( "[data-wmcp-timeline]" )?.replaceChildren();
+	}
+
+	function renderExplanationLoading( workflowId ) {
+		const shortId = String( workflowId ).slice( 0, 8 );
+		text( one( "#wmcp-timeline-title" ), "Loading workflow replay…" );
+		text( one( "[data-wmcp-explanation]" ), `Loading redacted evidence for workflow ${ shortId }…` );
+		text( one( "[data-wmcp-timeline-count]" ), "Loading…" );
+		resetExplanationEvidence( "Loading", "—" );
+	}
+
+	function renderExplanationUnavailable( workflowId ) {
+		const shortId = String( workflowId ).slice( 0, 8 );
+		text( one( "#wmcp-timeline-title" ), "Workflow replay unavailable" );
+		text( one( "[data-wmcp-explanation]" ), `The redacted replay for workflow ${ shortId }… could not be loaded.` );
+		text( one( "[data-wmcp-timeline-count]" ), "0 events" );
+		resetExplanationEvidence( "Unavailable", "Not available" );
+	}
+
+	function setWorkflowRowBusy( row, busy ) {
+		if ( ! row ) {
+			return;
+		}
+
+		row.classList.toggle( "wmcp-is-loading", busy );
+		if ( busy ) {
+			row.setAttribute( "aria-busy", "true" );
+		} else {
+			row.removeAttribute( "aria-busy" );
+		}
+
+		const button = one( "[data-explain-workflow]", row );
+		if ( button ) {
+			button.disabled = busy;
+			text( button, busy ? "Loading…" : button.dataset.workflowLabel );
+			if ( busy ) {
+				button.setAttribute( "aria-busy", "true" );
+			} else {
+				button.removeAttribute( "aria-busy" );
+			}
+		}
+	}
+
+	function selectWorkflowRow( selectedRow ) {
+		all( "[data-workflow-id]" ).forEach( ( row ) => {
+			const selected = row === selectedRow;
+			row.classList.toggle( "wmcp-is-selected", selected );
+			row.classList.remove( "wmcp-has-error" );
+			const button = one( "[data-explain-workflow]", row );
+			if ( selected ) {
+				button?.setAttribute( "aria-current", "true" );
+			} else {
+				button?.removeAttribute( "aria-current" );
+			}
+			setWorkflowRowBusy( row, selected );
 		} );
 	}
 
@@ -769,7 +835,13 @@
 		return payload;
 	}
 
-	async function execute( tool, input = {} ) {
+	function dispatchToolResult( tool, payload ) {
+		const detail = { requestId: payload.event_id || uuid(), response: payload, tool };
+		window.dispatchEvent( new CustomEvent( "wmcp:tool-result", { detail } ) );
+		window.dispatchEvent( new CustomEvent( "wmcp:ui-update", { detail: Object.assign( { ui: payload.ui || {} }, detail ) } ) );
+	}
+
+	async function execute( tool, input = {}, options = {} ) {
 		const manifest = await fetchManifest();
 		if ( ! manifest.tools?.some( ( definition ) => definition.name === tool ) ) {
 			throw new Error( `${ tool } is not available in the current policy scope.` );
@@ -791,9 +863,9 @@
 			},
 			method: "POST",
 		}, `${ tool } tool` );
-		const detail = { requestId: payload.event_id || uuid(), response: payload, tool };
-		window.dispatchEvent( new CustomEvent( "wmcp:tool-result", { detail } ) );
-		window.dispatchEvent( new CustomEvent( "wmcp:ui-update", { detail: Object.assign( { ui: payload.ui || {} }, detail ) } ) );
+		if ( options.dispatch !== false ) {
+			dispatchToolResult( tool, payload );
+		}
 		return payload;
 	}
 
@@ -801,11 +873,36 @@
 		if ( ! workflowId ) {
 			return;
 		}
-		all( "[data-workflow-id]" ).forEach( ( row ) => row.classList.toggle( "wmcp-is-selected", row === selectedRow ) );
+		const request = ++explanationRequest;
+		selectWorkflowRow( selectedRow );
+		renderExplanationLoading( workflowId );
+		showError( "" );
+		announce( `Loading workflow replay for ${ String( workflowId ).slice( 0, 8 ) }…` );
 		try {
-			await execute( "explain_agent_workflow", { workflow_id: workflowId } );
+			const payload = await execute(
+				"explain_agent_workflow",
+				{ workflow_id: workflowId },
+				{ dispatch: false }
+			);
+			if ( request !== explanationRequest ) {
+				return;
+			}
+			dispatchToolResult( "explain_agent_workflow", payload );
+			showError( "" );
+			announce( `Workflow replay loaded for ${ String( workflowId ).slice( 0, 8 ) }…` );
 		} catch ( error ) {
-			showError( error.message || "The workflow could not be explained." );
+			if ( request !== explanationRequest ) {
+				return;
+			}
+			const message = error.message || "The workflow could not be explained.";
+			selectedRow?.classList.add( "wmcp-has-error" );
+			renderExplanationUnavailable( workflowId );
+			showError( message );
+			announce( `Workflow replay unavailable. ${ message }` );
+		} finally {
+			if ( request === explanationRequest ) {
+				setWorkflowRowBusy( selectedRow, false );
+			}
 		}
 	}
 

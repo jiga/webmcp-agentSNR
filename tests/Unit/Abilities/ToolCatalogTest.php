@@ -54,6 +54,16 @@ final class ToolCatalogTest extends TestCase
         );
     }
 
+    public function test_explain_workflow_keeps_standard_output_ceiling(): void
+    {
+        $definitions = (new ToolCatalog())->all();
+
+        self::assertSame(8192, $definitions[ToolName::EXPLAIN_WORKFLOW]['max_output_bytes']);
+        foreach ($definitions as $definition) {
+            self::assertSame(8192, $definition['max_output_bytes']);
+        }
+    }
+
     public function test_capability_gap_is_a_telemetry_write_and_checkout_uses_cart_revision(): void
     {
         $catalog  = new ToolCatalog();

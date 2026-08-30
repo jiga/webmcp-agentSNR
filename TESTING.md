@@ -35,11 +35,11 @@ npm run test:browser
 
 Run the complete host-independent static/unit/build slice with `./bin/verify.sh`. The REST, Woo lifecycle, and browser checks require the local demo started by `./bin/start-demo.sh`.
 
-The automated suites currently contain 63 JavaScript contract tests, 58 PHP tests with 521 assertions, and 13 isolated Chromium scenarios. The REST smoke harness covers seven public routes, 19 tools, private cart-count manifest snapshots, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
+The automated suites currently contain 66 JavaScript contract tests, 65 PHP tests with 597 assertions, and 14 isolated Chromium scenarios. The REST smoke harness covers seven public routes, 19 tools, bounded workflow replay, private cart-count manifest snapshots, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
 
 The WooCommerce lifecycle gate uses public Woo CRUD APIs and explicit provenance fixtures in the configured storage mode. It proves unpaid exclusion, paid attribution, partial and full refund recomputation, cancellation removal, provenance-negative line handling, and human-only exclusion. Every fixture is tagged and deleted before the test exits.
 
-The Chromium suite separately exercises the complete browser path: WebMCP search/cart/handoff, existing- and late-tab cart-badge synchronization, normal classic checkout, the real no-charge demo gateway, paid direct attribution, an actual agent removal followed by a normal human re-add (influenced, never direct), and withholding the gateway from a human-only cart.
+The Chromium suite separately exercises the complete browser path: WebMCP search/cart/handoff, existing- and late-tab cart-badge synchronization, bounded partial replay for a large Agent Sessions workflow, normal classic checkout, the real no-charge demo gateway, paid direct attribution, an actual agent removal followed by a normal human re-add (influenced, never direct), and withholding the gateway from a human-only cart.
 
 Branch CI validates Composer metadata, WordPress Coding Standards, PHP/JavaScript tests, the plugin ZIP layout, Playground execution, Plugin Check, and the WordPress/WooCommerce matrix with both order-storage modes. The tag workflow builds once, mounts the extracted release-candidate ZIP in every matrix job, reruns the REST, Woo lifecycle, Plugin Check, and primary Chromium gates, and cannot publish until they all pass.
 

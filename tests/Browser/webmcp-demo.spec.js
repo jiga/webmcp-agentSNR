@@ -599,6 +599,33 @@ test( "manually loads current-session storefront evidence into Agent SNR", async
 		.toBeGreaterThan( 0 );
 } );
 
+test( "opens a bounded partial replay for a large Agent Sessions workflow", async ( { context, page } ) => {
+	await installModelContextMock( context );
+	await page.goto( "/storefront-demo/" );
+	await waitForRuntime( page, STOREFRONT_TOOLS.length );
+
+	let cart;
+	for ( let invocation = 0; invocation < 12; invocation++ ) {
+		cart = await executeActiveTool( page, "get_cart" );
+		expect( cart.ok ).toBe( true );
+	}
+	const workflowId = cart.workflow_id;
+
+	await page.goto( "/agentops-demo/" );
+	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.locator( "[data-wmcp-load-dashboard]" ).click();
+	await expect( page.locator( "[data-wmcp-announcer]" ) ).toContainText( "Current-session evidence loaded" );
+
+	const workflowRow = page.locator( `[data-workflow-id="${ workflowId }"]` );
+	await expect( workflowRow ).toBeVisible();
+	await workflowRow.locator( "[data-explain-workflow]" ).click();
+
+	await expect( page.locator( "#wmcp-timeline-title" ) ).toHaveText( `Workflow ${ workflowId.slice( 0, 8 ) }…` );
+	await expect( page.locator( "[data-wmcp-timeline-count]" ) ).toContainText( "partial replay" );
+	await expect( page.locator( "[data-wmcp-timeline] li" ).first() ).toBeVisible();
+	await expect( page.locator( "[data-wmcp-error]" ) ).toBeHidden();
+} );
+
 test( "disabling compare removes its registration and denies stale or direct execution", async ( { context, page } ) => {
 	await installModelContextMock( context );
 	await page.goto( "/storefront-demo/" );

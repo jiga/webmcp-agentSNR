@@ -108,6 +108,51 @@ function signalCards( root ) {
 	return root.querySelectorAll( "[data-wmcp-signals] .wmcp-signal-card" );
 }
 
+function workflow( workflowId, overrides = {} ) {
+	return Object.assign( {
+		commerce: { by_currency: {} },
+		last_event: { event_name: "workflow.started" },
+		status: "completed",
+		tool_count: 1,
+		workflow_id: workflowId,
+	}, overrides );
+}
+
+function explanation( workflowId, label = "Returned evidence." ) {
+	return {
+		capability_gaps: [],
+		commerce_outcome: { orders: [] },
+		explanation: label,
+		timeline: [ {
+			duration_ms: 12,
+			event_name: "tool.call.succeeded",
+			occurred_at: "2026-08-30 12:00:00",
+			outcome: "success",
+			product_ids: [ 101 ],
+		} ],
+		truncated: false,
+		workflow: { status: "completed", workflow_id: workflowId },
+	};
+}
+
+function explanationManifest() {
+	return {
+		manifest_revision: "revision-1",
+		schema_version: "1",
+		session: { csrf_token: "csrf" },
+		tools: [ { name: "explain_agent_workflow" } ],
+		workflow_id: "current-session-workflow",
+	};
+}
+
+function deferred() {
+	let resolve;
+	const promise = new Promise( ( promiseResolve ) => {
+		resolve = promiseResolve;
+	} );
+	return { promise, resolve };
+}
+
 test( "journey stages omit unknown median timing instead of displaying null", () => {
 	const fixture = dashboardFixture();
 
@@ -171,6 +216,164 @@ test( "Workflow Replay discloses a truncated event timeline", () => {
 		fixture.root.querySelector( "[data-wmcp-timeline-count]" ).textContent,
 		"1 event shown · partial replay"
 	);
+} );
+
+test( "clicking an Agent Sessions row exposes contained loading state then renders replay", async () => {
+	const selectedWorkflow = "01M18QH3GTR0AJB8NCGN35R5CE";
+	const fetch = queuedFetch( [
+		jsonResponse( explanationManifest() ),
+		jsonResponse( { ok: true, result: explanation( selectedWorkflow ) } ),
+	] );
+	const fixture = dashboardFixture( { fetch } );
+	render( fixture.window, "query_agent_workflows", {
+		items: [
+			workflow( selectedWorkflow ),
+			workflow( "01M18QH3GTR0AJB8NCGN35R5CF" ),
+		],
+	} );
+	const rows = fixture.root.querySelectorAll( "[data-workflow-id]" );
+	const selectedButton = rows[ 0 ].querySelector( "[data-explain-workflow]" );
+	const otherButton = rows[ 1 ].querySelector( "[data-explain-workflow]" );
+	const error = fixture.root.querySelector( "[data-wmcp-error]" );
+	error.hidden = false;
+	error.textContent = "Previous replay error";
+	let resultEvents = 0;
+	let updateEvents = 0;
+	fixture.window.addEventListener( "wmcp:tool-result", () => resultEvents++ );
+	fixture.window.addEventListener( "wmcp:ui-update", ( event ) => {
+		if ( event.detail?.tool === "explain_agent_workflow" ) {
+			updateEvents++;
+		}
+	} );
+
+	selectedButton.click();
+
+	assert.equal( rows[ 0 ].classList.contains( "wmcp-is-selected" ), true );
+	assert.equal( rows[ 0 ].classList.contains( "wmcp-is-loading" ), true );
+	assert.equal( rows[ 0 ].getAttribute( "aria-busy" ), "true" );
+	assert.equal( selectedButton.disabled, true );
+	assert.equal( selectedButton.textContent, "Loading…" );
+	assert.equal( selectedButton.getAttribute( "aria-busy" ), "true" );
+	assert.equal( selectedButton.getAttribute( "aria-current" ), "true" );
+	assert.equal( rows[ 1 ].classList.contains( "wmcp-is-loading" ), false );
+	assert.equal( otherButton.disabled, false );
+	assert.equal( otherButton.getAttribute( "aria-current" ), null );
+	assert.equal( fixture.root.querySelector( "#wmcp-timeline-title" ).textContent, "Loading workflow replay…" );
+
+	await waitFor( () => selectedButton.disabled === false, "workflow replay did not settle" );
+
+	assert.equal( rows[ 0 ].classList.contains( "wmcp-is-selected" ), true );
+	assert.equal( rows[ 0 ].classList.contains( "wmcp-is-loading" ), false );
+	assert.equal( rows[ 0 ].getAttribute( "aria-busy" ), null );
+	assert.equal( selectedButton.getAttribute( "aria-busy" ), null );
+	assert.equal( selectedButton.textContent, `${ selectedWorkflow.slice( 0, 8 ) }…` );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-explanation]" ).textContent, "Returned evidence." );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-timeline]" ).children.length, 1 );
+	assert.equal( error.hidden, true );
+	assert.doesNotMatch( error.textContent, /Previous replay error/ );
+	assert.match( fixture.root.querySelector( "[data-wmcp-announcer]" ).textContent, /Workflow replay loaded/ );
+	assert.equal( resultEvents, 1 );
+	assert.equal( updateEvents, 1 );
+} );
+
+test( "output_too_large clears stale replay and leaves the failed row selected", async () => {
+	const selectedWorkflow = "01M18QH3GTR0AJB8NCGN35R5CE";
+	const fetch = queuedFetch( [
+		jsonResponse( explanationManifest() ),
+		jsonResponse( {
+			error: {
+				code: "output_too_large",
+				message: "The workflow replay exceeded the safe display limit.",
+			},
+			ok: false,
+		}, { status: 413 } ),
+	] );
+	const fixture = dashboardFixture( { fetch } );
+	render( fixture.window, "query_agent_workflows", {
+		items: [ workflow( selectedWorkflow ) ],
+	} );
+	render( fixture.window, "explain_agent_workflow", explanation(
+		"stale-workflow",
+		"Stale replay evidence that must be cleared."
+	) );
+	const row = fixture.root.querySelector( "[data-workflow-id]" );
+	const button = row.querySelector( "[data-explain-workflow]" );
+	let resultEvents = 0;
+	let updateEvents = 0;
+	fixture.window.addEventListener( "wmcp:tool-result", () => resultEvents++ );
+	fixture.window.addEventListener( "wmcp:ui-update", () => updateEvents++ );
+
+	button.click();
+	await waitFor( () => button.disabled === false, "failed workflow replay did not settle" );
+
+	assert.equal( row.classList.contains( "wmcp-is-selected" ), true );
+	assert.equal( row.classList.contains( "wmcp-has-error" ), true );
+	assert.equal( row.classList.contains( "wmcp-is-loading" ), false );
+	assert.equal( button.textContent, `${ selectedWorkflow.slice( 0, 8 ) }…` );
+	assert.equal( button.getAttribute( "aria-busy" ), null );
+	assert.equal( button.getAttribute( "aria-current" ), "true" );
+	assert.equal( fixture.root.querySelector( "#wmcp-timeline-title" ).textContent, "Workflow replay unavailable" );
+	assert.match( fixture.root.querySelector( "[data-wmcp-explanation]" ).textContent, /could not be loaded/ );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-timeline-count]" ).textContent, "0 events" );
+	assert.equal( fixture.root.querySelector( '[data-evidence="status"]' ).textContent, "Unavailable" );
+	assert.equal( fixture.root.querySelector( '[data-evidence="products"]' ).textContent, "Not available" );
+	assert.equal( fixture.root.querySelector( '[data-evidence="orders"]' ).textContent, "Not available" );
+	assert.equal( fixture.root.querySelector( '[data-evidence="gaps"]' ).textContent, "Not available" );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-timeline]" ).children.length, 0 );
+	assert.doesNotMatch( fixture.root.textContent, /Stale replay evidence that must be cleared/ );
+	const error = fixture.root.querySelector( "[data-wmcp-error]" );
+	assert.equal( error.hidden, false );
+	assert.match( error.textContent, /exceeded the safe display limit/ );
+	assert.match( fixture.root.querySelector( "[data-wmcp-announcer]" ).textContent, /Workflow replay unavailable/ );
+	assert.equal( resultEvents, 0 );
+	assert.equal( updateEvents, 0 );
+} );
+
+test( "a late rapid-click replay cannot replace the latest selected workflow", async () => {
+	const firstWorkflow = "01M18QH3GTR0AJB8NCGN35R5CE";
+	const secondWorkflow = "01M18QH3GTR0AJB8NCGN35R5CF";
+	const firstResponse = deferred();
+	const fetch = queuedFetch( [
+		jsonResponse( explanationManifest() ),
+		() => firstResponse.promise,
+		jsonResponse( { ok: true, result: explanation( secondWorkflow, "Latest replay." ) } ),
+	] );
+	const fixture = dashboardFixture( { fetch } );
+	render( fixture.window, "query_agent_workflows", {
+		items: [ workflow( firstWorkflow ), workflow( secondWorkflow ) ],
+	} );
+	const rows = fixture.root.querySelectorAll( "[data-workflow-id]" );
+	const firstButton = rows[ 0 ].querySelector( "[data-explain-workflow]" );
+	const secondButton = rows[ 1 ].querySelector( "[data-explain-workflow]" );
+	let replayUpdates = 0;
+	fixture.window.addEventListener( "wmcp:ui-update", ( event ) => {
+		if ( event.detail?.tool === "explain_agent_workflow" ) {
+			replayUpdates++;
+		}
+	} );
+
+	firstButton.click();
+	await waitFor( () => fetch.calls.length === 2, "first replay request did not start" );
+	secondButton.click();
+	await waitFor(
+		() => secondButton.disabled === false && fixture.root.querySelector( "[data-wmcp-explanation]" ).textContent === "Latest replay.",
+		"latest replay did not settle"
+	);
+
+	assert.equal( firstButton.disabled, false );
+	assert.equal( rows[ 0 ].classList.contains( "wmcp-is-selected" ), false );
+	assert.equal( rows[ 1 ].classList.contains( "wmcp-is-selected" ), true );
+	assert.equal( secondButton.getAttribute( "aria-current" ), "true" );
+
+	firstResponse.resolve( jsonResponse( {
+		ok: true,
+		result: explanation( firstWorkflow, "Late stale replay." ),
+	} ) );
+	await new Promise( ( resolve ) => setImmediate( resolve ) );
+
+	assert.equal( fixture.root.querySelector( "[data-wmcp-explanation]" ).textContent, "Latest replay." );
+	assert.equal( fixture.root.querySelector( "#wmcp-timeline-title" ).textContent, `Workflow ${ secondWorkflow.slice( 0, 8 ) }…` );
+	assert.equal( replayUpdates, 1 );
 } );
 
 test( "overview and attribution preserve separate totals for every returned currency", () => {

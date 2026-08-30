@@ -8,24 +8,24 @@ Two consecutive clean builds produced identical bytes:
 
 | Artifact | SHA-256 |
 |---|---|
-| `wmcp-agentops-0.1.0.zip` | `e25c4dee2fa1b5d6456002798da3fac5c27a8a8d99f2e20af4a8d2a6164bdee0` |
-| `wmcp-agentops-playground-0.1.0.zip` | `d666f777259aaa2738171aab0db093ddbf019752ff838c84a8cf3b86510db2ea` |
+| `wmcp-agentops-0.1.0.zip` | `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e` |
+| `wmcp-agentops-playground-0.1.0.zip` | `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8` |
 
-The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 13-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
+The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 14-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
 
 ## Green automated gates
 
 | Gate | Result |
 |---|---|
 | PHP syntax | All plugin and test PHP files pass |
-| PHPUnit, PHP 8.1 | 58 tests, 521 assertions |
-| PHPUnit, PHP 8.4 | 58 tests, 521 assertions |
+| PHPUnit, PHP 8.1 | 65 tests, 597 assertions |
+| PHPUnit, PHP 8.4 | 65 tests, 597 assertions |
 | WordPress Coding Standards | Zero errors; line-length warnings only |
-| JavaScript | 63 tests; ESLint passes |
+| JavaScript | 66 tests; ESLint passes |
 | CSS | Stylelint passes |
 | Dependency audit | Zero npm vulnerabilities |
 | REST/security smoke | Passes seven routes, 19 tools, shopper, analytics, governance, and reset |
-| Chromium acceptance | 13/13 pass serially, including cross-tab cart synchronization and two real classic-checkout orders |
+| Chromium acceptance | 14/14 pass serially, including bounded large-workflow replay, cross-tab cart synchronization, and two real classic-checkout orders |
 | Woo lifecycle | Unpaid, paid, partial/full refund, cancel, provenance-negative, and human-only cases pass |
 | Plugin Check 2.1.0 | Zero errors; 54 documented warnings; zero trademark findings |
 | Repository hygiene | Workflow YAML parses, shell syntax passes, and `git diff --check` is clean |
@@ -38,7 +38,7 @@ The same built `wmcp-agentops-0.1.0.zip` was extracted and mounted read-only in 
 |---|---|---|
 | WordPress 6.9 / PHP 8.1.34 / WooCommerce 10.9.4 | Legacy | Activation, seed, REST smoke, and Woo lifecycle pass |
 | WordPress 7.0.4 / PHP 8.3.33 / WooCommerce 11.0.1 | Legacy | Activation, seed, REST smoke, and Woo lifecycle pass |
-| WordPress 7.1 / PHP 8.3 / WooCommerce 11.0.1 | HPOS | REST smoke, Woo lifecycle, 13 Chromium scenarios, and Plugin Check pass |
+| WordPress 7.1 / PHP 8.3 / WooCommerce 11.0.1 | HPOS | REST smoke, Woo lifecycle, 14 Chromium scenarios, and Plugin Check pass |
 
 The tag workflow runs that real Woo CRUD lifecycle in all three exact-artifact matrix targets.
 

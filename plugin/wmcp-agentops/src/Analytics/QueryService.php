@@ -19,7 +19,14 @@ use WPWebMCP\AgentOps\Support\Json;
 
 final class QueryService
 {
-    private const MAX_TIMELINE_EVENTS = 200;
+    private const MAX_TIMELINE_EVENTS = 20;
+    private const TIMELINE_HEAD_EVENTS = 8;
+    private const TIMELINE_TAIL_EVENTS = 12;
+    private const MAX_REPLAY_ORDERS = 4;
+    private const MAX_REPLAY_GAPS = 6;
+    private const MAX_EVENT_PROPERTIES = 5;
+    private const MAX_PROPERTY_STRING_LENGTH = 120;
+    private const REPLAY_RESULT_BUDGET = 7000;
     private const MAX_HEALTH_EVENTS = 10000;
 
     private object $database;
@@ -348,78 +355,120 @@ final class QueryService
             return null;
         }
 
-        $event_rows = $this->results(
-            "SELECT e.event_id, e.event_name, e.request_id, e.step_number, e.tool_name, e.tool_version, e.risk_class,
-                    e.outcome, e.duration_ms, e.error_code, e.http_status, e.product_ids_json, e.currency, e.value,
-                    e.properties_json, e.occurred_at
-             FROM {$this->events_table()} e
+        $event_columns = 'e.id AS row_id, e.event_id, e.event_name, e.request_id, e.step_number, e.tool_name, e.tool_version, e.risk_class,
+                e.outcome, e.duration_ms, e.error_code, e.http_status, e.product_ids_json, e.currency, e.value,
+                e.properties_json, e.occurred_at';
+        $event_scope = "FROM {$this->events_table()} e
              INNER JOIN {$this->workflows_table()} w ON w.id = e.workflow_id
-             WHERE w.demo_session_hash = %s AND w.surface = 'storefront' AND w.id = %s
+             WHERE w.demo_session_hash = %s AND w.surface = 'storefront' AND w.id = %s";
+        $scope_args = array($session_hash_hex, $workflow_id);
+        $head_rows  = $this->results(
+            "SELECT {$event_columns} {$event_scope}
              ORDER BY e.occurred_at ASC, e.id ASC
-             LIMIT " . (self::MAX_TIMELINE_EVENTS + 1),
-            array($session_hash_hex, $workflow_id)
+             LIMIT " . (self::TIMELINE_HEAD_EVENTS + 1),
+            $scope_args
         );
-        $truncated = count($event_rows) > self::MAX_TIMELINE_EVENTS;
-        $event_rows = array_slice($event_rows, 0, self::MAX_TIMELINE_EVENTS);
-        $timeline = array();
-        $first_problem = null;
-        $recovery      = null;
-        $last_commerce = null;
-        foreach ($event_rows as $row) {
-            $event_name = (string) $row['event_name'];
-            $properties = $this->safe_properties($event_name, $row['properties_json']);
-            $event = array(
-                'event_id'    => (string) $row['event_id'],
-                'event_name'  => $event_name,
-                'request_id'  => null === $row['request_id'] ? null : (string) $row['request_id'],
-                'step_number' => (int) $row['step_number'],
-                'tool'        => null === $row['tool_name'] ? null : array(
-                    'name'       => (string) $row['tool_name'],
-                    'version'    => (string) $row['tool_version'],
-                    'risk_class' => (string) $row['risk_class'],
-                ),
-                'outcome'     => null === $row['outcome'] ? null : (string) $row['outcome'],
-                'duration_ms' => null === $row['duration_ms'] ? null : (int) $row['duration_ms'],
-                'error_code'  => null === $row['error_code'] ? null : (string) $row['error_code'],
-                'http_status' => null === $row['http_status'] ? null : (int) $row['http_status'],
-                'product_ids' => $this->safe_id_list($row['product_ids_json']),
-                'currency'    => null === $row['currency'] ? null : (string) $row['currency'],
-                'value'       => null === $row['value'] ? null : (float) $row['value'],
-                'properties'  => $properties,
-                'occurred_at' => (string) $row['occurred_at'],
-            );
-            $timeline[] = $event;
+        $tail_rows = $this->results(
+            "SELECT {$event_columns} {$event_scope}
+             ORDER BY e.occurred_at DESC, e.id DESC
+             LIMIT " . (self::TIMELINE_TAIL_EVENTS + 1),
+            $scope_args
+        );
 
-            if (null === $first_problem && in_array($event_name, array(EventName::TOOL_CALL_FAILED, EventName::TOOL_CALL_CANCELLED, EventName::TOOL_CALL_DENIED), true)) {
-                $first_problem = $event;
-            } elseif (null !== $first_problem && null === $recovery && EventName::TOOL_CALL_SUCCEEDED === $event_name) {
-                $recovery = $event;
-            }
-            if (str_starts_with($event_name, 'commerce.')) {
-                $last_commerce = $event;
+        $timeline_rows = array();
+        foreach (array_merge($head_rows, $tail_rows) as $row) {
+            $timeline_rows[(string) $row['event_id']] = $row;
+        }
+        $timeline_rows = array_values($timeline_rows);
+        usort(
+            $timeline_rows,
+            static fn (array $left, array $right): int => array((string) $left['occurred_at'], (int) $left['row_id'])
+                <=> array((string) $right['occurred_at'], (int) $right['row_id'])
+        );
+        $truncated = count($timeline_rows) > self::MAX_TIMELINE_EVENTS;
+        if ($truncated) {
+            $timeline_rows = array_merge(
+                array_slice($timeline_rows, 0, self::TIMELINE_HEAD_EVENTS),
+                array_slice($timeline_rows, -self::TIMELINE_TAIL_EVENTS)
+            );
+        }
+        $timeline = array();
+        foreach ($timeline_rows as $row) {
+            $timeline[] = $this->public_replay_event($row, $truncated);
+        }
+
+        $first_problem_row = $this->row(
+            "SELECT {$event_columns} {$event_scope}
+               AND e.event_name IN ('tool.call.failed','tool.call.cancelled','tool.call.denied')
+             ORDER BY e.occurred_at ASC, e.id ASC LIMIT 1",
+            $scope_args
+        );
+        $first_problem = array() === $first_problem_row
+            ? null
+            : $this->public_replay_event($first_problem_row, $truncated);
+
+        $recovery = null;
+        if (array() !== $first_problem_row) {
+            $recovery_row = $this->row(
+                "SELECT {$event_columns} {$event_scope}
+                   AND e.event_name = 'tool.call.succeeded'
+                   AND (e.occurred_at > %s OR (e.occurred_at = %s AND e.id > %d))
+                 ORDER BY e.occurred_at ASC, e.id ASC LIMIT 1",
+                array_merge(
+                    $scope_args,
+                    array(
+                        (string) $first_problem_row['occurred_at'],
+                        (string) $first_problem_row['occurred_at'],
+                        (int) $first_problem_row['row_id'],
+                    )
+                )
+            );
+            if (array() !== $recovery_row) {
+                $recovery = $this->public_replay_event($recovery_row, $truncated);
             }
         }
 
-        $orders = $this->results(
+        $last_commerce_row = $this->row(
+            "SELECT {$event_columns} {$event_scope}
+               AND e.event_name LIKE 'commerce.%'
+             ORDER BY e.occurred_at DESC, e.id DESC LIMIT 1",
+            $scope_args
+        );
+        $last_commerce = array() === $last_commerce_row
+            ? null
+            : $this->public_replay_event($last_commerce_row, $truncated);
+
+        $order_rows = $this->results(
             "SELECT ol.order_id, ol.attribution_class, ol.confidence, ol.rule_version, ol.gross_value, ol.refund_value,
                     ol.net_value, ol.currency, ol.matched_products_json, ol.evidence_event_ids_json, ol.updated_at
              FROM {$this->order_links_table()} ol
              INNER JOIN {$this->workflows_table()} w ON w.id = ol.workflow_id
              WHERE w.demo_session_hash = %s AND w.surface = 'storefront' AND w.id = %s
-             ORDER BY ol.updated_at ASC, ol.order_id ASC
-             LIMIT 20",
+             ORDER BY ol.updated_at DESC, ol.order_id DESC
+             LIMIT " . (self::MAX_REPLAY_ORDERS + 1),
             array($session_hash_hex, $workflow_id)
         );
-        $orders = array_map(fn (array $row): array => $this->public_order($row), $orders);
+        if (count($order_rows) > self::MAX_REPLAY_ORDERS) {
+            $truncated = true;
+        }
+        $order_rows = array_reverse(array_slice($order_rows, 0, self::MAX_REPLAY_ORDERS));
+        $orders = array();
+        foreach ($order_rows as $row) {
+            $orders[] = $this->public_order($row, $truncated);
+        }
 
-        $gaps = $this->results(
+        $gap_rows = $this->results(
             "SELECT g.id, g.capability_slug, g.related_product_id, g.status, g.occurred_at
              FROM {$this->gaps_table()} g
              WHERE g.demo_session_hash = %s AND g.workflow_id = %s
-             ORDER BY g.occurred_at ASC, g.id ASC
-             LIMIT 50",
+             ORDER BY g.occurred_at DESC, g.id DESC
+             LIMIT " . (self::MAX_REPLAY_GAPS + 1),
             array($session_hash_hex, $workflow_id)
         );
+        if (count($gap_rows) > self::MAX_REPLAY_GAPS) {
+            $truncated = true;
+        }
+        $gap_rows = array_reverse(array_slice($gap_rows, 0, self::MAX_REPLAY_GAPS));
         $gaps = array_map(
             static fn (array $row): array => array(
                 'gap_id'             => (string) $row['id'],
@@ -428,10 +477,10 @@ final class QueryService
                 'status'             => (string) $row['status'],
                 'occurred_at'        => (string) $row['occurred_at'],
             ),
-            $gaps
+            $gap_rows
         );
 
-        return array(
+        $result = array(
             'workflow' => array(
                 'workflow_id'   => (string) $workflow['id'],
                 'protocol'      => (string) $workflow['protocol'],
@@ -454,6 +503,17 @@ final class QueryService
             'timeline'        => $timeline,
             'truncated'       => $truncated,
         );
+
+        $result = $this->fit_replay_result($result);
+        $result['explanation'] = $this->explanation_text(
+            $workflow,
+            $result['first_problem'],
+            $result['recovery'],
+            $result['commerce_outcome']['orders'],
+            $result['capability_gaps']
+        );
+
+        return $result;
     }
 
     /**
@@ -812,10 +872,141 @@ final class QueryService
     }
 
     /**
+     * @param array<string, mixed> $row Event database row.
+     * @return array<string, mixed>
+     */
+    private function public_replay_event(array $row, bool &$truncated): array
+    {
+        $event_name = (string) $row['event_name'];
+        $event      = array(
+            'event_id'    => (string) $row['event_id'],
+            'event_name'  => $event_name,
+            'step_number' => (int) $row['step_number'],
+            'occurred_at' => (string) $row['occurred_at'],
+        );
+
+        if (null !== $row['request_id']) {
+            $event['request_id'] = (string) $row['request_id'];
+        }
+        if (null !== $row['tool_name']) {
+            $event['tool'] = array(
+                'name'       => (string) $row['tool_name'],
+                'version'    => (string) $row['tool_version'],
+                'risk_class' => (string) $row['risk_class'],
+            );
+        }
+        if (null !== $row['outcome']) {
+            $event['outcome'] = (string) $row['outcome'];
+        }
+        if (null !== $row['duration_ms']) {
+            $event['duration_ms'] = (int) $row['duration_ms'];
+        }
+        if (null !== $row['error_code']) {
+            $event['error_code'] = (string) $row['error_code'];
+        }
+        if (null !== $row['http_status']) {
+            $event['http_status'] = (int) $row['http_status'];
+        }
+
+        $product_ids = $this->safe_id_list($row['product_ids_json'], 8, $truncated);
+        if (array() !== $product_ids) {
+            $event['product_ids'] = $product_ids;
+        }
+        if (null !== $row['currency']) {
+            $event['currency'] = (string) $row['currency'];
+        }
+        if (null !== $row['value']) {
+            $event['value'] = (float) $row['value'];
+        }
+
+        $properties = $this->safe_properties($event_name, $row['properties_json'], $truncated);
+        if (array() !== $properties) {
+            $event['properties'] = $properties;
+        }
+
+        return $event;
+    }
+
+    /**
+     * Keep a replay below the execution controller's 8 KiB output ceiling while
+     * retaining its first/latest events and explicit diagnostic highlights.
+     *
+     * @param array<string, mixed> $result Replay result.
+     * @return array<string, mixed>
+     */
+    private function fit_replay_result(array $result): array
+    {
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && $this->drop_interior_event_properties($result['timeline'])) {
+            $result['truncated'] = true;
+        }
+
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && count($result['timeline']) > 2) {
+            array_splice($result['timeline'], 1, 1);
+            $result['truncated'] = true;
+        }
+
+        if ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET) {
+            $this->drop_all_event_properties($result);
+            $result['truncated'] = true;
+        }
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && array() !== $result['commerce_outcome']['orders']) {
+            array_shift($result['commerce_outcome']['orders']);
+            $result['truncated'] = true;
+        }
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && array() !== $result['capability_gaps']) {
+            array_shift($result['capability_gaps']);
+            $result['truncated'] = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $timeline Replay timeline.
+     */
+    private function drop_interior_event_properties(array &$timeline): bool
+    {
+        $last = count($timeline) - 1;
+        for ($index = 1; $index < $last; ++$index) {
+            if (isset($timeline[$index]['properties'])) {
+                unset($timeline[$index]['properties']);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /** @param array<string, mixed> $result Replay result. */
+    private function drop_all_event_properties(array &$result): void
+    {
+        foreach ($result['timeline'] as &$event) {
+            unset($event['properties']);
+        }
+        unset($event);
+
+        foreach (array('first_problem', 'recovery') as $key) {
+            if (is_array($result[$key])) {
+                unset($result[$key]['properties']);
+            }
+        }
+        if (is_array($result['commerce_outcome']['last_event'])) {
+            unset($result['commerce_outcome']['last_event']['properties']);
+        }
+    }
+
+    /** @param array<string, mixed> $result Replay result. */
+    private function replay_size(array $result): int
+    {
+        return strlen(Json::encode($result));
+    }
+
+    /**
      * @param array<string, mixed> $row Order-link row.
      * @return array<string, mixed>
      */
-    private function public_order(array $row): array
+    private function public_order(array $row, bool &$truncated): array
     {
         return array(
             'order_id'              => (int) $row['order_id'],
@@ -826,8 +1017,8 @@ final class QueryService
             'refunds'               => (float) $row['refund_value'],
             'net'                   => (float) $row['net_value'],
             'currency'              => (string) $row['currency'],
-            'matched_product_ids'   => $this->safe_id_list($row['matched_products_json']),
-            'evidence_event_ids'    => $this->safe_event_id_list($row['evidence_event_ids_json']),
+            'matched_product_ids'   => $this->safe_id_list($row['matched_products_json'], 8, $truncated),
+            'evidence_event_ids'    => $this->safe_event_id_list($row['evidence_event_ids_json'], 8, $truncated),
             'updated_at'            => (string) $row['updated_at'],
         );
     }
@@ -836,7 +1027,7 @@ final class QueryService
      * @param mixed $json Encoded property object.
      * @return array<string, mixed>
      */
-    private function safe_properties(string $event_name, $json): array
+    private function safe_properties(string $event_name, $json, bool &$truncated): array
     {
         if (! is_string($json) || '' === $json) {
             return array();
@@ -844,17 +1035,37 @@ final class QueryService
         try {
             $properties = Json::decode_object($json);
         } catch (JsonException | InvalidArgumentException $exception) {
+            $truncated = true;
+
             return array();
         }
 
-        return $this->schema->properties($event_name, $properties);
+        $properties = $this->schema->properties($event_name, $properties);
+        if (count($properties) > self::MAX_EVENT_PROPERTIES) {
+            $truncated = true;
+        }
+
+        $result = array();
+        foreach (array_slice($properties, 0, self::MAX_EVENT_PROPERTIES, true) as $key => $value) {
+            if (is_array($value)) {
+                $truncated = true;
+                continue;
+            }
+            if (is_string($value) && mb_strlen($value) > self::MAX_PROPERTY_STRING_LENGTH) {
+                $value     = mb_substr($value, 0, self::MAX_PROPERTY_STRING_LENGTH);
+                $truncated = true;
+            }
+            $result[$key] = $value;
+        }
+
+        return $result;
     }
 
     /**
      * @param mixed $json Encoded integer list.
      * @return list<int>
      */
-    private function safe_id_list($json): array
+    private function safe_id_list($json, int $limit, bool &$truncated): array
     {
         if (! is_string($json) || '' === $json) {
             return array();
@@ -862,14 +1073,21 @@ final class QueryService
         try {
             $values = json_decode($json, true, 16, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
+            $truncated = true;
+
             return array();
         }
         if (! is_array($values)) {
+            $truncated = true;
+
             return array();
+        }
+        if (count($values) > $limit) {
+            $truncated = true;
         }
 
         $result = array();
-        foreach (array_slice($values, 0, 50) as $value) {
+        foreach (array_slice($values, 0, $limit) as $value) {
             if (is_int($value) && $value > 0) {
                 $result[] = $value;
             }
@@ -882,7 +1100,7 @@ final class QueryService
      * @param mixed $json Encoded event-ID list.
      * @return list<string>
      */
-    private function safe_event_id_list($json): array
+    private function safe_event_id_list($json, int $limit, bool &$truncated): array
     {
         if (! is_string($json) || '' === $json) {
             return array();
@@ -890,14 +1108,21 @@ final class QueryService
         try {
             $values = json_decode($json, true, 16, JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
+            $truncated = true;
+
             return array();
         }
         if (! is_array($values)) {
+            $truncated = true;
+
             return array();
+        }
+        if (count($values) > $limit) {
+            $truncated = true;
         }
 
         $result = array();
-        foreach (array_slice($values, 0, 50) as $value) {
+        foreach (array_slice($values, 0, $limit) as $value) {
             if (is_string($value) && 1 === preg_match('/\Aevt_[0-9A-HJKMNP-TV-Z]{26}\z/', $value)) {
                 $result[] = $value;
             }
@@ -919,10 +1144,11 @@ final class QueryService
             sprintf('Storefront workflow %s is %s after %d recorded tool calls.', $workflow['id'], $workflow['status'], (int) $workflow['tool_count']),
         );
         if (null !== $first_problem) {
+            $error_code = $first_problem['error_code'] ?? null;
             $parts[] = sprintf(
                 'The first recorded problem was %s%s.',
                 $first_problem['event_name'],
-                null === $first_problem['error_code'] ? '' : ' (' . $first_problem['error_code'] . ')'
+                null === $error_code ? '' : ' (' . $error_code . ')'
             );
             $parts[] = null === $recovery
                 ? 'No later successful tool call was recorded.'
@@ -932,9 +1158,9 @@ final class QueryService
         }
         $parts[] = array() === $orders
             ? 'No attributed WooCommerce order is linked to this workflow.'
-            : sprintf('%d attributed WooCommerce order link(s) are recorded.', count($orders));
+            : sprintf('%d attributed WooCommerce order link(s) are shown.', count($orders));
         if (array() !== $gaps) {
-            $parts[] = sprintf('%d unsupported capability request(s) were recorded.', count($gaps));
+            $parts[] = sprintf('%d unsupported capability request(s) are shown.', count($gaps));
         }
 
         return implode(' ', $parts);
