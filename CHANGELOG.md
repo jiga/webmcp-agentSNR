@@ -5,6 +5,7 @@ All notable changes are documented here. This project follows semantic versionin
 ## [Unreleased]
 
 - Public links, real-client results, formal trademark/domain clearance, and release provenance remain to be added before submission.
+- Preserved object-based third-party WooCommerce gateways when registering the demo gateway, preventing admin fatals with extensions such as WooCommerce PayPal Payments.
 - Bounded Agent Sessions replays beneath the existing tool-output ceiling, preserving first/latest and diagnostic evidence while making row loading and failures explicit.
 - Hydrated and synchronized the accessible storefront cart badge across existing and newly opened tabs through private manifest snapshots, without adding session state to cacheable HTML.
 - Reframed the monitoring surface around Agent Sessions, Workflow Replay, Signals, Tools, Outcomes, and Controls.

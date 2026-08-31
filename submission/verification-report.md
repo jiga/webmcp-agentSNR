@@ -8,8 +8,8 @@ Two consecutive clean builds produced identical bytes:
 
 | Artifact | SHA-256 |
 |---|---|
-| `wmcp-agentops-0.1.0.zip` | `2da371cf494d2c4921e8c50f725136e4ebf509d44b312dc9dd827c311c4a962e` |
-| `wmcp-agentops-playground-0.1.0.zip` | `9ca14aabc65fe77ffa98f088f549da26a43d2e68b53c17f76535b68a491b68c8` |
+| `wmcp-agentops-0.1.0.zip` | `6bc90a59837a46fbb350dda53cb3b503e60e11315f4a2c804f163d0888e27c89` |
+| `wmcp-agentops-playground-0.1.0.zip` | `96bbd8ef4d09f392d8d9d0ebdddba30e34f0d232826bb9688f6243609cf3d978` |
 
 The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 14-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
 
@@ -18,8 +18,8 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 | Gate | Result |
 |---|---|
 | PHP syntax | All plugin and test PHP files pass |
-| PHPUnit, PHP 8.1 | 65 tests, 597 assertions |
-| PHPUnit, PHP 8.4 | 65 tests, 597 assertions |
+| PHPUnit, PHP 8.1 | 68 tests, 606 assertions |
+| PHPUnit, PHP 8.4 | 68 tests, 606 assertions |
 | WordPress Coding Standards | Zero errors; line-length warnings only |
 | JavaScript | 79 tests, including fail-closed showcase origin/redirect/credential/output configuration; ESLint passes |
 | Showcase launcher guards | Automated invalid-port, reset-confirmation, project/loopback, checksum, symlink-entry, and extracted-cache integrity/repair checks pass |
@@ -36,6 +36,7 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 The following artifact-level checks were performed locally in addition to `npm run verify`:
 
 - `./bin/start-showcase.sh start` built a missing release ZIP when needed, mounted the verified artifact under the isolated `agent-snr-showcase` project on `127.0.0.1`, and verified WooCommerce 11.0.1, 12 products, and all four public pages.
+- The exact mounted ZIP loaded WooCommerce PayPal Payments 4.1.2 object-based gateways without an Agent SNR fatal and completed the full no-charge order/refund capture with zero console errors; the live development admin dashboard also recovered with PayPal Payments and WooPayments still active.
 - `npm run showcase:capture` completed one eight-call TerraRoll capability-gap → human order → full-refund workflow with zero console errors. The machine-readable evidence is in `demo-screenshots/showcase-summary.json`.
 - `agent-snr-hackathon-demo.pptx` rendered as 11 editable slides; all 11 speaker-note source blocks were present and the presentation overflow check passed.
 

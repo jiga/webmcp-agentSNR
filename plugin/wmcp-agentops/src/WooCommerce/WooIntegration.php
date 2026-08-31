@@ -83,16 +83,24 @@ final class WooIntegration
     }
 
     /**
-     * @param list<class-string> $gateways Gateway class names.
-     * @return list<class-string>
+     * @param array<int|string, class-string|\WC_Payment_Gateway> $gateways Gateway classes or objects.
+     * @return array<int|string, class-string|\WC_Payment_Gateway>
      */
     public function register_demo_gateway(array $gateways): array
     {
-        if (DemoMode::enabled() && class_exists('WC_Payment_Gateway')) {
-            $gateways[] = DemoPaymentGateway::class;
+        if (! DemoMode::enabled() || ! class_exists('WC_Payment_Gateway')) {
+            return $gateways;
         }
 
-        return array_values(array_unique($gateways));
+        foreach ($gateways as $gateway) {
+            if (is_a($gateway, DemoPaymentGateway::class, true)) {
+                return $gateways;
+            }
+        }
+
+        $gateways[] = DemoPaymentGateway::class;
+
+        return $gateways;
     }
 
     /**

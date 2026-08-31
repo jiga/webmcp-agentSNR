@@ -150,3 +150,20 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Safety: capture credentials fail closed; remote capture requires HTTPS, explicit opt-in, explicit credentials, and same-origin admin redirects. Public cookies are restored from the exact pre-login snapshot. Output promotion is marker-gated, failure-atomic, and rejects broad or unmarked directories.
 - Verification: `npm run verify` passes 79 JavaScript/configuration tests plus launcher guard tests; exact artifact start/capture/verify/stop passes; Plugin ZIP and Playground checksums remain unchanged; the PPTX ZIP and slide-overflow checks pass; `git diff --check` is clean.
 - Remaining publication gates are still owner/external: formal Agent SNR clearance, public remote, hosted top-level HTTPS deployment, real-client validation, hosted recapture/video, Devpost submission, and freeze.
+
+## Mixed WooCommerce gateway compatibility
+
+- [x] Reproduce and document the wp-admin fatal with an object-based third-party gateway.
+- [x] Add focused regression coverage for mixed class-string/object gateway lists.
+- [x] Replace unsafe whole-array deduplication with a strict demo-gateway presence check.
+- [x] Run focused and full verification, then confirm the live admin dashboard recovers.
+- [x] Complete independent review and commit the fix.
+
+### Mixed gateway compatibility review
+
+- Root cause: `woocommerce_payment_gateways` can contain both class strings and instantiated gateway objects. Default `array_unique()` coerced PayPal Commerce's non-stringable `AxoGateway` object and fatally broke wp-admin after the WooCommerce setup wizard activated optional payment extensions.
+- Fix: Agent SNR now preserves third-party keys, order, objects, and duplicates; it recognizes its own class or instance with case-insensitive `is_a(..., true)` and appends only the missing demo gateway.
+- Coverage: isolated regression tests cover mixed arrays, key/object identity, canonical and differently-cased class strings, existing demo objects, idempotence, demo-disabled mode, and missing WooCommerce dependencies.
+- Live verification: the development dashboard recovered with WooCommerce PayPal Payments and WooPayments still active. The final exact ZIP also loaded PayPal Payments 4.1.2 gateway objects and completed the full no-charge order/refund capture with zero console errors.
+- Gates: 79 JavaScript/configuration tests, 68 PHP tests / 606 assertions on PHP 8.1 and 8.4, 14/14 Chromium scenarios, smoke/security, legacy and HPOS Woo lifecycle, Plugin Check `0 errors / 54 warnings`, WordPress 6.9/7.0.4/7.1 exact-artifact matrix, and Playground execution pass.
+- Final deterministic artifacts: plugin `6bc90a59837a46fbb350dda53cb3b503e60e11315f4a2c804f163d0888e27c89`; Playground `96bbd8ef4d09f392d8d9d0ebdddba30e34f0d232826bb9688f6243609cf3d978`.
