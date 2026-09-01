@@ -10,7 +10,10 @@ The showcase uses a checksummed plugin ZIP in `dist/`, not a mutable source bind
 ./bin/start-showcase.sh start
 ./bin/start-showcase.sh status
 ./bin/start-showcase.sh verify
+WMCP_BASE_URL=http://localhost:18084 npm run test:webmcp:smoke
 ```
+
+The pinned keyless smoke must report **5/5 storefront** and **6/6 Agent SNR** calls. It checks native Chrome discovery and rejects application-level `{ "ok": false }` results; it does not replace the stateful Playwright/order/refund acceptance suite.
 
 If port `18084` is already occupied, choose another local port consistently for every showcase command:
 

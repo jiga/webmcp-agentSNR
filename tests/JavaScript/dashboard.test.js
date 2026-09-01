@@ -887,7 +887,7 @@ test( "Signals queue labels mixed failure and denial codes as tool-level termina
 			denial_rate: 0.25,
 			failed: 1,
 			failure_rate: 0.25,
-			tool_name: "checkout_handoff",
+			tool_name: "prepare_checkout_handoff",
 			top_errors: [
 				{ code: "catalog_timeout", count: 1 },
 				{ code: "policy_denied", count: 1 },

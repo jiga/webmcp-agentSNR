@@ -1,0 +1,100 @@
+[
+  {
+    "name": "Storefront smoke: discover the agent guide",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Read the site's agent guide."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_agent_guide",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "name": "Storefront smoke: read public context",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Summarize the storefront context."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_storefront_context",
+        "arguments": {
+          "include": [
+            "page",
+            "currency",
+            "categories",
+            "policy_summary",
+            "cart_summary"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "name": "Storefront smoke: search public products",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Find an in-stock waterproof backpack under $100 with IPX5 protection."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "search_products",
+        "arguments": {
+          "query": "waterproof backpack",
+          "max_price": 100,
+          "attributes": {
+            "water_rating": "IPX5"
+          },
+          "in_stock_only": true,
+          "limit": 6
+        }
+      }
+    ]
+  },
+  {
+    "name": "Storefront smoke: read returns policy",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "What is the published returns policy?"
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_store_policy",
+        "arguments": {
+          "policy_type": "returns"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Storefront smoke: inspect the session cart",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Show the current cart."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_cart",
+        "arguments": {}
+      }
+    ]
+  }
+]

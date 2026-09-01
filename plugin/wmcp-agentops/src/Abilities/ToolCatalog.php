@@ -18,6 +18,62 @@ final class ToolCatalog
     public const ABILITY_NAMESPACE = 'wmcp-agentops';
 
     /**
+     * Human-readable descriptions for every public input-schema property.
+     * Reused names intentionally have one meaning across tools so schema
+     * guidance cannot drift between the native Ability and WebMCP manifest.
+     *
+     * @var array<string, string>
+     */
+    private const INPUT_PROPERTY_DESCRIPTIONS = array(
+        'include'                => 'Optional result sections to include.',
+        'query'                  => 'Public catalog terms and constraints to search for.',
+        'max_price'              => 'Highest acceptable product price in the store currency.',
+        'min_price'              => 'Lowest acceptable product price in the store currency.',
+        'categories'             => 'Public product category slugs to require.',
+        'attributes'             => 'Exact public product attribute values to require.',
+        'in_stock_only'          => 'Whether to exclude products that are not currently in stock.',
+        'limit'                  => 'Maximum number of matching records to return.',
+        'product_id'             => 'Positive WooCommerce product ID to read or filter by.',
+        'slug'                   => 'Public WooCommerce product slug to read.',
+        'product_ids'            => 'Two to four positive WooCommerce product IDs to compare.',
+        'criteria'               => 'Stored product facts to include in the comparison.',
+        'policy_type'            => 'Published store-policy topic to read.',
+        'quantity'               => 'Desired cart quantity; zero removes an existing line.',
+        'variation_id'           => 'Positive WooCommerce variation ID when the product requires one.',
+        'variation'              => 'Exact public variation attributes selected by the shopper.',
+        'expected_cart_revision' => 'Latest cart revision from get_cart or a cart-changing result.',
+        'cart_item_key'          => 'Opaque cart line key returned by get_cart.',
+        'requested_capability'   => 'Legacy enum for the unsupported store capability encountered.',
+        'user_goal'              => 'Short redacted goal that the unsupported capability blocked.',
+        'related_product_id'     => 'Optional positive product ID related to the unsupported request.',
+        'context'                => 'Small redacted key-value context for the unsupported request.',
+        'outcome'                => 'Agent-reported outcome of the current journey.',
+        'feedback_type'          => 'Structured category for the optional journey feedback.',
+        'step'                   => 'Journey stage to which the feedback applies.',
+        'reason_code'            => 'Structured reason supporting the reported outcome.',
+        'evidence_event_ids'     => 'Same-workflow event IDs returned by this site as evidence.',
+        'ratings'                => 'Optional closed-set ratings for evidence, policy, handoff, and effort.',
+        'evidence_quality'       => 'Whether site evidence was sufficient for the agent task.',
+        'policy_clarity'         => 'Whether the cited store policy was clear for the task.',
+        'handoff_quality'        => 'Whether the human checkout handoff was smooth or blocked.',
+        'effort'                 => 'Agent-reported effort required to complete the journey.',
+        'requested_metrics'      => 'Metric names for the site to compute from its own evidence.',
+        'suggested_owner_action' => 'Closed-set follow-up the agent suggests to the site owner.',
+        'date_from'              => 'Optional inclusive start date in YYYY-MM-DD format.',
+        'date_to'                => 'Optional inclusive end date in YYYY-MM-DD format.',
+        'tool_name'              => 'Canonical tool name to filter or govern.',
+        'status'                 => 'Optional lifecycle status used to filter matching records.',
+        'cursor'                 => 'Opaque pagination cursor returned by the preceding call.',
+        'workflow_id'            => 'ULID of one workflow in the authorized session scope.',
+        'category'               => 'Opportunity category to include in the result.',
+        'source'                 => 'Evidence source to include: site-observed or agent-reported.',
+        'checks'                 => 'Read-only diagnostic checks to run; omit to run all checks.',
+        'enabled'                => 'False restricts the tool for this session; true clears that override.',
+        'scope'                  => 'Required governance scope; only this demo session is supported.',
+        'reason'                 => 'Short operator reason recorded with the session-only change.',
+    );
+
+    /**
      * @return array<string, array<string, mixed>> Definitions keyed by WebMCP name.
      */
     public function all(): array
@@ -26,7 +82,8 @@ final class ToolCatalog
             $this->definition(
                 ToolName::GET_STOREFRONT_CONTEXT,
                 'Get storefront context',
-                'Read the current public storefront, store, policy, and cart context. This tool does not change the cart or place an order.',
+                'Use on storefront entry to read current public page, store, policy, cart, and ' .
+                    'guide-discovery context. This read does not change the cart or place an order.',
                 'storefront',
                 RiskClass::READ,
                 $this->object(
@@ -64,23 +121,12 @@ final class ToolCatalog
             $this->definition(
                 ToolName::GET_AGENT_GUIDE,
                 'Get the agent guide',
-                'Start here before a storefront journey. Read supported journeys, human approval boundaries, privacy rules, feedback triggers, and the metrics this site can verify.',
+                'Use once at the start of a co-browsing journey to learn shopper and operator paths, ' .
+                    'tool effects, privacy, pricing, and human boundaries. This read changes no state.',
                 'storefront',
                 RiskClass::READ,
                 $this->object(array()),
-                $this->object(
-                    array(
-                        'version'            => array('type' => 'string'),
-                        'start_here'         => array('type' => 'boolean'),
-                        'commerce_available' => array('type' => 'boolean'),
-                        'purpose'            => array('type' => 'string'),
-                        'supported_journeys' => array('type' => 'array', 'items' => array('type' => 'object')),
-                        'human_boundaries'   => array('type' => 'array', 'items' => array('type' => 'object')),
-                        'privacy'            => array('type' => 'object'),
-                        'feedback'           => array('type' => 'object'),
-                    ),
-                    array('version', 'start_here', 'commerce_available', 'purpose', 'supported_journeys', 'human_boundaries', 'privacy', 'feedback')
-                ),
+                $this->agent_guide_output_schema(),
                 'storefront.agent_guide',
                 true,
                 false,
@@ -333,7 +379,9 @@ final class ToolCatalog
             $this->definition(
                 ToolName::REPORT_CAPABILITY_GAP,
                 'Report unsupported request',
-                'Record a short redacted request that the store cannot currently fulfill. This creates analytics only and does not create a notification, reservation, or order.',
+                'Legacy compatibility telemetry for a known unsupported store capability. It is not ' .
+                    'publicly discoverable; new journeys use report_agent_feedback. It never creates a ' .
+                    'notification, reservation, or order.',
                 'storefront',
                 RiskClass::TELEMETRY_WRITE,
                 $this->object(
@@ -365,12 +413,16 @@ final class ToolCatalog
                 false,
                 false,
                 false,
-                5
+                5,
+                60,
+                false
             ),
             $this->definition(
                 ToolName::REPORT_AGENT_FEEDBACK,
                 'Report structured agent feedback',
-                'Leave bounded structured feedback about the current journey. Cite workflow event IDs returned by this site and request metric names only; the site validates evidence and computes every metric value.',
+                'Optionally report a completed or blocked journey using site-issued evidence IDs. This ' .
+                    'bounded telemetry cannot request products, alter commerce, or supply metric values; ' .
+                    'the site computes them.',
                 'storefront',
                 RiskClass::TELEMETRY_WRITE,
                 $this->object(
@@ -466,6 +518,22 @@ final class ToolCatalog
             array_filter(
                 $this->all(),
                 static fn (array $definition): bool => $surface === $definition['surface']
+            )
+        );
+    }
+
+    /**
+     * Return only canonical tools intended for public WebMCP discovery.
+     * Registered legacy Abilities remain available through all() and surface().
+     *
+     * @return list<array<string, mixed>>
+     */
+    public function public_surface(string $surface): array
+    {
+        return array_values(
+            array_filter(
+                $this->surface($surface),
+                static fn (array $definition): bool => true === $definition['discoverable']
             )
         );
     }
@@ -606,7 +674,9 @@ final class ToolCatalog
             $this->definition(
                 ToolName::GET_CAPABILITY_GAPS,
                 'Get capability gaps',
-                'Read grouped unsupported shopper requests for the authorized scope. Product value is shown only as opportunity context and is never labeled lost revenue.',
+                'Legacy operator view of grouped unsupported requests. It is not publicly discoverable; ' .
+                    'use get_opportunity_signals for current unified analysis. Product value is context, ' .
+                    'never lost revenue.',
                 'agentops',
                 RiskClass::READ,
                 $this->object(
@@ -620,12 +690,16 @@ final class ToolCatalog
                 true,
                 true,
                 false,
-                30
+                30,
+                60,
+                false
             ),
             $this->definition(
                 ToolName::GET_OPPORTUNITY_SIGNALS,
                 'Get opportunity signals',
-                'Read grouped site-observed opportunities and evidence-linked agent feedback for the authorized scope. Agent testimony and site-verified measurements remain explicitly separated.',
+                'Use for unified operator analysis of demand, inventory, capability, and experience ' .
+                    'signals. This read keeps agent testimony separate from site-observed evidence and ' .
+                    'changes no state.',
                 'agentops',
                 RiskClass::READ,
                 $this->object(
@@ -687,7 +761,7 @@ final class ToolCatalog
                 RiskClass::SESSION_WRITE,
                 $this->object(
                     array(
-                        'tool_name' => array('type' => 'string', 'enum' => ToolName::storefront()),
+                        'tool_name' => array('type' => 'string', 'enum' => ToolName::storefrontPublic()),
                         'enabled'   => array('type' => 'boolean'),
                         'scope'     => array('type' => 'string', 'enum' => array('demo_session')),
                         'reason'    => array('type' => 'string', 'minLength' => 3, 'maxLength' => 300),
@@ -723,7 +797,8 @@ final class ToolCatalog
         bool $untrusted_content,
         bool $requires_woocommerce,
         int $rate_limit,
-        int $rate_window = 60
+        int $rate_window = 60,
+        bool $discoverable = true
     ): array {
         return array(
             'ability_id'           => self::ABILITY_NAMESPACE . '/' . str_replace('_', '-', $name),
@@ -733,12 +808,13 @@ final class ToolCatalog
             'surface'              => $surface,
             'risk_class'           => $risk,
             'version'              => '1.0.0',
-            'input_schema'         => $input_schema,
+            'input_schema'         => $this->describe_input_schema($input_schema),
             'output_schema'        => $output_schema,
             'callback'             => $callback,
             'read_only'            => $read_only,
             'untrusted_content'    => $untrusted_content,
             'requires_woocommerce' => $requires_woocommerce,
+            'discoverable'         => $discoverable,
             'rate_limit'           => $rate_limit,
             'rate_window'          => $rate_window,
             'max_input_bytes'      => 8192,
@@ -767,6 +843,214 @@ final class ToolCatalog
         }
 
         return $schema;
+    }
+
+    /**
+     * Add canonical descriptions to every named input property, including
+     * properties nested inside other objects or array items.
+     *
+     * @param array<string, mixed> $schema Input JSON Schema.
+     * @return array<string, mixed>
+     */
+    private function describe_input_schema(array $schema): array
+    {
+        if (isset($schema['properties']) && is_array($schema['properties'])) {
+            foreach ($schema['properties'] as $name => $property) {
+                if (! is_string($name) || ! is_array($property)) {
+                    continue;
+                }
+
+                if (! isset($property['description']) && isset(self::INPUT_PROPERTY_DESCRIPTIONS[$name])) {
+                    $property['description'] = self::INPUT_PROPERTY_DESCRIPTIONS[$name];
+                }
+
+                $schema['properties'][$name] = $this->describe_input_schema($property);
+            }
+        }
+
+        if (isset($schema['items']) && is_array($schema['items'])) {
+            $schema['items'] = $this->describe_input_schema($schema['items']);
+        }
+
+        if (isset($schema['additionalProperties']) && is_array($schema['additionalProperties'])) {
+            $schema['additionalProperties'] = $this->describe_input_schema($schema['additionalProperties']);
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Strict output contract shared by the Agent Guide Ability and manifest.
+     *
+     * @return array<string, mixed>
+     */
+    private function agent_guide_output_schema(): array
+    {
+        $string_list = array(
+            'type'  => 'array',
+            'items' => array('type' => 'string'),
+        );
+        $step_schema = $this->object(
+            array(
+                'id'             => array('type' => 'string'),
+                'tools'          => $string_list,
+                'effect'         => array(
+                    'type' => 'string',
+                    'enum' => array('answer', 'action', 'telemetry', 'human_checkpoint'),
+                ),
+                'human_required' => array('type' => 'boolean'),
+                'optional'       => array('type' => 'boolean'),
+            ),
+            array('id', 'tools', 'effect', 'human_required', 'optional')
+        );
+        $journey_schema = $this->object(
+            array(
+                'id'        => array('type' => 'string'),
+                'title'     => array('type' => 'string'),
+                'available' => array('type' => 'boolean'),
+                'steps'     => array('type' => 'array', 'items' => $step_schema, 'minItems' => 1),
+            ),
+            array('id', 'title', 'available', 'steps')
+        );
+        $effect_schema = $this->object(
+            array(
+                'id'                     => array(
+                    'type' => 'string',
+                    'enum' => array('answer', 'action', 'telemetry', 'human_checkpoint', 'sensitive_action'),
+                ),
+                'changes_commerce_state' => array('type' => 'boolean'),
+                'reversible'              => array('type' => 'boolean'),
+                'meaning'                 => array('type' => 'string'),
+            ),
+            array('id', 'changes_commerce_state', 'reversible', 'meaning')
+        );
+        $boundary_schema = $this->object(
+            array(
+                'at'         => array('type' => 'string'),
+                'agent_may'  => $string_list,
+                'human_must' => $string_list,
+            ),
+            array('at', 'agent_may', 'human_must')
+        );
+
+        return $this->object(
+            array(
+                'version'            => array('type' => 'string'),
+                'start_here'         => array('type' => 'boolean'),
+                'commerce_available' => array('type' => 'boolean'),
+                'purpose'            => array('type' => 'string'),
+                'execution'          => $this->object(
+                    array(
+                        'supported_mode'              => array(
+                            'type' => 'string',
+                            'enum' => array('top_level_co_browsing'),
+                        ),
+                        'unattended_remote_execution' => array(
+                            'type' => 'string',
+                            'enum' => array('unsupported'),
+                        ),
+                        'state_rule'                  => array('type' => 'string'),
+                    ),
+                    array('supported_mode', 'unattended_remote_execution', 'state_rule')
+                ),
+                'supported_journeys' => array(
+                    'type'     => 'array',
+                    'items'    => $journey_schema,
+                    'minItems' => 2,
+                    'maxItems' => 2,
+                ),
+                'trust'              => $this->object(
+                    array(
+                        'merchant_content' => array(
+                            'type' => 'string',
+                            'enum' => array('untrusted'),
+                        ),
+                        'agent_feedback'   => array(
+                            'type' => 'string',
+                            'enum' => array('agent_reported'),
+                        ),
+                        'site_metrics'     => array(
+                            'type' => 'string',
+                            'enum' => array('site_computed'),
+                        ),
+                        'effects'          => array(
+                            'type'     => 'array',
+                            'items'    => $effect_schema,
+                            'minItems' => 5,
+                            'maxItems' => 5,
+                        ),
+                    ),
+                    array('merchant_content', 'agent_feedback', 'site_metrics', 'effects')
+                ),
+                'sensitive_actions'  => $this->object(
+                    array(
+                        'tool_count'  => array('type' => 'integer', 'minimum' => 0, 'maximum' => 0),
+                        'tools'       => array('type' => 'array', 'items' => array('type' => 'string'), 'maxItems' => 0),
+                        'human_owned' => $string_list,
+                    ),
+                    array('tool_count', 'tools', 'human_owned')
+                ),
+                'pricing_boundary'   => $this->object(
+                    array(
+                        'before_checkout' => array(
+                            'type' => 'string',
+                            'enum' => array('cart_subtotal_or_estimate'),
+                        ),
+                        'final_total_at'   => array(
+                            'type' => 'string',
+                            'enum' => array('human_checkout'),
+                        ),
+                        'may_include'      => $string_list,
+                        'agent_rule'       => array('type' => 'string'),
+                    ),
+                    array('before_checkout', 'final_total_at', 'may_include', 'agent_rule')
+                ),
+                'human_boundaries'   => array(
+                    'type'     => 'array',
+                    'items'    => $boundary_schema,
+                    'minItems' => 1,
+                ),
+                'privacy'            => $this->object(
+                    array(
+                        'stored'   => $string_list,
+                        'excluded' => $string_list,
+                    ),
+                    array('stored', 'excluded')
+                ),
+                'feedback'           => $this->object(
+                    array(
+                        'optional'                 => array('type' => 'boolean'),
+                        'tool'                     => array('type' => 'string'),
+                        'recommended_when'         => $string_list,
+                        'max_reports_per_workflow' => array('type' => 'integer', 'minimum' => 0),
+                        'supported_metrics'        => $string_list,
+                        'metric_rule'              => array('type' => 'string'),
+                    ),
+                    array(
+                        'optional',
+                        'tool',
+                        'recommended_when',
+                        'max_reports_per_workflow',
+                        'supported_metrics',
+                        'metric_rule',
+                    )
+                ),
+            ),
+            array(
+                'version',
+                'start_here',
+                'commerce_available',
+                'purpose',
+                'execution',
+                'supported_journeys',
+                'trust',
+                'sensitive_actions',
+                'pricing_boundary',
+                'human_boundaries',
+                'privacy',
+                'feedback',
+            )
+        );
     }
 
     /**

@@ -338,7 +338,7 @@ final class DemoPages
         $emergency_stop   = $kill_switch->active();
         $tools            = array();
 
-        foreach ($catalog->surface('storefront') as $definition) {
+        foreach ($catalog->public_surface('storefront') as $definition) {
             $name             = (string) $definition['name'];
             $site_enabled     = $plugin_enabled && ! $emergency_stop && $policies->enabled($name);
             $tools[] = array(

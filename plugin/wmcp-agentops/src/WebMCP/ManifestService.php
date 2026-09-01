@@ -73,7 +73,7 @@ final class ManifestService
     private function public_tools(string $surface, string $session_hash_hex): array
     {
         $tools = array();
-        foreach ($this->catalog->surface($surface) as $definition) {
+        foreach ($this->catalog->public_surface($surface) as $definition) {
             if ($definition['requires_woocommerce'] && ! class_exists('WooCommerce')) {
                 continue;
             }

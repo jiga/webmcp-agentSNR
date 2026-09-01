@@ -86,7 +86,7 @@ final class AbilityRegistry
                             'destructive' => false,
                             'idempotent'  => (bool) $definition['read_only'],
                         ),
-                        'wmcp.public'              => true,
+                        'wmcp.public'              => (bool) $definition['discoverable'],
                         'wmcp.tool_name'           => $tool_name,
                         'wmcp.tool_version'        => (string) $definition['version'],
                         'wmcp.risk_class'          => (string) $definition['risk_class'],

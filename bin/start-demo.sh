@@ -44,6 +44,8 @@ docker compose run --rm cli wp config set WMCP_AGENTOPS_ALLOW_DESTRUCTIVE_RESET 
 docker compose run --rm cli wp plugin install woocommerce --version="${WOO_VERSION}" --activate
 docker compose run --rm cli wp plugin activate wmcp-agentops
 docker compose run --rm cli wp eval-file /workspace/bin/seed-demo.php
+docker compose run --rm cli wp option update woocommerce_coming_soon no
+docker compose run --rm cli wp option update woocommerce_store_pages_only no
 docker compose run --rm cli wp rewrite structure '/%postname%/'
 
 echo

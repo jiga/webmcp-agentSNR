@@ -55,7 +55,7 @@ Agent SNR differentiates through first-class WebMCP inventory and policy, browse
 - raw prompts, customer identity, addresses, payment data, or arbitrary payload capture;
 - persistent issue assignment, comments, alert delivery, anomaly detection, and saved segments;
 - model token/cost analytics and model-quality evaluation;
-- changing internal plugin slugs, namespaces, REST routes, or tool contracts;
+- changing internal plugin slugs, namespaces, or REST routes after the release candidate is frozen;
 - free-form feedback capture, caller-supplied metric values, or automatic changes to catalog, policy, attribution, or inventory;
 - public cross-session demand claims; v0.1 Signals remain explicitly scoped to the current private demo session.
 
@@ -63,7 +63,9 @@ Search signals compute counts, stock coverage, and highest matching public facts
 
 ### Agent Guide and feedback contract
 
-The storefront publishes one versioned **Agent Guide** for both humans and agents. It says where to start, which journeys are supported, which actions are reversible, where human authority begins, what telemetry is excluded, when feedback is useful, and that at most two structured reports are accepted per workflow.
+The storefront publishes one versioned **Agent Guide** for both humans and agents. Guide 1.1 declares top-level co-browsing as the supported mode, unattended execution as unsupported, the shopper and operator journeys, answer/action/telemetry effects, zero Sensitive Action tools, the subtotal/final-total boundary, privacy, optional feedback triggers, and the two-report limit.
+
+Public discovery is outcome-scoped: 12 storefront tools on the shopper page and 8 Agent SNR tools on the operator page. Two older capability-gap abilities remain registered for server-side compatibility but are absent from WebMCP discovery, so agents receive one canonical public tool per intent. The non-purchasing handoff is named `prepare_checkout_handoff`; normal WooCommerce UI retains customer data, terms, final totals, order placement, payment, cancellation, and refund authority.
 
 Automatic observation does not depend on an agent volunteering feedback. Zero-result and constrained low-coverage searches create privacy-preserving `site_observed` signals from a canonical demand signature. The agent may separately submit an `agent_reported` outcome, reason, ratings, owner-action suggestion, same-workflow evidence IDs, and a request for allowlisted measurements. WordPress computes every metric value from catalog, workflow, and WooCommerce evidence; unavailable conversion/value remains pending rather than becoming a false zero.
 

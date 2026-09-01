@@ -179,7 +179,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 
 ### Locked acceptance contract
 
-- Public catalog: 13 storefront tools and 9 Agent SNR tools. `get_agent_guide`, `report_agent_feedback`, and `get_opportunity_signals` are additive; capability-gap tools remain compatible.
+- Catalog abilities: 13 storefront and 9 Agent SNR; public discovery exposes 12 and 8 respectively. `get_agent_guide`, `report_agent_feedback`, and `get_opportunity_signals` are canonical; two capability-gap abilities remain server-side compatibility paths.
 - Discovery: storefront context points agents to a versioned, human-readable Agent Guide. The guide documents supported journeys, reversible actions, the human checkout boundary, privacy, feedback triggers, and the two-report limit.
 - Observation: zero-result and constrained low-coverage searches create deterministic `site_observed` signals without storing raw prompts, raw queries, identity, addresses, or arbitrary attributes.
 - Testimony: agent feedback is closed-schema, `agent_reported`, current-workflow scoped, limited to two unique reports, and linked only to same-session storefront evidence.
@@ -189,10 +189,32 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 
 ### Agent Guide, feedback, and opportunities review
 
-- Product: 13 storefront + 9 Agent SNR tools expose one canonical Agent Guide, automatic zero/low-coverage/OOS/missing-fact observation, evidence-linked structured feedback, dynamic site-computed metrics, compatible capability-gap views, replay evidence, and unified Signals.
+- Product: 12 storefront + 8 Agent SNR publicly discovered tools expose one canonical Agent Guide, automatic zero/low-coverage/OOS/missing-fact observation, evidence-linked structured feedback, dynamic site-computed metrics, replay evidence, and unified Signals; two legacy gap abilities remain undiscoverable.
 - Trust/privacy: site-observed, agent-reported, and site-verified sources remain separate; raw prompt/search/free-form feedback and caller metric values are excluded; unknown demand uses keyed grouping; evidence is same-workflow scoped; two feedback slots are database-enforced.
 - Demo: ten real 1440×900 exact-ZIP screenshots record Guide v1.0, a zero-result IPX5 signal, two IPX4 alternatives, linked feedback, a $69 HarborLite human order, direct attribution, governance, full refund, and $0 net with zero console errors.
 - Presentation: the editable 11-slide deck is updated in place with the new architecture/demo/provenance story. Template/theme fidelity, speaker-note sources, package, placeholder, exported-render, and overflow checks pass.
-- Verification: 91 JavaScript tests, 102 PHP tests / 858 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 22-tool REST/security smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
-- Final deterministic artifacts: plugin `f631ff06279ba11cc153789e960c4a3641be3dee81d1f81b2681b415ed45b940`; Playground `1a47231b071cd84915d4e7a5faf8a051656e630aeedd5ddfe6d0af9082f5348d`.
+- Verification: 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 20 public + 2 legacy REST/security smoke, 11/11 native WebMCP smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
+- Final deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
 - Remaining gates are owner/external only: formal Agent SNR clearance, public remote/tag, hosted top-level HTTPS deployment, real ChatGPT/Chrome validation, final WooCommerce 11.1 rerun if released, hosted media/video, Devpost URLs/submission, and freeze.
+
+## X-post hackathon readiness alignment
+
+- [x] Verify the five referenced resources: WebMCP Workbench, Google WebMCP Evals CLI, WebMCP.com implementations/API, agent-journey guide, and resource directory.
+- [x] Write one aligned product and technical design before changing implementation.
+- [x] Audit the 22 catalog abilities, public surfaces, descriptions, journey, confirmation boundaries, visible state, eval coverage, and submission proof against that design.
+- [x] Implement the smallest complete set of local improvements; keep extension installation, directory publication, hosted deployment, and real-client runs as explicit owner/manual gates.
+- [x] Add formal tool-selection and full-workflow evals with deterministic fixtures and CI-safe execution.
+- [x] Refresh the live demo, runbook, screenshots, deck, Devpost copy, verification report, exact artifacts, and checksums.
+- [x] Run the full source/exact-artifact matrix, independent review, and commit.
+
+### X-post hackathon readiness review
+
+- Design: `submission/webmcp-readiness-design.md` maps the five resources into one co-browsing product contract, two outcome-oriented surfaces, zero Sensitive Action tools, explicit pricing/human boundaries, failure recovery, eval layers, and owner-only publication gates.
+- Discovery: 12 storefront and 8 Agent SNR tools are publicly registered. `report_capability_gap` and `get_capability_gaps` remain registered with `wmcp.public=false`; they are absent from manifests, governance enums, visible Controls, and eval schemas. The handoff is publicly named `prepare_checkout_handoff`.
+- Guide: Guide 1.1 publishes seven shopper steps, four operator steps, answer/action/telemetry/human-checkpoint/sensitive taxonomy, co-browsing-only scope, zero sensitive tools, optional feedback, privacy, and subtotal/final-total rules. Runtime/schema referential integrity is tested.
+- Evals: exact `webmcp-evals@0.0.4`, generated schema parity, 17 fixture/report/smoke tests, natural-language selection/no-call/recovery suites, live browser trajectories with `ok:true` constraints, application-error-aware native smoke, and provenance-bound strict all-pass report checking are included. Model-backed runs remain an owner gate and no provider key was used.
+- External handoff: Workbench 1.2.1 and WebMCP.com scanner/API/human-listing evidence templates contain release identity, security, approval, log, audit, replay, model, classification, and sign-off fields without fabricating results.
+- Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
+- Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
+- Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
+- Remaining gates are external/owner-only: public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, protected model runs, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.

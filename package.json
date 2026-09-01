@@ -5,11 +5,16 @@
   "description": "Development and browser-test tooling for Agent SNR, agent outcome monitoring for WordPress.",
   "license": "GPL-2.0-or-later",
   "scripts": {
-    "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.{js,mjs}' 'demo/**/*.mjs'",
+    "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.{js,mjs}' 'demo/**/*.mjs' 'bin/**/*.mjs'",
     "lint:css": "stylelint 'plugin/wmcp-agentops/assets/css/**/*.css'",
     "test:js": "node --test tests/JavaScript/**/*.test.js tests/JavaScript/**/*.test.mjs",
     "test:showcase": "bash tests/Shell/showcase-launcher.test.sh",
     "test:browser": "playwright test",
+    "test:webmcp:fixtures": "node --test tests/JavaScript/webmcp-evals.test.mjs",
+    "test:webmcp:smoke": "node bin/run-webmcp-smoke.mjs",
+    "generate:webmcp:schemas": "docker run --rm --volume \"$PWD:/app\" --workdir /app php:8.3-cli php bin/generate-webmcp-eval-schemas.php",
+    "check:webmcp:schemas": "docker run --rm --volume \"$PWD:/app\" --workdir /app php:8.3-cli php bin/generate-webmcp-eval-schemas.php --check",
+    "check:webmcp:report": "node bin/check-webmcp-eval-report.mjs",
     "test": "npm run test:js",
     "verify": "npm run lint:js && npm run lint:css && npm run test:showcase && npm run test:js",
     "build": "./bin/build-plugin.sh",
@@ -25,6 +30,7 @@
     "eslint": "10.9.1",
     "globals": "17.11.0",
     "stylelint": "17.14.1",
-    "stylelint-config-standard": "40.0.0"
+    "stylelint-config-standard": "40.0.0",
+    "webmcp-evals": "0.0.4"
   }
 }

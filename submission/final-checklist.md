@@ -5,18 +5,29 @@ Checked items are complete in the prepared repository. Unchecked items require t
 ## Code and artifacts
 
 - [x] All automated JavaScript, PHP, security, browser, WooCommerce, HPOS-on/off, and artifact tests pass from a clean checkout.
-- [ ] WordPress 6.9.4, 7.0.4, and 7.1 pass; WooCommerce 10.9.4, 11.0.1, and final 11.1 pass.
+- [x] Exact-ZIP WordPress 6.9 / WooCommerce 10.9.4, WordPress 7.0.4 / WooCommerce 11.0.1, and WordPress 7.1 / WooCommerce 11.0.1 HPOS pass.
+- [ ] Re-run the matrix against final WooCommerce 11.1 if it releases before tagging.
 - [x] Official Plugin Check reports zero errors against the extracted ZIP; reviewed warnings are recorded in `verification-report.md`.
 - [x] ZIP contains one plugin root, local runtime assets, license/notices, and no development/private files.
 - [x] Playground bundle validates, installs, activates, seeds, and reports its iframe limitation accurately.
 - [x] Docker one-command bootstrap succeeds with a new named volume.
 - [x] Isolated `agent-snr-showcase` rehearsal runs the verified release ZIP without touching development volumes.
-- [x] Editable architecture/demo presentation and ten real local-flow reference screenshots are included.
+- [x] Editable 12-slide architecture/demo presentation and ten real exact-artifact local-flow reference screenshots are included.
 - [ ] Release tag, ZIP checksum, hosted plugin version, and repository commit match.
+
+## WebMCP quality and external evidence
+
+- [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the exact release in disposable localhost Chrome, including application-error-envelope enforcement.
+- [ ] Protected model-backed selection and browser reports meet the strict all-pass and provenance thresholds in [`webmcp-readiness-design.md`](webmcp-readiness-design.md).
+- [ ] Real ChatGPT desktop Site Tools and Chrome discover exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages.
+- [ ] The owner completed [`workbench-validation.md`](workbench-validation.md) with Workbench 1.2.1 (or a separately reviewed newer version), exact release identity, manual calls, Audit findings, saved-call replay, repeated evals, approval/log review, and User Mode evidence.
+- [ ] Provider keys and raw `.evals/`/Workbench logs remain private; every linked excerpt or screenshot is sanitized.
+- [ ] The WebMCP.com public scanner passes both frozen pages with expected catalogs and no API/load/blocking or unexplained Sensitive Action result.
+- [ ] The human directory request is approved, post-index API lookups return `supported: true` for the intended public representation, and the final directory URL is recorded using [`webmcp-directory-listing.md`](webmcp-directory-listing.md).
 
 ## Judged workflow
 
-- [ ] Top-level HTTPS page registers current imperative tools in real ChatGPT and Chrome.
+- [ ] Both top-level HTTPS pages register their current imperative catalogs in real ChatGPT and Chrome.
 - [x] Site remains human-usable with WebMCP absent.
 - [x] Shopper prompt visibly completes search, compare, policy, and cart.
 - [x] Agent discovers the guide; a zero-result search records a site-observed opportunity without feedback.

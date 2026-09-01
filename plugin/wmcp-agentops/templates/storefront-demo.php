@@ -21,7 +21,7 @@ if (array() === $agent_guide && class_exists(\WPWebMCP\AgentOps\Guidance\AgentGu
 }
 $guide_version = isset($agent_guide['version']) && is_string($agent_guide['version'])
 	? $agent_guide['version']
-	: '1.0';
+	: '1.1';
 $guide_journeys = isset($agent_guide['supported_journeys']) && is_array($agent_guide['supported_journeys'])
 	? $agent_guide['supported_journeys']
 	: array();
@@ -46,6 +46,15 @@ $guide_boundaries = isset($agent_guide['human_boundaries']) && is_array($agent_g
 $guide_privacy = isset($agent_guide['privacy']) && is_array($agent_guide['privacy'])
 	? $agent_guide['privacy']
 	: array();
+$wmcp_guide_execution = isset($agent_guide['execution']) && is_array($agent_guide['execution'])
+	? $agent_guide['execution']
+	: array();
+$wmcp_guide_sensitive_actions = isset($agent_guide['sensitive_actions']) && is_array($agent_guide['sensitive_actions'])
+	? $agent_guide['sensitive_actions']
+	: array();
+$wmcp_guide_pricing = isset($agent_guide['pricing_boundary']) && is_array($agent_guide['pricing_boundary'])
+	? $agent_guide['pricing_boundary']
+	: array();
 $guide_human_must = isset($guide_boundaries[0]['human_must']) && is_array($guide_boundaries[0]['human_must'])
 	? $guide_boundaries[0]['human_must']
 	: array('review_details', 'submit_customer_data', 'accept_terms', 'place_order');
@@ -56,11 +65,14 @@ $guide_feedback_triggers = isset($guide_feedback['recommended_when']) && is_arra
 	? $guide_feedback['recommended_when']
 	: array('journey_completed', 'journey_blocked', 'zero_results', 'human_handoff');
 $guide_step_copy = array(
+	'understand'    => array(__('Start', 'wmcp-agentops'), __('Read the site journey and boundaries', 'wmcp-agentops')),
 	'discover'      => array(__('Search', 'wmcp-agentops'), __('Read public product facts', 'wmcp-agentops')),
+	'evaluate'      => array(__('Evaluate', 'wmcp-agentops'), __('Inspect and compare stored facts', 'wmcp-agentops')),
 	'compare'       => array(__('Compare', 'wmcp-agentops'), __('Keep missing facts honest', 'wmcp-agentops')),
 	'verify_policy' => array(__('Verify', 'wmcp-agentops'), __('Use published policy evidence', 'wmcp-agentops')),
 	'prepare_cart'  => array(__('Prepare', 'wmcp-agentops'), __('Cart changes stay reversible', 'wmcp-agentops')),
 	'handoff'       => array(__('Hand off', 'wmcp-agentops'), __('A person completes checkout', 'wmcp-agentops')),
+	'feedback'      => array(__('Report', 'wmcp-agentops'), __('Optional structured journey feedback', 'wmcp-agentops')),
 );
 ?>
 <a class="wmcp-skip-link" href="#wmcp-storefront-main"><?php esc_html_e('Skip to storefront', 'wmcp-agentops'); ?></a>
@@ -120,10 +132,28 @@ $guide_step_copy = array(
 		</ol>
 		<div class="wmcp-agent-guide-foot">
 			<dl data-wmcp-guide-boundaries>
+				<div><dt><?php esc_html_e('Execution mode', 'wmcp-agentops'); ?></dt><dd><?php
+					echo esc_html(
+						'top_level_co_browsing' === ($wmcp_guide_execution['supported_mode'] ?? '')
+							? __('Top-level co-browsing supported; unattended remote execution unsupported.', 'wmcp-agentops')
+							: __('Use this guide with a person present in the top-level storefront.', 'wmcp-agentops')
+					);
+				?></dd></div>
 				<div><dt><?php esc_html_e('Human boundary', 'wmcp-agentops'); ?></dt><dd><?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_human_must))); ?>.</dd></div>
+				<div><dt><?php esc_html_e('Sensitive actions', 'wmcp-agentops'); ?></dt><dd><?php
+					/* translators: %d is the number of sensitive WebMCP tools exposed by the storefront. */
+					echo esc_html(sprintf(__('%d WebMCP tools; order placement and payment stay with the person.', 'wmcp-agentops'), (int) ($wmcp_guide_sensitive_actions['tool_count'] ?? 0)));
+				?></dd></div>
+				<div><dt><?php esc_html_e('Price boundary', 'wmcp-agentops'); ?></dt><dd><?php
+					echo esc_html(
+						'cart_subtotal_or_estimate' === ($wmcp_guide_pricing['before_checkout'] ?? '')
+							? __('Cart subtotal or estimate before checkout; final tax, shipping, fees, and total appear at human checkout.', 'wmcp-agentops')
+							: __('A person reviews the final amount at checkout.', 'wmcp-agentops')
+					);
+				?></dd></div>
 				<div><dt><?php esc_html_e('Data boundary', 'wmcp-agentops'); ?></dt><dd><?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_excluded_data))); ?>.</dd></div>
 			</dl>
-			<p data-wmcp-feedback-policy><strong><?php esc_html_e('Feedback invited:', 'wmcp-agentops'); ?></strong> <?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_feedback_triggers))); ?>. <?php
+			<p data-wmcp-feedback-policy><strong><?php esc_html_e('Optional feedback:', 'wmcp-agentops'); ?></strong> <?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_feedback_triggers))); ?>. <?php
 				/* translators: %d is the maximum feedback reports permitted in one workflow. */
 				echo esc_html(sprintf(__('Maximum %d reports per workflow.', 'wmcp-agentops'), (int) ($guide_feedback['max_reports_per_workflow'] ?? 2)));
 			?></p>

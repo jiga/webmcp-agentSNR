@@ -11,7 +11,7 @@
 
 	const stageForTool = {
 		add_to_cart: "cart",
-		checkout_handoff: "checkout",
+		prepare_checkout_handoff: "checkout",
 		compare_products: "comparison",
 		get_cart: "cart",
 		get_product: "search",
@@ -477,7 +477,7 @@
 		guide.dataset.state = "read";
 		guide.classList.remove( "wmcp-is-updated" );
 		window.requestAnimationFrame( () => guide.classList.add( "wmcp-is-updated" ) );
-		text( one( "[data-wmcp-guide-version]", guide ), result.guide_version || result.version || "1.0" );
+		text( one( "[data-wmcp-guide-version]", guide ), result.guide_version || result.version || "1.1" );
 		text( one( "[data-wmcp-guide-status]", guide ), "Read by agent" );
 		const feedback = record( result.feedback || result.feedback_policy );
 		const triggers = list( feedback.triggers || feedback.recommended_when );
@@ -487,7 +487,7 @@
 				: "";
 			text(
 				one( "[data-wmcp-feedback-policy]", guide ),
-				`Feedback invited after ${ triggers.map( ( trigger ) => String( trigger ).replaceAll( "_", " " ) ).join( ", " ) }.${ maximum }`
+				`Optional feedback after ${ triggers.map( ( trigger ) => String( trigger ).replaceAll( "_", " " ) ).join( ", " ) }.${ maximum }`
 			);
 		}
 	}
@@ -517,7 +517,7 @@
 			renderPolicy( result );
 		} else if ( [ "get_cart", "add_to_cart", "remove_from_cart", "update_cart_quantity" ].includes( tool ) ) {
 			renderCart( result, tool !== "get_cart" );
-		} else if ( tool === "checkout_handoff" ) {
+		} else if ( tool === "prepare_checkout_handoff" ) {
 			renderCheckout( result );
 		} else if ( tool === "report_capability_gap" ) {
 			renderGap( result );

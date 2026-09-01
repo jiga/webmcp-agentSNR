@@ -1,0 +1,1437 @@
+{
+    "tools": [
+        {
+            "name": "get_storefront_context",
+            "description": "Use on storefront entry to read current public page, store, policy, cart, and guide-discovery context. This read does not change the cart or place an order.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "include": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "page",
+                                "currency",
+                                "categories",
+                                "policy_summary",
+                                "cart_summary"
+                            ]
+                        },
+                        "maxItems": 5,
+                        "uniqueItems": true,
+                        "description": "Optional result sections to include."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "store": {
+                        "type": "object"
+                    },
+                    "page": {
+                        "type": "object"
+                    },
+                    "currency": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "categories": {
+                        "type": "array"
+                    },
+                    "policy_summary": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    },
+                    "cart_summary": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    },
+                    "supported_workflows": {
+                        "type": "array"
+                    },
+                    "agent_guide": {
+                        "type": "object"
+                    }
+                },
+                "required": [
+                    "store",
+                    "page",
+                    "supported_workflows",
+                    "agent_guide"
+                ]
+            }
+        },
+        {
+            "name": "get_agent_guide",
+            "description": "Use once at the start of a co-browsing journey to learn shopper and operator paths, tool effects, privacy, pricing, and human boundaries. This read changes no state.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "version": {
+                        "type": "string"
+                    },
+                    "start_here": {
+                        "type": "boolean"
+                    },
+                    "commerce_available": {
+                        "type": "boolean"
+                    },
+                    "purpose": {
+                        "type": "string"
+                    },
+                    "execution": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "supported_mode": {
+                                "type": "string",
+                                "enum": [
+                                    "top_level_co_browsing"
+                                ]
+                            },
+                            "unattended_remote_execution": {
+                                "type": "string",
+                                "enum": [
+                                    "unsupported"
+                                ]
+                            },
+                            "state_rule": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "supported_mode",
+                            "unattended_remote_execution",
+                            "state_rule"
+                        ]
+                    },
+                    "supported_journeys": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "id": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "available": {
+                                    "type": "boolean"
+                                },
+                                "steps": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "additionalProperties": false,
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "tools": {
+                                                "type": "array",
+                                                "items": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "effect": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "answer",
+                                                    "action",
+                                                    "telemetry",
+                                                    "human_checkpoint"
+                                                ]
+                                            },
+                                            "human_required": {
+                                                "type": "boolean"
+                                            },
+                                            "optional": {
+                                                "type": "boolean"
+                                            }
+                                        },
+                                        "required": [
+                                            "id",
+                                            "tools",
+                                            "effect",
+                                            "human_required",
+                                            "optional"
+                                        ]
+                                    },
+                                    "minItems": 1
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "title",
+                                "available",
+                                "steps"
+                            ]
+                        },
+                        "minItems": 2,
+                        "maxItems": 2
+                    },
+                    "trust": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "merchant_content": {
+                                "type": "string",
+                                "enum": [
+                                    "untrusted"
+                                ]
+                            },
+                            "agent_feedback": {
+                                "type": "string",
+                                "enum": [
+                                    "agent_reported"
+                                ]
+                            },
+                            "site_metrics": {
+                                "type": "string",
+                                "enum": [
+                                    "site_computed"
+                                ]
+                            },
+                            "effects": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "enum": [
+                                                "answer",
+                                                "action",
+                                                "telemetry",
+                                                "human_checkpoint",
+                                                "sensitive_action"
+                                            ]
+                                        },
+                                        "changes_commerce_state": {
+                                            "type": "boolean"
+                                        },
+                                        "reversible": {
+                                            "type": "boolean"
+                                        },
+                                        "meaning": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "id",
+                                        "changes_commerce_state",
+                                        "reversible",
+                                        "meaning"
+                                    ]
+                                },
+                                "minItems": 5,
+                                "maxItems": 5
+                            }
+                        },
+                        "required": [
+                            "merchant_content",
+                            "agent_feedback",
+                            "site_metrics",
+                            "effects"
+                        ]
+                    },
+                    "sensitive_actions": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "tool_count": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "maximum": 0
+                            },
+                            "tools": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "maxItems": 0
+                            },
+                            "human_owned": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "tool_count",
+                            "tools",
+                            "human_owned"
+                        ]
+                    },
+                    "pricing_boundary": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "before_checkout": {
+                                "type": "string",
+                                "enum": [
+                                    "cart_subtotal_or_estimate"
+                                ]
+                            },
+                            "final_total_at": {
+                                "type": "string",
+                                "enum": [
+                                    "human_checkout"
+                                ]
+                            },
+                            "may_include": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "agent_rule": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "before_checkout",
+                            "final_total_at",
+                            "may_include",
+                            "agent_rule"
+                        ]
+                    },
+                    "human_boundaries": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "at": {
+                                    "type": "string"
+                                },
+                                "agent_may": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "human_must": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "at",
+                                "agent_may",
+                                "human_must"
+                            ]
+                        },
+                        "minItems": 1
+                    },
+                    "privacy": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "stored": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "excluded": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "stored",
+                            "excluded"
+                        ]
+                    },
+                    "feedback": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "optional": {
+                                "type": "boolean"
+                            },
+                            "tool": {
+                                "type": "string"
+                            },
+                            "recommended_when": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "max_reports_per_workflow": {
+                                "type": "integer",
+                                "minimum": 0
+                            },
+                            "supported_metrics": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "metric_rule": {
+                                "type": "string"
+                            }
+                        },
+                        "required": [
+                            "optional",
+                            "tool",
+                            "recommended_when",
+                            "max_reports_per_workflow",
+                            "supported_metrics",
+                            "metric_rule"
+                        ]
+                    }
+                },
+                "required": [
+                    "version",
+                    "start_here",
+                    "commerce_available",
+                    "purpose",
+                    "execution",
+                    "supported_journeys",
+                    "trust",
+                    "sensitive_actions",
+                    "pricing_boundary",
+                    "human_boundaries",
+                    "privacy",
+                    "feedback"
+                ]
+            }
+        },
+        {
+            "name": "search_products",
+            "description": "Search the public WooCommerce catalog using product facts and constraints. This tool returns compact merchant-authored facts and does not modify the cart.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "description": "Public catalog terms and constraints to search for."
+                    },
+                    "max_price": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000000,
+                        "description": "Highest acceptable product price in the store currency."
+                    },
+                    "min_price": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000000,
+                        "description": "Lowest acceptable product price in the store currency."
+                    },
+                    "categories": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "maxLength": 80
+                        },
+                        "maxItems": 5,
+                        "uniqueItems": true,
+                        "description": "Public product category slugs to require."
+                    },
+                    "attributes": {
+                        "type": "object",
+                        "maxProperties": 8,
+                        "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 80
+                        },
+                        "description": "Exact public product attribute values to require."
+                    },
+                    "in_stock_only": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Whether to exclude products that are not currently in stock."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8,
+                        "default": 6,
+                        "description": "Maximum number of matching records to return."
+                    }
+                },
+                "required": [
+                    "query"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "price": {
+                                    "type": "number"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                },
+                                "stock_status": {
+                                    "type": "string"
+                                },
+                                "purchasable": {
+                                    "type": "boolean"
+                                },
+                                "attributes": {
+                                    "type": "object"
+                                },
+                                "return_days": {
+                                    "type": [
+                                        "integer",
+                                        "null"
+                                    ]
+                                },
+                                "evidence": {
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "url",
+                                "price",
+                                "currency",
+                                "stock_status",
+                                "purchasable",
+                                "attributes",
+                                "return_days",
+                                "evidence"
+                            ]
+                        },
+                        "maxItems": 8
+                    },
+                    "result_count": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "query": {
+                        "type": "string"
+                    },
+                    "opportunity_signal": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "products",
+                    "result_count",
+                    "query",
+                    "opportunity_signal"
+                ]
+            }
+        },
+        {
+            "name": "get_product",
+            "description": "Read one public WooCommerce product by ID or slug. Merchant-authored text is returned as untrusted content; no private product metadata is exposed.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Positive WooCommerce product ID to read or filter by."
+                    },
+                    "slug": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 200,
+                        "description": "Public WooCommerce product slug to read."
+                    },
+                    "include": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "description",
+                                "attributes",
+                                "images",
+                                "policy"
+                            ]
+                        },
+                        "maxItems": 4,
+                        "uniqueItems": true,
+                        "description": "Optional result sections to include."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "product": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "id": {
+                                "type": "integer"
+                            },
+                            "name": {
+                                "type": "string"
+                            },
+                            "url": {
+                                "type": "string"
+                            },
+                            "price": {
+                                "type": "number"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "stock_status": {
+                                "type": "string"
+                            },
+                            "purchasable": {
+                                "type": "boolean"
+                            },
+                            "attributes": {
+                                "type": "object"
+                            },
+                            "return_days": {
+                                "type": [
+                                    "integer",
+                                    "null"
+                                ]
+                            },
+                            "evidence": {
+                                "type": "array"
+                            },
+                            "slug": {
+                                "type": "string"
+                            },
+                            "short_description": {
+                                "type": "string"
+                            },
+                            "images": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "maxItems": 3
+                            }
+                        },
+                        "required": [
+                            "id",
+                            "name",
+                            "url",
+                            "price",
+                            "currency",
+                            "stock_status",
+                            "purchasable",
+                            "attributes",
+                            "return_days",
+                            "evidence"
+                        ]
+                    }
+                },
+                "required": [
+                    "product"
+                ]
+            }
+        },
+        {
+            "name": "compare_products",
+            "description": "Compare two to four public products using stored facts. Missing facts remain null, and any demo value score is explained rather than presented as objective.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "product_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "minimum": 1
+                        },
+                        "minItems": 2,
+                        "maxItems": 4,
+                        "uniqueItems": true,
+                        "description": "Two to four positive WooCommerce product IDs to compare."
+                    },
+                    "criteria": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "price",
+                                "capacity",
+                                "water_rating",
+                                "weight",
+                                "laptop_size",
+                                "return_days"
+                            ]
+                        },
+                        "maxItems": 6,
+                        "uniqueItems": true,
+                        "description": "Stored product facts to include in the comparison."
+                    }
+                },
+                "required": [
+                    "product_ids"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "products": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "id": {
+                                    "type": "integer"
+                                },
+                                "name": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "price": {
+                                    "type": "number"
+                                },
+                                "currency": {
+                                    "type": "string"
+                                },
+                                "stock_status": {
+                                    "type": "string"
+                                },
+                                "purchasable": {
+                                    "type": "boolean"
+                                },
+                                "attributes": {
+                                    "type": "object"
+                                },
+                                "return_days": {
+                                    "type": [
+                                        "integer",
+                                        "null"
+                                    ]
+                                },
+                                "evidence": {
+                                    "type": "array"
+                                }
+                            },
+                            "required": [
+                                "id",
+                                "name",
+                                "url",
+                                "price",
+                                "currency",
+                                "stock_status",
+                                "purchasable",
+                                "attributes",
+                                "return_days",
+                                "evidence"
+                            ]
+                        },
+                        "minItems": 2,
+                        "maxItems": 4
+                    },
+                    "criteria": {
+                        "type": "array"
+                    },
+                    "matrix": {
+                        "type": "array"
+                    },
+                    "missing_facts": {
+                        "type": "array"
+                    },
+                    "value_scores": {
+                        "type": "array"
+                    },
+                    "score_explanation": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "products",
+                    "criteria",
+                    "matrix",
+                    "missing_facts",
+                    "value_scores",
+                    "score_explanation"
+                ]
+            }
+        },
+        {
+            "name": "get_store_policy",
+            "description": "Read published store-policy facts and a short merchant-authored evidence excerpt. This tool does not make or change a purchase.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "policy_type": {
+                        "type": "string",
+                        "enum": [
+                            "returns",
+                            "shipping",
+                            "warranty",
+                            "privacy",
+                            "all"
+                        ],
+                        "description": "Published store-policy topic to read."
+                    },
+                    "product_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Positive WooCommerce product ID to read or filter by."
+                    }
+                },
+                "required": [
+                    "policy_type"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "policies": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        },
+                        "maxItems": 4
+                    }
+                },
+                "required": [
+                    "policies"
+                ]
+            }
+        },
+        {
+            "name": "get_cart",
+            "description": "Read the current WooCommerce session cart without customer identity, address, or payment data. This tool does not change the cart.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "item_count": {
+                        "type": "integer"
+                    },
+                    "subtotal": {
+                        "type": "number"
+                    },
+                    "discount_total": {
+                        "type": "number"
+                    },
+                    "currency": {
+                        "type": "string"
+                    },
+                    "cart_revision": {
+                        "type": "string"
+                    },
+                    "checkout_ready": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "items",
+                    "item_count",
+                    "subtotal",
+                    "discount_total",
+                    "currency",
+                    "cart_revision",
+                    "checkout_ready"
+                ]
+            }
+        },
+        {
+            "name": "add_to_cart",
+            "description": "Add a public purchasable product to this browser session cart using the latest cart revision. This reversible action does not create an order, accept terms, or process payment.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "product_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Positive WooCommerce product ID to read or filter by."
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 10,
+                        "default": 1,
+                        "description": "Desired cart quantity; zero removes an existing line."
+                    },
+                    "variation_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Positive WooCommerce variation ID when the product requires one."
+                    },
+                    "variation": {
+                        "type": "object",
+                        "maxProperties": 8,
+                        "additionalProperties": {
+                            "type": "string",
+                            "maxLength": 100
+                        },
+                        "description": "Exact public variation attributes selected by the shopper."
+                    },
+                    "expected_cart_revision": {
+                        "type": "string",
+                        "pattern": "^cartrev_[a-f0-9]{24}$",
+                        "description": "Latest cart revision from get_cart or a cart-changing result."
+                    }
+                },
+                "required": [
+                    "product_id",
+                    "expected_cart_revision"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "added_line": {
+                        "type": "object"
+                    },
+                    "cart": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
+                            },
+                            "item_count": {
+                                "type": "integer"
+                            },
+                            "subtotal": {
+                                "type": "number"
+                            },
+                            "discount_total": {
+                                "type": "number"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "cart_revision": {
+                                "type": "string"
+                            },
+                            "checkout_ready": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "items",
+                            "item_count",
+                            "subtotal",
+                            "discount_total",
+                            "currency",
+                            "cart_revision",
+                            "checkout_ready"
+                        ]
+                    }
+                },
+                "required": [
+                    "added_line",
+                    "cart"
+                ]
+            }
+        },
+        {
+            "name": "remove_from_cart",
+            "description": "Remove one line from this browser session cart. This reversible action does not cancel an order or process money.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "cart_item_key": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{32}$",
+                        "maxLength": 32,
+                        "description": "Opaque cart line key returned by get_cart."
+                    },
+                    "expected_cart_revision": {
+                        "type": "string",
+                        "pattern": "^cartrev_[a-f0-9]{24}$",
+                        "description": "Latest cart revision from get_cart or a cart-changing result."
+                    }
+                },
+                "required": [
+                    "cart_item_key",
+                    "expected_cart_revision"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "removed_item": {
+                        "type": "object"
+                    },
+                    "cart": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
+                            },
+                            "item_count": {
+                                "type": "integer"
+                            },
+                            "subtotal": {
+                                "type": "number"
+                            },
+                            "discount_total": {
+                                "type": "number"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "cart_revision": {
+                                "type": "string"
+                            },
+                            "checkout_ready": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "items",
+                            "item_count",
+                            "subtotal",
+                            "discount_total",
+                            "currency",
+                            "cart_revision",
+                            "checkout_ready"
+                        ]
+                    }
+                },
+                "required": [
+                    "removed_item",
+                    "cart"
+                ]
+            }
+        },
+        {
+            "name": "update_cart_quantity",
+            "description": "Change one line quantity in this browser session cart; zero removes it. This reversible action does not create or change an order.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "cart_item_key": {
+                        "type": "string",
+                        "pattern": "^[a-f0-9]{32}$",
+                        "maxLength": 32,
+                        "description": "Opaque cart line key returned by get_cart."
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 10,
+                        "description": "Desired cart quantity; zero removes an existing line."
+                    },
+                    "expected_cart_revision": {
+                        "type": "string",
+                        "pattern": "^cartrev_[a-f0-9]{24}$",
+                        "description": "Latest cart revision from get_cart or a cart-changing result."
+                    }
+                },
+                "required": [
+                    "cart_item_key",
+                    "quantity",
+                    "expected_cart_revision"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "item_count": {
+                        "type": "integer"
+                    },
+                    "subtotal": {
+                        "type": "number"
+                    },
+                    "discount_total": {
+                        "type": "number"
+                    },
+                    "currency": {
+                        "type": "string"
+                    },
+                    "cart_revision": {
+                        "type": "string"
+                    },
+                    "checkout_ready": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "items",
+                    "item_count",
+                    "subtotal",
+                    "discount_total",
+                    "currency",
+                    "cart_revision",
+                    "checkout_ready"
+                ]
+            }
+        },
+        {
+            "name": "prepare_checkout_handoff",
+            "description": "Validate this session cart and reveal the normal checkout link for human review. This tool never places an order, accepts terms, submits customer data, or processes payment.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "expected_cart_revision": {
+                        "type": "string",
+                        "pattern": "^cartrev_[a-f0-9]{24}$",
+                        "description": "Latest cart revision from get_cart or a cart-changing result."
+                    }
+                },
+                "required": [
+                    "expected_cart_revision"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "checkout_url": {
+                        "type": "string",
+                        "format": "uri"
+                    },
+                    "cart": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object"
+                                }
+                            },
+                            "item_count": {
+                                "type": "integer"
+                            },
+                            "subtotal": {
+                                "type": "number"
+                            },
+                            "discount_total": {
+                                "type": "number"
+                            },
+                            "currency": {
+                                "type": "string"
+                            },
+                            "cart_revision": {
+                                "type": "string"
+                            },
+                            "checkout_ready": {
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "items",
+                            "item_count",
+                            "subtotal",
+                            "discount_total",
+                            "currency",
+                            "cart_revision",
+                            "checkout_ready"
+                        ]
+                    },
+                    "requirements": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "checkout_url",
+                    "cart",
+                    "requirements",
+                    "message"
+                ]
+            }
+        },
+        {
+            "name": "report_agent_feedback",
+            "description": "Optionally report a completed or blocked journey using site-issued evidence IDs. This bounded telemetry cannot request products, alter commerce, or supply metric values; the site computes them.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "outcome": {
+                        "type": "string",
+                        "enum": [
+                            "success",
+                            "partial",
+                            "blocked",
+                            "abandoned"
+                        ],
+                        "description": "Agent-reported outcome of the current journey."
+                    },
+                    "feedback_type": {
+                        "type": "string",
+                        "enum": [
+                            "worked_well",
+                            "missing_product",
+                            "missing_capability",
+                            "policy_unclear",
+                            "insufficient_product_data",
+                            "confusing_result",
+                            "constraint_encountered",
+                            "too_many_steps",
+                            "slow_response",
+                            "handoff_issue"
+                        ],
+                        "description": "Structured category for the optional journey feedback."
+                    },
+                    "step": {
+                        "type": "string",
+                        "enum": [
+                            "discovery",
+                            "comparison",
+                            "policy",
+                            "cart",
+                            "checkout_handoff",
+                            "journey_summary"
+                        ],
+                        "description": "Journey stage to which the feedback applies."
+                    },
+                    "reason_code": {
+                        "type": "string",
+                        "enum": [
+                            "useful_evidence",
+                            "smooth_handoff",
+                            "zero_results",
+                            "low_coverage",
+                            "out_of_stock",
+                            "budget_tradeoff",
+                            "missing_fact",
+                            "unsupported_capability",
+                            "unclear_policy",
+                            "slow_tool",
+                            "difficult_handoff"
+                        ],
+                        "description": "Structured reason supporting the reported outcome."
+                    },
+                    "evidence_event_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "pattern": "^evt_[0-9A-HJKMNP-TV-Z]{26}$"
+                        },
+                        "minItems": 1,
+                        "maxItems": 6,
+                        "uniqueItems": true,
+                        "description": "Same-workflow event IDs returned by this site as evidence."
+                    },
+                    "ratings": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "evidence_quality": {
+                                "type": "string",
+                                "enum": [
+                                    "sufficient",
+                                    "insufficient",
+                                    "unknown"
+                                ],
+                                "description": "Whether site evidence was sufficient for the agent task."
+                            },
+                            "policy_clarity": {
+                                "type": "string",
+                                "enum": [
+                                    "clear",
+                                    "unclear",
+                                    "not_applicable"
+                                ],
+                                "description": "Whether the cited store policy was clear for the task."
+                            },
+                            "handoff_quality": {
+                                "type": "string",
+                                "enum": [
+                                    "smooth",
+                                    "difficult",
+                                    "blocked",
+                                    "not_applicable"
+                                ],
+                                "description": "Whether the human checkout handoff was smooth or blocked."
+                            },
+                            "effort": {
+                                "type": "string",
+                                "enum": [
+                                    "low",
+                                    "medium",
+                                    "high"
+                                ],
+                                "description": "Agent-reported effort required to complete the journey."
+                            }
+                        },
+                        "description": "Optional closed-set ratings for evidence, policy, handoff, and effort."
+                    },
+                    "requested_metrics": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "eligible_product_count",
+                                "highest_matching_water_rating",
+                                "search_refinement_count",
+                                "checkout_handoff",
+                                "checkout_conversion",
+                                "attributed_order_count",
+                                "paid_order_value",
+                                "net_attributed_value"
+                            ]
+                        },
+                        "maxItems": 5,
+                        "uniqueItems": true,
+                        "description": "Metric names for the site to compute from its own evidence."
+                    },
+                    "suggested_owner_action": {
+                        "type": "string",
+                        "enum": [
+                            "clarify_policy",
+                            "improve_product_data",
+                            "add_capability",
+                            "fix_tool_error",
+                            "reduce_steps",
+                            "improve_product_coverage",
+                            "review_inventory",
+                            "review_handoff",
+                            "no_action"
+                        ],
+                        "description": "Closed-set follow-up the agent suggests to the site owner."
+                    }
+                },
+                "required": [
+                    "outcome",
+                    "feedback_type",
+                    "step",
+                    "reason_code",
+                    "evidence_event_ids"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "feedback_id": {
+                        "type": "string"
+                    },
+                    "recorded": {
+                        "type": "boolean"
+                    },
+                    "replayed": {
+                        "type": "boolean"
+                    },
+                    "trust": {
+                        "type": "string",
+                        "enum": [
+                            "agent_reported"
+                        ]
+                    },
+                    "evidence_status": {
+                        "type": "string",
+                        "enum": [
+                            "linked"
+                        ]
+                    },
+                    "evidence_event_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "measured_context": {
+                        "type": "object"
+                    },
+                    "suggested_owner_action": {
+                        "type": "string"
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "feedback_id",
+                    "recorded",
+                    "replayed",
+                    "trust",
+                    "evidence_status",
+                    "evidence_event_ids",
+                    "measured_context",
+                    "suggested_owner_action",
+                    "message"
+                ]
+            }
+        }
+    ]
+}

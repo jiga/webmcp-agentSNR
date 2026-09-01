@@ -20,6 +20,8 @@ Most WordPress agent integrations stop at exposing actions. A merchant can see t
 4. WooCommerce order and refund hooks preserve same-session product evidence and classify eligible agent-linked orders as direct, assisted, or influenced without double-counting revenue. Orders without qualifying evidence are excluded from attributed reporting rather than claimed.
 5. A separate top-level Agent SNR surface exposes tools for the journey, Workflow Replay, unified Opportunity Signals, tool health, attributed revenue, diagnostics, and a restrictive session-only policy change.
 
+The two outcome-oriented pages publicly discover 12 storefront tools and 8 Agent SNR tools. Two older capability-gap abilities remain registered only for server-side compatibility and are intentionally absent from WebMCP discovery, leaving one canonical public tool per intent.
+
 The memorable loop is not “AI shopping.” It is a website observing and improving its own agent interface.
 
 Workflow Replay is a privacy-safe event timeline, not DOM capture, video recording, or pixel reconstruction.
@@ -36,7 +38,7 @@ WebMCP also makes the governance demonstration possible: the merchant asks Agent
 
 The agent first reads the site's versioned guide, then does the repetitive research and preparation: it finds products, compares stored facts, retrieves policy evidence, mutates a reversible session cart, prepares a checkout handoff, and can report structured friction. The human sees the same state, reviews normal WooCommerce checkout, supplies or verifies customer details, accepts terms, and explicitly places the no-charge demo order.
 
-The agent never places an order, submits payment, accepts terms, cancels, or refunds. Feedback never changes catalog, inventory, policy, or attribution. A compatibility tool still records unsupported requests such as a back-in-stock notification and clearly says no notification was created.
+The agent never places an order, submits payment, accepts terms, cancels, or refunds. Feedback never changes catalog, inventory, policy, or attribution. Current journeys use automatic opportunity observations plus evidence-linked feedback; a legacy capability-gap ability remains server-side for compatibility but is not publicly discoverable.
 
 Afterward, the merchant and agent work together on operations. They inspect the workflow timeline and business outcome, distinguish **Site observed**, **Agent reported**, and **Site verified** evidence, see missed demand or unsupported capabilities, and apply a reversible policy change.
 
@@ -50,6 +52,7 @@ Afterward, the merchant and agent work together on operations. They inspect the 
 - WooCommerce APIs and HPOS-safe CRUD handle catalog, cart, order, status, and refund state. Revenue is counted only from paid orders and always shows gross, refunds, and net by currency.
 - Public monitoring SQL is scoped to the current demo-session hash before rows are fetched. Persistent admin policy uses dedicated WordPress capabilities.
 - GPL-2.0-or-later source, original fictional products/artwork, checksummed plugin ZIP, Docker reproduction, and Playground portability bundle.
+- Pinned `webmcp-evals@0.0.4` schemas and natural-language fixtures, a keyless native Chrome smoke adapter that fails on application error envelopes, and provenance-bound model-report verification. Workbench, real-client, scanner, and directory checks remain explicit owner gates for the frozen public release.
 
 ## Impact
 

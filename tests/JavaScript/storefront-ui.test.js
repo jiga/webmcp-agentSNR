@@ -148,7 +148,7 @@ test( "a cart mutation revokes a previously prepared checkout handoff", () => {
 	const fixture = storefrontFixture();
 	const cartCount = fixture.root.querySelector( "[data-wmcp-cart-count]" );
 
-	render( fixture.window, "checkout_handoff", {
+	render( fixture.window, "prepare_checkout_handoff", {
 		cart: cart( "cart-rev-1" ),
 		checkout_url: "/checkout/",
 		message: "Review the cart and place the demo order yourself.",

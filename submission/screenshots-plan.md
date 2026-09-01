@@ -5,7 +5,7 @@ Ten real reference captures from the isolated exact-ZIP rehearsal are checked in
 Capture from the frozen hosted release at a consistent 1440×900 viewport. Do not composite or fabricate tool results.
 
 1. **Judge start** — one-line pitch, top-level/secure/API/manifest/Woo/session/ledger readiness, tool count, and prompt copy controls.
-2. **Agent Guide** — discoverable start point, five-step journey, human boundary, excluded data, and two-report feedback policy.
+2. **Agent Guide** — Guide 1.1 with seven-step shopper journey, co-browsing scope, zero Sensitive Actions, subtotal/final-total boundary, excluded data, and optional two-report feedback policy.
 3. **Missed demand** — zero IPX5 results under $100 and the site-observed opportunity receipt.
 4. **Agent feedback + handoff** — two IPX4 alternatives, HarborLite cart, linked agent-reported feedback, site measurements, and the human boundary.
 5. **Human order** — normal WooCommerce order confirmation using the no-charge gateway.

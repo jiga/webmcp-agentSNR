@@ -3,7 +3,7 @@
 The files under `submission/demo-screenshots/` are original 1440×900 captures from one isolated, exact-release local rehearsal. The matching guide, signal, feedback, workflow, product, order, measurement, and console evidence is recorded in `showcase-summary.json`.
 
 1. `01-agent-snr-overview.png` — public readiness and product overview.
-2. `02-agent-guide.png` — the versioned human/machine Agent Guide, read state, boundaries, privacy, triggers, and two-report policy.
+2. `02-agent-guide.png` — Agent Guide 1.1 with read state, co-browsing scope, seven shopper steps, zero sensitive tools, human/pricing/privacy boundaries, triggers, and optional two-report policy.
 3. `03-zero-result-opportunity.png` — the IPX5-under-$100 search with zero results and a server-confirmed Site observed signal.
 4. `04-agent-feedback-handoff.png` — HarborLite handoff plus Agent reported feedback, linked site evidence, verified product metrics, and pending order metrics.
 5. `05-human-order-confirmation.png` — real `$69.00` WooCommerce order using the no-charge demo gateway.

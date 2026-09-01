@@ -1,0 +1,144 @@
+[
+  {
+    "name": "Live shopper: recover constraints and prepare human checkout",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Start with this site's Agent Guide. Find an in-stock waterproof backpack under $100 with at least IPX5 protection. If none match and the result recommends feedback, optionally submit that bounded evidence-linked feedback before relaxing only the water rating to IPX4 and searching again. Compare the two best matches, verify the returns policy, read the current cart, add the compact option, and prepare checkout. Stop at the handoff: do not navigate, place an order, accept terms, submit customer data, or process payment. If the handoff result recommends optional feedback, submit only its bounded structured suggestion linked to evidence returned by this site."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_agent_guide",
+        "arguments": {},
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "search_products",
+        "arguments": {
+          "query": {
+            "$pattern": "(?i)backpack"
+          },
+          "max_price": {
+            "$lte": 100
+          },
+          "attributes": {
+            "water_rating": "IPX5"
+          },
+          "in_stock_only": true
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "report_agent_feedback",
+        "arguments": {
+          "outcome": "blocked",
+          "feedback_type": "missing_product",
+          "step": "discovery",
+          "reason_code": "zero_results",
+          "evidence_event_ids": {
+            "$type": "array"
+          },
+          "suggested_owner_action": "improve_product_coverage"
+        },
+        "result": {
+          "ok": true
+        },
+        "optional": true
+      },
+      {
+        "functionName": "search_products",
+        "arguments": {
+          "query": {
+            "$pattern": "(?i)backpack"
+          },
+          "max_price": {
+            "$lte": 100
+          },
+          "attributes": {
+            "water_rating": "IPX4"
+          },
+          "in_stock_only": true
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "compare_products",
+        "arguments": {
+          "product_ids": {
+            "$type": "array"
+          }
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "get_store_policy",
+        "arguments": {
+          "policy_type": "returns"
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "get_cart",
+        "arguments": {},
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "add_to_cart",
+        "arguments": {
+          "product_id": {
+            "$type": "number"
+          },
+          "quantity": 1,
+          "expected_cart_revision": {
+            "$pattern": "^cartrev_[a-f0-9]{24}$"
+          }
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "prepare_checkout_handoff",
+        "arguments": {
+          "expected_cart_revision": {
+            "$pattern": "^cartrev_[a-f0-9]{24}$"
+          }
+        },
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "functionName": "report_agent_feedback",
+        "arguments": {
+          "outcome": "success",
+          "feedback_type": "worked_well",
+          "step": "checkout_handoff",
+          "reason_code": "smooth_handoff",
+          "evidence_event_ids": {
+            "$type": "array"
+          },
+          "suggested_owner_action": "no_action"
+        },
+        "result": {
+          "ok": true
+        },
+        "optional": true
+      }
+    ]
+  }
+]

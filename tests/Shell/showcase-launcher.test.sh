@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 SHOWCASE="${REPO_DIR}/bin/start-showcase.sh"
+DEMO="${REPO_DIR}/bin/start-demo.sh"
 RUNTIME_ROOT="${REPO_DIR}/.release-test/showcase-runtime"
 ARTIFACTS_DIR="${RUNTIME_ROOT}/artifacts"
 STATE_FILE="${RUNTIME_ROOT}/active-artifact"
@@ -46,6 +47,9 @@ printf '%s\n' \
 chmod 700 "${TEST_ROOT}/bin/docker"
 
 bash -n "${SHOWCASE}"
+bash -n "${DEMO}"
+grep -Fq 'wp option update woocommerce_coming_soon no' "${DEMO}"
+grep -Fq 'wp option update woocommerce_store_pages_only no' "${DEMO}"
 
 help_output="$("${SHOWCASE}" help)"
 grep -Fq 'reset --confirm-agent-snr-showcase' <<< "${help_output}"

@@ -185,6 +185,12 @@ jobs:
           npm ci
           npx playwright install --with-deps chromium
 
+      - name: Run pinned native WebMCP discovery smoke against the exact ZIP
+        if: matrix.name == 'primary'
+        env:
+          WMCP_BASE_URL: http://localhost:18080
+        run: npm run test:webmcp:smoke
+
       - name: Run browser acceptance against the exact ZIP
         if: matrix.name == 'primary'
         env:

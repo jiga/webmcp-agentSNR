@@ -20,6 +20,8 @@ Include:
 
 - WebMCP annotations are hints, never authorization.
 - Only first-party catalog entries are exposable; third-party Abilities are not auto-published.
+- Public WebMCP discovery is scoped to top-level co-browsing: 12 storefront and 8 Agent SNR tools. Two legacy gap abilities remain registered with `wmcp.public=false` and are not included in manifests.
+- The catalog contains zero Sensitive Action tools. `prepare_checkout_handoff` reveals normal checkout but cannot navigate, submit customer data, accept terms, create or change an order, or process money.
 - Anonymous execution is available only in explicit server-side demo mode and is bound to one opaque browser session.
 - Persistent policies and site-wide analytics require dedicated WordPress capabilities and REST nonces.
 - Public session overrides may disable a storefront tool or clear that local override. They cannot re-enable a site-disabled tool or affect another session.
@@ -41,5 +43,6 @@ Demo session expiry is enforced on request. WP-Cron performs bounded garbage col
 - Apply `Origin-Agent-Cluster: ?1`, `Permissions-Policy: tools=(self)`, `Referrer-Policy: strict-origin-when-cross-origin`, and `X-Content-Type-Options: nosniff` consistently.
 - Keep session/manifest/execution/analytics responses `private, no-store` and prevent full-page caches from embedding session state.
 - Store environment secrets outside Git; rotate demo/admin credentials before public deployment.
+- Run the pinned native WebMCP smoke only against disposable loopback environments. Its runner refuses provider API keys; keep model-backed reports and Workbench logs private and sanitized.
 - Disable or sink outbound demo email and monitor PHP fatals and public health checks.
 - Back up before the submission freeze and verify all routes while logged out in an isolated browser profile.

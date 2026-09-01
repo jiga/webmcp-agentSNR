@@ -22,7 +22,7 @@ final class ToolName
     public const ADD_TO_CART = 'add_to_cart';
     public const REMOVE_FROM_CART = 'remove_from_cart';
     public const UPDATE_CART_QUANTITY = 'update_cart_quantity';
-    public const CHECKOUT_HANDOFF = 'checkout_handoff';
+    public const CHECKOUT_HANDOFF = 'prepare_checkout_handoff';
     public const REPORT_CAPABILITY_GAP = 'report_capability_gap';
     public const REPORT_AGENT_FEEDBACK = 'report_agent_feedback';
 
@@ -55,6 +55,21 @@ final class ToolName
             self::CHECKOUT_HANDOFF,
             self::REPORT_CAPABILITY_GAP,
             self::REPORT_AGENT_FEEDBACK,
+        );
+    }
+
+    /**
+     * Canonical storefront tools exposed through WebMCP discovery.
+     *
+     * @return list<string>
+     */
+    public static function storefrontPublic(): array
+    {
+        return array_values(
+            array_diff(
+                self::storefront(),
+                array(self::REPORT_CAPABILITY_GAP)
+            )
         );
     }
 

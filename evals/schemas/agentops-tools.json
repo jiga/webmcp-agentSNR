@@ -1,0 +1,608 @@
+{
+    "tools": [
+        {
+            "name": "get_agent_analytics_overview",
+            "description": "Read workflow, tool, commerce, attribution, and capability-gap totals for the authorized scope. Public demo results contain only this browser session.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "date_from": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive start date in YYYY-MM-DD format."
+                    },
+                    "date_to": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive end date in YYYY-MM-DD format."
+                    },
+                    "tool_name": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "description": "Canonical tool name to filter or govern."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "scope": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "workflows": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "tool_calls": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "commerce": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "revenue": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "capability_gaps": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "signals": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "policy_changes": {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                },
+                "required": [
+                    "scope",
+                    "workflows",
+                    "tool_calls",
+                    "commerce",
+                    "revenue",
+                    "capability_gaps",
+                    "signals",
+                    "policy_changes"
+                ]
+            }
+        },
+        {
+            "name": "get_agent_conversion_funnel",
+            "description": "Read the deterministic agent-commerce funnel for the authorized scope, including stage conversion, timing, and recorded exits. Public demo results contain only this browser session.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "date_from": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive start date in YYYY-MM-DD format."
+                    },
+                    "date_to": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive end date in YYYY-MM-DD format."
+                    },
+                    "tool_name": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "description": "Canonical tool name to filter or govern."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "scope": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "stages": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "workflow_count": {
+                        "type": "integer",
+                        "minimum": 0
+                    },
+                    "truncated": {
+                        "type": "boolean"
+                    },
+                    "value_definition": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "scope",
+                    "stages",
+                    "workflow_count",
+                    "truncated",
+                    "value_definition"
+                ]
+            }
+        },
+        {
+            "name": "query_agent_workflows",
+            "description": "List compact redacted workflow summaries for the authorized scope. Public demo results contain only this browser session and never include raw prompts or payloads.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "completed",
+                            "abandoned",
+                            "expired"
+                        ],
+                        "description": "Optional lifecycle status used to filter matching records."
+                    },
+                    "tool_name": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "description": "Canonical tool name to filter or govern."
+                    },
+                    "cursor": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Opaque pagination cursor returned by the preceding call."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 50,
+                        "default": 20,
+                        "description": "Maximum number of matching records to return."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "next_cursor": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "has_more": {
+                        "type": "boolean"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                },
+                "required": [
+                    "items",
+                    "next_cursor",
+                    "has_more",
+                    "limit"
+                ]
+            }
+        },
+        {
+            "name": "explain_agent_workflow",
+            "description": "Return a deterministic redacted timeline, first error, recovery, commerce outcome, attribution evidence, and capability gaps for one workflow in the authorized scope.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "workflow_id": {
+                        "type": "string",
+                        "pattern": "^[0-9A-HJKMNP-TV-Z]{26}$",
+                        "description": "ULID of one workflow in the authorized session scope."
+                    }
+                },
+                "required": [
+                    "workflow_id"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "workflow": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "explanation": {
+                        "type": "string"
+                    },
+                    "first_problem": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    },
+                    "recovery": {
+                        "type": [
+                            "object",
+                            "null"
+                        ]
+                    },
+                    "commerce_outcome": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "capability_gaps": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "opportunity_signals": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "agent_feedback": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "timeline": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "truncated": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "workflow",
+                    "explanation",
+                    "first_problem",
+                    "recovery",
+                    "commerce_outcome",
+                    "capability_gaps",
+                    "opportunity_signals",
+                    "agent_feedback",
+                    "timeline",
+                    "truncated"
+                ]
+            }
+        },
+        {
+            "name": "get_tool_health",
+            "description": "Read per-tool calls, outcomes, latency, errors, commerce contribution, attribution, and policy state for the authorized scope.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "date_from": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive start date in YYYY-MM-DD format."
+                    },
+                    "date_to": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive end date in YYYY-MM-DD format."
+                    },
+                    "tool_name": {
+                        "type": "string",
+                        "maxLength": 128,
+                        "description": "Canonical tool name to filter or govern."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "truncated": {
+                        "type": "boolean"
+                    },
+                    "event_cap": {
+                        "type": "integer",
+                        "minimum": 1
+                    }
+                },
+                "required": [
+                    "items",
+                    "truncated",
+                    "event_cap"
+                ]
+            }
+        },
+        {
+            "name": "get_opportunity_signals",
+            "description": "Use for unified operator analysis of demand, inventory, capability, and experience signals. This read keeps agent testimony separate from site-observed evidence and changes no state.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "category": {
+                        "type": "string",
+                        "enum": [
+                            "demand_gap",
+                            "inventory_gap",
+                            "capability_gap",
+                            "experience_friction",
+                            "worked_well"
+                        ],
+                        "description": "Opportunity category to include in the result."
+                    },
+                    "source": {
+                        "type": "string",
+                        "enum": [
+                            "site_observed",
+                            "agent_reported"
+                        ],
+                        "description": "Evidence source to include: site-observed or agent-reported."
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "open",
+                            "planned",
+                            "resolved",
+                            "dismissed"
+                        ],
+                        "description": "Optional lifecycle status used to filter matching records."
+                    },
+                    "date_from": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive start date in YYYY-MM-DD format."
+                    },
+                    "date_to": {
+                        "type": "string",
+                        "format": "date",
+                        "description": "Optional inclusive end date in YYYY-MM-DD format."
+                    },
+                    "cursor": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "description": "Opaque pagination cursor returned by the preceding call."
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 8,
+                        "default": 8,
+                        "description": "Maximum number of matching records to return."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "scope": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "items": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "next_cursor": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "has_more": {
+                        "type": "boolean"
+                    },
+                    "limit": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "truncated": {
+                        "type": "boolean"
+                    }
+                },
+                "required": [
+                    "scope",
+                    "items",
+                    "next_cursor",
+                    "has_more",
+                    "limit",
+                    "truncated"
+                ]
+            }
+        },
+        {
+            "name": "run_webmcp_diagnostics",
+            "description": "Run read-only compatibility checks for browser context, manifest, REST, session isolation, WordPress, WooCommerce, HPOS, and database readiness without exposing secrets.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "checks": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "manifest",
+                                "rest",
+                                "session",
+                                "woocommerce",
+                                "hpos",
+                                "database",
+                                "headers"
+                            ]
+                        },
+                        "maxItems": 7,
+                        "uniqueItems": true,
+                        "description": "Read-only diagnostic checks to run; omit to run all checks."
+                    }
+                }
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "plugin_version": {
+                        "type": "string"
+                    },
+                    "schema_version": {
+                        "type": "string"
+                    },
+                    "wordpress_version": {
+                        "type": "string"
+                    },
+                    "php_version": {
+                        "type": "string"
+                    },
+                    "checks": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "browser_checks_required": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "required": [
+                    "plugin_version",
+                    "schema_version",
+                    "wordpress_version",
+                    "php_version",
+                    "checks",
+                    "browser_checks_required"
+                ]
+            }
+        },
+        {
+            "name": "set_tool_enabled",
+            "description": "Disable a storefront tool for only this demo session, or clear that session override. This cannot change site policy, enable a site-disabled tool, or affect another browser.",
+            "inputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "tool_name": {
+                        "type": "string",
+                        "enum": [
+                            "get_storefront_context",
+                            "get_agent_guide",
+                            "search_products",
+                            "get_product",
+                            "compare_products",
+                            "get_store_policy",
+                            "get_cart",
+                            "add_to_cart",
+                            "remove_from_cart",
+                            "update_cart_quantity",
+                            "prepare_checkout_handoff",
+                            "report_agent_feedback"
+                        ],
+                        "description": "Canonical tool name to filter or govern."
+                    },
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "False restricts the tool for this session; true clears that override."
+                    },
+                    "scope": {
+                        "type": "string",
+                        "enum": [
+                            "demo_session"
+                        ],
+                        "description": "Required governance scope; only this demo session is supported."
+                    },
+                    "reason": {
+                        "type": "string",
+                        "minLength": 3,
+                        "maxLength": 300,
+                        "description": "Short operator reason recorded with the session-only change."
+                    }
+                },
+                "required": [
+                    "tool_name",
+                    "enabled",
+                    "scope",
+                    "reason"
+                ]
+            },
+            "outputSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "tool_name": {
+                        "type": "string"
+                    },
+                    "before": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "after": {
+                        "type": "object",
+                        "additionalProperties": true
+                    },
+                    "requested_enabled": {
+                        "type": "boolean"
+                    },
+                    "scope": {
+                        "type": "string"
+                    },
+                    "effective_revision": {
+                        "type": "string"
+                    },
+                    "session_policy_revision": {
+                        "type": "string"
+                    },
+                    "actor_type": {
+                        "type": "string"
+                    },
+                    "audit_event_id": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "tool_name",
+                    "before",
+                    "after",
+                    "requested_enabled",
+                    "scope",
+                    "effective_revision",
+                    "session_policy_revision",
+                    "actor_type",
+                    "audit_event_id"
+                ]
+            }
+        }
+    ]
+}

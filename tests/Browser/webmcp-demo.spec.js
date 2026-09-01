@@ -4,7 +4,6 @@ const BASE_URL = process.env.WMCP_BASE_URL || "http://localhost:18080";
 
 const STOREFRONT_TOOLS = [
 	"add_to_cart",
-	"checkout_handoff",
 	"compare_products",
 	"get_agent_guide",
 	"get_cart",
@@ -13,7 +12,7 @@ const STOREFRONT_TOOLS = [
 	"get_storefront_context",
 	"remove_from_cart",
 	"report_agent_feedback",
-	"report_capability_gap",
+	"prepare_checkout_handoff",
 	"search_products",
 	"update_cart_quantity",
 ];
@@ -22,7 +21,6 @@ const AGENTOPS_TOOLS = [
 	"explain_agent_workflow",
 	"get_agent_analytics_overview",
 	"get_agent_conversion_funnel",
-	"get_capability_gaps",
 	"get_opportunity_signals",
 	"get_tool_health",
 	"query_agent_workflows",
@@ -203,6 +201,20 @@ async function activeToolNames( page ) {
 	return page.evaluate( () => Array.from( globalThis.__wmcpBrowserTest.activeTools.keys() ).sort() );
 }
 
+function schemaParameters( schema, path = [] ) {
+	if ( ! schema || typeof schema !== "object" || Array.isArray( schema ) ) {
+		return [];
+	}
+
+	const parameters = [];
+	for ( const [ name, definition ] of Object.entries( schema.properties || {} ) ) {
+		parameters.push( { definition, name, path: [ ...path, name ].join( "." ) } );
+		parameters.push( ...schemaParameters( definition, [ ...path, name ] ) );
+	}
+
+	return parameters;
+}
+
 async function resetCurrentSession( page ) {
 	if ( page.isClosed() || ! page.url().startsWith( "http" ) ) {
 		return;
@@ -298,7 +310,7 @@ async function prepareCheckout( page ) {
 	expect( cart.ok ).toBe( true );
 	expect( cart.result.item_count ).toBeGreaterThan( 0 );
 
-	const handoff = await executeActiveTool( page, "checkout_handoff", {
+	const handoff = await executeActiveTool( page, "prepare_checkout_handoff", {
 		expected_cart_revision: cart.result.cart_revision,
 	} );
 	expect( handoff.ok ).toBe( true );
@@ -397,6 +409,7 @@ test( "registers every storefront and Agent SNR tool with standard imperative fi
 		expect( registrations.map( ( item ) => item.name ).sort() ).toEqual( [ ...surface.expected ].sort() );
 
 		for ( const registration of registrations ) {
+			expect( registration.name.length ).toBeLessThanOrEqual( 30 );
 			expect( registration.definitionKeys ).toEqual( [
 				"annotations",
 				"description",
@@ -419,6 +432,17 @@ test( "registers every storefront and Agent SNR tool with standard imperative fi
 				readOnlyHint: expect.any( Boolean ),
 				untrustedContentHint: expect.any( Boolean ),
 			} );
+			for ( const parameter of schemaParameters( registration.inputSchema ) ) {
+				expect( parameter.name.length, `${ registration.name }.${ parameter.path } name budget` ).toBeLessThanOrEqual( 30 );
+				expect( parameter.definition.description, `${ registration.name }.${ parameter.path } description` ).toEqual( expect.any( String ) );
+				expect( parameter.definition.description.length, `${ registration.name }.${ parameter.path } description budget` ).toBeGreaterThan( 0 );
+				expect( parameter.definition.description.length, `${ registration.name }.${ parameter.path } description budget` ).toBeLessThanOrEqual( 150 );
+			}
+		}
+
+		if ( surface.path === "/agentops-demo/" ) {
+			await expect( page.locator( "[data-policy-tool]" ) ).toHaveCount( STOREFRONT_TOOLS.length );
+			await expect( page.locator( '[data-policy-tool="report_capability_gap"]' ) ).toHaveCount( 0 );
 		}
 	}
 } );
@@ -439,7 +463,7 @@ test( "executes search, cart, and checkout handoff through registered callbacks"
 	expect( cart.ok ).toBe( true );
 	expect( cart.result.item_count ).toBe( 1 );
 
-	const handoff = await executeActiveTool( page, "checkout_handoff", {
+	const handoff = await executeActiveTool( page, "prepare_checkout_handoff", {
 		expected_cart_revision: cart.result.cart_revision,
 	} );
 	expect( handoff.ok ).toBe( true );
@@ -568,20 +592,20 @@ test( "manually loads current-session storefront evidence into Agent SNR", async
 	await waitForRuntime( page, STOREFRONT_TOOLS.length );
 
 	const search = await executeActiveTool( page, "search_products", {
+		attributes: { water_rating: "IPX5" },
 		in_stock_only: true,
 		limit: 4,
-		max_price: 120,
+		max_price: 100,
 		query: "waterproof backpack",
 	} );
 	expect( search.ok ).toBe( true );
 
-	const gap = await executeActiveTool( page, "report_capability_gap", {
-		context: { color: "blue" },
-		related_product_id: search.result.products[ 0 ].id,
-		requested_capability: "back_in_stock_notification",
-		user_goal: "Notify the shopper when the blue version is back in stock.",
+	expect( search.result.result_count ).toBe( 0 );
+	expect( search.result.opportunity_signal ).toMatchObject( {
+		evidence_status: "verified",
+		signal_code: "zero_results",
+		source: "site_observed",
 	} );
-	expect( gap.ok ).toBe( true );
 
 	await page.goto( "/agentops-demo/" );
 	await expect( page ).toHaveTitle( /Agent SNR/ );
@@ -596,7 +620,7 @@ test( "manually loads current-session storefront evidence into Agent SNR", async
 		.toBeGreaterThan( 0 );
 	await expect( page.locator( "[data-wmcp-workflows] [data-explain-workflow]" ).first() ).toBeVisible();
 	await expect( page.locator( "[data-wmcp-tool-health]" ) ).toContainText( "search_products" );
-	await expect( page.locator( "[data-wmcp-gaps]" ) ).toContainText( /back-in-stock notification/i );
+	await expect( page.locator( "[data-wmcp-gaps]" ) ).toContainText( /zero_results/i );
 	await expect
 		.poll( async () => Number.parseInt( await page.locator( '[data-funnel-stage="product_search"] [data-funnel-count]' ).textContent(), 10 ) )
 		.toBeGreaterThan( 0 );
@@ -611,8 +635,25 @@ test( "discovers the guide, records missed demand, and separates agent feedback 
 	await expect( page.locator( "[data-wmcp-guide-status]" ) ).toHaveText( "Start here" );
 	const guide = await executeActiveTool( page, "get_agent_guide", {} );
 	expect( guide.ok ).toBe( true );
-	expect( guide.result.version ).toBe( "1.0" );
+	expect( guide.result.version ).toBe( "1.1" );
+	expect( guide.result.execution ).toMatchObject( {
+		supported_mode: "top_level_co_browsing",
+		unattended_remote_execution: "unsupported",
+	} );
+	expect( guide.result.sensitive_actions ).toMatchObject( { tool_count: 0, tools: [] } );
+	expect( guide.result.pricing_boundary ).toMatchObject( {
+		before_checkout: "cart_subtotal_or_estimate",
+		final_total_at: "human_checkout",
+	} );
+	expect( guide.result.feedback.optional ).toBe( true );
+	expect( guide.result.supported_journeys.map( ( journey ) => journey.id ) ).toEqual( [
+		"evidence_first_purchase",
+		"agent_outcome_monitoring",
+	] );
 	await expect( page.locator( "[data-wmcp-guide-status]" ) ).toHaveText( "Read by agent" );
+	await expect( page.locator( "[data-wmcp-guide-boundaries]" ) ).toContainText( "Top-level co-browsing supported" );
+	await expect( page.locator( "[data-wmcp-guide-boundaries]" ) ).toContainText( "0 WebMCP tools" );
+	await expect( page.locator( "[data-wmcp-guide-boundaries]" ) ).toContainText( "final tax, shipping, fees, and total" );
 
 	const zero = await executeActiveTool( page, "search_products", {
 		attributes: { water_rating: "IPX5" },
@@ -649,7 +690,7 @@ test( "discovers the guide, records missed demand, and separates agent feedback 
 		product_id: harborLite.id,
 		quantity: 1,
 	} );
-	const handoff = await executeActiveTool( page, "checkout_handoff", {
+	const handoff = await executeActiveTool( page, "prepare_checkout_handoff", {
 		expected_cart_revision: add.result.cart.cart_revision,
 	} );
 	const feedback = await executeActiveTool( page, "report_agent_feedback", {

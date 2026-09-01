@@ -25,16 +25,18 @@ final class ToolCatalogTest extends TestCase
         self::assertSame(array_keys($definitions), array_values(array_unique(array_keys($definitions))));
 
         foreach ($definitions as $name => $definition) {
-            self::assertMatchesRegularExpression('/\A[A-Za-z0-9_.-]{1,128}\z/', $name);
+            self::assertMatchesRegularExpression('/\A[A-Za-z0-9_.-]{1,30}\z/', $name);
             self::assertSame($name, $definition['name']);
             self::assertMatchesRegularExpression(
                 '/\A[a-z0-9-]+\/[a-z0-9-]+\z/',
                 $definition['ability_id']
             );
             self::assertLessThanOrEqual(500, strlen((string) $definition['description']));
+            self::assertIsBool($definition['discoverable']);
             self::assertContains($definition['risk_class'], RiskClass::all());
             self::assertSame('object', $definition['input_schema']['type']);
             self::assertFalse($definition['input_schema']['additionalProperties']);
+            $this->assert_input_property_contracts($definition['input_schema']);
             self::assertLessThanOrEqual(8192, $definition['max_input_bytes']);
             self::assertLessThanOrEqual(8192, $definition['max_output_bytes']);
         }
@@ -52,6 +54,34 @@ final class ToolCatalogTest extends TestCase
             ToolName::agentops(),
             array_column($catalog->surface('agentops'), 'name')
         );
+    }
+
+    public function test_public_surfaces_hide_only_legacy_gap_abilities(): void
+    {
+        $catalog = new ToolCatalog();
+
+        self::assertCount(13, $catalog->surface('storefront'));
+        self::assertCount(12, $catalog->public_surface('storefront'));
+        self::assertCount(9, $catalog->surface('agentops'));
+        self::assertCount(8, $catalog->public_surface('agentops'));
+
+        self::assertFalse($catalog->find(ToolName::REPORT_CAPABILITY_GAP)['discoverable']);
+        self::assertFalse($catalog->find(ToolName::GET_CAPABILITY_GAPS)['discoverable']);
+        self::assertNotContains(
+            ToolName::REPORT_CAPABILITY_GAP,
+            array_column($catalog->public_surface('storefront'), 'name')
+        );
+        self::assertNotContains(
+            ToolName::GET_CAPABILITY_GAPS,
+            array_column($catalog->public_surface('agentops'), 'name')
+        );
+
+        foreach ($catalog->public_surface('storefront') as $definition) {
+            self::assertTrue($definition['discoverable']);
+        }
+        foreach ($catalog->public_surface('agentops') as $definition) {
+            self::assertTrue($definition['discoverable']);
+        }
     }
 
     public function test_explain_workflow_keeps_standard_output_ceiling(): void
@@ -80,6 +110,8 @@ final class ToolCatalogTest extends TestCase
         self::assertArrayHasKey('expected_cart_revision', $add['input_schema']['properties']);
 
         self::assertNotNull($checkout);
+        self::assertSame('prepare_checkout_handoff', $checkout['name']);
+        self::assertNull($catalog->find('checkout_handoff'));
         self::assertSame(array('expected_cart_revision'), $checkout['input_schema']['required']);
         self::assertArrayHasKey('expected_cart_revision', $checkout['input_schema']['properties']);
         self::assertArrayNotHasKey('acknowledge_human_review', $checkout['input_schema']['properties']);
@@ -100,6 +132,11 @@ final class ToolCatalogTest extends TestCase
         self::assertContains('version', $guide['output_schema']['required']);
         self::assertArrayHasKey('version', $guide['output_schema']['properties']);
         self::assertArrayNotHasKey('guide_version', $guide['output_schema']['properties']);
+        self::assertArrayHasKey('execution', $guide['output_schema']['properties']);
+        self::assertArrayHasKey('trust', $guide['output_schema']['properties']);
+        self::assertArrayHasKey('sensitive_actions', $guide['output_schema']['properties']);
+        self::assertArrayHasKey('pricing_boundary', $guide['output_schema']['properties']);
+        $this->assert_strict_object_schemas($guide['output_schema']);
 
         self::assertNotNull($feedback);
         self::assertSame(RiskClass::TELEMETRY_WRITE, $feedback['risk_class']);
@@ -139,6 +176,14 @@ final class ToolCatalogTest extends TestCase
             array('demo_session'),
             $definition['input_schema']['properties']['scope']['enum']
         );
+        self::assertSame(
+            ToolName::storefrontPublic(),
+            $definition['input_schema']['properties']['tool_name']['enum']
+        );
+        self::assertNotContains(
+            ToolName::REPORT_CAPABILITY_GAP,
+            $definition['input_schema']['properties']['tool_name']['enum']
+        );
     }
 
     public function test_empty_object_input_omits_array_shaped_properties(): void
@@ -151,5 +196,54 @@ final class ToolCatalogTest extends TestCase
             '{"type":"object","additionalProperties":false}',
             json_encode($definition['input_schema'], JSON_UNESCAPED_SLASHES)
         );
+    }
+
+    /** @param array<string, mixed> $schema Input JSON Schema. */
+    private function assert_input_property_contracts(array $schema): void
+    {
+        if (isset($schema['properties']) && is_array($schema['properties'])) {
+            foreach ($schema['properties'] as $name => $property) {
+                self::assertIsString($name);
+                self::assertLessThanOrEqual(30, strlen($name), 'Input property name exceeds 30 characters.');
+                self::assertIsArray($property);
+                self::assertArrayHasKey('description', $property, 'Missing description for input property ' . $name);
+                self::assertNotSame('', trim((string) $property['description']));
+                self::assertLessThanOrEqual(
+                    150,
+                    strlen((string) $property['description']),
+                    'Input property description exceeds 150 characters for ' . $name
+                );
+                $this->assert_input_property_contracts($property);
+            }
+        }
+
+        if (isset($schema['items']) && is_array($schema['items'])) {
+            $this->assert_input_property_contracts($schema['items']);
+        }
+
+        if (isset($schema['additionalProperties']) && is_array($schema['additionalProperties'])) {
+            $this->assert_input_property_contracts($schema['additionalProperties']);
+        }
+    }
+
+    /** @param array<string, mixed> $schema Output JSON Schema. */
+    private function assert_strict_object_schemas(array $schema): void
+    {
+        if ('object' === ($schema['type'] ?? null)) {
+            self::assertArrayHasKey('additionalProperties', $schema);
+            self::assertFalse($schema['additionalProperties']);
+        }
+
+        if (isset($schema['properties']) && is_array($schema['properties'])) {
+            foreach ($schema['properties'] as $property) {
+                if (is_array($property)) {
+                    $this->assert_strict_object_schemas($property);
+                }
+            }
+        }
+
+        if (isset($schema['items']) && is_array($schema['items'])) {
+            $this->assert_strict_object_schemas($schema['items']);
+        }
     }
 }

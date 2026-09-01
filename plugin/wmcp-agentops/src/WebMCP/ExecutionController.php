@@ -894,7 +894,7 @@ final class ExecutionController
             'get_store_policy' => 'policy_viewed',
             'get_cart' => 'cart_read',
             'add_to_cart', 'remove_from_cart', 'update_cart_quantity' => 'cart_changed',
-            'checkout_handoff' => 'checkout_ready',
+            'prepare_checkout_handoff' => 'checkout_ready',
             'report_capability_gap' => 'capability_gap_recorded',
             'report_agent_feedback' => 'agent_feedback_recorded',
             'get_agent_guide' => 'agent_guide_loaded',

@@ -1,0 +1,112 @@
+[
+  {
+    "name": "Agent SNR smoke: read the analytics overview",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Summarize this session's agent activity."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_agent_analytics_overview",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "name": "Agent SNR smoke: read the conversion funnel",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Show the agent commerce funnel for this session."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_agent_conversion_funnel",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "name": "Agent SNR smoke: list workflows",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "List recent agent workflows."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "query_agent_workflows",
+        "arguments": {
+          "limit": 5
+        }
+      }
+    ]
+  },
+  {
+    "name": "Agent SNR smoke: read tool health",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Show current WebMCP tool health."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_tool_health",
+        "arguments": {}
+      }
+    ]
+  },
+  {
+    "name": "Agent SNR smoke: read unified opportunity signals",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Show the latest opportunity signals from this session."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "get_opportunity_signals",
+        "arguments": {
+          "limit": 5
+        }
+      }
+    ]
+  },
+  {
+    "name": "Agent SNR smoke: run safe diagnostics",
+    "messages": [
+      {
+        "role": "user",
+        "type": "message",
+        "content": "Run all safe compatibility diagnostics."
+      }
+    ],
+    "expectedCall": [
+      {
+        "functionName": "run_webmcp_diagnostics",
+        "arguments": {
+          "checks": [
+            "manifest",
+            "rest",
+            "session",
+            "woocommerce",
+            "hpos",
+            "database",
+            "headers"
+          ]
+        }
+      }
+    ]
+  }
+]

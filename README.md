@@ -41,6 +41,12 @@ flowchart LR
 
 The browser runtime uses the current imperative API, `document.modelContext.registerTool()`. WordPress Abilities remain the canonical server-side registry; a narrow same-origin REST gateway adds anonymous demo-session authorization, policy, idempotency, rate limiting, and the workflow ledger.
 
+## Standards status and external validation
+
+WebMCP is a proposed browser API and [W3C Community Group draft](https://webmachinelearning.github.io/webmcp/), not a W3C Recommendation. Agent SNR targets the current imperative API and follows the official Chrome guidance for [workflow design](https://developer.chrome.com/docs/ai/webmcp/build-tools), [evals](https://developer.chrome.com/docs/ai/webmcp/evals), and [tool security](https://developer.chrome.com/docs/ai/webmcp/secure-tools). The accepted journey, trust, failure, and evidence contract is in [submission/webmcp-readiness-design.md](submission/webmcp-readiness-design.md).
+
+Validation is intentionally layered: deterministic repository tests; pinned GoogleChromeLabs WebMCP Evals smoke and protected model-backed runs documented in [evals/README.md](evals/README.md); a real-client [Workbench 1.2.1 evidence sheet](submission/workbench-validation.md); then the [WebMCP.com scanner/API and human listing handoff](submission/webmcp-directory-listing.md) against the frozen public release. The external Workbench, hosted scanner, directory, and real ChatGPT/Chrome checks remain explicit owner gates until their templates contain actual results.
+
 ## Judge prompts
 
 Shopper:
@@ -205,7 +211,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The prepared repository passes 91 JavaScript tests, 102 PHP tests / 858 assertions on PHP 8.1 and 8.4, and 15 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, real classic checkout, cross-tab cart synchronization, and bounded replay. The 22-tool REST/security smoke, Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, and Playground execution also pass. Official Plugin Check reports zero errors; its reviewed warnings are documented in [submission/verification-report.md](submission/verification-report.md).
+The prepared repository passes 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, and 15 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, real classic checkout, cross-tab cart synchronization, and bounded replay. The REST/security smoke covers 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passes 11/11 calls; the Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, and Playground execution also pass. Official Plugin Check reports zero errors; its reviewed warnings are documented in [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

@@ -106,7 +106,7 @@ final class DiagnosticsService
         $catalog  = $this->catalog ?? new ToolCatalog();
         $policies = $this->policies ?? new PolicyStore();
         $count    = 0;
-        foreach ($catalog->surface($surface) as $definition) {
+        foreach ($catalog->public_surface($surface) as $definition) {
             if ($definition['requires_woocommerce'] && ! class_exists('WooCommerce')) {
                 continue;
             }

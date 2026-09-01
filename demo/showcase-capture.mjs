@@ -17,8 +17,8 @@ const OUTPUT_DIR = path.resolve(
 	process.env.WMCP_SHOWCASE_OUTPUT || "submission/demo-screenshots"
 );
 
-const STOREFRONT_TOOL_COUNT = 13;
-const AGENT_SNR_TOOL_COUNT = 9;
+const STOREFRONT_TOOL_COUNT = 12;
+const AGENT_SNR_TOOL_COUNT = 8;
 const SHOWCASE_CREDENTIALS_FILE = path.resolve(
 	process.env.WMCP_SHOWCASE_CREDENTIALS_FILE || ".release-test/showcase-runtime/operator-credentials"
 );
@@ -249,7 +249,7 @@ async function runShowcase( browser, outputDirectory ) {
 		product_id: harborLite.id,
 		quantity: 1,
 	} );
-	const handoff = await callTool( page, "checkout_handoff", {
+	const handoff = await callTool( page, "prepare_checkout_handoff", {
 		expected_cart_revision: add.result.cart.cart_revision,
 	} );
 	const feedback = await callTool( page, "report_agent_feedback", {

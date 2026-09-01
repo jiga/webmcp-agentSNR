@@ -3,6 +3,7 @@
 /.phpunit.result.cache
 /.playwright/
 /.playwright-cli/
+/.evals/
 /.release-test/
 /playwright-report/
 /test-results/

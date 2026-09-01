@@ -112,9 +112,11 @@ STOREFRONT_MANIFEST="${SMOKE_TEMP_DIR}/storefront.json"
 AGENTOPS_MANIFEST="${SMOKE_TEMP_DIR}/agentops.json"
 fetch_manifest storefront "${STOREFRONT_MANIFEST}"
 jq -e '
-  ([.tools[].name] | length) == 13
+  ([.tools[].name] | length) == 12
   and ([.tools[].name] | index("get_agent_guide")) != null
   and ([.tools[].name] | index("report_agent_feedback")) != null
+  and ([.tools[].name] | index("report_capability_gap")) == null
+  and ([.tools[].name] | index("prepare_checkout_handoff")) != null
   and ([.tools[].name] | index("search_products")) != null
   and .cart.item_count == 0
 ' "${STOREFRONT_MANIFEST}" >/dev/null
@@ -136,9 +138,9 @@ test "${BAD_CSRF_STATUS}" = "403"
 jq -e '.error.code == "csrf_invalid"' "${SMOKE_TEMP_DIR}/csrf-denied.json" >/dev/null
 
 invoke_tool "${STOREFRONT_MANIFEST}" get_storefront_context '{}' "${SMOKE_TEMP_DIR}/context.json"
-jq -e '.result.agent_guide == {available:true,tool:"get_agent_guide",version:"1.0",start_here:true}' "${SMOKE_TEMP_DIR}/context.json" >/dev/null
+jq -e '.result.agent_guide == {available:true,tool:"get_agent_guide",version:"1.1",start_here:true}' "${SMOKE_TEMP_DIR}/context.json" >/dev/null
 invoke_tool "${STOREFRONT_MANIFEST}" get_agent_guide '{}' "${SMOKE_TEMP_DIR}/guide.json"
-jq -e '.result.version == "1.0" and .result.feedback.max_reports_per_workflow == 2' "${SMOKE_TEMP_DIR}/guide.json" >/dev/null
+jq -e '.result.version == "1.1" and .result.feedback.max_reports_per_workflow == 2' "${SMOKE_TEMP_DIR}/guide.json" >/dev/null
 invoke_tool "${STOREFRONT_MANIFEST}" search_products \
   '{"query":"waterproof backpack","max_price":100,"attributes":{"water_rating":"IPX5"},"in_stock_only":true,"limit":8}' \
   "${SMOKE_TEMP_DIR}/zero-search.json"
@@ -189,14 +191,14 @@ STALE_CART_STATUS="$(curl --silent --show-error --output "${SMOKE_TEMP_DIR}/stal
   --header "Origin: ${BASE_URL}" --header 'Content-Type: application/json' \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${STOREFRONT_MANIFEST}")" \
   --data-binary "${STALE_CART_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/checkout_handoff")"
+  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/prepare_checkout_handoff")"
 test "${STALE_CART_STATUS}" = "409"
 jq -e '.error.code == "stale_cart_revision"' "${SMOKE_TEMP_DIR}/stale-cart.json" >/dev/null
 invoke_tool "${STOREFRONT_MANIFEST}" report_capability_gap \
   "{\"requested_capability\":\"back_in_stock_notification\",\"user_goal\":\"Notify the shopper when the blue option is available.\",\"related_product_id\":${PRODUCT_ID},\"context\":{\"color\":\"blue\"}}" \
   "${SMOKE_TEMP_DIR}/gap.json"
 jq -e '.result.recorded == true and .result.fulfilled == false' "${SMOKE_TEMP_DIR}/gap.json" >/dev/null
-invoke_tool "${STOREFRONT_MANIFEST}" checkout_handoff \
+invoke_tool "${STOREFRONT_MANIFEST}" prepare_checkout_handoff \
   "{\"expected_cart_revision\":\"$(jq -r '.result.cart_revision' "${SMOKE_TEMP_DIR}/cart.json")\"}" \
   "${SMOKE_TEMP_DIR}/handoff.json"
 jq -e '.result.checkout_url | contains("/checkout/")' "${SMOKE_TEMP_DIR}/handoff.json" >/dev/null
@@ -251,7 +253,7 @@ test "${CONFLICT_STATUS}" = "409"
 jq -e '.error.code == "request_id_conflict"' "${SMOKE_TEMP_DIR}/request-conflict.json" >/dev/null
 
 fetch_manifest agentops "${AGENTOPS_MANIFEST}"
-jq -e '([.tools[].name] | length) == 9 and ([.tools[].name] | index("get_opportunity_signals")) != null and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
+jq -e '([.tools[].name] | length) == 8 and ([.tools[].name] | index("get_capability_gaps")) == null and ([.tools[].name] | index("get_opportunity_signals")) != null and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
 invoke_tool "${AGENTOPS_MANIFEST}" get_agent_analytics_overview '{}' "${SMOKE_TEMP_DIR}/overview.json"
 jq -e '.result.workflows.total >= 1 and .result.tool_calls.total >= 1 and .result.capability_gaps.requests >= 1' "${SMOKE_TEMP_DIR}/overview.json" >/dev/null
 invoke_tool "${AGENTOPS_MANIFEST}" get_opportunity_signals '{}' "${SMOKE_TEMP_DIR}/signals.json"
@@ -320,4 +322,4 @@ jq -e '.cart.item_count == 0' "${SMOKE_TEMP_DIR}/after-reset.json" >/dev/null
 invoke_tool "${SMOKE_TEMP_DIR}/after-reset.json" get_cart '{}' "${SMOKE_TEMP_DIR}/reset-cart.json"
 jq -e '.result.item_count == 0' "${SMOKE_TEMP_DIR}/reset-cart.json" >/dev/null
 
-echo "Smoke tests passed: pages, 22-tool catalogs, guide, observed opportunities, agent feedback, shopper flow, analytics, governance, server denial, and isolated reset."
+echo "Smoke tests passed: pages, 20-tool public discovery, two legacy compatibility abilities, guide, observed opportunities, agent feedback, shopper flow, analytics, governance, server denial, and isolated reset."

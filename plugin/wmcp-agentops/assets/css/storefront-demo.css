@@ -173,7 +173,7 @@
 
 .wmcp-agent-guide > ol {
 	display: grid;
-	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -188,8 +188,13 @@
 	padding: 28px 18px;
 }
 
+.wmcp-agent-guide > ol li[data-guide-effect="action"],
 .wmcp-agent-guide > ol li[data-guide-effect="reversible_session_write"] {
 	background: var(--wmcp-forest);
+}
+
+.wmcp-agent-guide > ol li[data-guide-effect="telemetry"] {
+	background: #253c32;
 }
 
 .wmcp-agent-guide > ol li[data-guide-effect="human_checkpoint"] {
