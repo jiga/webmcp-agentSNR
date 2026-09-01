@@ -22,6 +22,7 @@ use WPWebMCP\AgentOps\Contract\EventName;
 use WPWebMCP\AgentOps\Contract\Versions;
 use WPWebMCP\AgentOps\Demo\DemoMode;
 use WPWebMCP\AgentOps\Demo\DemoSession;
+use WPWebMCP\AgentOps\Guidance\AgentGuide;
 use WPWebMCP\AgentOps\Policy\PolicyEngine;
 use WPWebMCP\AgentOps\Policy\RateLimiter;
 use WPWebMCP\AgentOps\Support\Json;
@@ -42,7 +43,8 @@ final class ExecutionController
         private readonly WorkflowService $workflows,
         private readonly EventRecorder $events,
         private readonly IdempotencyStore $idempotency,
-        private readonly RestResponseFactory $responses
+        private readonly RestResponseFactory $responses,
+        private readonly ?AgentGuide $guide = null
     ) {
     }
 
@@ -426,7 +428,9 @@ final class ExecutionController
                 'result'            => $result,
                 'evidence'          => isset($result['evidence']) && is_array($result['evidence']) ? $result['evidence'] : array(),
                 'ui'                => array('event' => $this->ui_event($tool_name), 'revision' => $revision),
-                'next_actions'      => array(),
+                'next_actions'      => null === $this->guide
+                    ? array()
+                    : $this->guide->next_actions($tool_name, $result, (string) $terminal['event_id']),
             );
         } catch (Throwable $exception) {
             return $this->post_execution_failure_response(
@@ -892,10 +896,12 @@ final class ExecutionController
             'add_to_cart', 'remove_from_cart', 'update_cart_quantity' => 'cart_changed',
             'checkout_handoff' => 'checkout_ready',
             'report_capability_gap' => 'capability_gap_recorded',
+            'report_agent_feedback' => 'agent_feedback_recorded',
+            'get_agent_guide' => 'agent_guide_loaded',
             'set_tool_enabled' => 'manifest_invalidated',
             default => str_starts_with($tool_name, 'get_agent_') || in_array(
                 $tool_name,
-                array('query_agent_workflows', 'explain_agent_workflow', 'get_tool_health', 'get_capability_gaps'),
+                array('query_agent_workflows', 'explain_agent_workflow', 'get_tool_health', 'get_capability_gaps', 'get_opportunity_signals'),
                 true
             )
                 ? 'dashboard_updated'

@@ -23,13 +23,17 @@ use WPWebMCP\AgentOps\Analytics\CapabilityGapService;
 use WPWebMCP\AgentOps\Analytics\EventRecorder;
 use WPWebMCP\AgentOps\Analytics\EventSchema;
 use WPWebMCP\AgentOps\Analytics\FunnelService;
+use WPWebMCP\AgentOps\Analytics\FeedbackMetricResolver;
+use WPWebMCP\AgentOps\Analytics\OpportunityDetector;
 use WPWebMCP\AgentOps\Analytics\QueryService;
+use WPWebMCP\AgentOps\Analytics\SignalService;
 use WPWebMCP\AgentOps\Analytics\WorkflowService;
 use WPWebMCP\AgentOps\Demo\DemoCheckout;
 use WPWebMCP\AgentOps\Demo\DemoCleanup;
 use WPWebMCP\AgentOps\Demo\DemoPages;
 use WPWebMCP\AgentOps\Demo\DemoReset;
 use WPWebMCP\AgentOps\Demo\DemoSession;
+use WPWebMCP\AgentOps\Guidance\AgentGuide;
 use WPWebMCP\AgentOps\Policy\KillSwitch;
 use WPWebMCP\AgentOps\Policy\PolicyEngine;
 use WPWebMCP\AgentOps\Policy\PolicyStore;
@@ -106,13 +110,22 @@ final class Plugin
         $responses   = new RestResponseFactory();
         $idempotency = new IdempotencyStore();
         $diagnostics = new DiagnosticsService($catalog, $policies, $kill_switch);
+        $guide       = new AgentGuide();
+        $opportunities = new OpportunityDetector();
+        $signals     = new SignalService(
+            $wpdb,
+            $schema,
+            $events,
+            new FeedbackMetricResolver($wpdb, $schema)
+        );
         $queries     = new QueryService(
             $wpdb,
             $schema,
             static fn (string $tool_name, string $session_hash): bool => ! $kill_switch->active()
                 && $policies->plugin_enabled()
                 && $policies->enabled($tool_name)
-                && ! $overrides->disabled($session_hash, $tool_name)
+                && ! $overrides->disabled($session_hash, $tool_name),
+            $signals
         );
         $funnel      = new FunnelService($wpdb, $schema);
         $gaps        = new CapabilityGapService($wpdb, $schema, new Redactor(), $events);
@@ -122,6 +135,8 @@ final class Plugin
             $queries,
             $funnel,
             $gaps,
+            $signals,
+            $guide,
             $diagnostics,
             $policies,
             $overrides,
@@ -129,7 +144,7 @@ final class Plugin
             $events
         ))->register($callbacks);
 
-        (new WooIntegration($callbacks, $workflows, $events, $wpdb))->hooks();
+        (new WooIntegration($callbacks, $workflows, $events, $wpdb, $signals, $opportunities))->hooks();
         (new AbilityRegistry($catalog, $callbacks))->hooks();
 
         $session_controller  = new SessionController(
@@ -152,7 +167,8 @@ final class Plugin
             $workflows,
             $events,
             $idempotency,
-            $responses
+            $responses,
+            $guide
         );
         $reset               = new DemoReset(
             $sessions,

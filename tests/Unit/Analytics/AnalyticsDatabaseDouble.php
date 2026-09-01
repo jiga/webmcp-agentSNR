@@ -74,6 +74,16 @@ final class AnalyticsDatabaseDouble
             if (isset($this->gaps[$row['id']])) {
                 return false;
             }
+            if (null !== ($row['feedback_slot'] ?? null)) {
+                foreach ($this->gaps as $existing) {
+                    if (
+                        ($existing['workflow_id'] ?? null) === ($row['workflow_id'] ?? null)
+                        && ($existing['feedback_slot'] ?? null) === $row['feedback_slot']
+                    ) {
+                        return false;
+                    }
+                }
+            }
             $this->gaps[(string) $row['id']] = $row;
 
             return 1;
@@ -144,6 +154,36 @@ final class AnalyticsDatabaseDouble
                 return $gap;
             }
         }
+        if (str_contains($sql, 'FROM wp_wmcp_capability_gaps') && str_contains($sql, 'WHERE dedupe_key = %s')) {
+            foreach ($this->gaps as $gap) {
+                if (($gap['dedupe_key'] ?? null) === ($args[0] ?? null)) {
+                    return $gap;
+                }
+            }
+
+            return null;
+        }
+        if (
+            str_contains($sql, 'FROM wp_wmcp_capability_gaps')
+            && str_contains($sql, "signal_source = 'site_observed'")
+        ) {
+            $matches = array_values(
+                array_filter(
+                    $this->gaps,
+                    static fn (array $gap): bool => ($gap['workflow_id'] ?? null) === ($args[0] ?? null)
+                        && 'site_observed' === ($gap['signal_source'] ?? null)
+                )
+            );
+            usort(
+                $matches,
+                static fn (array $left, array $right): int => strcmp(
+                    (string) ($right['occurred_at'] ?? '') . (string) ($right['id'] ?? ''),
+                    (string) ($left['occurred_at'] ?? '') . (string) ($left['id'] ?? '')
+                )
+            );
+
+            return $matches[0] ?? null;
+        }
 
         return null;
     }
@@ -173,6 +213,38 @@ final class AnalyticsDatabaseDouble
                 ? $workflow['id']
                 : null;
         }
+        if (str_contains($sql, 'COUNT(*) FROM wp_wmcp_capability_gaps')) {
+            return count(
+                array_filter(
+                    $this->gaps,
+                    static fn (array $gap): bool => ($gap['workflow_id'] ?? null) === ($args[0] ?? null)
+                        && 'agent_reported' === ($gap['signal_source'] ?? null)
+                        && 'linked' === ($gap['evidence_status'] ?? null)
+                        && null !== ($gap['reason_code'] ?? null)
+                )
+            );
+        }
+        if (str_contains($sql, 'COUNT(*) FROM wp_wmcp_events') && str_contains($sql, 'event_name = %s')) {
+            return count(
+                array_filter(
+                    $this->events,
+                    static fn (array $event): bool => ($event['workflow_id'] ?? null) === ($args[0] ?? null)
+                        && ($event['event_name'] ?? null) === ($args[1] ?? null)
+                )
+            );
+        }
+        if (str_contains($sql, 'feedback_slot = %d')) {
+            foreach ($this->gaps as $gap) {
+                if (
+                    ($gap['workflow_id'] ?? null) === ($args[0] ?? null)
+                    && ($gap['feedback_slot'] ?? null) === ($args[1] ?? null)
+                ) {
+                    return $gap['id'] ?? 'occupied';
+                }
+            }
+
+            return null;
+        }
 
         return null;
     }
@@ -197,6 +269,45 @@ final class AnalyticsDatabaseDouble
             }
 
             return $matches;
+        }
+        if (
+            str_contains($sql, 'FROM wp_wmcp_events')
+            && str_contains($sql, 'INNER JOIN wp_wmcp_workflows')
+            && str_contains($sql, 'e.event_id IN')
+        ) {
+            $workflow = $this->workflows[(string) ($args[1] ?? '')] ?? null;
+            if (
+                null === $workflow
+                || ($workflow['demo_session_hash'] ?? null) !== ($args[0] ?? null)
+                || 'storefront' !== ($workflow['surface'] ?? null)
+            ) {
+                return array();
+            }
+            $event_ids = array_slice($args, 2);
+
+            return array_values(
+                array_filter(
+                    $this->events,
+                    static fn (array $event): bool => ($event['workflow_id'] ?? null) === ($args[1] ?? null)
+                        && in_array($event['event_id'] ?? null, $event_ids, true)
+                )
+            );
+        }
+        if (
+            str_contains($sql, 'FROM wp_wmcp_events')
+            && str_contains($sql, 'workflow_id = %s AND event_name = %s')
+            && str_contains($sql, 'SELECT properties_json')
+        ) {
+            return array_values(
+                array_map(
+                    static fn (array $event): array => array('properties_json' => $event['properties_json'] ?? null),
+                    array_filter(
+                        $this->events,
+                        static fn (array $event): bool => ($event['workflow_id'] ?? null) === ($args[0] ?? null)
+                            && ($event['event_name'] ?? null) === ($args[1] ?? null)
+                    )
+                )
+            );
         }
 
         return array();

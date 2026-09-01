@@ -51,12 +51,39 @@ final class ToolCatalog
                         'policy_summary'      => array('type' => array('object', 'null')),
                         'cart_summary'        => array('type' => array('object', 'null')),
                         'supported_workflows' => array('type' => 'array'),
+                        'agent_guide'         => array('type' => 'object'),
                     ),
-                    array('store', 'page', 'supported_workflows')
+                    array('store', 'page', 'supported_workflows', 'agent_guide')
                 ),
                 'storefront.context',
                 true,
                 true,
+                false,
+                30
+            ),
+            $this->definition(
+                ToolName::GET_AGENT_GUIDE,
+                'Get the agent guide',
+                'Start here before a storefront journey. Read supported journeys, human approval boundaries, privacy rules, feedback triggers, and the metrics this site can verify.',
+                'storefront',
+                RiskClass::READ,
+                $this->object(array()),
+                $this->object(
+                    array(
+                        'version'            => array('type' => 'string'),
+                        'start_here'         => array('type' => 'boolean'),
+                        'commerce_available' => array('type' => 'boolean'),
+                        'purpose'            => array('type' => 'string'),
+                        'supported_journeys' => array('type' => 'array', 'items' => array('type' => 'object')),
+                        'human_boundaries'   => array('type' => 'array', 'items' => array('type' => 'object')),
+                        'privacy'            => array('type' => 'object'),
+                        'feedback'           => array('type' => 'object'),
+                    ),
+                    array('version', 'start_here', 'commerce_available', 'purpose', 'supported_journeys', 'human_boundaries', 'privacy', 'feedback')
+                ),
+                'storefront.agent_guide',
+                true,
+                false,
                 false,
                 30
             ),
@@ -92,8 +119,9 @@ final class ToolCatalog
                         'products'     => array('type' => 'array', 'items' => $this->product_summary_schema(), 'maxItems' => 8),
                         'result_count' => array('type' => 'integer', 'minimum' => 0),
                         'query'        => array('type' => 'string'),
+                        'opportunity_signal' => array('type' => array('object', 'null')),
                     ),
-                    array('products', 'result_count', 'query')
+                    array('products', 'result_count', 'query', 'opportunity_signal')
                 ),
                 'commerce.search_products',
                 true,
@@ -339,6 +367,72 @@ final class ToolCatalog
                 false,
                 5
             ),
+            $this->definition(
+                ToolName::REPORT_AGENT_FEEDBACK,
+                'Report structured agent feedback',
+                'Leave bounded structured feedback about the current journey. Cite workflow event IDs returned by this site and request metric names only; the site validates evidence and computes every metric value.',
+                'storefront',
+                RiskClass::TELEMETRY_WRITE,
+                $this->object(
+                    array(
+                        'outcome' => array('type' => 'string', 'enum' => array('success', 'partial', 'blocked', 'abandoned')),
+                        'feedback_type' => array(
+                            'type' => 'string',
+                            'enum' => array('worked_well', 'missing_product', 'missing_capability', 'policy_unclear', 'insufficient_product_data', 'confusing_result', 'constraint_encountered', 'too_many_steps', 'slow_response', 'handoff_issue'),
+                        ),
+                        'step' => array('type' => 'string', 'enum' => array('discovery', 'comparison', 'policy', 'cart', 'checkout_handoff', 'journey_summary')),
+                        'reason_code' => array(
+                            'type' => 'string',
+                            'enum' => array('useful_evidence', 'smooth_handoff', 'zero_results', 'low_coverage', 'out_of_stock', 'budget_tradeoff', 'missing_fact', 'unsupported_capability', 'unclear_policy', 'slow_tool', 'difficult_handoff'),
+                        ),
+                        'evidence_event_ids' => array(
+                            'type'        => 'array',
+                            'items'       => array('type' => 'string', 'pattern' => '^evt_[0-9A-HJKMNP-TV-Z]{26}$'),
+                            'minItems'    => 1,
+                            'maxItems'    => 6,
+                            'uniqueItems' => true,
+                        ),
+                        'ratings' => $this->object(
+                            array(
+                                'evidence_quality' => array('type' => 'string', 'enum' => array('sufficient', 'insufficient', 'unknown')),
+                                'policy_clarity'   => array('type' => 'string', 'enum' => array('clear', 'unclear', 'not_applicable')),
+                                'handoff_quality'  => array('type' => 'string', 'enum' => array('smooth', 'difficult', 'blocked', 'not_applicable')),
+                                'effort'           => array('type' => 'string', 'enum' => array('low', 'medium', 'high')),
+                            )
+                        ),
+                        'requested_metrics' => array(
+                            'type'        => 'array',
+                            'items'       => array('type' => 'string', 'enum' => array('eligible_product_count', 'highest_matching_water_rating', 'search_refinement_count', 'checkout_handoff', 'checkout_conversion', 'attributed_order_count', 'paid_order_value', 'net_attributed_value')),
+                            'maxItems'    => 5,
+                            'uniqueItems' => true,
+                        ),
+                        'suggested_owner_action' => array(
+                            'type' => 'string',
+                            'enum' => array('clarify_policy', 'improve_product_data', 'add_capability', 'fix_tool_error', 'reduce_steps', 'improve_product_coverage', 'review_inventory', 'review_handoff', 'no_action'),
+                        ),
+                    ),
+                    array('outcome', 'feedback_type', 'step', 'reason_code', 'evidence_event_ids')
+                ),
+                $this->object(
+                    array(
+                        'feedback_id'            => array('type' => 'string'),
+                        'recorded'               => array('type' => 'boolean'),
+                        'replayed'               => array('type' => 'boolean'),
+                        'trust'                  => array('type' => 'string', 'enum' => array('agent_reported')),
+                        'evidence_status'        => array('type' => 'string', 'enum' => array('linked')),
+                        'evidence_event_ids'     => array('type' => 'array', 'items' => array('type' => 'string')),
+                        'measured_context'       => array('type' => 'object'),
+                        'suggested_owner_action' => array('type' => 'string'),
+                        'message'                => array('type' => 'string'),
+                    ),
+                    array('feedback_id', 'recorded', 'replayed', 'trust', 'evidence_status', 'evidence_event_ids', 'measured_context', 'suggested_owner_action', 'message')
+                ),
+                'analytics.report_agent_feedback',
+                false,
+                false,
+                false,
+                4
+            ),
         );
 
         foreach ($this->agentops_definitions() as $definition) {
@@ -397,9 +491,10 @@ final class ToolCatalog
                 'commerce'        => $open_object,
                 'revenue'         => $open_object,
                 'capability_gaps' => $open_object,
+                'signals'         => $open_object,
                 'policy_changes'  => array('type' => 'integer', 'minimum' => 0),
             ),
-            array('scope', 'workflows', 'tool_calls', 'commerce', 'revenue', 'capability_gaps', 'policy_changes')
+            array('scope', 'workflows', 'tool_calls', 'commerce', 'revenue', 'capability_gaps', 'signals', 'policy_changes')
         );
         $funnel_output = $this->object(
             array(
@@ -428,10 +523,12 @@ final class ToolCatalog
                 'recovery'          => array('type' => array('object', 'null')),
                 'commerce_outcome'  => $open_object,
                 'capability_gaps'   => array('type' => 'array', 'items' => $open_object),
+                'opportunity_signals' => array('type' => 'array', 'items' => $open_object),
+                'agent_feedback'    => array('type' => 'array', 'items' => $open_object),
                 'timeline'          => array('type' => 'array', 'items' => $open_object),
                 'truncated'         => array('type' => 'boolean'),
             ),
-            array('workflow', 'explanation', 'first_problem', 'recovery', 'commerce_outcome', 'capability_gaps', 'timeline', 'truncated')
+            array('workflow', 'explanation', 'first_problem', 'recovery', 'commerce_outcome', 'capability_gaps', 'opportunity_signals', 'agent_feedback', 'timeline', 'truncated')
         );
         $health_output = $this->object(
             array(
@@ -520,6 +617,40 @@ final class ToolCatalog
                 ),
                 $collection_output,
                 'analytics.capability_gaps',
+                true,
+                true,
+                false,
+                30
+            ),
+            $this->definition(
+                ToolName::GET_OPPORTUNITY_SIGNALS,
+                'Get opportunity signals',
+                'Read grouped site-observed opportunities and evidence-linked agent feedback for the authorized scope. Agent testimony and site-verified measurements remain explicitly separated.',
+                'agentops',
+                RiskClass::READ,
+                $this->object(
+                    array(
+                        'category' => array('type' => 'string', 'enum' => array('demand_gap', 'inventory_gap', 'capability_gap', 'experience_friction', 'worked_well')),
+                        'source'   => array('type' => 'string', 'enum' => array('site_observed', 'agent_reported')),
+                        'status'   => array('type' => 'string', 'enum' => array('open', 'planned', 'resolved', 'dismissed')),
+                        'date_from' => array('type' => 'string', 'format' => 'date'),
+                        'date_to'  => array('type' => 'string', 'format' => 'date'),
+                        'cursor'   => array('type' => 'string', 'maxLength' => 100),
+                        'limit'    => array('type' => 'integer', 'minimum' => 1, 'maximum' => 8, 'default' => 8),
+                    )
+                ),
+                $this->object(
+                    array(
+                        'scope'       => $open_object,
+                        'items'       => array('type' => 'array', 'items' => $open_object),
+                        'next_cursor' => array('type' => array('string', 'null')),
+                        'has_more'    => array('type' => 'boolean'),
+                        'limit'       => array('type' => 'integer', 'minimum' => 1),
+                        'truncated'   => array('type' => 'boolean'),
+                    ),
+                    array('scope', 'items', 'next_cursor', 'has_more', 'limit', 'truncated')
+                ),
+                'analytics.opportunity_signals',
                 true,
                 true,
                 false,

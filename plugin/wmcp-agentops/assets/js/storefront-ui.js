@@ -18,10 +18,21 @@
 		get_store_policy: "policy",
 		remove_from_cart: "cart",
 		report_capability_gap: "gap",
+		report_agent_feedback: "feedback",
 		search_products: "search",
 		update_cart_quantity: "cart",
 	};
 	const orderedStages = [ "search", "comparison", "policy", "cart", "checkout" ];
+	const measuredMetricLabels = {
+		attributed_order_count: "attributed orders",
+		checkout_conversion: "checkout converted",
+		checkout_handoff: "checkout handoff",
+		eligible_product_count: "eligible products",
+		highest_matching_water_rating: "highest water rating",
+		net_attributed_value: "net attributed",
+		paid_order_value: "paid order value",
+		search_refinement_count: "search refinements",
+	};
 
 	function one( selector, scope = root ) {
 		return scope.querySelector( selector );
@@ -81,7 +92,7 @@
 	}
 
 	function updateRail( stage, tool ) {
-		if ( stage === "gap" ) {
+		if ( ! orderedStages.includes( stage ) ) {
 			return;
 		}
 		const stageIndex = orderedStages.indexOf( stage );
@@ -161,6 +172,39 @@
 		} );
 		container.append( items );
 		markProducts( products );
+	}
+
+	function feedbackAction( nextActions ) {
+		return list( nextActions ).map( record ).find( ( action ) => {
+			return ( action.tool || action.name ) === "report_agent_feedback";
+		} ) || {};
+	}
+
+	function renderSearchOpportunity( result, nextActions ) {
+		const container = one( "[data-wmcp-search-opportunity]" );
+		if ( ! container ) {
+			return;
+		}
+
+		const signals = list( result.opportunity_signals );
+		const opportunity = record( result.opportunity_signal || result.opportunity || signals[ 0 ] );
+		const action = feedbackAction( nextActions );
+		const zeroResults = Number( result.result_count ) === 0;
+		const recorded = opportunity.recorded === true || Boolean( opportunity.id || opportunity.signal_id || opportunity.signal_key );
+		const hasOpportunity = recorded;
+		const summary = opportunity.summary || opportunity.title || ( zeroResults
+			? "No public product matched this search. The zero-result evidence is available to the current-session opportunity view."
+			: "The site recorded a meaningful constraint in this search." );
+		const hint = action.message || action.reason || action.signal_code || "";
+
+		container.hidden = ! hasOpportunity;
+		container.dataset.state = recorded ? "recorded" : zeroResults ? "observed" : "feedback-invited";
+		text( one( "[data-wmcp-opportunity-summary]", container ), hasOpportunity ? summary : "" );
+		const hintTarget = one( "[data-wmcp-feedback-hint]", container );
+		if ( hintTarget ) {
+			hintTarget.hidden = ! hint;
+			text( hintTarget, hint ? `Feedback invited · ${ pretty( hint ) }` : "" );
+		}
 	}
 
 	function comparisonValue( row, criterion ) {
@@ -370,9 +414,93 @@
 		text( one( "[data-wmcp-gap-message]" ), result.message || "The unsupported request was recorded for the merchant. No notification or reservation was created." );
 	}
 
+	function rawMetricValue( key, value ) {
+		if ( [ "net_attributed_value", "paid_order_value" ].includes( key ) ) {
+			return list( value ).map( ( item ) => {
+				const amount = record( item );
+				return money( amount.value, amount.currency );
+			} ).filter( ( item ) => item !== "—" ).join( " + " ) || "—";
+		}
+		if ( typeof value === "boolean" ) {
+			return value ? "yes" : "no";
+		}
+		return value === null || value === undefined || value === "" ? "—" : String( value );
+	}
+
+	function metricValue( key, value ) {
+		const envelope = record( value );
+		if ( Object.hasOwn( envelope, "status" ) && Object.hasOwn( envelope, "value" ) ) {
+			const measured = rawMetricValue( key, envelope.value );
+			const status = pretty( envelope.status || "unknown" );
+			return `${ measured } (${ status })`;
+		}
+		return rawMetricValue( key, value );
+	}
+
+	function measuredContextSummary( value ) {
+		const context = record( value );
+		return Object.keys( measuredMetricLabels ).filter( ( key ) => Object.hasOwn( context, key ) ).map( ( key ) => {
+			return `${ measuredMetricLabels[ key ] }: ${ metricValue( key, context[ key ] ) }`;
+		} ).join( " · " ) || "No site-computed measurement returned";
+	}
+
+	function evidenceStatus( value ) {
+		return {
+			linked: "Site evidence linked",
+			unlinked: "Agent report only",
+			verified: "Site evidence verified",
+		}[ String( value || "" ) ] || "Evidence status unavailable";
+	}
+
+	function renderAgentFeedback( result ) {
+		const panel = one( '[data-wmcp-panel="feedback"]' );
+		if ( ! panel ) {
+			return;
+		}
+
+		const trust = result.trust === "agent_reported" ? "Agent reported" : "Unverified agent report";
+		panel.dataset.evidenceStatus = String( result.evidence_status || "unlinked" );
+		panel.dataset.feedbackTrust = String( result.trust || "unverified" );
+		text( one( "[data-wmcp-feedback-trust]", panel ), trust );
+		text( one( "[data-wmcp-feedback-evidence-status]", panel ), evidenceStatus( result.evidence_status ) );
+		text( one( "#wmcp-feedback-title", panel ), result.replayed ? "Agent feedback receipt confirmed" : "Agent feedback recorded" );
+		text( one( "[data-wmcp-feedback-message]", panel ), result.message || "The feedback was recorded as agent-reported testimony and kept separate from site-verified facts." );
+		text( one( "[data-wmcp-feedback-metrics]", panel ), measuredContextSummary( result.measured_context ) );
+		text( one( "[data-wmcp-feedback-action]", panel ), pretty( result.suggested_owner_action || "No action suggested" ) );
+	}
+
+	function markGuideRead( result ) {
+		const guide = one( "[data-wmcp-agent-guide]" );
+		if ( ! guide ) {
+			return;
+		}
+		guide.dataset.state = "read";
+		guide.classList.remove( "wmcp-is-updated" );
+		window.requestAnimationFrame( () => guide.classList.add( "wmcp-is-updated" ) );
+		text( one( "[data-wmcp-guide-version]", guide ), result.guide_version || result.version || "1.0" );
+		text( one( "[data-wmcp-guide-status]", guide ), "Read by agent" );
+		const feedback = record( result.feedback || result.feedback_policy );
+		const triggers = list( feedback.triggers || feedback.recommended_when );
+		if ( triggers.length ) {
+			const maximum = Number.isInteger( feedback.max_reports_per_workflow )
+				? ` Maximum ${ feedback.max_reports_per_workflow } reports per workflow.`
+				: "";
+			text(
+				one( "[data-wmcp-feedback-policy]", guide ),
+				`Feedback invited after ${ triggers.map( ( trigger ) => String( trigger ).replaceAll( "_", " " ) ).join( ", " ) }.${ maximum }`
+			);
+		}
+	}
+
 	function renderUpdate( detail ) {
 		const tool = detail.tool || detail.response?.tool?.name || "";
-		const result = record( detail.response?.result );
+		const response = record( detail.response );
+		const result = record( response.result );
+		const nextActions = list( response.next_actions );
+		if ( tool === "get_agent_guide" ) {
+			markGuideRead( result );
+			return;
+		}
 		const stage = stageForTool[ tool ];
 		if ( ! stage ) {
 			return;
@@ -380,7 +508,9 @@
 
 		if ( tool === "search_products" || tool === "get_product" ) {
 			all( ".wmcp-product-card" ).forEach( ( card ) => card.classList.remove( "wmcp-is-compared" ) );
-			renderSearch( tool === "get_product" ? { products: [ result.product || result ], result_count: 1 } : result );
+			const searchResult = tool === "get_product" ? { products: [ result.product || result ], result_count: 1 } : result;
+			renderSearch( searchResult );
+			renderSearchOpportunity( searchResult, nextActions );
 		} else if ( tool === "compare_products" ) {
 			renderComparison( result );
 		} else if ( tool === "get_store_policy" ) {
@@ -391,6 +521,8 @@
 			renderCheckout( result );
 		} else if ( tool === "report_capability_gap" ) {
 			renderGap( result );
+		} else if ( tool === "report_agent_feedback" ) {
+			renderAgentFeedback( result );
 		}
 
 		updateRail( stage, tool );

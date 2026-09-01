@@ -111,7 +111,13 @@ jq -e '.ok == true' "${SMOKE_TEMP_DIR}/fixation.json" >/dev/null
 STOREFRONT_MANIFEST="${SMOKE_TEMP_DIR}/storefront.json"
 AGENTOPS_MANIFEST="${SMOKE_TEMP_DIR}/agentops.json"
 fetch_manifest storefront "${STOREFRONT_MANIFEST}"
-jq -e '([.tools[].name] | length) == 11 and ([.tools[].name] | index("search_products")) != null and .cart.item_count == 0' "${STOREFRONT_MANIFEST}" >/dev/null
+jq -e '
+  ([.tools[].name] | length) == 13
+  and ([.tools[].name] | index("get_agent_guide")) != null
+  and ([.tools[].name] | index("report_agent_feedback")) != null
+  and ([.tools[].name] | index("search_products")) != null
+  and .cart.item_count == 0
+' "${STOREFRONT_MANIFEST}" >/dev/null
 
 BAD_CSRF_PAYLOAD="$(jq -cn \
   --arg schema_version "$(jq -r '.schema_version' "${STOREFRONT_MANIFEST}")" \
@@ -130,17 +136,31 @@ test "${BAD_CSRF_STATUS}" = "403"
 jq -e '.error.code == "csrf_invalid"' "${SMOKE_TEMP_DIR}/csrf-denied.json" >/dev/null
 
 invoke_tool "${STOREFRONT_MANIFEST}" get_storefront_context '{}' "${SMOKE_TEMP_DIR}/context.json"
+jq -e '.result.agent_guide == {available:true,tool:"get_agent_guide",version:"1.0",start_here:true}' "${SMOKE_TEMP_DIR}/context.json" >/dev/null
+invoke_tool "${STOREFRONT_MANIFEST}" get_agent_guide '{}' "${SMOKE_TEMP_DIR}/guide.json"
+jq -e '.result.version == "1.0" and .result.feedback.max_reports_per_workflow == 2' "${SMOKE_TEMP_DIR}/guide.json" >/dev/null
 invoke_tool "${STOREFRONT_MANIFEST}" search_products \
-  '{"query":"waterproof backpack","max_price":120,"in_stock_only":true,"limit":8}' \
+  '{"query":"waterproof backpack","max_price":100,"attributes":{"water_rating":"IPX5"},"in_stock_only":true,"limit":8}' \
+  "${SMOKE_TEMP_DIR}/zero-search.json"
+jq -e '
+  .result.result_count == 0
+  and .result.opportunity_signal.signal_code == "zero_results"
+  and .result.opportunity_signal.source == "site_observed"
+  and .result.opportunity_signal.evidence_status == "verified"
+  and any(.next_actions[]; .tool == "report_agent_feedback")
+' "${SMOKE_TEMP_DIR}/zero-search.json" >/dev/null
+invoke_tool "${STOREFRONT_MANIFEST}" search_products \
+  '{"query":"waterproof backpack","max_price":100,"in_stock_only":true,"limit":8}' \
   "${SMOKE_TEMP_DIR}/search.json"
 jq -e '
-  (.result.products | length) >= 2
-  and all(.result.products[]; (.name | test("TrailCover|UrbanDry|CanyonDay") | not))
-  and all(.result.products[]; (.attributes.water_rating | test("IPX[4-9]|[Ww]aterproof")))
+  .result.result_count == 2
+  and (.result.products | length) == 2
+  and all(.result.products[]; .attributes.water_rating == "IPX4")
+  and any(.result.products[]; .name == "HarborLite 16 Pack" and .price == 69)
 ' "${SMOKE_TEMP_DIR}/search.json" >/dev/null
 
-PRODUCT_ID="$(jq -r '.result.products[0].id' "${SMOKE_TEMP_DIR}/search.json")"
-SECOND_PRODUCT_ID="$(jq -r '.result.products[1].id' "${SMOKE_TEMP_DIR}/search.json")"
+PRODUCT_ID="$(jq -r '.result.products[] | select(.name == "HarborLite 16 Pack") | .id' "${SMOKE_TEMP_DIR}/search.json")"
+SECOND_PRODUCT_ID="$(jq -r --argjson product_id "${PRODUCT_ID}" '.result.products[] | select(.id != $product_id) | .id' "${SMOKE_TEMP_DIR}/search.json")"
 invoke_tool "${STOREFRONT_MANIFEST}" compare_products \
   "{\"product_ids\":[${PRODUCT_ID},${SECOND_PRODUCT_ID}],\"criteria\":[\"price\",\"capacity\",\"water_rating\",\"return_days\"]}" \
   "${SMOKE_TEMP_DIR}/compare.json"
@@ -180,6 +200,23 @@ invoke_tool "${STOREFRONT_MANIFEST}" checkout_handoff \
   "{\"expected_cart_revision\":\"$(jq -r '.result.cart_revision' "${SMOKE_TEMP_DIR}/cart.json")\"}" \
   "${SMOKE_TEMP_DIR}/handoff.json"
 jq -e '.result.checkout_url | contains("/checkout/")' "${SMOKE_TEMP_DIR}/handoff.json" >/dev/null
+invoke_tool "${STOREFRONT_MANIFEST}" report_agent_feedback \
+  "$(jq -cn \
+    --arg zero_event_id "$(jq -r '.event_id' "${SMOKE_TEMP_DIR}/zero-search.json")" \
+    --arg search_event_id "$(jq -r '.event_id' "${SMOKE_TEMP_DIR}/search.json")" \
+    --arg handoff_event_id "$(jq -r '.event_id' "${SMOKE_TEMP_DIR}/handoff.json")" \
+    '{outcome:"partial",feedback_type:"constraint_encountered",step:"checkout_handoff",reason_code:"budget_tradeoff",evidence_event_ids:[$zero_event_id,$search_event_id,$handoff_event_id],ratings:{evidence_quality:"sufficient",policy_clarity:"not_applicable",handoff_quality:"smooth",effort:"medium"},requested_metrics:["eligible_product_count","highest_matching_water_rating","search_refinement_count","checkout_conversion","paid_order_value"],suggested_owner_action:"improve_product_coverage"}')" \
+  "${SMOKE_TEMP_DIR}/feedback.json"
+jq -e '
+  .result.recorded == true
+  and .result.trust == "agent_reported"
+  and .result.evidence_status == "linked"
+  and .result.measured_context.eligible_product_count.value == 2
+  and .result.measured_context.highest_matching_water_rating.value == "IPX4"
+  and .result.measured_context.search_refinement_count.value == 2
+  and .result.measured_context.checkout_conversion.status == "pending"
+  and .result.measured_context.paid_order_value.status == "pending"
+' "${SMOKE_TEMP_DIR}/feedback.json" >/dev/null
 
 REPLAY_REQUEST_ID="$(request_id)"
 REPLAY_INPUT="{\"product_ids\":[${PRODUCT_ID},${SECOND_PRODUCT_ID}]}"
@@ -214,9 +251,15 @@ test "${CONFLICT_STATUS}" = "409"
 jq -e '.error.code == "request_id_conflict"' "${SMOKE_TEMP_DIR}/request-conflict.json" >/dev/null
 
 fetch_manifest agentops "${AGENTOPS_MANIFEST}"
-jq -e '([.tools[].name] | length) == 8 and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
+jq -e '([.tools[].name] | length) == 9 and ([.tools[].name] | index("get_opportunity_signals")) != null and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
 invoke_tool "${AGENTOPS_MANIFEST}" get_agent_analytics_overview '{}' "${SMOKE_TEMP_DIR}/overview.json"
 jq -e '.result.workflows.total >= 1 and .result.tool_calls.total >= 1 and .result.capability_gaps.requests >= 1' "${SMOKE_TEMP_DIR}/overview.json" >/dev/null
+invoke_tool "${AGENTOPS_MANIFEST}" get_opportunity_signals '{}' "${SMOKE_TEMP_DIR}/signals.json"
+jq -e '
+  any(.result.items[]; .sources.site_observed == true)
+  and any(.result.items[]; .sources.agent_reported == true)
+  and all(.result.items[]; (.title | test("lost revenue"; "i") | not))
+' "${SMOKE_TEMP_DIR}/signals.json" >/dev/null
 invoke_tool "${AGENTOPS_MANIFEST}" query_agent_workflows '{"limit":20}' "${SMOKE_TEMP_DIR}/workflows.json"
 WORKFLOW_ID="$(jq -r '.result.items[0].workflow_id' "${SMOKE_TEMP_DIR}/workflows.json")"
 test "${#WORKFLOW_ID}" = "26"
@@ -277,4 +320,4 @@ jq -e '.cart.item_count == 0' "${SMOKE_TEMP_DIR}/after-reset.json" >/dev/null
 invoke_tool "${SMOKE_TEMP_DIR}/after-reset.json" get_cart '{}' "${SMOKE_TEMP_DIR}/reset-cart.json"
 jq -e '.result.item_count == 0' "${SMOKE_TEMP_DIR}/reset-cart.json" >/dev/null
 
-echo "Smoke tests passed: pages, 19-tool catalogs, shopper flow, analytics, governance, server denial, and isolated reset."
+echo "Smoke tests passed: pages, 22-tool catalogs, guide, observed opportunities, agent feedback, shopper flow, analytics, governance, server denial, and isolated reset."

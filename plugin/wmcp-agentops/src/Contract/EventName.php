@@ -39,6 +39,8 @@ final class EventName
     public const ORDER_REFUNDED = 'commerce.order.refunded';
 
     public const CAPABILITY_GAP_REPORTED = 'capability_gap.reported';
+    public const OPPORTUNITY_DETECTED = 'opportunity.detected';
+    public const AGENT_FEEDBACK_REPORTED = 'agent_feedback.reported';
     public const DIAGNOSTICS_COMPLETED = 'diagnostics.completed';
     public const DEMO_RESET = 'demo.reset';
 

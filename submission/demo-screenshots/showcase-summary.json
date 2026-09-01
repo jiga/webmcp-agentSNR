@@ -1,30 +1,94 @@
 {
   "baseUrl": "http://localhost:18084",
-  "workflowId": "01M1AESJEQQ2TP2X8YMQFVA66Y",
-  "orderId": 49,
+  "workflowId": "01M1D45DH7E2VWNR2C5D3KMWHM",
+  "orderId": 54,
   "product": {
-    "id": 20,
-    "name": "AlpineFlow 24 Pack",
-    "price": 109
+    "id": 27,
+    "name": "HarborLite 16 Pack",
+    "price": 69
   },
-  "capabilitySignal": {
-    "fulfilled": false,
-    "recorded": true,
-    "requestedCapability": "back_in_stock_notification",
-    "relatedProduct": {
-      "id": 28,
-      "name": "TerraRoll 25 Pack",
-      "stockStatus": "outofstock"
+  "agentGuide": {
+    "version": "1.0",
+    "maxFeedbackReportsPerWorkflow": 2
+  },
+  "opportunitySignal": {
+    "id": "01M1D45DQ7SMHYEM3EKH2XK0YA",
+    "evidenceStatus": "verified",
+    "signalCode": "zero_results",
+    "source": "site_observed"
+  },
+  "agentFeedback": {
+    "feedbackId": "01M1D45FHYMFJPE41GMTHWD3KX",
+    "evidenceStatus": "linked",
+    "measuredContext": {
+      "eligible_product_count": {
+        "value": 2,
+        "status": "verified"
+      },
+      "highest_matching_water_rating": {
+        "value": "IPX4",
+        "status": "verified"
+      },
+      "search_refinement_count": {
+        "value": 2,
+        "status": "verified"
+      },
+      "checkout_conversion": {
+        "value": null,
+        "status": "pending"
+      },
+      "paid_order_value": {
+        "value": null,
+        "status": "pending"
+      }
+    },
+    "requestedMetrics": [
+      "eligible_product_count",
+      "highest_matching_water_rating",
+      "search_refinement_count",
+      "checkout_conversion",
+      "paid_order_value"
+    ],
+    "trust": "agent_reported",
+    "verifiedContextAfterOrder": {
+      "eligible_product_count": {
+        "value": 2,
+        "status": "verified"
+      },
+      "highest_matching_water_rating": {
+        "value": "IPX4",
+        "status": "verified"
+      },
+      "search_refinement_count": {
+        "value": 2,
+        "status": "verified"
+      },
+      "checkout_conversion": {
+        "value": true,
+        "status": "verified"
+      },
+      "paid_order_value": {
+        "value": [
+          {
+            "currency": "USD",
+            "value": 69
+          }
+        ],
+        "status": "verified"
+      }
     }
   },
   "screenshots": {
     "landingScreenshot": "submission/demo-screenshots/01-agent-snr-overview.png",
-    "storefrontScreenshot": "submission/demo-screenshots/02-storefront-evidence.png",
-    "orderScreenshot": "submission/demo-screenshots/03-human-order-confirmation.png",
-    "monitorScreenshot": "submission/demo-screenshots/04-agent-snr-monitor.png",
-    "replayScreenshot": "submission/demo-screenshots/05-workflow-replay.png",
-    "controlsScreenshot": "submission/demo-screenshots/06-session-controls.png",
-    "refundScreenshot": "submission/demo-screenshots/07-refund-net-outcome.png"
+    "guideScreenshot": "submission/demo-screenshots/02-agent-guide.png",
+    "opportunityScreenshot": "submission/demo-screenshots/03-zero-result-opportunity.png",
+    "storefrontScreenshot": "submission/demo-screenshots/04-agent-feedback-handoff.png",
+    "orderScreenshot": "submission/demo-screenshots/05-human-order-confirmation.png",
+    "monitorScreenshot": "submission/demo-screenshots/06-agent-snr-monitor.png",
+    "signalsScreenshot": "submission/demo-screenshots/07-opportunity-signals.png",
+    "replayScreenshot": "submission/demo-screenshots/08-workflow-replay.png",
+    "controlsScreenshot": "submission/demo-screenshots/09-session-controls.png",
+    "refundScreenshot": "submission/demo-screenshots/10-refund-net-outcome.png"
   },
   "consoleErrors": []
 }

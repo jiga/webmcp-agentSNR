@@ -62,6 +62,9 @@ final class CapabilityGapServiceTest extends AnalyticsTestCase
         self::assertStringNotContainsString('shopper@example.test', $stored['user_goal_redacted']);
         self::assertStringNotContainsString('415', $stored['user_goal_redacted']);
         self::assertSame('{"color":"blue"}', $stored['context_json']);
+        self::assertSame('agent_reported', $stored['signal_source']);
+        self::assertSame('capability_gap', $stored['signal_category']);
+        self::assertSame(hash('sha256', 'capability_gap|back_in_stock_notification'), $stored['signal_key']);
         self::assertCount(
             1,
             array_filter(

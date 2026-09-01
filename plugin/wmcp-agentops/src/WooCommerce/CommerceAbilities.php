@@ -11,6 +11,8 @@ declare(strict_types=1);
 namespace WPWebMCP\AgentOps\WooCommerce;
 
 use WPWebMCP\AgentOps\Abilities\CallbackRouter;
+use WPWebMCP\AgentOps\Analytics\OpportunityDetector;
+use WPWebMCP\AgentOps\Analytics\SignalService;
 use WPWebMCP\AgentOps\Contract\EventName;
 
 final class CommerceAbilities
@@ -19,7 +21,9 @@ final class CommerceAbilities
         private readonly ProductCatalog $products,
         private readonly StorePolicyService $policies,
         private readonly CartService $cart,
-        private readonly CommerceTelemetry $telemetry
+        private readonly CommerceTelemetry $telemetry,
+        private readonly ?SignalService $signals = null,
+        private readonly ?OpportunityDetector $opportunities = null
     ) {
     }
 
@@ -42,15 +46,44 @@ final class CommerceAbilities
      */
     public function search_products(array $input): array
     {
-        $result      = $this->products->search($input);
+        $search      = $this->products->search_with_analysis($input);
+        $result      = $search['result'];
         $product_ids = array_values(array_map(static fn (array $product): int => (int) $product['id'], $result['products']));
+        $analysis    = null === $this->opportunities
+            ? null
+            : $this->opportunities->search($input, $result, $search['analysis']);
+        $metrics     = is_array($analysis) && isset($analysis['metrics']) && is_array($analysis['metrics']) ? $analysis['metrics'] : array();
+        $demand      = is_array($analysis) && isset($analysis['demand']) && is_array($analysis['demand']) ? $analysis['demand'] : array();
 
-        $this->telemetry->record(
+        $event = $this->telemetry->record(
             EventName::PRODUCT_SEARCHED,
             'search',
             $product_ids,
-            array('result_count' => (int) $result['result_count'])
+            array(
+                'result_count'               => (int) $result['result_count'],
+                'demand_key'                 => $demand['key'] ?? null,
+                'highest_water_rating'       => $metrics['highest_matching_water_rating'] ?? null,
+                'in_stock_match_count'       => $metrics['in_stock_match_count'] ?? null,
+                'out_of_stock_match_count'   => $metrics['out_of_stock_match_count'] ?? null,
+            )
         );
+        $result['opportunity_signal'] = null;
+        if (null !== $event && null !== $analysis && null !== $this->signals) {
+            $signal_product_ids = $product_ids;
+            if (array() === $signal_product_ids && isset($search['analysis']['related_product_ids']) && is_array($search['analysis']['related_product_ids'])) {
+                $signal_product_ids = array_values(array_map('intval', $search['analysis']['related_product_ids']));
+            }
+            $recorded = $this->signals->observe_search($event, $analysis, $signal_product_ids);
+            if (array() !== $recorded) {
+                $first = $recorded[0];
+                $result['opportunity_signal'] = array(
+                    'id'              => (string) $first['id'],
+                    'signal_code'     => (string) $first['capability_slug'],
+                    'source'          => 'site_observed',
+                    'evidence_status' => 'verified',
+                );
+            }
+        }
 
         return $result;
     }
@@ -83,7 +116,19 @@ final class CommerceAbilities
         $ids    = array_values(array_map('intval', (array) $input['product_ids']));
         $result = $this->products->compare($ids, isset($input['criteria']) && is_array($input['criteria']) ? $input['criteria'] : array());
 
-        $this->telemetry->record(EventName::PRODUCTS_COMPARED, 'compare', $ids, array('result_count' => count($ids)));
+        $signals = null === $this->opportunities ? array() : $this->opportunities->comparison($result);
+        $event = $this->telemetry->record(
+            EventName::PRODUCTS_COMPARED,
+            'compare',
+            $ids,
+            array(
+                'result_count'      => count($ids),
+                'missing_fact_count' => count((array) ($result['missing_facts'] ?? array())),
+            )
+        );
+        if (null !== $event && array() !== $signals && null !== $this->signals) {
+            $this->signals->observe_comparison($event, $signals, $ids);
+        }
 
         return $result;
     }

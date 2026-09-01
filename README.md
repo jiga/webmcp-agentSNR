@@ -2,7 +2,9 @@
 
 **Agent outcome monitoring for WordPress.**
 
-Agent SNR separates trustworthy business signal from raw agent noise: browser agents operate a real WooCommerce storefront through WebMCP, while merchants replay the privacy-safe workflow, see reliability and capability signals, connect human handoffs to paid/refunded outcomes, and govern the site-tool layer. SNR uses its established engineering meaning: **signal-to-noise ratio**.
+Agent SNR separates trustworthy business signal from raw agent noise: browser agents operate a real WooCommerce storefront through WebMCP, while merchants replay the privacy-safe workflow, see site-observed opportunities beside structured agent feedback, connect human handoffs to paid/refunded outcomes, and govern the site-tool layer. SNR uses its established engineering meaning: **signal-to-noise ratio**.
+
+> See what agents did. Hear what they experienced. Discover what your site is missing.
 
 The familiar investigation pattern resembles **LogRocket/Fullstory for website agents**, combined with Datadog-style tool health and Amplitude-style commerce outcomes. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model and MVP boundaries.
 
@@ -17,7 +19,7 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 | Video | Script and run sheet are included; owner must record and publish a sub-three-minute YouTube video |
 | Presentation | Editable 11-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
 | Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |
-| Captured proof | Seven real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |
+| Captured proof | Ten real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |
 | Plugin artifact | Reproducibly built as `dist/wmcp-agentops-0.1.0.zip` with a SHA-256 sidecar |
 | Playground | Reproducibly built as `dist/wmcp-agentops-playground-0.1.0.zip` |
 | License | [GPL-2.0-or-later](LICENSE) |
@@ -26,11 +28,13 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 
 ```mermaid
 flowchart LR
-    A[Shopper goal] --> B[Top-level WebMCP tools]
+    A[Shopper goal] --> B[Agent Guide · top-level WebMCP tools]
     B --> C[Search · compare · policy · cart]
+    C --> H[Observed opportunities · agent feedback]
     C --> D[Human-confirmed Woo checkout]
     D --> E[Order and refund evidence]
-    E --> F[Agent SNR · replay · signals]
+    H --> F[Agent SNR · replay · signals]
+    E --> F
     F --> G[Session-safe tool policy]
     G --> B
 ```
@@ -42,17 +46,11 @@ The browser runtime uses the current imperative API, `document.modelContext.regi
 Shopper:
 
 ```text
-Find a waterproof backpack under $120, compare the two best choices,
-confirm that the return policy is at least 30 days, and add the best-value
-option to my cart.
-```
-
-Capability gap:
-
-```text
-Find the blue TerraRoll 25 Pack and notify me when it is back in stock.
-If the store cannot do that, say so honestly, record the capability gap,
-and do not pretend a notification was created.
+Start with this site's Agent Guide. Find a waterproof backpack under $100
+with at least IPX5 protection. If none match, show the closest in-stock
+options and explain the constraint. Compare the two best, verify the return
+policy, add the compact option, stop at checkout, and follow the guide's
+feedback instructions.
 ```
 
 Merchant:
@@ -60,7 +58,8 @@ Merchant:
 ```text
 Monitor my current agent session, replay its tool and commerce timeline,
 identify the slowest or failed invocation, connect it to the commerce outcome,
-show any capability signals this store does not support, and summarize current controls.
+separate site-observed opportunities from agent-reported feedback and verified
+measurements, and summarize current controls.
 ```
 
 Governance:
@@ -73,7 +72,8 @@ Disable product comparison for this demo session.
 
 - Two independent top-level WebMCP surfaces: storefront and Agent SNR.
 - A single first-party catalog that generates WordPress Abilities and WebMCP manifests.
-- Product discovery, evidence-based comparison, published policy facts, reversible cart writes, checkout handoff, and capability-gap capture.
+- A versioned Agent Guide that makes supported journeys, feedback triggers, privacy, reversible effects, and the human checkout boundary discoverable to agents and people.
+- Product discovery, evidence-based comparison, published policy facts, reversible cart writes, checkout handoff, automatic opportunity detection, structured agent feedback, and compatible capability-gap capture.
 - Workflow events, tool outcomes/latency, funnel analysis, order/refund linkage, deterministic attribution, and redacted explanations.
 - Restrictive session overrides, persistent admin policy boundaries, rate limits, replay protection, and a global kill switch.
 - Accessible visible state for every meaningful tool result; the human storefront still works when WebMCP is absent.
@@ -165,6 +165,8 @@ Site Tools currently require the latest ChatGPT desktop app, a ChatGPT Work or C
 - Permission callbacks fail closed unless the verified execution controller installs a request-scoped context.
 - Public analytics queries scope in SQL to the current demo-session hash.
 - No raw conversations, prompts, identities, addresses, cookies, nonces, authorization headers, payment fields, or arbitrary tool payloads are stored.
+- Search opportunities persist only canonical server-owned demand signatures; feedback accepts enums and evidence IDs, never free-form comments or caller-supplied metric values.
+- Agent testimony is labeled `agent_reported`; site observation and site-computed measurements remain separate evidence classes.
 - Tool content is structured, sanitized, bounded, and marked untrusted when it originates from merchant-authored catalog or policy data.
 - The agent can prepare checkout but cannot create an order, accept terms, submit customer data, charge, cancel, or refund.
 
@@ -190,7 +192,7 @@ npm run test:js
 ./bin/lint-php.sh
 ```
 
-With the isolated showcase already running, regenerate the seven local reference captures and run summary with:
+With the isolated showcase already running, regenerate the ten local reference captures and run summary with:
 
 ```bash
 npx playwright install chromium
@@ -203,7 +205,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The prepared repository passes 79 JavaScript tests, 68 PHP tests / 606 assertions on PHP 8.1 and 8.4, 14 Chromium scenarios (including real classic checkout, cross-tab cart synchronization, and bounded large-workflow replay), REST/security smoke, Woo order/refund lifecycle checks, and exact-ZIP compatibility on WordPress 6.9, 7.0.4, and 7.1 with legacy storage and HPOS. Official Plugin Check reports zero errors; its remaining warnings are documented. See [submission/verification-report.md](submission/verification-report.md).
+The prepared repository passes 91 JavaScript tests, 102 PHP tests / 858 assertions on PHP 8.1 and 8.4, and 15 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, real classic checkout, cross-tab cart synchronization, and bounded replay. The 22-tool REST/security smoke, Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, and Playground execution also pass. Official Plugin Check reports zero errors; its reviewed warnings are documented in [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

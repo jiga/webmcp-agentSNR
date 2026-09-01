@@ -8,7 +8,7 @@ Website operators can inspect model traces in generic LLM tools or replay human 
 
 Agent experience monitoring is the broader category. **Agent SNR** is the product: it turns WebMCP activity into verified operational and business signal while suppressing unactionable noise. SNR uses its established engineering meaning: **signal-to-noise ratio**.
 
-> See what agents could do, what they actually did, where humans intervened, and what happened next.
+> See what agents did. Hear what they experienced. Discover what your site is missing.
 
 ## Target users
 
@@ -36,7 +36,7 @@ Agent SNR differentiates through first-class WebMCP inventory and policy, browse
 | Invocation | One tool-call start plus one authoritative terminal event |
 | Human checkpoint | Visible cart review, checkout handoff, and human order placement evidence |
 | Outcome | Paid order, cancellation, refund, abandonment, or no commerce effect |
-| Signal | Recorded tool failure, denied invocation, or unsupported capability request |
+| Signal | Site-observed behavior, agent-reported feedback, or a site-verified outcome that can change an operator decision |
 | Workflow Replay | Event-sourced redacted timeline; never described as a screen recording |
 
 ## Core MVP
@@ -45,7 +45,7 @@ Agent SNR differentiates through first-class WebMCP inventory and policy, browse
 
 1. **Monitor** — completion, failure/denial, latency, human handoffs, attributed orders, refunds, and net outcome.
 2. **Agent Sessions** — a session-scoped workflow feed that opens a redacted Workflow Replay.
-3. **Signals** — a loaded-snapshot queue derived from top tool errors, denied/failed invocations, and unsupported capability requests.
+3. **Signals** — a loaded-snapshot queue that keeps site-observed demand, agent-reported feedback, linked measurements, tool errors, denials, and unsupported capabilities visibly distinct.
 4. **Tools** — availability, policy state, reliability, latency, and commerce contribution.
 5. **Controls** — server-authoritative session restrictions, persistent policy, and emergency stop.
 
@@ -55,7 +55,17 @@ Agent SNR differentiates through first-class WebMCP inventory and policy, browse
 - raw prompts, customer identity, addresses, payment data, or arbitrary payload capture;
 - persistent issue assignment, comments, alert delivery, anomaly detection, and saved segments;
 - model token/cost analytics and model-quality evaluation;
-- changing internal plugin slugs, namespaces, REST routes, or tool contracts.
+- changing internal plugin slugs, namespaces, REST routes, or tool contracts;
+- free-form feedback capture, caller-supplied metric values, or automatic changes to catalog, policy, attribution, or inventory;
+- public cross-session demand claims; v0.1 Signals remain explicitly scoped to the current private demo session.
+
+Search signals compute counts, stock coverage, and highest matching public facts across the plugin's bounded 200-product catalog scan before the public response is sliced to at most eight products. When an in-stock search returns zero, one bounded all-stock scan distinguishes no match within that bounded scan from an existing out-of-stock match; out-of-stock matches remain absent from the tool result while their public product ID can anchor the merchant's inventory signal. Grouped measurements are explicitly one deterministic workflow sample—latest linked agent feedback when available, otherwise the latest site observation—and are never presented as a multi-workflow aggregate.
+
+### Agent Guide and feedback contract
+
+The storefront publishes one versioned **Agent Guide** for both humans and agents. It says where to start, which journeys are supported, which actions are reversible, where human authority begins, what telemetry is excluded, when feedback is useful, and that at most two structured reports are accepted per workflow.
+
+Automatic observation does not depend on an agent volunteering feedback. Zero-result and constrained low-coverage searches create privacy-preserving `site_observed` signals from a canonical demand signature. The agent may separately submit an `agent_reported` outcome, reason, ratings, owner-action suggestion, same-workflow evidence IDs, and a request for allowlisted measurements. WordPress computes every metric value from catalog, workflow, and WooCommerce evidence; unavailable conversion/value remains pending rather than becoming a false zero.
 
 ## Signature experience
 
@@ -72,7 +82,9 @@ An operator starts with a recorded signal or outcome, then inspects the session-
 - [x] A paid/refunded outcome remains visibly distinct from tool success.
 - [x] Every monitoring label remains accurate under the current privacy and attribution implementation.
 - [x] Existing WebMCP, REST, WooCommerce, and browser acceptance tests remain green.
+- [x] A zero-result search is visible even when no agent feedback is submitted.
+- [x] Agent testimony, site observation, and site-verified measurements are never merged into one trust label.
 
 ## Full vision
 
-Later phases can add saved workflow segments, durable Signal-to-Issue grouping, alert thresholds/anomalies, ownership and resolution state, annotations/highlights, visitor-session-to-agent-session correlation, and cross-site aggregate monitoring.
+Later phases can add saved workflow segments, durable Signal-to-Issue grouping, alert thresholds/anomalies, ownership and resolution state, annotations/highlights, visitor-session-to-agent-session correlation, and authenticated thresholded cross-session aggregate monitoring.

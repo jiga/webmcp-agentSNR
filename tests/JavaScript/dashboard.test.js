@@ -53,7 +53,9 @@ function dashboardFixture( options = {} ) {
 			} ),
 			element( document, "strong", { dataset: { metric: "revenue.net" } } ),
 			element( document, "strong", { dataset: { metric: "revenue.refunds" } } ),
-			element( document, "strong", { dataset: { metric: "policy_changes" }, text: "—" } ),
+				element( document, "strong", { dataset: { metric: "policy_changes" }, text: "—" } ),
+				element( document, "strong", { dataset: { wmcpOpportunityCount: "" }, text: "—" } ),
+				element( document, "span", { dataset: { wmcpFeedbackCount: "" }, text: "—" } ),
 			attributionCard( document, "direct" ),
 			attributionCard( document, "assisted" ),
 			attributionCard( document, "influenced" ),
@@ -65,11 +67,13 @@ function dashboardFixture( options = {} ) {
 			element( document, "dd", { dataset: { evidence: "status" } } ),
 			element( document, "dd", { dataset: { evidence: "products" } } ),
 			element( document, "dd", { dataset: { evidence: "orders" } } ),
-			element( document, "dd", { dataset: { evidence: "gaps" } } ),
+				element( document, "dd", { dataset: { evidence: "gaps" } } ),
+				element( document, "dd", { dataset: { evidence: "opportunities" } } ),
+				element( document, "dd", { dataset: { evidence: "feedback" } } ),
 			element( document, "ol", { dataset: { wmcpTimeline: "" } } ),
 			element( document, "tbody", { dataset: { wmcpWorkflows: "" } } ),
 			element( document, "tbody", { dataset: { wmcpToolHealth: "" } } ),
-			element( document, "div", { dataset: { wmcpGaps: "" } } ),
+				element( document, "div", { dataset: { wmcpGaps: "", wmcpOpportunities: "" } } ),
 			policyRow,
 			element( document, "p", { dataset: { wmcpAnnouncer: "" } } ),
 			element( document, "div", { dataset: { wmcpError: "" }, hidden: true } ),
@@ -104,6 +108,13 @@ function formattedMoney( value, currency ) {
 	} ).format( value );
 }
 
+function formattedDateTime( value ) {
+	return new Intl.DateTimeFormat( undefined, {
+		dateStyle: "short",
+		timeStyle: "medium",
+	} ).format( new Date( `${ value.replace( " ", "T" ) }Z` ) );
+}
+
 function signalCards( root ) {
 	return root.querySelectorAll( "[data-wmcp-signals] .wmcp-signal-card" );
 }
@@ -120,9 +131,11 @@ function workflow( workflowId, overrides = {} ) {
 
 function explanation( workflowId, label = "Returned evidence." ) {
 	return {
+		agent_feedback: [],
 		capability_gaps: [],
 		commerce_outcome: { orders: [] },
 		explanation: label,
+		opportunity_signals: [],
 		timeline: [ {
 			duration_ms: 12,
 			event_name: "tool.call.succeeded",
@@ -604,6 +617,221 @@ test( "Signals queue renders active grouped capability gaps as opportunities", (
 	assert.doesNotMatch( cards[ 0 ].textContent, /gift_wrapping/ );
 } );
 
+test( "Signals keep site observation, agent testimony, and verified measurements distinct", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_opportunity_signals", {
+		has_more: false,
+		items: [ {
+			affected_workflows: 2,
+			category: "demand_gap",
+			evidence_status: "linked",
+			feedback_count: 1,
+			latest_occurrence: "2026-08-31 12:00:00",
+			measured_context: {
+				checkout_conversion: { status: "verified", value: true },
+				eligible_product_count: { status: "verified", value: 2 },
+				highest_matching_water_rating: { status: "verified", value: "IPX4" },
+				net_attributed_value: { status: "verified", value: [ { currency: "USD", value: 69 } ] },
+				search_refinement_count: { status: "verified", value: 2 },
+			},
+			measurement_scope: {
+				kind: "latest_workflow_sample",
+				occurred_at: "2026-08-31 11:59:00",
+				source: "agent_reported",
+				workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE",
+			},
+			observed_count: 1,
+			related_product_ids: [ 18, 21 ],
+			signal_key: "waterproof-under-100",
+			sources: { agent_reported: 1, site_observed: 1 },
+			status: "open",
+			suggested_owner_action: "improve_product_coverage",
+			title: "Waterproof backpack under $100",
+		} ],
+	} );
+
+	const cards = signalCards( fixture.root );
+	assert.equal( cards.length, 1 );
+	assert.equal( cards[ 0 ].dataset.signalCategory, "demand_gap" );
+	assert.equal( cards[ 0 ].dataset.signalSource, "site-observed+agent-reported" );
+	assert.deepEqual(
+		cards[ 0 ].querySelectorAll( "[data-signal-source]" ).map( ( label ) => label.textContent ),
+		[ "Site observed", "Agent reported" ]
+	);
+	assert.match( cards[ 0 ].textContent, /1 site observation · 1 agent report/ );
+	assert.match( cards[ 0 ].textContent, /Improve Product Coverage/ );
+
+	const detail = fixture.root.querySelector( "[data-wmcp-opportunities] .wmcp-opportunity-card" );
+	assert.equal( detail.dataset.signalSource, "site-observed+agent-reported" );
+	assert.match( detail.textContent, /eligible products: 2 \(Verified\)/ );
+	assert.match( detail.textContent, /highest water rating: IPX4 \(Verified\)/ );
+	assert.match( detail.textContent, /checkout converted: yes \(Verified\)/ );
+	assert.match( detail.textContent, new RegExp( formattedMoney( 69, "USD" ).replace( /[$]/g, "\\$&" ) ) );
+	assert.match( detail.textContent, /Latest workflow sample/ );
+	assert.match( detail.textContent, /Not aggregate · Workflow 01M18QH3… · Agent reported/ );
+	assert.equal( detail.textContent.includes( formattedDateTime( "2026-08-31 11:59:00" ) ), true );
+	assert.doesNotMatch( detail.textContent, /01M18QH3GTR0AJB8NCGN35R5CE/ );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-opportunity-count]" ).textContent, "1" );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-feedback-count]" ).textContent, "1" );
+} );
+
+test( "single-workflow opportunity measurements retain the Site measured label", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_opportunity_signals", {
+		items: [ {
+			affected_workflows: 1,
+			category: "inventory_gap",
+			evidence_status: "verified",
+			feedback_count: 0,
+			measured_context: { eligible_product_count: { status: "verified", value: 0 } },
+			measurement_scope: {
+				kind: "single_workflow",
+				occurred_at: "2026-08-31 12:00:00",
+				source: "site_observed",
+				workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE",
+			},
+			observed_count: 1,
+			sources: { agent_reported: 0, site_observed: 1 },
+			title: "Matching product unavailable",
+		} ],
+	} );
+
+	const detail = fixture.root.querySelector( "[data-wmcp-opportunities] .wmcp-opportunity-card" );
+	assert.match( detail.textContent, /Site measuredeligible products: 0 \(Verified\)/ );
+	assert.match( detail.textContent, /Measurement scopeSingle workflow · Workflow 01M18QH3… · Site observed/ );
+	assert.doesNotMatch( detail.textContent, /Latest workflow sample|Not aggregate/ );
+} );
+
+test( "multiple affected workflows force a latest-sample label even with inconsistent scope kind", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_opportunity_signals", {
+		items: [ {
+			affected_workflows: 3,
+			category: "demand_gap",
+			feedback_count: 1,
+			measured_context: { search_refinement_count: { status: "verified", value: 2 } },
+			measurement_scope: {
+				kind: "single_workflow",
+				occurred_at: "2026-08-31 12:00:00",
+				source: "agent_reported",
+				workflow_id: "short-id",
+			},
+			observed_count: 0,
+			sources: { agent_reported: 1, site_observed: 0 },
+			title: "Repeated refinements",
+		} ],
+	} );
+
+	const detail = fixture.root.querySelector( "[data-wmcp-opportunities] .wmcp-opportunity-card" );
+	assert.match( detail.textContent, /Latest workflow samplesearch refinements: 2 \(Verified\)/ );
+	assert.match( detail.textContent, /Sample scopeNot aggregate · Workflow short-id · Agent reported/ );
+} );
+
+test( "missing measurement scope is labeled unavailable instead of inventing a sample", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_opportunity_signals", {
+		items: [ {
+			affected_workflows: 4,
+			category: "capability_gap",
+			feedback_count: 2,
+			measured_context: {},
+			measurement_scope: null,
+			observed_count: 0,
+			sources: { agent_reported: 1, site_observed: 0 },
+			title: "Back-in-stock capability requested",
+		} ],
+	} );
+
+	const detail = fixture.root.querySelector( "[data-wmcp-opportunities] .wmcp-opportunity-card" );
+	assert.match( detail.textContent, /Measurement unavailableNo site-computed measurement returned/ );
+	assert.match( detail.textContent, /Measurement scopeNo workflow measurement sample returned/ );
+	assert.doesNotMatch( detail.textContent, /Latest workflow sample|Not aggregate|Site measured|Single workflow/ );
+} );
+
+test( "site-observed opportunities never imply agent testimony or lost revenue", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "get_opportunity_signals", {
+		items: [ {
+			affected_workflows: 1,
+			category: "demand_gap",
+			evidence_status: "verified",
+			feedback_count: 0,
+			measured_context: { eligible_product_count: { status: "verified", value: 0 } },
+			observed_count: 1,
+			related_product_ids: [],
+			signal_key: "zero-results",
+			sources: { agent_reported: 0, site_observed: 1 },
+			title: "No IPX5 waterproof backpack under $100",
+		} ],
+	} );
+
+	const card = signalCards( fixture.root )[ 0 ];
+	assert.equal( card.dataset.signalSource, "site-observed" );
+	assert.match( card.textContent, /Site observed/ );
+	assert.doesNotMatch( card.textContent, /Agent reported|lost revenue/i );
+	assert.equal( fixture.root.querySelector( "[data-wmcp-feedback-count]" ).textContent, "0" );
+} );
+
+test( "opportunity values are rendered only as text", () => {
+	const fixture = dashboardFixture();
+	const hostileTitle = '<img src=x onerror="stealSession()">';
+	const hostileAction = '</dd><script>stealSession()</script>';
+	const hostileWorkflow = '<svg onload="stealSession()">workflow-secret-suffix';
+
+	render( fixture.window, "get_opportunity_signals", {
+		items: [ {
+			affected_workflows: 1,
+			category: "experience_friction",
+			evidence_status: "linked",
+			feedback_count: 1,
+			measured_context: {},
+			measurement_scope: {
+				kind: "latest_workflow_sample",
+				occurred_at: '</dd><script>stealSession()</script>',
+				source: '<img src=x onerror="stealSession()">',
+				workflow_id: hostileWorkflow,
+			},
+			observed_count: 0,
+			signal_key: "hostile",
+			sources: { agent_reported: 1, site_observed: 0 },
+			suggested_owner_action: hostileAction,
+			title: hostileTitle,
+		} ],
+	} );
+
+	const opportunities = fixture.root.querySelector( "[data-wmcp-opportunities]" );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value === hostileTitle ) );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value.toLowerCase().includes( "<script>stealsession()" ) ) );
+	assert.match( opportunities.textContent, /Source unavailable/ );
+	assert.doesNotMatch( opportunities.textContent, new RegExp( hostileWorkflow.replace( /[.*+?^${}()|[\]\\]/g, "\\$&" ) ) );
+	assert.equal( opportunities.querySelectorAll( "img" ).length, 0 );
+	assert.equal( opportunities.querySelectorAll( "script" ).length, 0 );
+	assert.equal( fixture.document.innerHTMLWrites.length, 0 );
+} );
+
+test( "Workflow Replay separates site-observed opportunities from agent feedback", () => {
+	const fixture = dashboardFixture();
+
+	render( fixture.window, "explain_agent_workflow", {
+		agent_feedback: [ { evidence_status: "linked" } ],
+		capability_gaps: [],
+		commerce_outcome: { orders: [] },
+		explanation: "The journey completed with a recorded constraint.",
+		opportunity_signals: [ { evidence_status: "verified" } ],
+		timeline: [],
+		truncated: false,
+		workflow: { status: "completed", workflow_id: "01M18QH3GTR0AJB8NCGN35R5CE" },
+	} );
+
+	assert.match( fixture.root.querySelector( '[data-evidence="opportunities"]' ).textContent, /1 site-observed signal · Site-observed evidence verified/ );
+	assert.match( fixture.root.querySelector( '[data-evidence="feedback"]' ).textContent, /1 agent-reported item · Agent report linked to workflow evidence/ );
+} );
+
 test( "Signals queue reports a clear empty state after all monitoring evidence loads", () => {
 	const fixture = dashboardFixture();
 
@@ -763,7 +991,7 @@ test( "Signals queue clears the previous snapshot before a refresh with a failed
 		"get_agent_conversion_funnel",
 		"query_agent_workflows",
 		"get_tool_health",
-		"get_capability_gaps",
+		"get_opportunity_signals",
 	];
 	const fetch = queuedFetch( [
 		jsonResponse( {

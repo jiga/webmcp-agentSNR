@@ -128,12 +128,29 @@ final class DatabaseMigrator
                 user_goal_redacted varchar(300) NOT NULL,
                 related_product_id bigint(20) unsigned DEFAULT NULL,
                 context_json text DEFAULT NULL,
+                signal_source varchar(24) NOT NULL DEFAULT 'agent_reported',
+                signal_category varchar(32) NOT NULL DEFAULT 'capability_gap',
+                signal_key char(64) DEFAULT NULL,
+                evidence_status varchar(24) NOT NULL DEFAULT 'unlinked',
+                outcome varchar(24) DEFAULT NULL,
+                step_id varchar(32) DEFAULT NULL,
+                reason_code varchar(64) DEFAULT NULL,
+                evidence_event_ids_json text DEFAULT NULL,
+                ratings_json text DEFAULT NULL,
+                requested_metrics_json text DEFAULT NULL,
+                measured_context_json text DEFAULT NULL,
+                suggested_action varchar(64) DEFAULT NULL,
+                dedupe_key char(64) DEFAULT NULL,
+                feedback_slot tinyint(3) unsigned DEFAULT NULL,
                 status varchar(24) NOT NULL DEFAULT 'open',
                 occurred_at datetime NOT NULL,
                 PRIMARY KEY  (id),
+                UNIQUE KEY signal_dedupe (dedupe_key),
+                UNIQUE KEY workflow_feedback_slot (workflow_id,feedback_slot),
                 KEY workflow_id (workflow_id),
                 KEY demo_session_time (demo_session_hash,occurred_at),
-                KEY capability_time (capability_slug,occurred_at)
+                KEY capability_time (capability_slug,occurred_at),
+                KEY signal_group (demo_session_hash,signal_category,capability_slug,occurred_at)
             ) {$collation};"
         );
 
@@ -152,13 +169,26 @@ final class DatabaseMigrator
             $wpdb->prefix . 'wmcp_workflows' => array('id', 'demo_session_hash', 'wc_session_hash', 'status', 'started_at'),
             $wpdb->prefix . 'wmcp_events' => array('id', 'event_id', 'workflow_id', 'request_id', 'dedupe_key', 'event_name'),
             $wpdb->prefix . 'wmcp_order_links' => array('id', 'order_id', 'workflow_id', 'rule_version', 'net_value'),
-            $wpdb->prefix . 'wmcp_capability_gaps' => array('id', 'workflow_id', 'demo_session_hash', 'capability_slug'),
+            $wpdb->prefix . 'wmcp_capability_gaps' => array(
+                'id',
+                'workflow_id',
+                'demo_session_hash',
+                'capability_slug',
+                'signal_source',
+                'signal_category',
+                'signal_key',
+                'evidence_status',
+                'evidence_event_ids_json',
+                'measured_context_json',
+                'dedupe_key',
+                'feedback_slot',
+            ),
         );
         $indexes = array(
             $wpdb->prefix . 'wmcp_workflows' => array('PRIMARY', 'demo_started', 'wc_session'),
             $wpdb->prefix . 'wmcp_events' => array('PRIMARY', 'event_id', 'dedupe_key', 'workflow_step', 'request_id'),
             $wpdb->prefix . 'wmcp_order_links' => array('PRIMARY', 'order_rule', 'workflow_id'),
-            $wpdb->prefix . 'wmcp_capability_gaps' => array('PRIMARY', 'demo_session_time', 'capability_time'),
+            $wpdb->prefix . 'wmcp_capability_gaps' => array('PRIMARY', 'signal_dedupe', 'workflow_feedback_slot', 'demo_session_time', 'capability_time', 'signal_group'),
         );
 
         $previous_suppression = $wpdb->suppress_errors(true);

@@ -10,9 +10,20 @@
 	let loading = false;
 	let explanationRequest = 0;
 	const monitorState = {
-		gaps: null,
 		overview: null,
+		opportunities: null,
 		toolHealth: null,
+	};
+	const measuredMetricLabels = {
+		attributed_order_count: "attributed orders",
+		checkout_conversion: "checkout converted",
+		checkout_handoff: "checkout handoff",
+		eligible_product_count: "eligible products",
+		highest_matching_water_rating: "highest water rating",
+		net_attributed_value: "net attributed",
+		paid_order_value: "paid order value",
+		search_refinement_count: "search refinements",
+		viewed_product_value_context: "Viewed-product value context",
 	};
 
 	if ( ! root ) {
@@ -165,21 +176,23 @@
 	}
 
 	function resetMonitorState() {
-		monitorState.gaps = null;
 		monitorState.overview = null;
+		monitorState.opportunities = null;
 		monitorState.toolHealth = null;
 		renderSignals();
 	}
 
 	function coverageMessage() {
-		const gaps = record( monitorState.gaps );
 		const health = record( monitorState.toolHealth );
+		const opportunities = record( monitorState.opportunities );
 		const reasons = [];
 		if ( health.truncated === true ) {
 			reasons.push( "tool-health results were truncated" );
 		}
-		if ( gaps.has_more === true ) {
-			reasons.push( "more capability-gap groups are available" );
+		if ( opportunities.has_more === true ) {
+			reasons.push( opportunities.compatibility_source === "capability_gaps"
+				? "more capability-gap groups are available"
+				: "more opportunity-signal groups are available" );
 		}
 		return reasons.join( "; " );
 	}
@@ -273,34 +286,79 @@
 	}
 
 	function opportunitySignals() {
-		if ( monitorState.gaps === null ) {
+		if ( monitorState.opportunities === null ) {
 			return [];
 		}
-		return list( monitorState.gaps.items || monitorState.gaps.gaps ).map( record ).filter( ( item ) => {
-			return ! [ "resolved", "dismissed" ].includes( String( item.status || "" ).toLowerCase() ) && ( metricNumber( item.requests ) || 0 ) > 0;
+		return list( monitorState.opportunities.items ).map( record ).filter( ( item ) => {
+			const evidenceCount = ( metricNumber( item.observed_count ) || 0 ) + ( metricNumber( item.feedback_count ) || 0 );
+			return ! [ "resolved", "dismissed" ].includes( String( item.status || "" ).toLowerCase() ) && evidenceCount > 0;
 		} ).map( ( item ) => {
-			const capability = typeof item.capability === "string" && item.capability !== "" ? item.capability : "Unspecified capability";
-			const requests = metricNumber( item.requests ) || 0;
-			const workflows = metricNumber( item.affected_workflows );
-			const affected = workflows === null
-				? plural( requests, "request" )
-				: `${ plural( requests, "request" ) } · ${ plural( workflows, "workflow" ) }`;
+			const observed = metricNumber( item.observed_count ) || 0;
+			const feedback = metricNumber( item.feedback_count ) || 0;
+			const workflows = metricNumber( item.affected_workflows ) || 0;
+			const sources = sourceLabels( item );
+			const badges = evidenceLabels( item );
+			const evidence = item.compatibility_evidence || `${ plural( observed, "site observation" ) } · ${ plural( feedback, "agent report" ) }`;
 			return {
-				affected: requests,
+				affected: observed + feedback,
+				category: String( item.category || "opportunity" ),
 				className: "wmcp-signal-opportunity",
 				fields: [
-					[ "Affected", affected ],
-					[ "Capability", capability ],
-					[ "Status", pretty( item.status || "open" ) ],
+					[ "Evidence", evidence ],
+					[ "Signal code", item.signal_code || "—" ],
+					[ "Workflows", plural( workflows, "workflow" ) ],
+					[ "Suggested action", pretty( item.suggested_owner_action || "review signal" ) ],
 				],
 				severity: "Opportunity",
 				severityRank: 2,
-				sortKey: `3:${ capability }:${ item.status || "" }`,
-				title: `${ pretty( capability ) } demand recorded`,
-				type: "Opportunity gap",
+				signalKey: String( item.signal_key || "" ),
+				sortKey: `3:${ item.category || "" }:${ item.signal_key || item.title || "" }`,
+				badges,
+				sources,
+				title: item.title || `${ pretty( item.category || "opportunity" ) } recorded`,
+				type: item.display_type || pretty( item.category || "Opportunity signal" ),
 				typeRank: 2,
 			};
 		} );
+	}
+
+	function sourceLabels( item ) {
+		const sources = record( item.sources );
+		const labels = [];
+		if ( ( metricNumber( sources.site_observed ) || 0 ) > 0 ) {
+			labels.push( "Site observed" );
+		}
+		if ( ( metricNumber( sources.agent_reported ) || 0 ) > 0 ) {
+			labels.push( "Agent reported" );
+		}
+		return labels;
+	}
+
+	function evidenceLabels( item ) {
+		const labels = sourceLabels( item );
+		if ( item.evidence_status === "verified" ) {
+			labels.push( "Site verified" );
+		}
+		return labels;
+	}
+
+	function sourceList( labels, status = "" ) {
+		const group = document.createElement( "span" );
+		group.className = "wmcp-signal-source-list";
+		if ( status ) {
+			const severity = document.createElement( "span" );
+			severity.className = "wmcp-signal-severity";
+			text( severity, status );
+			group.append( severity );
+		}
+		list( labels ).forEach( ( source ) => {
+			const label = document.createElement( "span" );
+			label.className = "wmcp-signal-source";
+			label.dataset.signalSource = String( source ).toLowerCase().replaceAll( " ", "-" );
+			text( label, source );
+			group.append( label );
+		} );
+		return group;
 	}
 
 	function renderSignals() {
@@ -339,15 +397,29 @@
 			const card = document.createElement( "article" );
 			card.className = `wmcp-signal-card ${ signal.className }`;
 			card.dataset.signalType = signal.type.toLowerCase().replaceAll( " ", "-" );
+			if ( signal.category ) {
+				card.dataset.signalCategory = signal.category;
+			}
+			if ( signal.signalKey ) {
+				card.dataset.signalKey = signal.signalKey;
+			}
+			if ( list( signal.sources ).length ) {
+				card.dataset.signalSource = signal.sources.join( "+" ).toLowerCase().replaceAll( " ", "-" );
+			}
 			const label = document.createElement( "div" );
 			label.className = "wmcp-panel-label";
 			const type = document.createElement( "span" );
 			type.className = "wmcp-signal-type";
-			const severity = document.createElement( "span" );
-			severity.className = "wmcp-signal-severity";
 			text( type, signal.type );
-			text( severity, signal.severity );
-			label.append( type, severity );
+			label.append( type );
+			if ( list( signal.badges || signal.sources ).length ) {
+				label.append( sourceList( signal.badges || signal.sources, signal.severity ) );
+			} else {
+				const severity = document.createElement( "span" );
+				severity.className = "wmcp-signal-severity";
+				text( severity, signal.severity );
+				label.append( severity );
+			}
 			const title = document.createElement( "h3" );
 			text( title, signal.title );
 			const metadata = document.createElement( "dl" );
@@ -493,13 +565,23 @@
 		);
 		const productIds = Array.from( new Set( timeline.flatMap( ( event ) => list( event.product_ids ).map( String ) ) ) );
 		const orders = list( result.commerce_outcome?.orders );
+		const opportunities = list( result.opportunity_signals );
+		const feedback = list( result.agent_feedback );
 		const orderSummary = orders.length
 			? orders.map( ( order ) => `#${ order.order_id } ${ pretty( order.attribution_class ) } ${ money( order.net, order.currency ) }` ).join( " · " )
 			: "No attributed order";
+		const opportunitySummary = opportunities.length
+			? `${ plural( opportunities.length, "site-observed signal" ) } · ${ Array.from( new Set( opportunities.map( ( item ) => evidenceStatusLabel( item.evidence_status ) ) ) ).join( " · " ) }`
+			: "No site-observed opportunity signal";
+		const feedbackSummary = feedback.length
+			? `${ plural( feedback.length, "agent-reported item" ) } · ${ Array.from( new Set( feedback.map( ( item ) => evidenceStatusLabel( item.evidence_status ) ) ) ).join( " · " ) }`
+			: "No agent feedback";
 		text( one( '[data-evidence="status"]' ), pretty( workflow.status ) );
 		text( one( '[data-evidence="products"]' ), productIds.join( ", " ) || "No product evidence" );
 		text( one( '[data-evidence="orders"]' ), orderSummary );
 		text( one( '[data-evidence="gaps"]' ), list( result.capability_gaps ).length );
+		text( one( '[data-evidence="opportunities"]' ), opportunitySummary );
+		text( one( '[data-evidence="feedback"]' ), feedbackSummary );
 		const container = one( "[data-wmcp-timeline]" );
 		if ( ! container ) {
 			return;
@@ -540,6 +622,8 @@
 		text( one( '[data-evidence="products"]' ), fallback );
 		text( one( '[data-evidence="orders"]' ), fallback );
 		text( one( '[data-evidence="gaps"]' ), fallback );
+		text( one( '[data-evidence="opportunities"]' ), fallback );
+		text( one( '[data-evidence="feedback"]' ), fallback );
 		one( "[data-wmcp-timeline]" )?.replaceChildren();
 	}
 
@@ -671,43 +755,177 @@
 		return value ?? "—";
 	}
 
-	function renderGaps( result ) {
-		monitorState.gaps = record( result );
+	function rawMeasuredMetricValue( key, value ) {
+		if ( [ "net_attributed_value", "paid_order_value" ].includes( key ) ) {
+			return list( value ).map( ( item ) => {
+				const amount = record( item );
+				return money( amount.value, amount.currency );
+			} ).filter( ( item ) => item !== "—" ).join( " + " ) || "—";
+		}
+		if ( key === "viewed_product_value_context" ) {
+			return valueContext( value );
+		}
+		if ( typeof value === "boolean" ) {
+			return value ? "yes" : "no";
+		}
+		return value === null || value === undefined || value === "" ? "—" : String( value );
+	}
+
+	function measuredMetricValue( key, value ) {
+		const envelope = record( value );
+		if ( Object.hasOwn( envelope, "status" ) && Object.hasOwn( envelope, "value" ) ) {
+			const measured = rawMeasuredMetricValue( key, envelope.value );
+			const status = pretty( envelope.status || "unknown" );
+			return `${ measured } (${ status })`;
+		}
+		return rawMeasuredMetricValue( key, value );
+	}
+
+	function measuredContextSummary( value ) {
+		const context = record( value );
+		return Object.keys( measuredMetricLabels ).filter( ( key ) => Object.hasOwn( context, key ) ).map( ( key ) => {
+			return `${ measuredMetricLabels[ key ] }: ${ measuredMetricValue( key, context[ key ] ) }`;
+		} ).join( " · " ) || "No site-computed measurement returned";
+	}
+
+	function shortWorkflowId( value ) {
+		const workflowId = String( value || "" ).trim();
+		if ( ! workflowId ) {
+			return "";
+		}
+		return workflowId.length > 8 ? `${ workflowId.slice( 0, 8 ) }…` : workflowId;
+	}
+
+	function measurementSourceLabel( value ) {
+		return {
+			agent_reported: "Agent reported",
+			site_observed: "Site observed",
+		}[ String( value || "" ) ] || "Source unavailable";
+	}
+
+	function measurementDisplay( item ) {
+		const scope = record( item.measurement_scope );
+		const affectedWorkflows = metricNumber( item.affected_workflows ) || 0;
+		const hasScope = [ "single_workflow", "latest_workflow_sample" ].includes( String( scope.kind || "" ) )
+			&& String( scope.workflow_id || "" ).trim() !== "";
+		if ( ! hasScope ) {
+			return {
+				label: "Measurement unavailable",
+				provenance: "No workflow measurement sample returned",
+				scopeLabel: "Measurement scope",
+			};
+		}
+		const isLatestSample = affectedWorkflows > 1 || scope.kind === "latest_workflow_sample";
+		const provenance = [];
+		const workflowId = shortWorkflowId( scope.workflow_id );
+		if ( workflowId ) {
+			provenance.push( `Workflow ${ workflowId }` );
+		}
+		if ( scope.source ) {
+			provenance.push( measurementSourceLabel( scope.source ) );
+		}
+		if ( scope.occurred_at ) {
+			provenance.push( dateTime( scope.occurred_at ) );
+		}
+		return {
+			label: isLatestSample ? "Latest workflow sample" : "Site measured",
+			provenance: `${ isLatestSample ? "Not aggregate" : "Single workflow" }${ provenance.length ? ` · ${ provenance.join( " · " ) }` : "" }`,
+			scopeLabel: isLatestSample ? "Sample scope" : "Measurement scope",
+		};
+	}
+
+	function evidenceStatusLabel( value ) {
+		return {
+			linked: "Agent report linked to workflow evidence",
+			unlinked: "Agent report without linked site evidence",
+			verified: "Site-observed evidence verified",
+		}[ String( value || "" ) ] || "Evidence status unavailable";
+	}
+
+	function normalizedCapabilityGap( value ) {
+		const item = record( value );
+		const requests = metricNumber( item.requests ) || 0;
+		return {
+			affected_workflows: metricNumber( item.affected_workflows ) || 0,
+			category: "capability_gap",
+			evidence_status: "linked",
+			feedback_count: requests,
+			compatibility_evidence: `${ plural( requests, "request" ) } · ${ plural( metricNumber( item.affected_workflows ) || 0, "workflow" ) }`,
+			latest_occurrence: item.latest_occurrence,
+			measured_context: {
+				viewed_product_value_context: item.viewed_product_value_context,
+			},
+			observed_count: 0,
+			related_product_ids: list( item.related_product_ids ),
+			signal_code: item.capability,
+			signal_key: item.gap_key || item.capability,
+			sources: { agent_reported: requests, site_observed: 0 },
+			status: item.status,
+			suggested_owner_action: "review capability",
+			title: item.capability ? `${ pretty( item.capability ) } demand recorded` : "Unsupported capability reported",
+			display_type: "Opportunity gap",
+		};
+	}
+
+	function renderOpportunities( result ) {
+		monitorState.opportunities = record( result );
 		renderSignals();
-		const items = list( result.items || result.gaps );
-		const container = one( "[data-wmcp-gaps]" );
+		const items = list( result.items );
+		const container = one( "[data-wmcp-opportunities]" ) || one( "[data-wmcp-gaps]" );
+		const feedbackCount = items.reduce( ( total, item ) => total + ( metricNumber( record( item ).feedback_count ) || 0 ), 0 );
+		text( one( "[data-wmcp-opportunity-count]" ), items.length );
+		text( one( "[data-wmcp-feedback-count]" ), feedbackCount );
 		if ( ! container ) {
 			return;
+		}
+		const countTarget = one( "[data-wmcp-opportunity-count]" );
+		if ( countTarget ) {
+			countTarget.title = result.has_more === true
+				? `Showing ${ items.length } grouped signals; more are available in this scope.`
+				: `${ items.length } grouped opportunity signals in this scope.`;
 		}
 		container.replaceChildren();
 		if ( items.length === 0 ) {
 			const empty = document.createElement( "p" );
 			empty.className = "wmcp-empty-state";
-			text( empty, "No unsupported capability request is recorded in this scope." );
+			text( empty, "No grouped opportunity or feedback signal is recorded in this scope." );
 			container.append( empty );
 			return;
 		}
 
 		items.forEach( ( item, index ) => {
+			item = record( item );
+			const sources = sourceLabels( item );
+			const badges = evidenceLabels( item );
+			const measurement = measurementDisplay( item );
 			const card = document.createElement( "article" );
-			card.className = "wmcp-gap-card";
+			card.className = "wmcp-gap-card wmcp-opportunity-card";
+			card.dataset.signalCategory = String( item.category || "opportunity" );
+			card.dataset.signalKey = String( item.signal_key || "" );
+			card.dataset.signalSource = sources.join( "+" ).toLowerCase().replaceAll( " ", "-" );
 			const label = document.createElement( "div" );
 			label.className = "wmcp-panel-label";
 			const kind = document.createElement( "span" );
 			const number = document.createElement( "span" );
-			text( kind, "Unsupported request" );
+			text( kind, pretty( item.category || "Opportunity signal" ) );
 			text( number, String( index + 1 ).padStart( 2, "0" ) );
-			label.append( kind, number );
+			label.append( kind, badges.length ? sourceList( badges ) : number );
 			const title = document.createElement( "h3" );
-			text( title, pretty( item.capability ) );
+			text( title, item.title || pretty( item.signal_code || "Opportunity signal" ) );
 			const details = document.createElement( "dl" );
 			const fields = [
-				[ "Requests", item.requests ],
-				[ "Workflows", item.affected_workflows ],
+				[ "Site observations", metricNumber( item.observed_count ) || 0 ],
+				[ "Agent feedback", metricNumber( item.feedback_count ) || 0 ],
+				[ "Signal", item.signal_code || "—" ],
+				[ "Workflows", metricNumber( item.affected_workflows ) || 0 ],
+				[ "Distinct sessions", metricNumber( item.distinct_sessions ) || 0 ],
 				[ "Related products", list( item.related_product_ids ).join( ", " ) || "—" ],
-				[ "Viewed-product value context", valueContext( item.viewed_product_value_context ) ],
+				[ measurement.label, measuredContextSummary( item.measured_context ) ],
+				[ measurement.scopeLabel, measurement.provenance ],
+				[ "Evidence", evidenceStatusLabel( item.evidence_status ) ],
+				[ "Suggested action", pretty( item.suggested_owner_action || "review signal" ) ],
 				[ "Latest", dateTime( item.latest_occurrence ) ],
-				[ "Status", pretty( item.status ) ],
+				[ "Status", pretty( item.status || "open" ) ],
 			];
 			fields.forEach( ( [ term, value ] ) => {
 				const wrapper = document.createElement( "div" );
@@ -720,6 +938,14 @@
 			} );
 			card.append( label, title, details );
 			container.append( card );
+		} );
+	}
+
+	function renderGaps( result ) {
+		renderOpportunities( {
+			compatibility_source: "capability_gaps",
+			has_more: result.has_more === true,
+			items: list( result.items || result.gaps ).map( normalizedCapabilityGap ),
 		} );
 	}
 
@@ -758,6 +984,8 @@
 			renderExplanation( result );
 		} else if ( tool === "get_tool_health" ) {
 			renderToolHealth( result );
+		} else if ( tool === "get_opportunity_signals" ) {
+			renderOpportunities( result );
 		} else if ( tool === "get_capability_gaps" ) {
 			renderGaps( result );
 		} else if ( tool === "set_tool_enabled" ) {
@@ -917,16 +1145,19 @@
 			button.disabled = true;
 		}
 		showError( "" );
-		announce( "Loading current-session overview, funnel, workflows, tool health, and capability gaps." );
+		announce( "Loading current-session overview, funnel, workflows, tool health, and opportunity signals." );
 		try {
 			currentManifest = null;
-			await fetchManifest();
+			const manifest = await fetchManifest();
+			const opportunityTool = manifest.tools?.some( ( definition ) => definition.name === "get_opportunity_signals" )
+				? "get_opportunity_signals"
+				: "get_capability_gaps";
 			const tools = [
 				"get_agent_analytics_overview",
 				"get_agent_conversion_funnel",
 				"query_agent_workflows",
 				"get_tool_health",
-				"get_capability_gaps",
+				opportunityTool,
 			];
 			const results = await Promise.allSettled( tools.map( ( tool ) => execute( tool, tool === "query_agent_workflows" ? { limit: 20 } : {} ) ) );
 			const failures = results.filter( ( result ) => result.status === "rejected" );

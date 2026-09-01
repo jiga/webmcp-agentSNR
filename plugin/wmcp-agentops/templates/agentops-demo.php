@@ -91,7 +91,7 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 			<article class="wmcp-metric"><span><?php esc_html_e('Paid orders', 'wmcp-agentops'); ?></span><strong data-metric="commerce.orders_paid">—</strong><small><?php esc_html_e('same-session outcomes', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric wmcp-metric-revenue"><span><?php esc_html_e('Net attributed', 'wmcp-agentops'); ?></span><strong data-metric="revenue.net">—</strong><small><span data-metric="revenue.orders">—</span> <?php esc_html_e('orders', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('Refund value', 'wmcp-agentops'); ?></span><strong data-metric="revenue.refunds">—</strong><small><?php esc_html_e('attributed by currency', 'wmcp-agentops'); ?></small></article>
-			<article class="wmcp-metric"><span><?php esc_html_e('Capability signals', 'wmcp-agentops'); ?></span><strong data-metric="capability_gaps.requests">—</strong><small><?php esc_html_e('unsupported goals', 'wmcp-agentops'); ?></small></article>
+			<article class="wmcp-metric"><span><?php esc_html_e('Opportunity signals', 'wmcp-agentops'); ?></span><strong data-wmcp-opportunity-count>—</strong><small><span data-wmcp-feedback-count>—</span> <?php esc_html_e('agent reports', 'wmcp-agentops'); ?></small></article>
 			<article class="wmcp-metric"><span><?php esc_html_e('Control changes', 'wmcp-agentops'); ?></span><strong data-metric="policy_changes">—</strong><small><?php esc_html_e('policy signals', 'wmcp-agentops'); ?></small></article>
 		</div>
 		<div class="wmcp-attribution-strip" aria-label="<?php esc_attr_e('Attributed revenue classes', 'wmcp-agentops'); ?>">
@@ -120,6 +120,8 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 					<div><dt><?php esc_html_e('Products', 'wmcp-agentops'); ?></dt><dd data-evidence="products">—</dd></div>
 					<div><dt><?php esc_html_e('Orders / attribution', 'wmcp-agentops'); ?></dt><dd data-evidence="orders">—</dd></div>
 					<div><dt><?php esc_html_e('Capability signals', 'wmcp-agentops'); ?></dt><dd data-evidence="gaps">—</dd></div>
+					<div><dt><?php esc_html_e('Opportunity signals', 'wmcp-agentops'); ?></dt><dd data-evidence="opportunities">—</dd></div>
+					<div><dt><?php esc_html_e('Agent feedback', 'wmcp-agentops'); ?></dt><dd data-evidence="feedback">—</dd></div>
 				</dl>
 				<ol class="wmcp-timeline" data-wmcp-timeline></ol>
 			</article>
@@ -160,10 +162,10 @@ $dashboard_available = ! $is_admin || ! empty($view['demo_mode']);
 	</section>
 
 	<section id="wmcp-gaps" class="wmcp-board-section" aria-labelledby="wmcp-gaps-title">
-		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('05 / Actionable evidence', 'wmcp-agentops'); ?></p><h2 id="wmcp-gaps-title"><?php esc_html_e('Signals', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Signals come from recorded failures, denials, and unsupported goals—not inferred sentiment.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-board-section-head"><div><p class="wmcp-kicker"><?php esc_html_e('05 / Actionable evidence', 'wmcp-agentops'); ?></p><h2 id="wmcp-gaps-title"><?php esc_html_e('Signals', 'wmcp-agentops'); ?></h2></div><p><?php esc_html_e('Signals combine site-observed behavior with agent-reported feedback. Agent testimony is never promoted to fact; linked measurements come from catalog, workflow, and WooCommerce evidence.', 'wmcp-agentops'); ?></p></div>
 		<div class="wmcp-signal-feed" data-wmcp-signals></div>
-		<div class="wmcp-capability-signal-head"><span><?php esc_html_e('Capability requests', 'wmcp-agentops'); ?></span><small><?php esc_html_e('Viewed-product value is opportunity context, not a claim of lost revenue.', 'wmcp-agentops'); ?></small></div>
-		<div class="wmcp-gap-list" data-wmcp-gaps><p class="wmcp-empty-state"><?php esc_html_e('No unsupported-goal signals have been recorded for this scope.', 'wmcp-agentops'); ?></p></div>
+		<div class="wmcp-capability-signal-head"><span><?php esc_html_e('Opportunity and feedback evidence', 'wmcp-agentops'); ?></span><small><?php esc_html_e('Site observations and agent reports stay visibly separate. Product value is context, never a lost-revenue claim.', 'wmcp-agentops'); ?></small></div>
+		<div class="wmcp-gap-list wmcp-opportunity-list" data-wmcp-opportunities data-wmcp-gaps><p class="wmcp-empty-state"><?php esc_html_e('No grouped opportunity or feedback signal has been recorded for this scope.', 'wmcp-agentops'); ?></p></div>
 	</section>
 
 	<section id="wmcp-governance" class="wmcp-board-section wmcp-governance" aria-labelledby="wmcp-governance-title">

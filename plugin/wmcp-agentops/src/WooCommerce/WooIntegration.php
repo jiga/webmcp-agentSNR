@@ -13,6 +13,8 @@ namespace WPWebMCP\AgentOps\WooCommerce;
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use WPWebMCP\AgentOps\Abilities\CallbackRouter;
 use WPWebMCP\AgentOps\Analytics\EventRecorder;
+use WPWebMCP\AgentOps\Analytics\OpportunityDetector;
+use WPWebMCP\AgentOps\Analytics\SignalService;
 use WPWebMCP\AgentOps\Analytics\WorkflowService;
 use WPWebMCP\AgentOps\Demo\DemoMode;
 use WPWebMCP\AgentOps\Privacy\ActorHasher;
@@ -25,7 +27,9 @@ final class WooIntegration
         private readonly CallbackRouter $callbacks,
         private readonly WorkflowService $workflows,
         private readonly EventRecorder $events,
-        private readonly ?object $database = null
+        private readonly ?object $database = null,
+        private readonly ?SignalService $signals = null,
+        private readonly ?OpportunityDetector $opportunities = null
     ) {
     }
 
@@ -66,7 +70,9 @@ final class WooIntegration
             $catalog,
             new StorePolicyService(),
             $cart,
-            new CommerceTelemetry($correlator, $this->events)
+            new CommerceTelemetry($correlator, $this->events),
+            $this->signals,
+            $this->opportunities
         );
 
         $abilities->register($this->callbacks);

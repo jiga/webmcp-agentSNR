@@ -29,7 +29,9 @@ Include:
 
 ## Data minimization
 
-The workflow ledger stores stable event names, tool/version/risk, outcome, duration, carefully allowlisted commerce facts, and one-way session/actor hashes. It does not store raw prompts, conversations, user identities, email, phone, addresses, cookies, nonces, authentication headers, payment fields, full request/response payloads, or product reviews.
+The workflow ledger stores stable event names, tool/version/risk, outcome, duration, carefully allowlisted commerce facts, canonical demand signatures, structured feedback enums, evidence IDs, and one-way session/actor hashes. It does not store raw prompts or search text, conversations, free-form feedback, user identities, email, phone, addresses, cookies, nonces, authentication headers, payment fields, full request/response payloads, or product reviews.
+
+Agent feedback is untrusted testimony. The caller cannot choose its trust label, scope, status, or metric values; every referenced event must belong to the same storefront workflow and private demo session. Site-observed signals and server-computed measurements are rendered separately, and feedback never changes attribution, catalog, inventory, or policy.
 
 Demo session expiry is enforced on request. WP-Cron performs bounded garbage collection only; it is not relied upon for authorization expiry.
 

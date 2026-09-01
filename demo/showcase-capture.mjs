@@ -17,8 +17,8 @@ const OUTPUT_DIR = path.resolve(
 	process.env.WMCP_SHOWCASE_OUTPUT || "submission/demo-screenshots"
 );
 
-const STOREFRONT_TOOL_COUNT = 11;
-const AGENT_SNR_TOOL_COUNT = 8;
+const STOREFRONT_TOOL_COUNT = 13;
+const AGENT_SNR_TOOL_COUNT = 9;
 const SHOWCASE_CREDENTIALS_FILE = path.resolve(
 	process.env.WMCP_SHOWCASE_CREDENTIALS_FILE || ".release-test/showcase-runtime/operator-credentials"
 );
@@ -200,55 +200,84 @@ async function runShowcase( browser, outputDirectory ) {
 
 	await page.goto( "/storefront-demo/" );
 	await waitForTools( page, STOREFRONT_TOOL_COUNT );
+	const guide = await callTool( page, "get_agent_guide" );
 	const initialCart = await callTool( page, "get_cart" );
+	const zeroSearch = await callTool( page, "search_products", {
+		attributes: { water_rating: "IPX5" },
+		in_stock_only: true,
+		limit: 6,
+		max_price: 100,
+		query: "waterproof backpack",
+	} );
+	if (
+		zeroSearch.result.result_count !== 0 ||
+		zeroSearch.result.opportunity_signal?.signal_code !== "zero_results"
+	) {
+		throw new Error( "The zero-result opportunity signal was not recorded." );
+	}
+	const guideScreenshot = await captureViewport(
+		page,
+		outputDirectory,
+		"02-agent-guide.png",
+		"#wmcp-agent-guide"
+	);
+	const opportunityScreenshot = await captureViewport(
+		page,
+		outputDirectory,
+		"03-zero-result-opportunity.png",
+		'[data-wmcp-search-opportunity]'
+	);
 	const search = await callTool( page, "search_products", {
 		in_stock_only: true,
 		limit: 6,
-		max_price: 120,
+		max_price: 100,
 		query: "waterproof backpack",
 	} );
 	const byName = Object.fromEntries( search.result.products.map( ( product ) => [ product.name, product ] ) );
-	const alpine = byName[ "AlpineFlow 24 Pack" ];
-	const coast = byName[ "CoastRunner 26 Pack" ];
-	if ( ! alpine || ! coast ) {
+	const harborLite = byName[ "HarborLite 16 Pack" ];
+	const rainTrail = byName[ "RainTrail 20 Pack" ];
+	if ( ! harborLite || ! rainTrail ) {
 		throw new Error( "The showcase products were not found." );
 	}
 	await callTool( page, "compare_products", {
 		criteria: [ "price", "capacity", "water_rating", "weight", "return_days" ],
-		product_ids: [ alpine.id, coast.id ],
+		product_ids: [ harborLite.id, rainTrail.id ],
 	} );
-	await callTool( page, "get_store_policy", { policy_type: "returns", product_id: alpine.id } );
-	const unavailableSearch = await callTool( page, "search_products", {
-		in_stock_only: false,
-		limit: 6,
-		max_price: 120,
-		query: "TerraRoll 25 Pack",
-	} );
-	const terra = unavailableSearch.result.products.find(
-		( product ) => product.name === "TerraRoll 25 Pack"
-	);
-	if ( ! terra || terra.stock_status !== "outofstock" ) {
-		throw new Error( "The out-of-stock TerraRoll showcase product was not found." );
-	}
-	const capabilityGap = await callTool( page, "report_capability_gap", {
-		context: { color: "blue", stock_status: "outofstock" },
-		related_product_id: terra.id,
-		requested_capability: "back_in_stock_notification",
-		user_goal: "Notify the shopper when the blue TerraRoll 25 Pack is back in stock.",
-	} );
+	await callTool( page, "get_store_policy", { policy_type: "returns", product_id: harborLite.id } );
 	const add = await callTool( page, "add_to_cart", {
 		expected_cart_revision: initialCart.result.cart_revision,
-		product_id: alpine.id,
+		product_id: harborLite.id,
 		quantity: 1,
 	} );
 	const handoff = await callTool( page, "checkout_handoff", {
 		expected_cart_revision: add.result.cart.cart_revision,
 	} );
+	const feedback = await callTool( page, "report_agent_feedback", {
+		evidence_event_ids: [ zeroSearch.event_id, search.event_id, handoff.event_id ],
+		feedback_type: "constraint_encountered",
+		outcome: "partial",
+		ratings: {
+			effort: "medium",
+			evidence_quality: "sufficient",
+			handoff_quality: "smooth",
+			policy_clarity: "clear",
+		},
+		reason_code: "budget_tradeoff",
+		requested_metrics: [
+			"eligible_product_count",
+			"highest_matching_water_rating",
+			"search_refinement_count",
+			"checkout_conversion",
+			"paid_order_value",
+		],
+		step: "checkout_handoff",
+		suggested_owner_action: "improve_product_coverage",
+	} );
 	const storefrontScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"02-storefront-evidence.png",
-		".wmcp-operation-dock"
+		"04-agent-feedback-handoff.png",
+		'[data-wmcp-panel="feedback"]'
 	);
 
 	await page.goto( handoff.result.checkout_url );
@@ -266,11 +295,18 @@ async function runShowcase( browser, outputDirectory ) {
 	const orderScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"03-human-order-confirmation.png"
+		"05-human-order-confirmation.png"
 	);
 
 	await page.goto( "/agentops-demo/" );
 	await waitForTools( page, AGENT_SNR_TOOL_COUNT );
+	const verifiedSignals = await callTool( page, "get_opportunity_signals" );
+	const corroboratedSignal = verifiedSignals.result.items.find(
+		( item ) => item.sources?.site_observed === true && item.sources?.agent_reported === true
+	);
+	if ( ! corroboratedSignal ) {
+		throw new Error( "The combined observed and agent-reported signal was not found." );
+	}
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
 	await page.locator( "[data-wmcp-workflows] [data-explain-workflow]" ).first().waitFor( {
 		state: "visible",
@@ -279,8 +315,15 @@ async function runShowcase( browser, outputDirectory ) {
 	const monitorScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"04-agent-snr-monitor.png",
+		"06-agent-snr-monitor.png",
 		"#wmcp-overview"
+	);
+	const signalsScreenshot = await captureViewport(
+		page,
+		outputDirectory,
+		"07-opportunity-signals.png",
+		"#wmcp-gaps",
+		-90
 	);
 	const workflowButton = page.locator( `[data-workflow-id="${ handoff.workflow_id }"] [data-explain-workflow]` );
 	await workflowButton.click();
@@ -291,7 +334,7 @@ async function runShowcase( browser, outputDirectory ) {
 	const replayScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"05-workflow-replay.png",
+		"08-workflow-replay.png",
 		"#wmcp-workflows"
 	);
 
@@ -304,7 +347,7 @@ async function runShowcase( browser, outputDirectory ) {
 	const controlsScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"06-session-controls.png",
+		"09-session-controls.png",
 		"#wmcp-governance",
 		45
 	);
@@ -321,7 +364,7 @@ async function runShowcase( browser, outputDirectory ) {
 	const refundScreenshot = await captureViewport(
 		page,
 		outputDirectory,
-		"07-refund-net-outcome.png",
+		"10-refund-net-outcome.png",
 		"#wmcp-overview"
 	);
 	if ( consoleErrors.length ) {
@@ -334,22 +377,39 @@ async function runShowcase( browser, outputDirectory ) {
 		baseUrl: BASE_URL,
 		workflowId: handoff.workflow_id,
 		orderId,
-		product: { id: alpine.id, name: alpine.name, price: alpine.price },
-		capabilitySignal: {
-			fulfilled: capabilityGap.result.fulfilled,
-			recorded: capabilityGap.result.recorded,
-			requestedCapability: "back_in_stock_notification",
-			relatedProduct: {
-				id: terra.id,
-				name: terra.name,
-				stockStatus: terra.stock_status,
-			},
+		product: { id: harborLite.id, name: harborLite.name, price: harborLite.price },
+		agentGuide: {
+			version: guide.result.version,
+			maxFeedbackReportsPerWorkflow: guide.result.feedback.max_reports_per_workflow,
+		},
+		opportunitySignal: {
+			id: zeroSearch.result.opportunity_signal.id,
+			evidenceStatus: zeroSearch.result.opportunity_signal.evidence_status,
+			signalCode: zeroSearch.result.opportunity_signal.signal_code,
+			source: zeroSearch.result.opportunity_signal.source,
+		},
+		agentFeedback: {
+			feedbackId: feedback.result.feedback_id,
+			evidenceStatus: feedback.result.evidence_status,
+			measuredContext: feedback.result.measured_context,
+			requestedMetrics: [
+				"eligible_product_count",
+				"highest_matching_water_rating",
+				"search_refinement_count",
+				"checkout_conversion",
+				"paid_order_value",
+			],
+			trust: feedback.result.trust,
+			verifiedContextAfterOrder: corroboratedSignal.measured_context,
 		},
 		screenshots: {
 			landingScreenshot,
+			guideScreenshot,
+			opportunityScreenshot,
 			storefrontScreenshot,
 			orderScreenshot,
 			monitorScreenshot,
+			signalsScreenshot,
 			replayScreenshot,
 			controlsScreenshot,
 			refundScreenshot,

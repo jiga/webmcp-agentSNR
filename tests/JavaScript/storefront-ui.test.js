@@ -17,7 +17,7 @@ const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentops/assets/js/st
 function panel( document, stage, children ) {
 	return element( document, "section", {
 		dataset: { wmcpPanel: stage },
-		hidden: stage === "gap",
+		hidden: [ "feedback", "gap" ].includes( stage ),
 		children,
 	} );
 }
@@ -35,15 +35,41 @@ function storefrontFixture() {
 		dataset: { wmcpCheckoutLink: "" },
 		hidden: true,
 	} );
+	const guide = element( document, "section", {
+		dataset: { wmcpAgentGuide: "", state: "published" },
+		children: [
+			element( document, "strong", { dataset: { wmcpGuideVersion: "" }, text: "1.0" } ),
+			element( document, "span", { dataset: { wmcpGuideStatus: "" }, text: "Published" } ),
+			element( document, "p", { dataset: { wmcpFeedbackPolicy: "" } } ),
+		],
+	} );
+	const opportunity = element( document, "aside", {
+		dataset: { wmcpSearchOpportunity: "" },
+		hidden: true,
+		children: [
+			element( document, "p", { dataset: { wmcpOpportunitySummary: "" } } ),
+			element( document, "p", { dataset: { wmcpFeedbackHint: "" }, hidden: true } ),
+		],
+	} );
+	const feedbackPanel = panel( document, "feedback", [
+		element( document, "span", { dataset: { wmcpFeedbackTrust: "" } } ),
+		element( document, "span", { dataset: { wmcpFeedbackEvidenceStatus: "" } } ),
+		element( document, "h3", { id: "wmcp-feedback-title" } ),
+		element( document, "p", { dataset: { wmcpFeedbackMessage: "" } } ),
+		element( document, "dd", { dataset: { wmcpFeedbackMetrics: "" } } ),
+		element( document, "dd", { dataset: { wmcpFeedbackAction: "" } } ),
+	] );
 	const root = element( document, "main", {
 		className: "wmcp-field",
 		dataset: { wmcpSurface: "storefront" },
 		children: [
+			guide,
 			...Object.values( stages ),
 			panel( document, "search", [
 				element( document, "span", { dataset: { wmcpResultCount: "" } } ),
 				element( document, "h3", { id: "wmcp-search-results-title" } ),
 				element( document, "div", { dataset: { wmcpSearchResults: "" } } ),
+				opportunity,
 			] ),
 			panel( document, "comparison", [
 				element( document, "h3", { id: "wmcp-comparison-title" } ),
@@ -66,20 +92,21 @@ function storefrontFixture() {
 			panel( document, "gap", [
 				element( document, "p", { dataset: { wmcpGapMessage: "" } } ),
 			] ),
+			feedbackPanel,
 		],
 	} );
 	document.body.append( root );
 	const window = new MockWindow( document, { origin: "https://storefront.test" } );
 	runBrowserScript( SCRIPT, { document, window } );
-	return { checkoutLink, document, root, stages, window };
+	return { checkoutLink, document, feedbackPanel, guide, opportunity, root, stages, window };
 }
 
-function render( window, tool, result, extra = {} ) {
+function render( window, tool, result, response = {} ) {
 	window.dispatchEvent( new MockCustomEvent( "wmcp:ui-update", {
-		detail: Object.assign( {
-			response: { result, tool: { name: tool } },
+		detail: {
+			response: Object.assign( { result, tool: { name: tool } }, response ),
 			tool,
-		}, extra ),
+		},
 	} ) );
 }
 
@@ -221,4 +248,137 @@ test( "unsafe policy source URLs are omitted instead of becoming executable link
 	} );
 
 	assert.equal( fixture.root.querySelector( "[data-wmcp-policy]" ).querySelector( "a" ), null );
+} );
+
+test( "Agent Guide marks discovery as read without changing commerce progress", () => {
+	const fixture = storefrontFixture();
+
+	render( fixture.window, "get_agent_guide", {
+		feedback: {
+			recommended_when: [ "zero_results", "human_handoff" ],
+		},
+		version: "1.1",
+	} );
+
+	assert.equal( fixture.guide.dataset.state, "read" );
+	assert.equal( fixture.guide.classList.contains( "wmcp-is-updated" ), true );
+	assert.equal( fixture.guide.querySelector( "[data-wmcp-guide-version]" ).textContent, "1.1" );
+	assert.equal( fixture.guide.querySelector( "[data-wmcp-guide-status]" ).textContent, "Read by agent" );
+	assert.match( fixture.guide.querySelector( "[data-wmcp-feedback-policy]" ).textContent, /zero results, human handoff/ );
+	assert.equal( Object.values( fixture.stages ).some( ( stage ) => stage.classList.contains( "wmcp-is-complete" ) ), false );
+} );
+
+test( "zero-result search shows a site-observed opportunity and bounded feedback hint", () => {
+	const fixture = storefrontFixture();
+
+	render(
+		fixture.window,
+		"search_products",
+		{
+			opportunity_signals: [ {
+				recorded: true,
+				signal_id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+				summary: "No IPX5 waterproof backpack matched under $100.",
+			} ],
+			products: [],
+			result_count: 0,
+		},
+		{
+			next_actions: [ {
+				reason: "zero_results",
+				tool: "report_agent_feedback",
+			} ],
+		}
+	);
+
+	assert.equal( fixture.opportunity.hidden, false );
+	assert.equal( fixture.opportunity.dataset.state, "recorded" );
+	assert.match( fixture.opportunity.querySelector( "[data-wmcp-opportunity-summary]" ).textContent, /No IPX5/ );
+	const hint = fixture.opportunity.querySelector( "[data-wmcp-feedback-hint]" );
+	assert.equal( hint.hidden, false );
+	assert.match( hint.textContent, /Feedback invited · Zero Results/ );
+} );
+
+test( "zero results without a recorded server signal keep the opportunity notice hidden", () => {
+	const fixture = storefrontFixture();
+
+	render(
+		fixture.window,
+		"search_products",
+		{ products: [], result_count: 0 },
+		{
+			next_actions: [ { reason: "zero_results", tool: "report_agent_feedback" } ],
+		}
+	);
+
+	assert.equal( fixture.opportunity.hidden, true );
+	assert.equal( fixture.opportunity.querySelector( "[data-wmcp-opportunity-summary]" ).textContent, "—" );
+} );
+
+test( "a later ordinary search clears prior opportunity evidence and feedback text", () => {
+	const fixture = storefrontFixture();
+
+	render(
+		fixture.window,
+		"search_products",
+		{
+			opportunity_signals: [ {
+				recorded: true,
+				signal_id: "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+				summary: "No IPX5 waterproof backpack matched under $100.",
+			} ],
+			products: [],
+			result_count: 0,
+		},
+		{ next_actions: [ { reason: "zero_results", tool: "report_agent_feedback" } ] }
+	);
+	assert.equal( fixture.opportunity.hidden, false );
+
+	render( fixture.window, "search_products", {
+		products: [ {
+			currency: "USD",
+			id: 18,
+			name: "HarborLite 16 Pack",
+			price: 69,
+			url: "https://storefront.test/product/harborlite-16/",
+		} ],
+		result_count: 4,
+	} );
+
+	assert.equal( fixture.opportunity.hidden, true );
+	assert.equal( fixture.opportunity.querySelector( "[data-wmcp-opportunity-summary]" ).textContent, "—" );
+	assert.equal( fixture.opportunity.querySelector( "[data-wmcp-feedback-hint]" ).hidden, true );
+	assert.equal( fixture.opportunity.querySelector( "[data-wmcp-feedback-hint]" ).textContent, "—" );
+} );
+
+test( "feedback receipt keeps agent testimony separate from site-computed metrics", () => {
+	const fixture = storefrontFixture();
+	const hostileMessage = '<img src=x onerror="stealSession()">';
+
+	render( fixture.window, "search_products", { products: [], result_count: 0 } );
+	render( fixture.window, "report_agent_feedback", {
+		evidence_status: "linked",
+		measured_context: {
+			checkout_conversion: { status: "pending", value: null },
+			eligible_product_count: { status: "verified", value: 2 },
+			highest_matching_water_rating: { status: "verified", value: "IPX4" },
+			search_refinement_count: { status: "verified", value: 2 },
+		},
+		message: hostileMessage,
+		suggested_owner_action: "improve_product_coverage",
+		trust: "agent_reported",
+	} );
+
+	assert.equal( fixture.feedbackPanel.hidden, false );
+	assert.equal( fixture.feedbackPanel.dataset.feedbackTrust, "agent_reported" );
+	assert.equal( fixture.feedbackPanel.dataset.evidenceStatus, "linked" );
+	assert.equal( fixture.feedbackPanel.querySelector( "[data-wmcp-feedback-trust]" ).textContent, "Agent reported" );
+	assert.equal( fixture.feedbackPanel.querySelector( "[data-wmcp-feedback-evidence-status]" ).textContent, "Site evidence linked" );
+	assert.match( fixture.feedbackPanel.querySelector( "[data-wmcp-feedback-metrics]" ).textContent, /eligible products: 2 \(Verified\)/ );
+	assert.match( fixture.feedbackPanel.querySelector( "[data-wmcp-feedback-metrics]" ).textContent, /checkout converted: — \(Pending\)/ );
+	assert.equal( fixture.feedbackPanel.querySelector( "[data-wmcp-feedback-action]" ).textContent, "Improve Product Coverage" );
+	assert.ok( fixture.document.textContentWrites.some( ( write ) => write.value === hostileMessage ) );
+	assert.equal( fixture.root.querySelectorAll( "img" ).length, 0 );
+	assert.equal( fixture.document.innerHTMLWrites.length, 0 );
+	assert.equal( fixture.stages.search.classList.contains( "wmcp-is-active" ), true );
 } );

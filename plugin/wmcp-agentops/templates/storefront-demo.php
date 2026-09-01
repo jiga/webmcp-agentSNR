@@ -14,6 +14,54 @@ if (null !== $cart_count) {
 	/* translators: %d is the number of items in the current WooCommerce cart. */
 	$cart_label = sprintf(_n('%d item in cart', '%d items in cart', $cart_count, 'wmcp-agentops'), $cart_count);
 }
+
+$agent_guide = isset($view['agent_guide']) && is_array($view['agent_guide']) ? $view['agent_guide'] : array();
+if (array() === $agent_guide && class_exists(\WPWebMCP\AgentOps\Guidance\AgentGuide::class)) {
+	$agent_guide = (new \WPWebMCP\AgentOps\Guidance\AgentGuide())->guide();
+}
+$guide_version = isset($agent_guide['version']) && is_string($agent_guide['version'])
+	? $agent_guide['version']
+	: '1.0';
+$guide_journeys = isset($agent_guide['supported_journeys']) && is_array($agent_guide['supported_journeys'])
+	? $agent_guide['supported_journeys']
+	: array();
+$guide_steps = isset($guide_journeys[0]['steps']) && is_array($guide_journeys[0]['steps'])
+	? $guide_journeys[0]['steps']
+	: array();
+if (array() === $guide_steps) {
+	$guide_steps = array(
+		array('id' => 'discover', 'effect' => 'read'),
+		array('id' => 'compare', 'effect' => 'read'),
+		array('id' => 'verify_policy', 'effect' => 'read'),
+		array('id' => 'prepare_cart', 'effect' => 'reversible_session_write'),
+		array('id' => 'handoff', 'effect' => 'human_checkpoint'),
+	);
+}
+$guide_feedback = isset($agent_guide['feedback']) && is_array($agent_guide['feedback'])
+	? $agent_guide['feedback']
+	: array();
+$guide_boundaries = isset($agent_guide['human_boundaries']) && is_array($agent_guide['human_boundaries'])
+	? $agent_guide['human_boundaries']
+	: array();
+$guide_privacy = isset($agent_guide['privacy']) && is_array($agent_guide['privacy'])
+	? $agent_guide['privacy']
+	: array();
+$guide_human_must = isset($guide_boundaries[0]['human_must']) && is_array($guide_boundaries[0]['human_must'])
+	? $guide_boundaries[0]['human_must']
+	: array('review_details', 'submit_customer_data', 'accept_terms', 'place_order');
+$guide_excluded_data = isset($guide_privacy['excluded']) && is_array($guide_privacy['excluded'])
+	? $guide_privacy['excluded']
+	: array('raw_prompt', 'identity', 'address', 'payment_data', 'raw_payload');
+$guide_feedback_triggers = isset($guide_feedback['recommended_when']) && is_array($guide_feedback['recommended_when'])
+	? $guide_feedback['recommended_when']
+	: array('journey_completed', 'journey_blocked', 'zero_results', 'human_handoff');
+$guide_step_copy = array(
+	'discover'      => array(__('Search', 'wmcp-agentops'), __('Read public product facts', 'wmcp-agentops')),
+	'compare'       => array(__('Compare', 'wmcp-agentops'), __('Keep missing facts honest', 'wmcp-agentops')),
+	'verify_policy' => array(__('Verify', 'wmcp-agentops'), __('Use published policy evidence', 'wmcp-agentops')),
+	'prepare_cart'  => array(__('Prepare', 'wmcp-agentops'), __('Cart changes stay reversible', 'wmcp-agentops')),
+	'handoff'       => array(__('Hand off', 'wmcp-agentops'), __('A person completes checkout', 'wmcp-agentops')),
+);
 ?>
 <a class="wmcp-skip-link" href="#wmcp-storefront-main"><?php esc_html_e('Skip to storefront', 'wmcp-agentops'); ?></a>
 <div id="wmcp-storefront-main" class="wmcp-field wmcp-storefront alignfull" data-wmcp-surface="storefront" tabindex="-1">
@@ -23,6 +71,7 @@ if (null !== $cart_count) {
 			<span>TrailForge<br><em>Field Supply</em></span>
 		</a>
 		<nav class="wmcp-store-nav" aria-label="<?php esc_attr_e('Storefront navigation', 'wmcp-agentops'); ?>">
+			<a href="#wmcp-agent-guide"><?php esc_html_e('Agent guide', 'wmcp-agentops'); ?></a>
 			<a href="#wmcp-specimens"><?php esc_html_e('Field specimens', 'wmcp-agentops'); ?></a>
 			<a href="<?php echo esc_url((string) $view['shop_url']); ?>"><?php esc_html_e('Standard shop', 'wmcp-agentops'); ?></a>
 			<a class="wmcp-cart-link" href="<?php echo esc_url((string) $view['cart_url']); ?>"><span><?php esc_html_e('Cart', 'wmcp-agentops'); ?></span><strong data-wmcp-cart-count aria-label="<?php echo esc_attr($cart_label); ?>"><?php echo esc_html(null === $cart_count ? '—' : (string) $cart_count); ?></strong></a>
@@ -37,7 +86,7 @@ if (null !== $cart_count) {
 		</div>
 		<div class="wmcp-store-prompt">
 			<span class="wmcp-panel-label"><span><?php esc_html_e('Suggested field brief', 'wmcp-agentops'); ?></span><span>01</span></span>
-			<p data-copy-source="storefront">Find a waterproof backpack under $120, compare the two best choices, confirm that the return policy is at least 30 days, and add the best-value option to my cart.</p>
+			<p data-copy-source="storefront">Start with this site’s Agent Guide. Find a waterproof backpack under $100 with IPX5 protection. If none match, show the closest options, explain the constraint, prepare the compact choice for checkout, and follow the guide’s feedback instructions.</p>
 			<button type="button" class="wmcp-copy-button" data-copy-target="storefront"><span data-copy-label><?php esc_html_e('Copy prompt', 'wmcp-agentops'); ?></span><span aria-hidden="true">⌁</span></button>
 		</div>
 	</section>
@@ -50,6 +99,35 @@ if (null !== $cart_count) {
 		<div><span><?php esc_html_e('Workflow', 'wmcp-agentops'); ?></span><strong class="wmcp-mono" data-wmcp-workflow>—</strong></div>
 		<div><span><?php esc_html_e('Latest signal', 'wmcp-agentops'); ?></span><strong class="wmcp-mono" data-wmcp-latest-tool><?php esc_html_e('Awaiting tool call', 'wmcp-agentops'); ?></strong></div>
 		<div><span><?php esc_html_e('Registered', 'wmcp-agentops'); ?></span><strong class="wmcp-mono"><span data-wmcp-tool-count>—</span> <?php esc_html_e('tools', 'wmcp-agentops'); ?></strong></div>
+	</section>
+
+	<section id="wmcp-agent-guide" class="wmcp-agent-guide" data-wmcp-agent-guide data-state="published" aria-labelledby="wmcp-agent-guide-title">
+		<div class="wmcp-agent-guide-head">
+			<p class="wmcp-kicker"><?php esc_html_e('Site field guide', 'wmcp-agentops'); ?></p>
+			<h2 id="wmcp-agent-guide-title"><?php esc_html_e('How agents can use this store.', 'wmcp-agentops'); ?></h2>
+			<p class="wmcp-agent-guide-purpose"><?php echo esc_html((string) ($agent_guide['purpose'] ?? __('Use public evidence, keep reversible actions reversible, and stop when a person must decide.', 'wmcp-agentops'))); ?></p>
+			<p class="wmcp-agent-guide-stamp"><span><?php esc_html_e('Guide', 'wmcp-agentops'); ?> <strong data-wmcp-guide-version><?php echo esc_html($guide_version); ?></strong></span><span data-wmcp-guide-status><?php esc_html_e('Start here', 'wmcp-agentops'); ?></span></p>
+		</div>
+		<ol data-wmcp-guide-steps>
+			<?php foreach ($guide_steps as $index => $step) : ?>
+				<?php
+				$step_id = isset($step['id']) && is_string($step['id']) ? $step['id'] : '';
+				$step_copy = $guide_step_copy[$step_id] ?? array(ucwords(str_replace('_', ' ', $step_id)), __('Follow the published site guidance', 'wmcp-agentops'));
+				$step_effect = isset($step['effect']) && is_string($step['effect']) ? $step['effect'] : 'read';
+				?>
+				<li data-guide-effect="<?php echo esc_attr($step_effect); ?>"><span><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span><strong><?php echo esc_html((string) $step_copy[0]); ?></strong><small><?php echo esc_html((string) $step_copy[1]); ?></small></li>
+			<?php endforeach; ?>
+		</ol>
+		<div class="wmcp-agent-guide-foot">
+			<dl data-wmcp-guide-boundaries>
+				<div><dt><?php esc_html_e('Human boundary', 'wmcp-agentops'); ?></dt><dd><?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_human_must))); ?>.</dd></div>
+				<div><dt><?php esc_html_e('Data boundary', 'wmcp-agentops'); ?></dt><dd><?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_excluded_data))); ?>.</dd></div>
+			</dl>
+			<p data-wmcp-feedback-policy><strong><?php esc_html_e('Feedback invited:', 'wmcp-agentops'); ?></strong> <?php echo esc_html(implode(', ', array_map(static fn ($value): string => str_replace('_', ' ', (string) $value), $guide_feedback_triggers))); ?>. <?php
+				/* translators: %d is the maximum feedback reports permitted in one workflow. */
+				echo esc_html(sprintf(__('Maximum %d reports per workflow.', 'wmcp-agentops'), (int) ($guide_feedback['max_reports_per_workflow'] ?? 2)));
+			?></p>
+		</div>
 	</section>
 
 	<div class="wmcp-store-layout">
@@ -105,6 +183,11 @@ if (null !== $cart_count) {
 					<div class="wmcp-panel-label"><span><?php esc_html_e('Result tray', 'wmcp-agentops'); ?></span><span data-wmcp-result-count>—</span></div>
 					<h3 id="wmcp-search-results-title" tabindex="-1"><?php esc_html_e('No agent search yet', 'wmcp-agentops'); ?></h3>
 					<div class="wmcp-empty-state" data-wmcp-search-results><?php esc_html_e('Matching products will appear here while the complete catalog remains usable at left.', 'wmcp-agentops'); ?></div>
+					<aside class="wmcp-opportunity-notice" data-wmcp-search-opportunity aria-label="<?php esc_attr_e('Recorded opportunity signal', 'wmcp-agentops'); ?>" hidden>
+						<div><span><?php esc_html_e('Site observed', 'wmcp-agentops'); ?></span><strong><?php esc_html_e('Opportunity signal', 'wmcp-agentops'); ?></strong></div>
+						<p data-wmcp-opportunity-summary></p>
+						<p data-wmcp-feedback-hint hidden></p>
+					</aside>
 				</section>
 
 				<section class="wmcp-operation-panel" data-wmcp-panel="comparison" aria-labelledby="wmcp-comparison-title">
@@ -137,6 +220,16 @@ if (null !== $cart_count) {
 					<div class="wmcp-panel-label"><span><?php esc_html_e('Capability gap', 'wmcp-agentops'); ?></span><span>!</span></div>
 					<h3 id="wmcp-gap-title" tabindex="-1"><?php esc_html_e('Unsupported request recorded', 'wmcp-agentops'); ?></h3>
 					<p data-wmcp-gap-message></p>
+				</section>
+
+				<section class="wmcp-operation-panel wmcp-feedback-panel" data-wmcp-panel="feedback" aria-labelledby="wmcp-feedback-title" hidden>
+					<div class="wmcp-panel-label"><span data-wmcp-feedback-trust><?php esc_html_e('Agent reported', 'wmcp-agentops'); ?></span><span data-wmcp-feedback-evidence-status><?php esc_html_e('Evidence pending', 'wmcp-agentops'); ?></span></div>
+					<h3 id="wmcp-feedback-title" tabindex="-1"><?php esc_html_e('Agent feedback recorded', 'wmcp-agentops'); ?></h3>
+					<p data-wmcp-feedback-message></p>
+					<dl class="wmcp-feedback-evidence">
+						<div><dt><?php esc_html_e('Site measured', 'wmcp-agentops'); ?></dt><dd data-wmcp-feedback-metrics>—</dd></div>
+						<div><dt><?php esc_html_e('Suggested action', 'wmcp-agentops'); ?></dt><dd data-wmcp-feedback-action>—</dd></div>
+					</dl>
 				</section>
 			</div>
 

@@ -167,3 +167,32 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Live verification: the development dashboard recovered with WooCommerce PayPal Payments and WooPayments still active. The final exact ZIP also loaded PayPal Payments 4.1.2 gateway objects and completed the full no-charge order/refund capture with zero console errors.
 - Gates: 79 JavaScript/configuration tests, 68 PHP tests / 606 assertions on PHP 8.1 and 8.4, 14/14 Chromium scenarios, smoke/security, legacy and HPOS Woo lifecycle, Plugin Check `0 errors / 54 warnings`, WordPress 6.9/7.0.4/7.1 exact-artifact matrix, and Playground execution pass.
 - Final deterministic artifacts: plugin `6bc90a59837a46fbb350dda53cb3b503e60e11315f4a2c804f163d0888e27c89`; Playground `96bbd8ef4d09f392d8d9d0ebdddba30e34f0d232826bb9688f6243609cf3d978`.
+
+## Agent Guide, Feedback, and Opportunity Signals
+
+- [x] Specify friendly guide discovery, automatic opportunity triggers, feedback taxonomy, trust labels, metric enrichment, privacy, rate limits, and aggregation.
+- [x] Implement Agent Guide exposure, report_agent_feedback, evidence linking, server-computed metrics, and automatic observed opportunity signals.
+- [x] Add Agent Feedback and Opportunity Signals to the storefront and Agent SNR UI with accessible evidence-source labels.
+- [x] Add PHP, JavaScript, browser, security, isolation, idempotency, and aggregation regression coverage.
+- [x] Update the demo narrative, runbook, screenshots, presentation, product/submission docs, artifacts, and checksums.
+- [x] Run full exact-artifact verification, independent review, and commit.
+
+### Locked acceptance contract
+
+- Public catalog: 13 storefront tools and 9 Agent SNR tools. `get_agent_guide`, `report_agent_feedback`, and `get_opportunity_signals` are additive; capability-gap tools remain compatible.
+- Discovery: storefront context points agents to a versioned, human-readable Agent Guide. The guide documents supported journeys, reversible actions, the human checkout boundary, privacy, feedback triggers, and the two-report limit.
+- Observation: zero-result and constrained low-coverage searches create deterministic `site_observed` signals without storing raw prompts, raw queries, identity, addresses, or arbitrary attributes.
+- Testimony: agent feedback is closed-schema, `agent_reported`, current-workflow scoped, limited to two unique reports, and linked only to same-session storefront evidence.
+- Measurement: agents request allowlisted metric names only. Values come from site events, catalog facts, and attributed WooCommerce outcomes; unavailable conversion/value stays pending instead of becoming a false zero.
+- Presentation: Agent SNR always separates site observation, agent testimony, and site-verified measurements, never calls opportunity context “lost revenue,” and stays current-demo-session scoped.
+- Demo path: guide → zero IPX5 waterproof-backpack results under $100 → relaxed search with two IPX4 matches → HarborLite handoff → structured constraint feedback → human order → verified outcome in Signals/Replay.
+
+### Agent Guide, feedback, and opportunities review
+
+- Product: 13 storefront + 9 Agent SNR tools expose one canonical Agent Guide, automatic zero/low-coverage/OOS/missing-fact observation, evidence-linked structured feedback, dynamic site-computed metrics, compatible capability-gap views, replay evidence, and unified Signals.
+- Trust/privacy: site-observed, agent-reported, and site-verified sources remain separate; raw prompt/search/free-form feedback and caller metric values are excluded; unknown demand uses keyed grouping; evidence is same-workflow scoped; two feedback slots are database-enforced.
+- Demo: ten real 1440×900 exact-ZIP screenshots record Guide v1.0, a zero-result IPX5 signal, two IPX4 alternatives, linked feedback, a $69 HarborLite human order, direct attribution, governance, full refund, and $0 net with zero console errors.
+- Presentation: the editable 11-slide deck is updated in place with the new architecture/demo/provenance story. Template/theme fidelity, speaker-note sources, package, placeholder, exported-render, and overflow checks pass.
+- Verification: 91 JavaScript tests, 102 PHP tests / 858 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 22-tool REST/security smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
+- Final deterministic artifacts: plugin `f631ff06279ba11cc153789e960c4a3641be3dee81d1f81b2681b415ed45b940`; Playground `1a47231b071cd84915d4e7a5faf8a051656e630aeedd5ddfe6d0af9082f5348d`.
+- Remaining gates are owner/external only: formal Agent SNR clearance, public remote/tag, hosted top-level HTTPS deployment, real ChatGPT/Chrome validation, final WooCommerce 11.1 rerun if released, hosted media/video, Devpost URLs/submission, and freeze.

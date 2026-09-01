@@ -1,14 +1,17 @@
 # Agent SNR demo evidence
 
-The files under `submission/demo-screenshots/` are original 1440×900 captures from one isolated, exact-release local rehearsal. The matching identifiers and console result are recorded in `showcase-summary.json`.
+The files under `submission/demo-screenshots/` are original 1440×900 captures from one isolated, exact-release local rehearsal. The matching guide, signal, feedback, workflow, product, order, measurement, and console evidence is recorded in `showcase-summary.json`.
 
 1. `01-agent-snr-overview.png` — public readiness and product overview.
-2. `02-storefront-evidence.png` — grounded product results and completed workflow rail.
-3. `03-human-order-confirmation.png` — real WooCommerce order using the no-charge demo gateway.
-4. `04-agent-snr-monitor.png` — same-session workflow, tool, capability, and commerce evidence.
-5. `05-workflow-replay.png` — redacted ordered workflow timeline and direct attribution.
-6. `06-session-controls.png` — comparison disabled only for the current demo session.
-7. `07-refund-net-outcome.png` — full refund reflected as `$109.00` refund and `$0.00` net.
+2. `02-agent-guide.png` — the versioned human/machine Agent Guide, read state, boundaries, privacy, triggers, and two-report policy.
+3. `03-zero-result-opportunity.png` — the IPX5-under-$100 search with zero results and a server-confirmed Site observed signal.
+4. `04-agent-feedback-handoff.png` — HarborLite handoff plus Agent reported feedback, linked site evidence, verified product metrics, and pending order metrics.
+5. `05-human-order-confirmation.png` — real `$69.00` WooCommerce order using the no-charge demo gateway.
+6. `06-agent-snr-monitor.png` — same-session workflow, tool, opportunity, commerce, and attribution overview.
+7. `07-opportunity-signals.png` — separate Site observed, Agent reported, and Site verified provenance with product-coverage action.
+8. `08-workflow-replay.png` — redacted ordered workflow timeline with two observed signals, one linked feedback report, and direct attribution.
+9. `09-session-controls.png` — comparison disabled only for the current demo session while guide and feedback remain available.
+10. `10-refund-net-outcome.png` — full `$69.00` refund retained as outcome evidence and net attributed value reduced to `$0.00`.
 
 Regenerate the complete set atomically after starting the isolated showcase:
 

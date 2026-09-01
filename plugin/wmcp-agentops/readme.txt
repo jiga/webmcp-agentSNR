@@ -8,11 +8,11 @@ Stable tag: 0.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Agent outcome monitoring for WordPress: expose safe WebMCP workflows, measure verified commerce outcomes, and govern the tool layer locally.
+Agent outcome monitoring for WordPress: expose safe WebMCP workflows, capture missed opportunities and agent feedback, measure verified outcomes, and govern the tool layer locally.
 
 == Description ==
 
-Agent SNR is an open-source, local-first outcome-monitoring layer for browser agents on WordPress. It registers narrowly scoped top-level WebMCP tools backed by WordPress Abilities, reconstructs privacy-safe workflow replays, surfaces reliability and capability signals, links same-session WooCommerce orders and refunds, and provides merchant controls.
+Agent SNR is an open-source, local-first outcome-monitoring layer for browser agents on WordPress. It registers narrowly scoped top-level WebMCP tools backed by WordPress Abilities, publishes a friendly Agent Guide, reconstructs privacy-safe workflow replays, separates site-observed opportunities from structured agent feedback and site-verified measurements, links same-session WooCommerce orders and refunds, and provides merchant controls.
 
 Workflow Replay is a redacted event-sourced tool and commerce timeline. It does not record or reconstruct the DOM, screen, video, raw prompt, or arbitrary payload.
 
@@ -36,7 +36,7 @@ No. Checkout handoff returns the normal WooCommerce checkout URL. A human review
 
 = Does this store conversations or personal data? =
 
-No raw prompts, conversations, identity, address, cookie, nonce, authorization, or payment fields are stored. The ledger contains allowlisted operational events and one-way session hashes.
+No raw prompts or search text, conversations, free-form feedback, identity, address, cookie, nonce, authorization, or payment fields are stored. The ledger contains allowlisted operational events, canonical demand signatures, structured feedback enums, and one-way session hashes.
 
 = Does WebMCP work inside WordPress Playground? =
 

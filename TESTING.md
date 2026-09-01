@@ -36,11 +36,11 @@ npm run test:browser
 
 Run the complete host-independent static/unit/build slice with `./bin/verify.sh`. The REST, Woo lifecycle, and browser checks require the local demo started by `./bin/start-demo.sh`.
 
-The automated suites currently contain 79 JavaScript contract/configuration tests, 68 PHP tests with 606 assertions, and 14 isolated Chromium scenarios. The PHP suite includes mixed class-string/object WooCommerce gateway compatibility plus disabled and missing-dependency branches. The JavaScript suite includes fail-closed showcase origin, redirect, credential, console-location, and output-directory checks. The REST smoke harness covers seven public routes, 19 tools, bounded workflow replay, private cart-count manifest snapshots, session bootstrap/fixation, Origin and CSRF denial, stale cart revisions, request-ID conflicts, policy denial/recovery, analytics, and reset.
+The automated suites currently contain 91 JavaScript contract/configuration tests, 102 PHP tests with 858 assertions, and 15 isolated Chromium scenarios. The PHP suite covers guide/schema contracts, privacy-safe demand signatures, full-result and out-of-stock analysis, evidence scope, metric enrichment and sample provenance, semantic and transport idempotency, database-enforced feedback slots, output budgets, capability compatibility, plus mixed class-string/object WooCommerce gateways. The JavaScript suite covers provenance, single/latest/unavailable measurement labels, safe text rendering, stale opportunity clearing, and fail-closed showcase configuration. The REST smoke harness covers seven public routes, 22 tools, guide discovery, automatic opportunities, agent feedback, bounded workflow replay, private cart snapshots, Origin/CSRF denial, replay conflicts, policy denial/recovery, analytics, and reset.
 
 The WooCommerce lifecycle gate uses public Woo CRUD APIs and explicit provenance fixtures in the configured storage mode. It proves unpaid exclusion, paid attribution, partial and full refund recomputation, cancellation removal, provenance-negative line handling, and human-only exclusion. Every fixture is tagged and deleted before the test exits.
 
-The Chromium suite separately exercises the complete browser path: WebMCP search/cart/handoff, existing- and late-tab cart-badge synchronization, bounded partial replay for a large Agent Sessions workflow, normal classic checkout, the real no-charge demo gateway, paid direct attribution, an actual agent removal followed by a normal human re-add (influenced, never direct), and withholding the gateway from a human-only cart.
+The Chromium suite separately exercises the complete browser path: Agent Guide discovery, automatic zero-result recording, constrained recovery, structured feedback and provenance, WebMCP search/cart/handoff, existing- and late-tab cart-badge synchronization, bounded partial replay, classic checkout, the real no-charge gateway, paid direct attribution, an actual agent removal followed by a human re-add (influenced, never direct), gateway exclusion from a human-only cart, policy refresh, and cross-session isolation.
 
 Branch CI validates Composer metadata, WordPress Coding Standards, PHP/JavaScript tests, the plugin ZIP layout, Playground execution, Plugin Check, and the WordPress/WooCommerce matrix with both order-storage modes. The tag workflow builds once, mounts the extracted release-candidate ZIP in every matrix job, reruns the REST, Woo lifecycle, Plugin Check, and primary Chromium gates, and cannot publish until they all pass.
 
@@ -50,12 +50,13 @@ Branch CI validates Composer metadata, WordPress Coding Standards, PHP/JavaScrip
 2. Confirm the page remains useful without a WebMCP API and reports **Unsupported browser** rather than failing.
 3. In a supported top-level WebMCP client, confirm the status progresses from **API detected** to **Tools ready** only after registration succeeds.
 4. Run the shopper prompt from `README.md`. Verify visible search results, comparison evidence, policy evidence, cart badge/summary, and workflow rail.
-5. Ask for a blue TerraRoll 25 Pack back-in-stock notification. Confirm the out-of-stock product is recorded as the related capability-gap evidence and the agent explicitly says no notification was created.
-6. Run checkout handoff. Confirm it does not create an order or navigate automatically.
-7. Click the human checkout CTA, review the prefilled fictional demo fields, choose **Demo payment — no charge**, and place the order.
-8. Open Agent SNR and run the merchant prompt. Confirm the journey, Workflow Replay, Signals, tool health, capability gap, paid order, attribution class, gross revenue, refunds, and net revenue refer only to this demo session.
-9. Ask to disable comparison for this demo session. Confirm the server blocks it immediately and the local/cross-tab manifest refresh removes it without affecting a second isolated browser profile.
-10. Reset the current demo. Confirm a fresh scope appears and another browser profile remains unchanged.
+5. Confirm the agent reads the visible Agent Guide, then search for an in-stock waterproof backpack under $100 with IPX5. Verify zero results create a server-confirmed **Site observed** opportunity without a feedback call.
+6. Relax only the water rating. Confirm exactly RainTrail and HarborLite match, both IPX4; compare them, verify returns, add HarborLite, and prepare checkout.
+7. Follow the guide's feedback instructions. Confirm only structured enums/evidence IDs are submitted, the receipt is **Agent reported**, linked site metrics are separate, and conversion/value remain pending before the order.
+8. Confirm checkout handoff does not create an order or navigate automatically. Click the human checkout CTA, review the prefilled fictional demo fields, choose **Demo payment — no charge**, and place the order.
+9. Open Agent SNR and run the merchant prompt. Confirm the journey, Workflow Replay, Opportunity Signals, tool health, observed demand, agent feedback, verified paid order, attribution class, gross revenue, refunds, and net revenue refer only to this demo session.
+10. Ask to disable comparison for this demo session. Confirm the server blocks it immediately and the local/cross-tab manifest refresh removes it without affecting a second isolated browser profile.
+11. Reset the current demo. Confirm a fresh scope appears and another browser profile remains unchanged.
 
 ## Real-client release checks
 
@@ -82,6 +83,9 @@ Client `AbortSignal` cancellation stops the browser fetch and UI wait. PHP/WooCo
 - kill switch immediately blocks server execution even with stale browser tools;
 - catalog/policy HTML and scripts are sanitized and never inserted as HTML;
 - redaction/allowlist unit cases reject raw prompt, PII, cookie, token, nonce, authorization, and payment fields;
+- automatic opportunity rows exclude raw search text and unknown attributes;
+- feedback rejects caller metric values, free-form comments, foreign or non-storefront evidence, and a third unique report in one workflow;
+- site-observed, agent-reported, and site-verified provenance remain separate in API responses and rendered text;
 - session and manifest responses contain `private, no-store`; cached HTML contains no session identity;
 - the demo gateway is absent when the server-side demo constant is false.
 

@@ -141,13 +141,17 @@ final class CapabilityGapService
             'user_goal_redacted'  => $goal,
             'related_product_id'  => $related_product_id,
             'context_json'        => $context_json,
+            'signal_source'       => 'agent_reported',
+            'signal_category'     => 'capability_gap',
+            'signal_key'          => hash('sha256', 'capability_gap|' . $capability_slug),
+            'evidence_status'     => 'unlinked',
             'status'              => 'open',
             'occurred_at'         => $occurred_at,
         );
         $result = $this->database->insert(
             $this->gaps_table(),
             $row,
-            array('%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s')
+            array('%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s')
         );
         if (false === $result) {
             $existing = $this->find_existing(
@@ -473,7 +477,7 @@ final class CapabilityGapService
      */
     private function scope(string $session_hash_hex, array $filters, string $alias): array
     {
-        $where = "{$alias}.demo_session_hash = %s";
+        $where = "{$alias}.demo_session_hash = %s AND ({$alias}.signal_category = 'capability_gap' OR {$alias}.signal_category IS NULL)";
         $args  = array($session_hash_hex);
         if (null !== $filters['status']) {
             $where .= " AND {$alias}.status = %s";

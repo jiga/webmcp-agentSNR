@@ -11,25 +11,26 @@ Checked items are complete in the prepared repository. Unchecked items require t
 - [x] Playground bundle validates, installs, activates, seeds, and reports its iframe limitation accurately.
 - [x] Docker one-command bootstrap succeeds with a new named volume.
 - [x] Isolated `agent-snr-showcase` rehearsal runs the verified release ZIP without touching development volumes.
-- [x] Editable architecture/demo presentation and seven real local-flow reference screenshots are included.
+- [x] Editable architecture/demo presentation and ten real local-flow reference screenshots are included.
 - [ ] Release tag, ZIP checksum, hosted plugin version, and repository commit match.
 
 ## Judged workflow
 
 - [ ] Top-level HTTPS page registers current imperative tools in real ChatGPT and Chrome.
 - [x] Site remains human-usable with WebMCP absent.
-- [ ] Shopper prompt visibly completes search, compare, policy, and cart.
-- [ ] Capability-gap request records non-fulfillment honestly.
-- [ ] Checkout handoff creates no order; human demo checkout creates and pays a real Woo order.
-- [ ] Order, product evidence, workflow, attribution class, gross/refund/net, and currency correlate correctly.
-- [ ] Merchant prompt returns scoped overview, funnel, explanation, health, and gaps.
-- [ ] Session policy disables comparison server-side and refreshes browser tools without cross-session effects.
-- [ ] Reset creates a clean scope without deleting another judge’s records.
+- [x] Shopper prompt visibly completes search, compare, policy, and cart.
+- [x] Agent discovers the guide; a zero-result search records a site-observed opportunity without feedback.
+- [x] Structured agent feedback links only same-workflow evidence and displays site-computed metrics separately.
+- [x] Checkout handoff creates no order; human demo checkout creates and pays a real Woo order.
+- [x] Order, product evidence, workflow, attribution class, gross/refund/net, and currency correlate correctly.
+- [x] Merchant prompt returns scoped overview, funnel, explanation, health, and Signals with distinct Site observed / Agent reported / Site verified provenance.
+- [x] Session policy disables comparison server-side and refreshes browser tools without cross-session effects.
+- [x] Reset creates a clean scope without deleting another judge’s records.
 
 ## Security and operations
 
-- [x] Cross-origin/CSRF/replay/schema/size/rate/capability/session-isolation tests pass.
-- [x] Redaction/secret checks are clean; cacheable page HTML contains no session or credential values.
+- [x] Cross-origin/CSRF/replay/schema/size/rate/evidence/capability/session-isolation tests pass.
+- [x] Redaction/secret checks are clean; raw prompt/search/free-form feedback is absent and cacheable page HTML contains no session or credential values.
 - [x] Demo gateway is absent outside explicit demo mode and outbound demo email is disabled in the demo configuration.
 - [ ] Monitoring and backups are active; a restore has been rehearsed.
 - [ ] All public routes and artifacts work logged out and remain free through judging.

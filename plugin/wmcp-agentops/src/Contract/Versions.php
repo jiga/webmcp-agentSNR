@@ -14,6 +14,7 @@ final class Versions
 {
     public const PLUGIN = '0.1.0';
     public const SCHEMA = '1.0';
-    public const DATABASE = '1';
+    public const DATABASE = '2';
     public const ATTRIBUTION = '1.0';
+    public const AGENT_GUIDE = '1.0';
 }

@@ -8,8 +8,8 @@
 
 defined('ABSPATH') || exit;
 
-$shopper_prompt = 'Find a waterproof backpack under $120, compare the two best choices, confirm that the return policy is at least 30 days, and add the best-value option to my cart.';
-$merchant_prompt = 'Monitor my current agent session, replay its tool and commerce timeline, identify the slowest or failed invocation, connect it to the commerce outcome, show any capability signals this store does not support, and summarize current controls.';
+$shopper_prompt = 'Start with this site’s Agent Guide. Find a waterproof backpack under $100 with at least IPX5 protection. If none match, show the closest in-stock options, explain the constraint, compare the two best, verify returns, add the compact option, stop at checkout, and follow the guide’s feedback instructions.';
+$merchant_prompt = 'Monitor my current agent session, replay its tool and commerce timeline, connect the human order to its outcome, separate site-observed opportunities from agent-reported feedback and site-verified measurements, and summarize current controls.';
 ?>
 <a class="wmcp-skip-link" href="#wmcp-field-main"><?php esc_html_e('Skip to Agent SNR overview', 'wmcp-agentops'); ?></a>
 <div id="wmcp-field-main" class="wmcp-field wmcp-landing alignfull" data-wmcp-surface="landing" tabindex="-1">
@@ -32,7 +32,7 @@ $merchant_prompt = 'Monitor my current agent session, replay its tool and commer
 		<div class="wmcp-hero-copy">
 			<p class="wmcp-kicker"><?php esc_html_e('Agent outcome monitoring for WordPress', 'wmcp-agentops'); ?></p>
 			<h1 id="wmcp-landing-title"><?php esc_html_e('The storefront speaks.', 'wmcp-agentops'); ?><br><em><?php esc_html_e('Agent SNR shows what happened.', 'wmcp-agentops'); ?></em></h1>
-			<p class="wmcp-deck"><?php esc_html_e('Browser agents use a real shop while recorded tool and commerce steps become inspectable evidence, helping the merchant separate operational signal from noise and govern what happens next.', 'wmcp-agentops'); ?></p>
+			<p class="wmcp-deck"><?php esc_html_e('Browser agents use a real shop while observed demand, direct agent feedback, and verified commerce outcomes become inspectable evidence—without turning prompts or customer data into analytics.', 'wmcp-agentops'); ?></p>
 			<div class="wmcp-actions">
 				<a class="wmcp-button wmcp-button-primary" href="<?php echo esc_url((string) $view['storefront_url']); ?>"><?php esc_html_e('Open storefront', 'wmcp-agentops'); ?> <span aria-hidden="true">↗</span></a>
 				<a class="wmcp-button wmcp-button-quiet" href="<?php echo esc_url((string) $view['agentops_url']); ?>"><?php esc_html_e('Open Agent SNR', 'wmcp-agentops'); ?></a>
@@ -63,10 +63,10 @@ $merchant_prompt = 'Monitor my current agent session, replay its tool and commer
 			<h2 id="wmcp-loop-title"><?php esc_html_e('A closed loop instead of a black box.', 'wmcp-agentops'); ?></h2>
 		</div>
 		<ol class="wmcp-loop-rail">
-			<li><span class="wmcp-loop-index">01</span><strong><?php esc_html_e('Signal', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('A shopper describes a goal in plain language.', 'wmcp-agentops'); ?></p></li>
-			<li><span class="wmcp-loop-index">02</span><strong><?php esc_html_e('Structured action', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('WebMCP tools search, compare, cite policy, and prepare the cart.', 'wmcp-agentops'); ?></p></li>
-			<li><span class="wmcp-loop-index">03</span><strong><?php esc_html_e('Proof', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('The workflow ledger ties tool calls to checkout and revenue outcomes.', 'wmcp-agentops'); ?></p></li>
-			<li><span class="wmcp-loop-index">04</span><strong><?php esc_html_e('Control', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('The operator finds gaps and changes the next agent workflow safely.', 'wmcp-agentops'); ?></p></li>
+			<li><span class="wmcp-loop-index">01</span><strong><?php esc_html_e('Guide', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('The agent discovers supported journeys, boundaries, and feedback triggers.', 'wmcp-agentops'); ?></p></li>
+			<li><span class="wmcp-loop-index">02</span><strong><?php esc_html_e('Observe', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('The site records constrained demand while WebMCP tools act on catalog facts.', 'wmcp-agentops'); ?></p></li>
+			<li><span class="wmcp-loop-index">03</span><strong><?php esc_html_e('Verify', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('Agent testimony stays separate from workflow, catalog, order, and refund proof.', 'wmcp-agentops'); ?></p></li>
+			<li><span class="wmcp-loop-index">04</span><strong><?php esc_html_e('Improve', 'wmcp-agentops'); ?></strong><p><?php esc_html_e('The operator sees missed opportunities and changes the next workflow safely.', 'wmcp-agentops'); ?></p></li>
 		</ol>
 	</section>
 
@@ -117,7 +117,7 @@ $merchant_prompt = 'Monitor my current agent session, replay its tool and commer
 	</section>
 
 	<footer class="wmcp-field-footer">
-		<p><strong><?php esc_html_e('Privacy boundary:', 'wmcp-agentops'); ?></strong> <?php esc_html_e('This public board shows only the current demo session. It records redacted operational events, never raw prompts, customer addresses, or payment details.', 'wmcp-agentops'); ?></p>
+		<p><strong><?php esc_html_e('Privacy boundary:', 'wmcp-agentops'); ?></strong> <?php esc_html_e('This public board shows only the current demo session. It records redacted operational events, canonical demand signals, and structured feedback—never raw prompts or searches, customer addresses, or payment details.', 'wmcp-agentops'); ?></p>
 		<p class="wmcp-mono"><?php echo esc_html((string) $view['site_name']); ?> · GPL-2.0-or-later · <?php esc_html_e('WebMCP progressive enhancement', 'wmcp-agentops'); ?></p>
 	</footer>
 </div>

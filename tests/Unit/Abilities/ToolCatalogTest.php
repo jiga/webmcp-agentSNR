@@ -21,7 +21,7 @@ final class ToolCatalogTest extends TestCase
     {
         $definitions = (new ToolCatalog())->all();
 
-        self::assertCount(19, $definitions);
+        self::assertCount(22, $definitions);
         self::assertSame(array_keys($definitions), array_values(array_unique(array_keys($definitions))));
 
         foreach ($definitions as $name => $definition) {
@@ -83,6 +83,51 @@ final class ToolCatalogTest extends TestCase
         self::assertSame(array('expected_cart_revision'), $checkout['input_schema']['required']);
         self::assertArrayHasKey('expected_cart_revision', $checkout['input_schema']['properties']);
         self::assertArrayNotHasKey('acknowledge_human_review', $checkout['input_schema']['properties']);
+    }
+
+    public function test_agent_guide_feedback_and_opportunity_signal_contracts_are_strict(): void
+    {
+        $catalog      = new ToolCatalog();
+        $guide        = $catalog->find(ToolName::GET_AGENT_GUIDE);
+        $feedback     = $catalog->find(ToolName::REPORT_AGENT_FEEDBACK);
+        $opportunities = $catalog->find(ToolName::GET_OPPORTUNITY_SIGNALS);
+
+        self::assertNotNull($guide);
+        self::assertSame(RiskClass::READ, $guide['risk_class']);
+        self::assertTrue($guide['read_only']);
+        self::assertStringContainsStringIgnoringCase('start', (string) $guide['description']);
+        self::assertFalse($guide['input_schema']['additionalProperties']);
+        self::assertContains('version', $guide['output_schema']['required']);
+        self::assertArrayHasKey('version', $guide['output_schema']['properties']);
+        self::assertArrayNotHasKey('guide_version', $guide['output_schema']['properties']);
+
+        self::assertNotNull($feedback);
+        self::assertSame(RiskClass::TELEMETRY_WRITE, $feedback['risk_class']);
+        self::assertFalse($feedback['read_only']);
+        self::assertFalse($feedback['input_schema']['additionalProperties']);
+        self::assertArrayHasKey('requested_metrics', $feedback['input_schema']['properties']);
+        self::assertTrue($feedback['input_schema']['properties']['requested_metrics']['uniqueItems']);
+        self::assertSame(5, $feedback['input_schema']['properties']['requested_metrics']['maxItems']);
+        self::assertArrayHasKey('enum', $feedback['input_schema']['properties']['requested_metrics']['items']);
+        self::assertArrayNotHasKey('comment', $feedback['input_schema']['properties']);
+        self::assertArrayNotHasKey('user_goal', $feedback['input_schema']['properties']);
+        self::assertArrayNotHasKey('metric_values', $feedback['input_schema']['properties']);
+        self::assertArrayNotHasKey('measured_context', $feedback['input_schema']['properties']);
+        self::assertArrayNotHasKey('trust', $feedback['input_schema']['properties']);
+        self::assertArrayNotHasKey('workflow_id', $feedback['input_schema']['properties']);
+
+        self::assertNotNull($opportunities);
+        self::assertSame('agentops', $opportunities['surface']);
+        self::assertSame(RiskClass::READ, $opportunities['risk_class']);
+        self::assertTrue($opportunities['read_only']);
+        self::assertFalse($opportunities['input_schema']['additionalProperties']);
+        self::assertSame(
+            array('site_observed', 'agent_reported'),
+            $opportunities['input_schema']['properties']['source']['enum']
+        );
+        self::assertSame(8, $opportunities['input_schema']['properties']['limit']['maximum']);
+        self::assertSame(8, $opportunities['input_schema']['properties']['limit']['default']);
+        self::assertContains('truncated', $opportunities['output_schema']['required']);
     }
 
     public function test_session_policy_tool_cannot_request_site_scope(): void

@@ -36,6 +36,8 @@ final class QueryService
     /** @var callable(string,string):?bool|null */
     private $tool_enabled_resolver;
 
+    private ?SignalService $signals;
+
     /**
      * @param object|null                 $database              wpdb-compatible database object.
      * @param callable(string,string):?bool|null $tool_enabled_resolver Optional current policy lookup.
@@ -43,7 +45,8 @@ final class QueryService
     public function __construct(
         ?object $database = null,
         ?EventSchema $schema = null,
-        ?callable $tool_enabled_resolver = null
+        ?callable $tool_enabled_resolver = null,
+        ?SignalService $signals = null
     ) {
         if (null === $database) {
             global $wpdb;
@@ -56,6 +59,7 @@ final class QueryService
         $this->database              = $database;
         $this->schema                = $schema ?? new EventSchema();
         $this->tool_enabled_resolver = $tool_enabled_resolver;
+        $this->signals               = $signals;
     }
 
     /**
@@ -210,6 +214,9 @@ final class QueryService
         );
 
         $calls = (int) ($invocation_row['calls'] ?? 0);
+        $signal_summary = null === $this->signals
+            ? array('available' => false, 'reason' => 'signal_service_unavailable', 'observed' => null, 'agent_reported' => null, 'workflows' => null, 'categories' => null)
+            : $this->signals->summary($session_hash_hex, $filters);
 
         return array(
             'scope' => array(
@@ -251,6 +258,7 @@ final class QueryService
                 'workflows'    => (int) ($gap_row['workflows'] ?? 0),
                 'capabilities' => (int) ($gap_row['capabilities'] ?? 0),
             ),
+            'signals' => $signal_summary,
             'policy_changes' => (int) ($policy_row['changes'] ?? 0),
         );
     }
@@ -461,6 +469,7 @@ final class QueryService
             "SELECT g.id, g.capability_slug, g.related_product_id, g.status, g.occurred_at
              FROM {$this->gaps_table()} g
              WHERE g.demo_session_hash = %s AND g.workflow_id = %s
+               AND (g.signal_category = 'capability_gap' OR g.signal_category IS NULL)
              ORDER BY g.occurred_at DESC, g.id DESC
              LIMIT " . (self::MAX_REPLAY_GAPS + 1),
             array($session_hash_hex, $workflow_id)
@@ -479,6 +488,9 @@ final class QueryService
             ),
             $gap_rows
         );
+        $signal_replay = null === $this->signals
+            ? array('opportunity_signals' => array(), 'agent_feedback' => array())
+            : $this->signals->for_workflow($session_hash_hex, $workflow_id);
 
         $result = array(
             'workflow' => array(
@@ -492,7 +504,15 @@ final class QueryService
                 'tool_count'    => (int) $workflow['tool_count'],
                 'goal_source'   => 'unknown',
             ),
-            'explanation' => $this->explanation_text($workflow, $first_problem, $recovery, $orders, $gaps),
+            'explanation' => $this->explanation_text(
+                $workflow,
+                $first_problem,
+                $recovery,
+                $orders,
+                $gaps,
+                $signal_replay['opportunity_signals'],
+                $signal_replay['agent_feedback']
+            ),
             'first_problem' => $first_problem,
             'recovery' => $recovery,
             'commerce_outcome' => array(
@@ -500,6 +520,8 @@ final class QueryService
                 'orders'     => $orders,
             ),
             'capability_gaps' => $gaps,
+            'opportunity_signals' => $signal_replay['opportunity_signals'],
+            'agent_feedback'      => $signal_replay['agent_feedback'],
             'timeline'        => $timeline,
             'truncated'       => $truncated,
         );
@@ -510,7 +532,9 @@ final class QueryService
             $result['first_problem'],
             $result['recovery'],
             $result['commerce_outcome']['orders'],
-            $result['capability_gaps']
+            $result['capability_gaps'],
+            $result['opportunity_signals'],
+            $result['agent_feedback']
         );
 
         return $result;
@@ -711,7 +735,7 @@ final class QueryService
      */
     private function gap_scope(string $session_hash_hex, array $filters, string $alias): array
     {
-        $where = "{$alias}.demo_session_hash = %s";
+        $where = "{$alias}.demo_session_hash = %s AND ({$alias}.signal_category = 'capability_gap' OR {$alias}.signal_category IS NULL)";
         $args  = array($session_hash_hex);
         if (null !== $filters['date_from']) {
             $where .= " AND {$alias}.occurred_at >= %s";
@@ -957,6 +981,14 @@ final class QueryService
             array_shift($result['capability_gaps']);
             $result['truncated'] = true;
         }
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && array() !== $result['opportunity_signals']) {
+            array_shift($result['opportunity_signals']);
+            $result['truncated'] = true;
+        }
+        while ($this->replay_size($result) > self::REPLAY_RESULT_BUDGET && array() !== $result['agent_feedback']) {
+            array_shift($result['agent_feedback']);
+            $result['truncated'] = true;
+        }
 
         return $result;
     }
@@ -1138,8 +1170,15 @@ final class QueryService
      * @param list<array<string, mixed>> $orders Linked orders.
      * @param list<array<string, mixed>> $gaps Capability gaps.
      */
-    private function explanation_text(array $workflow, ?array $first_problem, ?array $recovery, array $orders, array $gaps): string
-    {
+    private function explanation_text(
+        array $workflow,
+        ?array $first_problem,
+        ?array $recovery,
+        array $orders,
+        array $gaps,
+        array $opportunities = array(),
+        array $feedback = array()
+    ): string {
         $parts = array(
             sprintf('Storefront workflow %s is %s after %d recorded tool calls.', $workflow['id'], $workflow['status'], (int) $workflow['tool_count']),
         );
@@ -1161,6 +1200,12 @@ final class QueryService
             : sprintf('%d attributed WooCommerce order link(s) are shown.', count($orders));
         if (array() !== $gaps) {
             $parts[] = sprintf('%d unsupported capability request(s) are shown.', count($gaps));
+        }
+        if (array() !== $opportunities) {
+            $parts[] = sprintf('%d site-observed opportunity signal(s) are shown.', count($opportunities));
+        }
+        if (array() !== $feedback) {
+            $parts[] = sprintf('%d evidence-linked agent feedback report(s) are shown.', count($feedback));
         }
 
         return implode(' ', $parts);

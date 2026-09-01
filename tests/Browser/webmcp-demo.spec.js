@@ -6,11 +6,13 @@ const STOREFRONT_TOOLS = [
 	"add_to_cart",
 	"checkout_handoff",
 	"compare_products",
+	"get_agent_guide",
 	"get_cart",
 	"get_product",
 	"get_store_policy",
 	"get_storefront_context",
 	"remove_from_cart",
+	"report_agent_feedback",
 	"report_capability_gap",
 	"search_products",
 	"update_cart_quantity",
@@ -21,6 +23,7 @@ const AGENTOPS_TOOLS = [
 	"get_agent_analytics_overview",
 	"get_agent_conversion_funnel",
 	"get_capability_gaps",
+	"get_opportunity_signals",
 	"get_tool_health",
 	"query_agent_workflows",
 	"run_webmcp_diagnostics",
@@ -593,10 +596,106 @@ test( "manually loads current-session storefront evidence into Agent SNR", async
 		.toBeGreaterThan( 0 );
 	await expect( page.locator( "[data-wmcp-workflows] [data-explain-workflow]" ).first() ).toBeVisible();
 	await expect( page.locator( "[data-wmcp-tool-health]" ) ).toContainText( "search_products" );
-	await expect( page.locator( "[data-wmcp-gaps]" ) ).toContainText( "Back In Stock Notification" );
+	await expect( page.locator( "[data-wmcp-gaps]" ) ).toContainText( /back-in-stock notification/i );
 	await expect
 		.poll( async () => Number.parseInt( await page.locator( '[data-funnel-stage="product_search"] [data-funnel-count]' ).textContent(), 10 ) )
 		.toBeGreaterThan( 0 );
+} );
+
+test( "discovers the guide, records missed demand, and separates agent feedback from site evidence", async ( { context, page } ) => {
+	await installModelContextMock( context );
+	await page.goto( "/storefront-demo/" );
+	await waitForRuntime( page, STOREFRONT_TOOLS.length );
+
+	await expect( page.locator( "[data-wmcp-agent-guide]" ) ).toBeVisible();
+	await expect( page.locator( "[data-wmcp-guide-status]" ) ).toHaveText( "Start here" );
+	const guide = await executeActiveTool( page, "get_agent_guide", {} );
+	expect( guide.ok ).toBe( true );
+	expect( guide.result.version ).toBe( "1.0" );
+	await expect( page.locator( "[data-wmcp-guide-status]" ) ).toHaveText( "Read by agent" );
+
+	const zero = await executeActiveTool( page, "search_products", {
+		attributes: { water_rating: "IPX5" },
+		in_stock_only: true,
+		limit: 6,
+		max_price: 100,
+		query: "waterproof backpack",
+	} );
+	expect( zero.ok ).toBe( true );
+	expect( zero.result.result_count ).toBe( 0 );
+	expect( zero.result.opportunity_signal ).toMatchObject( {
+		evidence_status: "verified",
+		signal_code: "zero_results",
+		source: "site_observed",
+	} );
+	await expect( page.locator( "[data-wmcp-search-opportunity]" ) ).toBeVisible();
+	await expect( page.locator( "[data-wmcp-search-opportunity]" ) ).toContainText( /Site observed|recorded/i );
+
+	const relaxed = await executeActiveTool( page, "search_products", {
+		in_stock_only: true,
+		limit: 6,
+		max_price: 100,
+		query: "waterproof backpack",
+	} );
+	expect( relaxed.ok ).toBe( true );
+	expect( relaxed.result.result_count ).toBe( 2 );
+	expect( relaxed.result.products.every( ( product ) => product.attributes.water_rating === "IPX4" ) ).toBe( true );
+	const harborLite = relaxed.result.products.find( ( product ) => product.name === "HarborLite 16 Pack" );
+	expect( harborLite ).toBeTruthy();
+
+	const cart = await executeActiveTool( page, "get_cart" );
+	const add = await executeActiveTool( page, "add_to_cart", {
+		expected_cart_revision: cart.result.cart_revision,
+		product_id: harborLite.id,
+		quantity: 1,
+	} );
+	const handoff = await executeActiveTool( page, "checkout_handoff", {
+		expected_cart_revision: add.result.cart.cart_revision,
+	} );
+	const feedback = await executeActiveTool( page, "report_agent_feedback", {
+		evidence_event_ids: [ zero.event_id, relaxed.event_id, handoff.event_id ],
+		feedback_type: "constraint_encountered",
+		outcome: "partial",
+		ratings: {
+			effort: "medium",
+			evidence_quality: "sufficient",
+			handoff_quality: "smooth",
+			policy_clarity: "not_applicable",
+		},
+		reason_code: "budget_tradeoff",
+		requested_metrics: [
+			"eligible_product_count",
+			"highest_matching_water_rating",
+			"search_refinement_count",
+			"checkout_conversion",
+			"paid_order_value",
+		],
+		step: "checkout_handoff",
+		suggested_owner_action: "improve_product_coverage",
+	} );
+	expect( feedback.ok ).toBe( true );
+	expect( feedback.result ).toMatchObject( {
+		evidence_status: "linked",
+		recorded: true,
+		trust: "agent_reported",
+	} );
+	expect( feedback.result.measured_context.eligible_product_count.value ).toBe( 2 );
+	expect( feedback.result.measured_context.highest_matching_water_rating.value ).toBe( "IPX4" );
+	expect( feedback.result.measured_context.checkout_conversion.status ).toBe( "pending" );
+	await expect( page.locator( '[data-wmcp-panel="feedback"]' ) ).toBeVisible();
+	await expect( page.locator( "[data-wmcp-feedback-trust]" ) ).toContainText( "Agent reported" );
+	await expect( page.locator( "[data-wmcp-feedback-metrics]" ) ).toContainText( "IPX4" );
+
+	await page.goto( "/agentops-demo/" );
+	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	const signals = await executeActiveTool( page, "get_opportunity_signals", {} );
+	expect( signals.ok ).toBe( true );
+	expect( signals.result.items.some( ( item ) => item.sources.site_observed ) ).toBe( true );
+	expect( signals.result.items.some( ( item ) => item.sources.agent_reported ) ).toBe( true );
+	await page.locator( "[data-wmcp-load-dashboard]" ).click();
+	await expect( page.locator( "[data-wmcp-opportunities]" ) ).toContainText( "Site observed" );
+	await expect( page.locator( "[data-wmcp-opportunities]" ) ).toContainText( "Agent reported" );
+	await expect( page.locator( "[data-wmcp-opportunities]" ) ).not.toContainText( /lost revenue/i );
 } );
 
 test( "opens a bounded partial replay for a large Agent Sessions workflow", async ( { context, page } ) => {

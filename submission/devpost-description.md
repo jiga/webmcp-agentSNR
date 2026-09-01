@@ -4,7 +4,7 @@
 
 ## One-line pitch
 
-**Agent outcome monitoring for WordPress.** Browser agents operate a real WooCommerce storefront, while merchants replay privacy-safe workflows, investigate signals, connect human handoffs to verified outcomes, and govern the WebMCP tool layer.
+**Agent outcome monitoring for WordPress.** Browser agents discover how to use a real WooCommerce storefront, while merchants see what agents did, hear structured feedback about the experience, discover missed demand, connect human handoffs to verified outcomes, and govern the WebMCP tool layer.
 
 ## The problem
 
@@ -14,10 +14,11 @@ Most WordPress agent integrations stop at exposing actions. A merchant can see t
 
 **Agent SNR** closes that loop locally inside WordPress. SNR retains its established meaning—**signal-to-noise ratio**—because the product separates verified business and reliability evidence from raw, unactionable agent noise:
 
-1. A top-level storefront exposes narrow WebMCP tools for product context, discovery, comparison, published policy evidence, reversible cart changes, checkout handoff, and unsupported-demand reporting.
+1. A top-level storefront publishes a friendly Agent Guide and narrow WebMCP tools for product context, discovery, comparison, published policy evidence, reversible cart changes, checkout handoff, and feedback.
 2. A redacted workflow ledger records one start and one terminal outcome for every authenticated tool request.
-3. WooCommerce order and refund hooks preserve same-session product evidence and classify eligible agent-linked orders as direct, assisted, or influenced without double-counting revenue. Orders without qualifying evidence are excluded from attributed reporting rather than claimed.
-4. A separate top-level Agent SNR surface exposes tools for the journey, Workflow Replay, tool health, capability signals, attributed revenue, diagnostics, and a restrictive session-only policy change.
+3. The site automatically records zero-result and constrained-search opportunities even when an agent says nothing. Structured agent feedback is stored separately as testimony, with only same-workflow evidence and server-computed measurements.
+4. WooCommerce order and refund hooks preserve same-session product evidence and classify eligible agent-linked orders as direct, assisted, or influenced without double-counting revenue. Orders without qualifying evidence are excluded from attributed reporting rather than claimed.
+5. A separate top-level Agent SNR surface exposes tools for the journey, Workflow Replay, unified Opportunity Signals, tool health, attributed revenue, diagnostics, and a restrictive session-only policy change.
 
 The memorable loop is not “AI shopping.” It is a website observing and improving its own agent interface.
 
@@ -33,18 +34,19 @@ WebMCP also makes the governance demonstration possible: the merchant asks Agent
 
 ## Human-agent collaboration
 
-The agent does the repetitive research and preparation: it finds products, compares stored facts, retrieves policy evidence, mutates a reversible session cart, and prepares a checkout handoff. The human sees the same state, reviews normal WooCommerce checkout, supplies or verifies customer details, accepts terms, and explicitly places the no-charge demo order.
+The agent first reads the site's versioned guide, then does the repetitive research and preparation: it finds products, compares stored facts, retrieves policy evidence, mutates a reversible session cart, prepares a checkout handoff, and can report structured friction. The human sees the same state, reviews normal WooCommerce checkout, supplies or verifies customer details, accepts terms, and explicitly places the no-charge demo order.
 
-The agent never places an order, submits payment, accepts terms, cancels, or refunds. If a shopper asks for an unsupported back-in-stock notification, the agent records a redacted capability gap and clearly says that no notification was created.
+The agent never places an order, submits payment, accepts terms, cancels, or refunds. Feedback never changes catalog, inventory, policy, or attribution. A compatibility tool still records unsupported requests such as a back-in-stock notification and clearly says no notification was created.
 
-Afterward, the merchant and agent work together on operations. They inspect the workflow timeline and business outcome, identify the slowest or failed tool, see unsupported demand, and apply a reversible policy change.
+Afterward, the merchant and agent work together on operations. They inspect the workflow timeline and business outcome, distinguish **Site observed**, **Agent reported**, and **Site verified** evidence, see missed demand or unsupported capabilities, and apply a reversible policy change.
 
 ## Technical implementation
 
 - WordPress 6.9+ native Abilities API with typed input/output schemas, execution callbacks, permission callbacks, and explicit first-party exposure.
 - Framework-free browser runtime with top-level/API detection, awaited atomic registration, separate registration cleanup and client-side execution abort handling, credential refresh, stale-manifest recovery, cross-tab invalidation, compact outputs, and progressive enhancement. If server work has already started, its recorded success/failure remains authoritative even when the client stops waiting.
 - Anonymous demo sessions use a 256-bit `HttpOnly` cookie, one-way stored digest, short-lived signed CSRF token, exact Origin checks, rate limits, size caps, and request-ID replay protection.
-- Four portable WordPress tables store workflows, redacted events, one primary order attribution per rule version, and capability gaps. No raw prompts, identities, cookies, nonces, headers, addresses, or payment fields are recorded.
+- Four portable WordPress tables store workflows, redacted events, one primary order attribution per rule version, and unified opportunity/feedback signals. No raw prompts or search text, free-form feedback, identities, cookies, nonces, headers, addresses, or payment fields are recorded.
+- Agents submit metric names, never values. Eligible product count, highest matching water rating, refinements, handoff, and order/value state are computed from site evidence; unavailable outcome metrics stay pending.
 - WooCommerce APIs and HPOS-safe CRUD handle catalog, cart, order, status, and refund state. Revenue is counted only from paid orders and always shows gross, refunds, and net by currency.
 - Public monitoring SQL is scoped to the current demo-session hash before rows are fetched. Persistent admin policy uses dedicated WordPress capabilities.
 - GPL-2.0-or-later source, original fictional products/artwork, checksummed plugin ZIP, Docker reproduction, and Playground portability bundle.

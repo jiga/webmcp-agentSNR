@@ -19,11 +19,14 @@ final class ProductCatalog
 
     private Closure $query_products;
 
+    private bool $uses_default_query;
+
     public function __construct(
         private readonly ProductNormalizer $normalizer,
         private readonly ProductSearchMatcher $matcher,
         ?callable $query_products = null
     ) {
+        $this->uses_default_query = null === $query_products;
         $this->query_products = null === $query_products
             ? static fn (array $args): array => (array) wc_get_products($args)
             : Closure::fromCallable($query_products);
@@ -35,23 +38,76 @@ final class ProductCatalog
      */
     public function search(array $input): array
     {
+        return $this->search_with_analysis($input)['result'];
+    }
+
+    /**
+     * Search once over the bounded catalog and retain full-set aggregate facts
+     * for trusted telemetry before the public product page is sliced. A second
+     * bounded scan runs only when an in-stock search returned zero, allowing an
+     * existing out-of-stock match to be classified as inventory demand.
+     *
+     * @param array<string, mixed> $input Validated tool input.
+     * @return array{result:array<string,mixed>,analysis:array<string,mixed>}
+     */
+    public function search_with_analysis(array $input): array
+    {
         $this->assert_available();
 
         $limit    = max(1, min(8, (int) ($input['limit'] ?? 6)));
-        $products = ($this->query_products)(self::public_query_args($input));
-        $matches  = array();
+        $matches  = $this->matches($input);
+        $analysis = $this->aggregate($matches);
+        if (0 === count($matches) && true === ($input['in_stock_only'] ?? true)) {
+            $all_stock_input                  = $input;
+            $all_stock_input['in_stock_only'] = false;
+            $all_stock_matches                = $this->matches($all_stock_input);
+            $out_of_stock                     = array_values(
+                array_filter(
+                    $all_stock_matches,
+                    static fn (array $facts): bool => 'instock' !== ($facts['stock_status'] ?? null)
+                        || true !== ($facts['purchasable'] ?? false)
+                )
+            );
+            if (array() !== $out_of_stock) {
+                $secondary = $this->aggregate($out_of_stock);
+                $analysis['out_of_stock_match_count']       = count($out_of_stock);
+                $analysis['highest_matching_water_rating']  = $secondary['highest_matching_water_rating'];
+                $analysis['related_product_ids']            = $secondary['matched_product_ids'];
+                $analysis['related_product_title']          = $secondary['first_product_title'];
+            }
+        }
 
-        foreach ($products as $product) {
+        return array(
+            'result' => array(
+                'products'     => array_values(
+                    array_map(
+                        array($this->normalizer, 'without_internal'),
+                        array_slice($matches, 0, $limit)
+                    )
+                ),
+                'result_count' => count($matches),
+                'query'        => (string) $input['query'],
+            ),
+            'analysis' => $analysis,
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $input Validated search input.
+     * @return list<array<string, mixed>>
+     */
+    private function matches(array $input): array
+    {
+        $matches = array();
+        foreach (($this->query_products)(self::public_query_args($input)) as $product) {
             if (! is_object($product) || ! $this->normalizer->is_public($product)) {
                 continue;
             }
-
             $facts = $this->normalizer->summary($product);
             if ($this->matcher->matches($facts, $input)) {
                 $matches[] = $facts;
             }
         }
-
         usort(
             $matches,
             static function (array $left, array $right): int {
@@ -61,13 +117,49 @@ final class ProductCatalog
             }
         );
 
-        $count   = count($matches);
-        $matches = array_slice($matches, 0, $limit);
+        return $matches;
+    }
+
+    /**
+     * @param list<array<string, mixed>> $matches Full matched fact set.
+     * @return array<string, mixed>
+     */
+    private function aggregate(array $matches): array
+    {
+        $in_stock = 0;
+        $out_of_stock = 0;
+        $best_rating = null;
+        $best_score  = -1;
+        foreach ($matches as $facts) {
+            if ('instock' === ($facts['stock_status'] ?? null) && true === ($facts['purchasable'] ?? false)) {
+                ++$in_stock;
+            } else {
+                ++$out_of_stock;
+            }
+            $rating = $facts['attributes']['water_rating'] ?? null;
+            if (! is_string($rating) || '' === trim($rating)) {
+                continue;
+            }
+            $score = $this->water_score($rating);
+            if ($score > $best_score) {
+                $best_score  = $score;
+                $best_rating = $rating;
+            }
+        }
 
         return array(
-            'products'     => array_values(array_map(array($this->normalizer, 'without_internal'), $matches)),
-            'result_count' => $count,
-            'query'        => (string) $input['query'],
+            'eligible_product_count'         => count($matches),
+            'highest_matching_water_rating' => $best_rating,
+            'in_stock_match_count'           => $in_stock,
+            'out_of_stock_match_count'       => $out_of_stock,
+            'matched_product_ids'            => array_values(
+                array_slice(
+                    array_filter(array_map(static fn (array $facts): int => (int) ($facts['id'] ?? 0), $matches)),
+                    0,
+                    20
+                )
+            ),
+            'first_product_title'            => isset($matches[0]['name']) ? (string) $matches[0]['name'] : null,
         );
     }
 
@@ -297,7 +389,7 @@ final class ProductCatalog
 
     private function assert_available(): void
     {
-        if (! function_exists('wc_get_products')) {
+        if ($this->uses_default_query && ! function_exists('wc_get_products')) {
             throw new ToolException('woocommerce_unavailable', 'WooCommerce catalog tools are unavailable.', 503, true);
         }
     }

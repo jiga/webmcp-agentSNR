@@ -662,6 +662,37 @@
 	text-transform: uppercase;
 }
 
+.wmcp-signal-source-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 5px;
+	justify-content: flex-end;
+	margin-left: auto;
+}
+
+.wmcp-signal-source {
+	border: 1px solid currentcolor;
+	font: 750 8px/1.2 var(--wmcp-mono);
+	letter-spacing: 0.04em;
+	padding: 5px 7px;
+	text-transform: uppercase;
+}
+
+.wmcp-signal-source[data-signal-source="site-observed"] {
+	background: var(--wmcp-forest);
+	color: var(--wmcp-paper);
+}
+
+.wmcp-signal-source[data-signal-source="agent-reported"] {
+	background: var(--wmcp-acid);
+	color: var(--wmcp-ink);
+}
+
+.wmcp-signal-source[data-signal-source="site-verified"] {
+	background: var(--wmcp-signal);
+	color: var(--wmcp-forest-deep);
+}
+
 .wmcp-signal-type {
 	color: var(--wmcp-ink-muted);
 }
@@ -781,6 +812,33 @@
 .wmcp-gap-card dd {
 	font-size: 12px;
 	margin: 5px 0 0;
+}
+
+.wmcp-opportunity-card {
+	border-top: 7px solid var(--wmcp-forest);
+	min-height: 330px;
+}
+
+.wmcp-opportunity-card[data-signal-source*="agent-reported"] {
+	border-top-color: var(--wmcp-acid);
+}
+
+.wmcp-opportunity-card[data-signal-source*="site-observed"] {
+	border-top-color: var(--wmcp-forest);
+}
+
+.wmcp-opportunity-card .wmcp-panel-label {
+	align-items: flex-start;
+	gap: 10px;
+	margin-bottom: 28px;
+}
+
+.wmcp-opportunity-card dl {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wmcp-opportunity-card dd {
+	overflow-wrap: anywhere;
 }
 
 .wmcp-governance {
@@ -1048,6 +1106,11 @@
 	.wmcp-capability-signal-head {
 		align-items: flex-start;
 		flex-direction: column;
+	}
+
+	.wmcp-signal-source-list {
+		justify-content: flex-start;
+		margin-left: 0;
 	}
 
 	.wmcp-capability-signal-head small {

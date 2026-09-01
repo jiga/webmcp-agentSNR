@@ -15,7 +15,9 @@ use WPWebMCP\AgentOps\Analytics\CapabilityGapService;
 use WPWebMCP\AgentOps\Analytics\EventRecorder;
 use WPWebMCP\AgentOps\Analytics\FunnelService;
 use WPWebMCP\AgentOps\Analytics\QueryService;
+use WPWebMCP\AgentOps\Analytics\SignalService;
 use WPWebMCP\AgentOps\Contract\EventName;
+use WPWebMCP\AgentOps\Guidance\AgentGuide;
 use WPWebMCP\AgentOps\Policy\PolicyStore;
 use WPWebMCP\AgentOps\Policy\SessionPolicyStore;
 use WPWebMCP\AgentOps\WebMCP\DiagnosticsService;
@@ -30,6 +32,8 @@ final class CoreAbilities
         private readonly QueryService $queries,
         private readonly FunnelService $funnel,
         private readonly CapabilityGapService $gaps,
+        private readonly SignalService $signals,
+        private readonly AgentGuide $guide,
         private readonly DiagnosticsService $diagnostics,
         private readonly PolicyStore $policies,
         private readonly SessionPolicyStore $session_policies,
@@ -41,13 +45,16 @@ final class CoreAbilities
     public function register(CallbackRouter $router): void
     {
         $router->register('storefront.context', array($this, 'storefront_context'));
+        $router->register('storefront.agent_guide', array($this, 'agent_guide'));
         $router->register('analytics.report_capability_gap', array($this, 'report_capability_gap'));
+        $router->register('analytics.report_agent_feedback', array($this, 'report_agent_feedback'));
         $router->register('analytics.overview', array($this, 'analytics_overview'));
         $router->register('analytics.funnel', array($this, 'analytics_funnel'));
         $router->register('analytics.query_workflows', array($this, 'query_workflows'));
         $router->register('analytics.explain_workflow', array($this, 'explain_workflow'));
         $router->register('analytics.tool_health', array($this, 'tool_health'));
         $router->register('analytics.capability_gaps', array($this, 'capability_gaps'));
+        $router->register('analytics.opportunity_signals', array($this, 'opportunity_signals'));
         $router->register('diagnostics.run', array($this, 'run_diagnostics'));
         $router->register('policy.set_tool_enabled', array($this, 'set_tool_enabled'));
     }
@@ -74,8 +81,19 @@ final class CoreAbilities
             'categories'          => $all || in_array('categories', $include, true) ? $this->categories() : array(),
             'policy_summary'      => $all || in_array('policy_summary', $include, true) ? $this->policy_summary() : null,
             'cart_summary'        => $all || in_array('cart_summary', $include, true) ? $this->cart_summary() : null,
-            'supported_workflows' => array('product_discovery', 'product_comparison', 'policy_evidence', 'cart_preparation', 'human_checkout_handoff'),
+            'supported_workflows' => class_exists('WooCommerce')
+                ? array('product_discovery', 'product_comparison', 'policy_evidence', 'cart_preparation', 'human_checkout_handoff')
+                : array(),
+            'agent_guide'         => $this->guide->discovery(),
         );
+    }
+
+    /** @return array<string, mixed> */
+    public function agent_guide(array $input = array()): array
+    {
+        unset($input);
+
+        return $this->guide->guide();
     }
 
     /**
@@ -105,6 +123,32 @@ final class CoreAbilities
             'fulfilled' => false,
             'message'   => (string) $gap['message'],
         );
+    }
+
+    /**
+     * @param array<string, mixed> $input Validated input.
+     * @return array<string, mixed>
+     */
+    public function report_agent_feedback(array $input): array
+    {
+        $context = $this->context();
+
+        try {
+            return $this->signals->report_feedback(
+                $context['workflow_id'],
+                $context['session_hash_hex'],
+                $context['request_id'],
+                $input
+            );
+        } catch (InvalidArgumentException $exception) {
+            throw new ToolException(
+                'invalid_agent_feedback',
+                'The structured feedback or its evidence could not be recorded safely.',
+                400,
+                false,
+                'Use only event IDs from this storefront workflow and request supported metric names.'
+            );
+        }
     }
 
     /** @param array<string, mixed> $input Validated input. */
@@ -160,6 +204,14 @@ final class CoreAbilities
     {
         return $this->analytics_query(
             fn (): array => $this->gaps->grouped($this->context()['session_hash_hex'], $input)
+        );
+    }
+
+    /** @param array<string, mixed> $input Validated input. */
+    public function opportunity_signals(array $input): array
+    {
+        return $this->analytics_query(
+            fn (): array => $this->signals->grouped($this->context()['session_hash_hex'], $input)
         );
     }
 

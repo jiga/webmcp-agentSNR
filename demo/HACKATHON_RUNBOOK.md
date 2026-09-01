@@ -41,32 +41,39 @@ That reset removes only the `agent-snr-showcase` containers, network, and named 
 
 Say: “Agent SNR does not mix sample history into this screen. We are starting with one empty, private browser evidence window.”
 
-## 3. Run the evidence-first shopper workflow
+## 3. Let the agent discover the site guide
 
 On the storefront, give the browser agent this prompt:
 
-> Find a waterproof backpack under $120. Compare the two best in-stock choices using product evidence, confirm that the published return policy is at least 30 days, and add the best-value option to my cart. Do not start checkout.
+> Start with this site's Agent Guide. Find a waterproof backpack under $100 with at least IPX5 protection. If none match, stop and explain what the site recorded before changing my constraints.
+
+Expected result: the agent discovers and reads the versioned guide without being told a technical contract name. The first constrained search returns no products and the site itself records a **Site observed** zero-result opportunity. No agent feedback is required for this evidence to exist.
+
+Say: “The site does not have to infer demand from a failed workflow later. It records a safe, canonical signal at the moment a real catalog constraint produces no results—without retaining the prompt or raw search text.”
+
+## 4. Recover with evidence and invite direct feedback
+
+Continue with:
+
+> Relax only the water rating. Keep the backpack, in-stock, and under-$100 constraints. Compare the two matches, verify the published return policy, add the compact option, prepare checkout, and stop at the human handoff. Then follow the Agent Guide's feedback instructions for this journey.
 
 Pause on the visible results and call out the evidence chain:
 
 - search is constrained by stock, price, and product facts;
+- the relaxed search returns RainTrail and HarborLite, both IPX4, so the tradeoff is explicit;
 - comparison is structured, not invented from page prose;
 - the return-policy answer cites the store’s published policy;
 - cart mutation is reversible and visibly updates the shared cart badge.
 
-Now ask for a capability that the store does not implement:
+Expected result: checkout stops at a visible link for a person, and no order exists yet. The agent submits one structured report describing the budget/waterproofing constraint. The receipt labels the opinion **Agent reported**, the linked workflow evidence separately, and the eligible-product count/highest water rating as site-computed measurements. Checkout conversion and paid value remain **Pending** because the person has not ordered yet.
 
-> Find the blue TerraRoll 25 Pack and notify me when it is back in stock. If the store cannot do that, say so honestly and record the unsupported request as a capability signal; do not pretend a notification was created.
+If the client does not voluntarily follow the guide's feedback hint, use this deterministic recovery prompt:
 
-Expected result: the agent reports the limitation, calls the capability-gap tool, and explicitly says that no alert, reservation, or order was created.
+> Before I continue, use the site's feedback mechanism once for the constraint you encountered. Link the zero-result search, relaxed search, and checkout-handoff evidence; ask the site to compute eligible product count, highest matching water rating, refinement count, checkout conversion, and paid order value. Do not invent metric values.
 
-Now prepare the human boundary:
+Optional compatibility bonus: ask for an unavailable back-in-stock alert for the blue TerraRoll 25 Pack. The older capability-gap tool remains available as a specialized feedback path and must still say that no notification was created.
 
-> Prepare checkout for the current cart and stop at the normal WooCommerce handoff. Do not navigate, submit customer data, accept terms, or place the order.
-
-Expected result: checkout stops at a visible link for a person, and no order exists yet.
-
-## 4. Cross the human checkpoint
+## 5. Cross the human checkpoint
 
 Follow the prepared checkout link yourself. The demo checkout fields are fictional and prefilled. Select **Demo payment — no charge**, review the order, and press **Place order**.
 
@@ -74,11 +81,11 @@ Say: “The agent could search, compare, read policy, change a cart, and prepare
 
 Keep the order-confirmation tab open long enough for the order number and no-charge result to be visible.
 
-## 5. Replay the outcome in Agent SNR
+## 6. Replay the outcome in Agent SNR
 
 Return to the public Agent SNR tab and give the merchant prompt:
 
-> Monitor this browser session. Load the overview, list its agent workflows, explain the storefront workflow with its redacted timeline, show the funnel and tool health, connect the human order to its attribution and net outcome, and include the unsupported back-in-stock capability signal.
+> Monitor this browser session. Load the overview, list its agent workflows, explain the storefront workflow with its redacted timeline, show the funnel and tool health, connect the human order to its attribution and net outcome, and separate site-observed opportunities from agent-reported feedback and site-verified measurements.
 
 Use the visible **Agent sessions** row to open the workflow replay. Call out:
 
@@ -86,9 +93,11 @@ Use the visible **Agent sessions** row to open the workflow replay. Call out:
 - raw prompts, arbitrary payloads, identity, address, payment data, and screen video are absent;
 - checkout handoff and the later WooCommerce order are separate facts;
 - attribution is evidence-based; “Agent direct” is not the same thing as WooCommerce’s traffic-origin label;
-- the unsupported request appears as opportunity context, never invented “lost revenue.”
+- the zero-result demand signal exists independently of feedback;
+- the agent's constraint report remains testimony, while product counts, water rating, paid order, and value come from site evidence;
+- opportunity context is never invented “lost revenue.”
 
-## 6. Demonstrate session-only governance
+## 7. Demonstrate session-only governance
 
 With the storefront and Agent SNR tabs still open, ask on Agent SNR:
 
@@ -102,7 +111,7 @@ Then restore it from Agent SNR:
 
 Return to the storefront and show that the tool is registered again. This closes the monitor → control → runtime loop without claiming a persistent public policy change.
 
-## 7. Prove refunds reduce net outcome
+## 8. Prove refunds reduce net outcome
 
 This is an operator action, not a shopper-agent ability. Before the demo, the operator can privately retrieve the machine-generated local credentials with:
 
@@ -118,9 +127,9 @@ Return to the public Agent SNR tab and ask:
 
 Expected result: the original paid-order evidence remains, refund value increases, and net attributed value falls accordingly. Say: “Agent SNR does not rewrite history; it appends verified WooCommerce outcome evidence.”
 
-## 8. Close and stop
+## 9. Close and stop
 
-Close with: “This is the full loop: structured agent action, explicit human authority, verified business outcome, privacy-safe replay, and a control that changes the next agent run.”
+Close with: “This is the full loop: a guide agents can discover, automatic evidence when the site misses demand, honest agent feedback, explicit human authority, verified business outcome, privacy-safe replay, and a control that changes the next agent run.”
 
 Stop the isolated showcase without deleting its data:
 

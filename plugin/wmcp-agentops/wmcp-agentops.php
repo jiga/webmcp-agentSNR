@@ -2,7 +2,7 @@
 
 /**
  * Plugin Name:       Agent SNR
- * Description:       Agent outcome monitoring for WordPress with privacy-safe replay, signals, and governance.
+ * Description:       Agent outcome monitoring for WordPress with privacy-safe replay, opportunity signals, agent feedback, and governance.
  * Version:           0.1.0
  * Requires at least: 6.9
  * Requires PHP:      8.1

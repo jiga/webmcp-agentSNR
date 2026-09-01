@@ -52,6 +52,67 @@ final class EventSchemaTest extends AnalyticsTestCase
         self::assertSame(array('quantity' => 2), $properties);
     }
 
+    public function test_opportunity_and_feedback_events_keep_only_bounded_provenance_fields(): void
+    {
+        $schema = new EventSchema();
+        $opportunity = $schema->properties(
+            EventName::OPPORTUNITY_DETECTED,
+            array(
+                'signal_id'       => '01ARZ3NDEKTSV4RRFFQ69G5FAV',
+                'signal_source'   => 'site_observed',
+                'signal_category' => 'demand_gap',
+                'signal_code'     => 'zero_results',
+                'signal_key'      => str_repeat('a', 64),
+                'result_count'    => 0,
+                'prompt'          => 'find a private medical product',
+                'email'           => 'shopper@example.test',
+                'query'           => 'raw visitor query',
+            )
+        );
+        $feedback = $schema->properties(
+            EventName::AGENT_FEEDBACK_REPORTED,
+            array(
+                'feedback_id'      => '01ARZ3NDEKTSV4RRFFQ69G5FAA',
+                'feedback_outcome' => 'partial',
+                'feedback_type'    => 'constraint_encountered',
+                'evidence_count'   => 2,
+                'evidence_status'  => 'linked',
+                'metric_count'     => 3,
+                'reason_code'      => 'low_coverage',
+                'step_id'          => 'discovery',
+                'suggested_action' => 'improve_product_coverage',
+                'comment'          => 'Call +1 415 555 0199',
+                'metric_values'    => array('paid_order_value' => 999999),
+            )
+        );
+
+        self::assertSame(
+            array(
+                'result_count'    => 0,
+                'signal_category' => 'demand_gap',
+                'signal_code'     => 'zero_results',
+                'signal_id'       => '01ARZ3NDEKTSV4RRFFQ69G5FAV',
+                'signal_key'      => str_repeat('a', 64),
+                'signal_source'   => 'site_observed',
+            ),
+            $opportunity
+        );
+        self::assertSame(
+            array(
+                'evidence_count'   => 2,
+                'evidence_status'  => 'linked',
+                'feedback_id'      => '01ARZ3NDEKTSV4RRFFQ69G5FAA',
+                'feedback_outcome' => 'partial',
+                'feedback_type'    => 'constraint_encountered',
+                'metric_count'     => 3,
+                'reason_code'      => 'low_coverage',
+                'step_id'          => 'discovery',
+                'suggested_action' => 'improve_product_coverage',
+            ),
+            $feedback
+        );
+    }
+
     public function test_terminal_dedupe_is_independent_of_terminal_outcome(): void
     {
         $schema = new EventSchema();
