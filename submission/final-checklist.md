@@ -18,7 +18,7 @@ Checked items are complete in the prepared repository. Unchecked items require t
 ## WebMCP quality and external evidence
 
 - [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the exact release in disposable localhost Chrome, including application-error-envelope enforcement.
-- [ ] Protected model-backed selection and browser evals were executed on September 1, 2026, but the strict all-pass gate failed. Fix the recorded selection, journey-ordering, and feedback-path findings, then rerun to the thresholds in [`webmcp-readiness-design.md`](webmcp-readiness-design.md); see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- [x] Protected model-backed selection and browser evals pass the strict all-pass gate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`: storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 - [ ] Real ChatGPT desktop Site Tools and Chrome discover exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages.
 - [ ] The owner completed [`workbench-validation.md`](workbench-validation.md) with Workbench 1.2.1 (or a separately reviewed newer version), exact release identity, manual calls, Audit findings, saved-call replay, repeated evals, approval/log review, and User Mode evidence.
 - [ ] Provider keys and raw `.evals/`/Workbench logs remain private; every linked excerpt or screenshot is sanitized.

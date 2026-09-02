@@ -212,12 +212,12 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Design: `submission/webmcp-readiness-design.md` maps the five resources into one co-browsing product contract, two outcome-oriented surfaces, zero Sensitive Action tools, explicit pricing/human boundaries, failure recovery, eval layers, and owner-only publication gates.
 - Discovery: 12 storefront and 8 Agent SNR tools are publicly registered. `report_capability_gap` and `get_capability_gaps` remain registered with `wmcp.public=false`; they are absent from manifests, governance enums, visible Controls, and eval schemas. The handoff is publicly named `prepare_checkout_handoff`.
 - Guide: Guide 1.1 publishes seven shopper steps, four operator steps, answer/action/telemetry/human-checkpoint/sensitive taxonomy, co-browsing-only scope, zero sensitive tools, optional feedback, privacy, and subtotal/final-total rules. Runtime/schema referential integrity is tested.
-- Evals: exact `webmcp-evals@0.0.4`, generated schema parity, 17 fixture/report/smoke tests, natural-language selection/no-call/recovery suites, live browser trajectories with `ok:true` constraints, application-error-aware native smoke, and provenance-bound strict all-pass report checking are included. Model-backed runs remain an owner gate and no provider key was used.
+- Evals: exact `webmcp-evals@0.0.4`, generated schema parity, natural-language selection/no-call/recovery suites, live browser trajectories with `ok:true` constraints, application-error-aware native smoke, and provenance-bound strict all-pass report checking are included. The protected fixed-model rerun now clears the strict gate; credentials and raw reports remain private.
 - External handoff: Workbench 1.2.1 and WebMCP.com scanner/API/human-listing evidence templates contain release identity, security, approval, log, audit, replay, model, classification, and sign-off fields without fabricating results.
 - Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
 - Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates include the internal protected-model remediation and clean rerun documented below, plus external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.
+- Remaining gates are external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.
 
 ## Live model-backed WebMCP eval report
 
@@ -228,13 +228,13 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - [x] Run the repository provenance checker for every JSON report and record each strict-gate verdict.
 - [x] Publish a sanitized repository report with results, failures, limitations, and private evidence hashes.
 
-### Live model-backed eval review
+### Initial live model-backed eval review — superseded baseline
 
 - The credential preflight succeeded without printing or committing the key. The run used fixed model `openai:gpt-5.4-mini-2026-03-17`, backend `vercel`, `webmcp-evals@0.0.4`, commit `e853062bb097e1c94fcb2a4fec64f019b3c9676b`, and exact plugin artifact SHA-256 `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`.
 - Deterministic guards (17/17), generated schema parity, and adapted native Chrome smoke (5/5 storefront and 6/6 Agent SNR) pass.
-- The protected model-backed gate **fails**: storefront selection passes 33/54 case-runs, Agent SNR selection passes 31/45, and the browser journey passes 3/8 required rows. All three strict provenance-checker invocations exit nonzero.
+- The initial protected model-backed gate **failed**: storefront selection passed 33/54 case-runs, Agent SNR selection passed 31/45, and the browser journey passed 3/8 required rows. All three strict provenance-checker invocations exited nonzero.
 - Safety held despite the quality failures: every case with authored `expectedCall: null` made zero state-changing calls, and an operator-observed before/after query found that the live browser run created zero orders.
-- The sanitized evidence report is `submission/webmcp-eval-report-2026-09-01.md`; raw reports remain private under ignored `.evals/`. Release clearance now requires the documented fixture/journey/feedback fixes and a clean rerun.
+- Those findings became the remediation acceptance criteria. The sanitized evidence report at `submission/webmcp-eval-report-2026-09-01.md` now records both this superseded baseline and the passing rerun; raw reports remain private under ignored `.evals/`.
 
 ## Model-backed eval remediation
 
@@ -242,5 +242,12 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - [x] Make isolated selection fixtures deterministic about guide start state, tool result context, and the intended single decision boundary.
 - [x] Reproduce the browser-only `invalid_agent_feedback` sequence, fix the underlying workflow/evidence validation defect, and add positive/negative regression coverage.
 - [x] Refine the live shopper journey so required commerce outcomes remain primary and optional telemetry occurs only after the core path.
-- [ ] Run focused tests, the full deterministic/native matrix, and the same fixed-model protected suites with strict provenance checking.
-- [ ] Update the sanitized report and release checklists with the rerun evidence; complete an independent review and focused commit.
+- [x] Run focused tests, the full deterministic/native matrix, and the same fixed-model protected suites with strict provenance checking.
+- [x] Update the sanitized report and release checklists with the rerun evidence; complete an independent review and focused commit.
+
+### Model-backed eval remediation review
+
+- Final provenance is commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`, plugin SHA-256 `38b1b8106f255b051ff07c953afb6db3be4504df85ac1c4f454c69ec82a416fa`, and Playground SHA-256 `96a9ec44596a76a07e5d549ff486d35acd8c0292cd5878db6e361321664d3f89`.
+- The fixed-model protected gate passes storefront 54/54, Agent SNR 45/45, and live browser 8/8 with zero console errors and no new WooCommerce order; all three strict provenance checkers pass.
+- The complete deterministic matrix passes: 112 JavaScript tests, 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4, 16/16 Chromium scenarios, 11/11 adapted native smoke calls, and 21/21 eval fixture/patch/checker/smoke guards.
+- [`submission/webmcp-eval-report-2026-09-01.md`](../submission/webmcp-eval-report-2026-09-01.md) records the before/after results, remediation, safety evidence, limitations, and private evidence hashes. The initial failed run remains a superseded baseline rather than an active blocker.
