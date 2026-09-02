@@ -217,4 +217,21 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
 - Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are external/owner-only: public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, protected model runs, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.
+- Remaining gates include the internal protected-model remediation and clean rerun documented below, plus external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.
+
+## Live model-backed WebMCP eval report
+
+- [x] Record the exact commit, release artifact, provider/backend, fixed model version, fixtures, and run counts.
+- [x] Re-run deterministic fixture/schema checks and adapted native Chrome smoke against the final showcase.
+- [x] Run storefront and Agent SNR local tool-selection suites three times each.
+- [x] Run the live result-aware shopper browser journey once and confirm no order is created.
+- [x] Run the repository provenance checker for every JSON report and record each strict-gate verdict.
+- [x] Publish a sanitized repository report with results, failures, limitations, and private evidence hashes.
+
+### Live model-backed eval review
+
+- The credential preflight succeeded without printing or committing the key. The run used fixed model `openai:gpt-5.4-mini-2026-03-17`, backend `vercel`, `webmcp-evals@0.0.4`, commit `e853062bb097e1c94fcb2a4fec64f019b3c9676b`, and exact plugin artifact SHA-256 `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`.
+- Deterministic guards (17/17), generated schema parity, and adapted native Chrome smoke (5/5 storefront and 6/6 Agent SNR) pass.
+- The protected model-backed gate **fails**: storefront selection passes 33/54 case-runs, Agent SNR selection passes 31/45, and the browser journey passes 3/8 required rows. All three strict provenance-checker invocations exit nonzero.
+- Safety held despite the quality failures: every case with authored `expectedCall: null` made zero state-changing calls, and an operator-observed before/after query found that the live browser run created zero orders.
+- The sanitized evidence report is `submission/webmcp-eval-report-2026-09-01.md`; raw reports remain private under ignored `.evals/`. Release clearance now requires the documented fixture/journey/feedback fixes and a clean rerun.

@@ -32,6 +32,12 @@ The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.
 | Plugin Check 2.1.0 | Zero errors; 73 documented warnings; zero trademark findings |
 | Repository hygiene | Workflow YAML parses, shell syntax passes, and `git diff --check` is clean |
 
+## Protected model-backed eval status
+
+The protected selection and live-browser evals were executed on September 1, 2026 with the recorded fixed model, exact artifact, schemas, fixtures, and run counts. The strict all-pass gate **failed**: storefront selection passed 33/54 case-runs, Agent SNR selection passed 31/45, and the live shopper journey passed 0/1 with five failed required rows. The complete provenance, safety evidence, findings, and private-report hashes are in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+
+This is an active release blocker, not an unrun owner gate. Fix the documented start-state, mock-output, safe no-call, journey-ordering, and feedback-path issues, then rerun the same protected suites until every authored required row passes and browser console errors are zero.
+
 ## Local showcase and media verification
 
 The following artifact-level checks were performed locally in addition to `npm run verify`:
@@ -84,7 +90,7 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 - Confirm the Git author identity, create the public remote, and push the unsquashed history.
 - Deploy the release tag to stable top-level HTTPS WordPress hosting.
 - Validate the frozen public site in real ChatGPT desktop Site Tools and flag-enabled Chrome.
-- Complete protected model-backed selection/browser evals, the Workbench evidence sheet, and the WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.
+- Fix and rerun the failed protected model-backed selection/browser evals documented in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md); then complete the Workbench evidence sheet and WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.
 - Re-run the complete matrix against final WooCommerce 11.1 if it releases before tagging.
 - Capture original screenshots, record/publish the sub-three-minute YouTube video, replace URL placeholders, submit Devpost, and freeze all judged resources.
 

@@ -16,7 +16,7 @@ These actions need human identity, accounts, infrastructure, or judgment and are
 
 ## WebMCP external validation
 
-- [ ] Run the repository eval ladder in [`evals/README.md`](../evals/README.md): deterministic suites, pinned keyless native smoke on disposable localhost, and protected model-backed selection/browser evals. Record the fixed model/version and keep `.evals/` reports private.
+- [ ] Fix and rerun the protected model-backed selection/browser evals after the failed September 1 run documented in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md). Keep `.evals/` reports private and require the repository's strict all-pass checker before clearance.
 - [ ] Run real ChatGPT desktop Site Tools and Chrome WebMCP testing against both frozen top-level pages; record exact client/browser versions, supported model, discovery counts, prompt results, and sanitized evidence.
 - [ ] Install and review **nekuda WebMCP Workbench 1.2.1** in a dedicated Chrome profile. If it auto-updates, record the actual version and re-review permissions/release notes.
 - [ ] Complete every Tools, manual-call, Audit, Saved calls, repeated Evals, Logs/approvals, and User Mode gate in [`workbench-validation.md`](workbench-validation.md). A score without the call and journey evidence is not complete.
