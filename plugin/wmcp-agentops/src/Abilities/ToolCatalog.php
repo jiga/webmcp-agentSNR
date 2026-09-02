@@ -26,11 +26,11 @@ final class ToolCatalog
      */
     private const INPUT_PROPERTY_DESCRIPTIONS = array(
         'include'                => 'Optional result sections to include.',
-        'query'                  => 'Public catalog terms and constraints to search for.',
+        'query'                  => 'Product name or type words only; put price, stock, categories, and attributes in their dedicated fields.',
         'max_price'              => 'Highest acceptable product price in the store currency.',
         'min_price'              => 'Lowest acceptable product price in the store currency.',
         'categories'             => 'Public product category slugs to require.',
-        'attributes'             => 'Exact public product attribute values to require.',
+        'attributes'             => 'Structured product filters; use canonical keys such as water_rating, for example {"water_rating":"IPX5"}.',
         'in_stock_only'          => 'Whether to exclude products that are not currently in stock.',
         'limit'                  => 'Maximum number of matching records to return.',
         'product_id'             => 'Positive WooCommerce product ID to read or filter by.',
@@ -65,8 +65,8 @@ final class ToolCatalog
         'status'                 => 'Optional lifecycle status used to filter matching records.',
         'cursor'                 => 'Opaque pagination cursor returned by the preceding call.',
         'workflow_id'            => 'ULID of one workflow in the authorized session scope.',
-        'category'               => 'Opportunity category to include in the result.',
-        'source'                 => 'Evidence source to include: site-observed or agent-reported.',
+        'category'               => 'Optional category filter; omit it to include every signal category in one result.',
+        'source'                 => 'Optional evidence-source filter; omit it to include site-observed and agent-reported signals together.',
         'checks'                 => 'Read-only diagnostic checks to run; omit to run all checks.',
         'enabled'                => 'False restricts the tool for this session; true clears that override.',
         'scope'                  => 'Required governance scope; only this demo session is supported.',
@@ -136,7 +136,7 @@ final class ToolCatalog
             $this->definition(
                 ToolName::SEARCH_PRODUCTS,
                 'Search products',
-                'Search the public WooCommerce catalog using product facts and constraints. This tool returns compact merchant-authored facts and does not modify the cart.',
+                'Call once per constraint set to search the public WooCommerce catalog, and wait for its result before refining. Put price, stock, category, and attribute filters in dedicated fields instead of repeating them in query; use attributes.water_rating for IPX constraints. This tool does not modify the cart.',
                 'storefront',
                 RiskClass::READ,
                 $this->object(
@@ -670,7 +670,20 @@ final class ToolCatalog
                 false,
                 30
             ),
-            $this->definition(ToolName::GET_TOOL_HEALTH, 'Get tool health', 'Read per-tool calls, outcomes, latency, errors, commerce contribution, attribution, and policy state for the authorized scope.', 'agentops', RiskClass::READ, $read_schema, $health_output, 'analytics.tool_health', true, false, false, 30),
+            $this->definition(
+                ToolName::GET_TOOL_HEALTH,
+                'Get tool health',
+                'Use this one call for per-tool calls, outcomes, latency, errors, commerce contribution, attribution, and policy state. It already contains the evidence needed to identify slow or failing tools; do not combine it with the overview unless the user also requests a sitewide summary.',
+                'agentops',
+                RiskClass::READ,
+                $read_schema,
+                $health_output,
+                'analytics.tool_health',
+                true,
+                false,
+                false,
+                30
+            ),
             $this->definition(
                 ToolName::GET_CAPABILITY_GAPS,
                 'Get capability gaps',
@@ -697,9 +710,10 @@ final class ToolCatalog
             $this->definition(
                 ToolName::GET_OPPORTUNITY_SIGNALS,
                 'Get opportunity signals',
-                'Use for unified operator analysis of demand, inventory, capability, and experience ' .
-                    'signals. This read keeps agent testimony separate from site-observed evidence and ' .
-                    'changes no state.',
+                'One call returns unified demand, inventory, capability, and experience signals while ' .
+                    'keeping agent testimony separate from site-observed evidence. Omit category and ' .
+                    'source to include every segment; use filters only when the user asks to narrow the ' .
+                    'result. This read changes no state.',
                 'agentops',
                 RiskClass::READ,
                 $this->object(
@@ -756,7 +770,7 @@ final class ToolCatalog
             $this->definition(
                 ToolName::SET_TOOL_ENABLED,
                 'Set demo tool availability',
-                'Disable a storefront tool for only this demo session, or clear that session override. This cannot change site policy, enable a site-disabled tool, or affect another browser.',
+                'Use only when the user names one storefront tool and explicitly requests a change for this demo session. Do not call for permanent, sitewide, all-tools, or other-visitor requests; explain that boundary without making a change. This cannot enable a site-disabled tool.',
                 'agentops',
                 RiskClass::SESSION_WRITE,
                 $this->object(

@@ -13,6 +13,10 @@ import {
 	validateWebmcpEvalReport,
 } from "../../bin/check-webmcp-eval-report.mjs";
 import {
+	patchCommandsSource,
+	patchVercelBackendSource,
+} from "../../bin/patch-webmcp-evals.mjs";
+import {
 	assertNoProviderCredentials,
 	assertSuccessfulWebmcpSmoke,
 	buildSmokeRuns,
@@ -214,7 +218,9 @@ function passingReport( {
 		config: {
 			backend: "vercel",
 			evalsFile: REPORT_FIXTURE_PATH,
+			maxSteps: 1,
 			model: REPORT_MODEL,
+			parallelToolCalls: false,
 			runs: 1,
 			toolSchemaFile: REPORT_SCHEMA_PATH,
 			...config,
@@ -233,8 +239,10 @@ function passingReport( {
 function reportValidationOptions( overrides = {} ) {
 	return {
 		expectedBackend: "vercel",
+		expectedMaxSteps: 1,
 		expectedMode: "local",
 		expectedModel: REPORT_MODEL,
+		expectedParallelToolCalls: false,
 		expectedRuns: 1,
 		expectedSchemaPath: REPORT_SCHEMA_PATH,
 		fixture: REPORT_FIXTURE,
@@ -245,6 +253,49 @@ function reportValidationOptions( overrides = {} ) {
 }
 
 describe( "WebMCP eval fixtures", () => {
+	it( "patches v0.0.4 local selection to disable OpenAI parallel tool calls", () => {
+		const commands = [
+			"        maxSteps: opts.maxSteps,",
+			"        outputDir: opts.outputDir,",
+		].join( "\n" );
+		const backend = [
+			"    maxSteps;",
+			"    logger;",
+			"        this.maxSteps = config.maxSteps ?? DEFAULT_MAX_STEPS;",
+			"        this.logger = new ConsoleLogger();",
+			"            tools: executableTools,",
+			"            // Enables multi-step trajectories.",
+		].join( "\n" );
+
+		const patchedCommands = patchCommandsSource( commands );
+		const patchedBackend = patchVercelBackendSource( backend );
+		assert.match( patchedCommands, /parallelToolCalls: false/ );
+		assert.match( patchedBackend, /parallelToolCalls: false/ );
+		assert.match( patchedBackend, /providerOptions/ );
+		assert.equal( patchCommandsSource( patchedCommands ), patchedCommands );
+		assert.equal( patchVercelBackendSource( patchedBackend ), patchedBackend );
+		assert.throws( () => patchCommandsSource( "unexpected source" ), /no longer matches/ );
+		assert.throws( () => patchVercelBackendSource( "unexpected source" ), /no longer matches/ );
+		assert.throws(
+			() =>
+				patchCommandsSource(
+					"// WMCP_EVAL_PATCH: disable-local-parallel-tool-calls\nmarker only"
+				),
+			/incomplete or altered/
+		);
+		assert.throws(
+			() =>
+				patchVercelBackendSource(
+					[
+						"    maxSteps;",
+						"    parallelToolCalls; // WMCP_EVAL_PATCH: disable-local-parallel-tool-calls",
+						"    logger;",
+					].join( "\n" )
+				),
+			/incomplete or altered/
+		);
+	} );
+
 	it( "keeps generated schema fixtures limited to the canonical public surfaces", async () => {
 		for ( const [ surface, contract ] of Object.entries( SURFACES ) ) {
 			const schema = await readJsonFixture( `schemas/${ surface }-tools.json` );
@@ -266,21 +317,35 @@ describe( "WebMCP eval fixtures", () => {
 	} );
 
 	it( "uses strict CLI-compatible JSON and covers every required selection class", async () => {
-		for ( const surface of Object.keys( SURFACES ) ) {
+		for ( const [ surface, contract ] of Object.entries( SURFACES ) ) {
 			const schema = await readJsonFixture( `schemas/${ surface }-tools.json` );
 			const allowedTools = new Set( schema.tools.map( ( tool ) => tool.name ) );
 			const suite = await readJsonFixture( `${ surface }-selection.json` );
 			assertEvalSuiteShape( suite, allowedTools );
 			assertExpectedArgumentsUseSchema( suite, schema );
+			for ( const testCase of suite ) {
+				const calls = expectedFunctionCalls( testCase.expectedCall );
+				const isBoundary = /^(Ambiguous recovery|Feedback vs gap boundary|Safety boundary):/.test(
+					testCase.name
+				);
+				if ( isBoundary ) {
+					assert.ok( calls.length > 0, `${ testCase.name } must enumerate safe alternatives` );
+				} else {
+					assert.equal( calls.length, 1, `${ testCase.name } must select one required call` );
+				}
+				for ( const call of calls ) {
+					assert.equal( call.mockOutput, undefined, `${ testCase.name } uses live/history state` );
+				}
+			}
 
 			const names = suite.map( ( testCase ) => testCase.name.toLowerCase() );
 			for ( const requiredClass of [
 				"direct:",
 				"paraphrase:",
 				"recovery:",
-				"ambiguous no-call:",
+				"ambiguous recovery:",
 				"feedback vs gap",
-				"safety no-call:",
+				"safety boundary:",
 			] ) {
 				assert.ok(
 					names.some( ( name ) => name.includes( requiredClass ) ),
@@ -289,11 +354,65 @@ describe( "WebMCP eval fixtures", () => {
 			}
 
 			for ( const testCase of suite.filter( ( candidate ) =>
-				candidate.name.startsWith( "Safety no-call:" )
+				/^(Ambiguous recovery|Feedback vs gap boundary|Safety boundary):/.test(
+					candidate.name
+				)
 			) ) {
-				assert.equal( testCase.expectedCall, null );
+				const safeCalls = expectedFunctionCalls( testCase.expectedCall );
+				assert.ok( safeCalls.length > 0, `${ testCase.name } must enumerate a safe recovery` );
+				for ( const call of safeCalls ) {
+					assert.equal( call.optional, true, `${ testCase.name }: ${ call.functionName }` );
+					assert.ok(
+						contract.safeSmokeNames.has( call.functionName ),
+						`${ testCase.name }: ${ call.functionName } must remain read-only`
+					);
+				}
 			}
 		}
+	} );
+
+	it( "gives isolated storefront selections completed Guide 1.1 and entry history", async () => {
+		const suite = await readJsonFixture( "storefront-selection.json" );
+		assert.equal(
+			suite[ 0 ].messages.some( ( message ) => message.type === "functioncall" ),
+			false
+		);
+
+		for ( const [ index, testCase ] of suite.entries() ) {
+			if ( index === 0 ) {
+				continue;
+			}
+			const warmCalls = testCase.messages.filter(
+				( message ) => message.role === "model" && message.type === "functioncall"
+			);
+			const warmResponses = testCase.messages.filter(
+				( message ) => message.role === "user" && message.type === "functionresponse"
+			);
+			assert.equal( warmCalls[ 0 ].name, "get_agent_guide", testCase.name );
+			assert.equal( warmResponses[ 0 ].name, "get_agent_guide", testCase.name );
+			assert.equal( warmResponses[ 0 ].response.result.version, "1.1", testCase.name );
+			if ( index > 1 ) {
+				assert.equal( warmCalls[ 1 ].name, "get_storefront_context", testCase.name );
+				assert.equal( warmResponses[ 1 ].name, "get_storefront_context", testCase.name );
+				assert.equal(
+					warmResponses[ 1 ].response.result.page.state,
+					"loaded",
+					testCase.name
+				);
+				assert.equal(
+					warmResponses[ 1 ].response.result.agent_guide.version,
+					"1.1",
+					testCase.name
+				);
+			}
+		}
+
+		assert.deepEqual( suite[ 1 ].expectedCall[ 0 ].arguments.include, [
+			"page",
+			"categories",
+			"cart_summary",
+		] );
+		assert.equal( suite[ 11 ].expectedCall[ 0 ].arguments.outcome, "blocked" );
 	} );
 
 	it( "keeps deterministic smoke concrete and read-only", async () => {
@@ -318,6 +437,14 @@ describe( "WebMCP eval fixtures", () => {
 		const suite = await readJsonFixture( "browser-journeys.json" );
 		assertEvalSuiteShape( suite, new Set( schema.tools.map( ( tool ) => tool.name ) ) );
 		assertExpectedArgumentsUseSchema( suite, schema );
+		assert.match( suite[ 0 ].messages[ 0 ].content, /never issue the IPX5 and IPX4 searches in parallel/ );
+		const independentReads = suite[ 0 ].expectedCall.find( ( node ) =>
+			Array.isArray( node.unordered )
+		);
+		assert.deepEqual(
+			independentReads.unordered.map( ( call ) => call.functionName ).sort(),
+			[ "compare_products", "get_cart", "get_store_policy" ]
+		);
 		const calls = expectedFunctionCalls( suite[ 0 ].expectedCall );
 		for ( const call of calls ) {
 			assert.deepEqual( call.result, { ok: true } );
@@ -326,12 +453,13 @@ describe( "WebMCP eval fixtures", () => {
 		const feedbackCalls = calls.filter(
 			( call ) => call.functionName === "report_agent_feedback"
 		);
-		assert.equal( feedbackCalls.length, 2 );
+		assert.equal( feedbackCalls.length, 1 );
 		assert.equal( calls[ 1 ].functionName, "search_products" );
-		assert.equal( calls[ 2 ], feedbackCalls[ 0 ] );
-		assert.equal( feedbackCalls[ 0 ].arguments.reason_code, "zero_results" );
+		assert.equal( feedbackCalls[ 0 ].arguments.outcome, "partial" );
+		assert.equal( feedbackCalls[ 0 ].arguments.feedback_type, "constraint_encountered" );
+		assert.equal( feedbackCalls[ 0 ].arguments.step, "journey_summary" );
+		assert.equal( feedbackCalls[ 0 ].arguments.reason_code, "low_coverage" );
 		assert.equal( feedbackCalls[ 0 ].optional, true );
-		assert.equal( feedbackCalls[ 1 ].arguments.reason_code, "smooth_handoff" );
 		assert.equal( calls.at( -1 ).functionName, "report_agent_feedback" );
 		assert.equal( calls.at( -1 ).optional, true );
 
@@ -406,6 +534,8 @@ describe( "WebMCP eval report checker", () => {
 			fixturePath: REPORT_FIXTURE_PATH,
 			mode: "local",
 			model: REPORT_MODEL,
+			maxSteps: 1,
+			parallelToolCalls: false,
 			passCount: 2,
 			resultCount: 2,
 			runs: 1,
@@ -478,7 +608,7 @@ describe( "WebMCP eval report checker", () => {
 		);
 	} );
 
-	it( "rejects backend, model, run, fixture, schema, and case-count mismatches", () => {
+	it( "rejects backend, model, run, local-loop, fixture, schema, and case-count mismatches", () => {
 		assert.throws(
 			() =>
 				validateWebmcpEvalReport(
@@ -502,6 +632,22 @@ describe( "WebMCP eval report checker", () => {
 					reportValidationOptions( { expectedRuns: 3 } )
 				),
 			/run-count mismatch/
+		);
+		assert.throws(
+			() =>
+				validateWebmcpEvalReport(
+					passingReport( { config: { maxSteps: 2 } } ),
+					reportValidationOptions()
+				),
+			/max-step mismatch/
+		);
+		assert.throws(
+			() =>
+				validateWebmcpEvalReport(
+					passingReport( { config: { parallelToolCalls: true } } ),
+					reportValidationOptions()
+				),
+			/parallel-tool-call mismatch/
 		);
 		assert.throws(
 			() =>
@@ -549,7 +695,9 @@ describe( "WebMCP eval report checker", () => {
 		} );
 		const options = reportValidationOptions( {
 			expectedChromeChannel: "chrome",
+			expectedMaxSteps: undefined,
 			expectedMode: "browser",
+			expectedParallelToolCalls: undefined,
 			expectedSchemaPath: undefined,
 			expectedUrl: browserUrl,
 		} );
@@ -733,6 +881,89 @@ describe( "WebMCP eval report checker", () => {
 		);
 	} );
 
+	it( "accepts the package no-call row for an all-optional safe-read case", () => {
+		const fixture = [
+			{
+				expectedCall: [
+					{
+						unordered: [
+							{
+								arguments: {},
+								functionName: "first_tool",
+								optional: true,
+							},
+							{
+								arguments: {},
+								functionName: "second_tool",
+								optional: true,
+							},
+						],
+					},
+				],
+				messages: [ { content: "Safe boundary", role: "user", type: "message" } ],
+				name: "All-optional safe reads",
+			},
+		];
+		const rows = [
+			{
+				browserConsoleErrors: [],
+				outcome: "pass",
+				response: null,
+				runIndex: 1,
+				stepIndex: 1,
+				test: fixture[ 0 ],
+			},
+		];
+
+		const summary = validateWebmcpEvalReport(
+			passingReport( { fixture, rows } ),
+			reportValidationOptions( {
+				fixture,
+				fixtureContents: JSON.stringify( fixture ),
+			} )
+		);
+		assert.equal( summary.passCount, 1 );
+		assert.equal( summary.resultCount, 1 );
+	} );
+
+	it( "does not let the all-optional no-call shortcut admit an unlisted call", () => {
+		const fixture = [
+			{
+				expectedCall: [
+					{ arguments: {}, functionName: "first_tool", optional: true },
+				],
+				messages: [ { content: "Safe boundary", role: "user", type: "message" } ],
+				name: "Only one safe read is allowed",
+			},
+		];
+		const rows = [
+			{
+				browserConsoleErrors: [],
+				outcome: "fail",
+				response: { args: {}, functionName: "state_changing_tool", result: {} },
+				runIndex: 1,
+				stepIndex: 1,
+				test: {
+					expectedCall: null,
+					messages: fixture[ 0 ].messages,
+					name: fixture[ 0 ].name,
+				},
+			},
+		];
+
+		assert.throws(
+			() =>
+				validateWebmcpEvalReport(
+					passingReport( { fixture, rows } ),
+					reportValidationOptions( {
+						fixture,
+						fixtureContents: JSON.stringify( fixture ),
+					} )
+				),
+			/expectedCall order does not match/
+		);
+	} );
+
 	it( "rejects browser console errors even when every identified row passed", () => {
 		const rows = reportRows();
 		rows[ 1 ] = {
@@ -764,13 +995,19 @@ describe( "WebMCP eval report checker", () => {
 				REPORT_MODEL,
 				"--runs",
 				"3",
+				"--max-steps",
+				"1",
+				"--parallel-tool-calls",
+				"false",
 				"--schema",
 				"evals/schemas/storefront-tools.json",
 			] ),
 			{
 				expectedBackend: "vercel",
+				expectedMaxSteps: 1,
 				expectedMode: "local",
 				expectedModel: REPORT_MODEL,
+				expectedParallelToolCalls: false,
 				expectedRuns: 3,
 				expectedSchemaPath: "evals/schemas/storefront-tools.json",
 				fixturePath: "evals/storefront-selection.json",
@@ -810,6 +1047,72 @@ describe( "WebMCP eval report checker", () => {
 		assert.throws(
 			() => parseReportCheckerArguments( [ "--report", "report.json" ] ),
 			/Usage:/
+		);
+		assert.throws(
+			() =>
+				parseReportCheckerArguments( [
+					"--backend",
+					"vercel",
+					"--report",
+					"report.json",
+					"--fixture",
+					"fixture.json",
+					"--mode",
+					"local",
+					"--model",
+					REPORT_MODEL,
+					"--runs",
+					"1",
+					"--schema",
+					"schema.json",
+				] ),
+			/requires --max-steps 1/
+		);
+		assert.throws(
+			() =>
+				parseReportCheckerArguments( [
+					"--backend",
+					"vercel",
+					"--report",
+					"report.json",
+					"--fixture",
+					"fixture.json",
+					"--mode",
+					"local",
+					"--model",
+					REPORT_MODEL,
+					"--runs",
+					"1",
+					"--max-steps",
+					"2",
+					"--parallel-tool-calls",
+					"false",
+					"--schema",
+					"schema.json",
+				] ),
+			/requires --max-steps 1/
+		);
+		assert.throws(
+			() =>
+				parseReportCheckerArguments( [
+					"--backend",
+					"vercel",
+					"--report",
+					"report.json",
+					"--fixture",
+					"fixture.json",
+					"--mode",
+					"local",
+					"--model",
+					REPORT_MODEL,
+					"--runs",
+					"1",
+					"--max-steps",
+					"1",
+					"--schema",
+					"schema.json",
+				] ),
+			/requires --parallel-tool-calls false/
 		);
 		assert.throws(
 			() =>

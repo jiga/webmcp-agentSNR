@@ -5,6 +5,7 @@
   "description": "Development and browser-test tooling for Agent SNR, agent outcome monitoring for WordPress.",
   "license": "GPL-2.0-or-later",
   "scripts": {
+    "postinstall": "node bin/patch-webmcp-evals.mjs",
     "lint:js": "eslint plugin/wmcp-agentops/assets/js 'tests/**/*.{js,mjs}' 'demo/**/*.mjs' 'bin/**/*.mjs'",
     "lint:css": "stylelint 'plugin/wmcp-agentops/assets/css/**/*.css'",
     "test:js": "node --test tests/JavaScript/**/*.test.js tests/JavaScript/**/*.test.mjs",

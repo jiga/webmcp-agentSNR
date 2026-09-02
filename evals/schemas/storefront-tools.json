@@ -425,7 +425,7 @@
         },
         {
             "name": "search_products",
-            "description": "Search the public WooCommerce catalog using product facts and constraints. This tool returns compact merchant-authored facts and does not modify the cart.",
+            "description": "Call once per constraint set to search the public WooCommerce catalog, and wait for its result before refining. Put price, stock, category, and attribute filters in dedicated fields instead of repeating them in query; use attributes.water_rating for IPX constraints. This tool does not modify the cart.",
             "inputSchema": {
                 "type": "object",
                 "additionalProperties": false,
@@ -434,7 +434,7 @@
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 200,
-                        "description": "Public catalog terms and constraints to search for."
+                        "description": "Product name or type words only; put price, stock, categories, and attributes in their dedicated fields."
                     },
                     "max_price": {
                         "type": "number",
@@ -465,7 +465,7 @@
                             "type": "string",
                             "maxLength": 80
                         },
-                        "description": "Exact public product attribute values to require."
+                        "description": "Structured product filters; use canonical keys such as water_rating, for example {\"water_rating\":\"IPX5\"}."
                     },
                     "in_stock_only": {
                         "type": "boolean",

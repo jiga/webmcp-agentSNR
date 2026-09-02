@@ -293,7 +293,7 @@
         },
         {
             "name": "get_tool_health",
-            "description": "Read per-tool calls, outcomes, latency, errors, commerce contribution, attribution, and policy state for the authorized scope.",
+            "description": "Use this one call for per-tool calls, outcomes, latency, errors, commerce contribution, attribution, and policy state. It already contains the evidence needed to identify slow or failing tools; do not combine it with the overview unless the user also requests a sitewide summary.",
             "inputSchema": {
                 "type": "object",
                 "additionalProperties": false,
@@ -343,7 +343,7 @@
         },
         {
             "name": "get_opportunity_signals",
-            "description": "Use for unified operator analysis of demand, inventory, capability, and experience signals. This read keeps agent testimony separate from site-observed evidence and changes no state.",
+            "description": "One call returns unified demand, inventory, capability, and experience signals while keeping agent testimony separate from site-observed evidence. Omit category and source to include every segment; use filters only when the user asks to narrow the result. This read changes no state.",
             "inputSchema": {
                 "type": "object",
                 "additionalProperties": false,
@@ -357,7 +357,7 @@
                             "experience_friction",
                             "worked_well"
                         ],
-                        "description": "Opportunity category to include in the result."
+                        "description": "Optional category filter; omit it to include every signal category in one result."
                     },
                     "source": {
                         "type": "string",
@@ -365,7 +365,7 @@
                             "site_observed",
                             "agent_reported"
                         ],
-                        "description": "Evidence source to include: site-observed or agent-reported."
+                        "description": "Optional evidence-source filter; omit it to include site-observed and agent-reported signals together."
                     },
                     "status": {
                         "type": "string",
@@ -509,7 +509,7 @@
         },
         {
             "name": "set_tool_enabled",
-            "description": "Disable a storefront tool for only this demo session, or clear that session override. This cannot change site policy, enable a site-disabled tool, or affect another browser.",
+            "description": "Use only when the user names one storefront tool and explicitly requests a change for this demo session. Do not call for permanent, sitewide, all-tools, or other-visitor requests; explain that boundary without making a change. This cannot enable a site-disabled tool.",
             "inputSchema": {
                 "type": "object",
                 "additionalProperties": false,

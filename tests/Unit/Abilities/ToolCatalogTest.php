@@ -158,6 +158,15 @@ final class ToolCatalogTest extends TestCase
         self::assertSame(RiskClass::READ, $opportunities['risk_class']);
         self::assertTrue($opportunities['read_only']);
         self::assertFalse($opportunities['input_schema']['additionalProperties']);
+        self::assertStringContainsString('One call returns unified', $opportunities['description']);
+        self::assertStringContainsString(
+            'omit it to include every signal category',
+            $opportunities['input_schema']['properties']['category']['description']
+        );
+        self::assertStringContainsString(
+            'omit it to include site-observed and agent-reported signals together',
+            $opportunities['input_schema']['properties']['source']['description']
+        );
         self::assertSame(
             array('site_observed', 'agent_reported'),
             $opportunities['input_schema']['properties']['source']['enum']
@@ -167,11 +176,22 @@ final class ToolCatalogTest extends TestCase
         self::assertContains('truncated', $opportunities['output_schema']['required']);
     }
 
+    public function test_tool_health_is_the_complete_single_call_for_slow_or_failing_tools(): void
+    {
+        $health = (new ToolCatalog())->find(ToolName::GET_TOOL_HEALTH);
+
+        self::assertNotNull($health);
+        self::assertStringContainsString('Use this one call', $health['description']);
+        self::assertStringContainsString('slow or failing tools', $health['description']);
+        self::assertStringContainsString('do not combine it with the overview', $health['description']);
+    }
+
     public function test_session_policy_tool_cannot_request_site_scope(): void
     {
         $definition = (new ToolCatalog())->find(ToolName::SET_TOOL_ENABLED);
 
         self::assertNotNull($definition);
+        self::assertStringContainsString('Do not call for permanent, sitewide, all-tools', $definition['description']);
         self::assertSame(
             array('demo_session'),
             $definition['input_schema']['properties']['scope']['enum']
@@ -183,6 +203,20 @@ final class ToolCatalogTest extends TestCase
         self::assertNotContains(
             ToolName::REPORT_CAPABILITY_GAP,
             $definition['input_schema']['properties']['tool_name']['enum']
+        );
+    }
+
+    public function test_product_search_contract_separates_text_from_structured_filters(): void
+    {
+        $search = (new ToolCatalog())->find(ToolName::SEARCH_PRODUCTS);
+
+        self::assertNotNull($search);
+        self::assertStringStartsWith('Call once per constraint set', $search['description']);
+        self::assertStringContainsString('wait for its result before refining', $search['description']);
+        self::assertStringContainsString('attributes.water_rating', $search['description']);
+        self::assertStringContainsString(
+            '{"water_rating":"IPX5"}',
+            $search['input_schema']['properties']['attributes']['description']
         );
     }
 

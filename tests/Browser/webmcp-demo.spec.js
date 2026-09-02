@@ -739,6 +739,56 @@ test( "discovers the guide, records missed demand, and separates agent feedback 
 	await expect( page.locator( "[data-wmcp-opportunities]" ) ).not.toContainText( /lost revenue/i );
 } );
 
+test( "primes one Woo guest session before parallel first storefront reads", async ( { context, page } ) => {
+	await installModelContextMock( context );
+	await page.goto( "/storefront-demo/" );
+	await waitForRuntime( page, STOREFRONT_TOOLS.length );
+
+	const cookies = await context.cookies( BASE_URL );
+	expect( cookies.some( ( cookie ) => cookie.name.startsWith( "wp_woocommerce_session_" ) ) ).toBe( true );
+
+	const [ zero, policy ] = await Promise.all( [
+		executeActiveTool( page, "search_products", {
+			attributes: { water_rating: "IPX5" },
+			in_stock_only: true,
+			limit: 6,
+			max_price: 100,
+			query: "waterproof backpack",
+		} ),
+		executeActiveTool( page, "get_store_policy", { policy_type: "returns" } ),
+	] );
+
+	expect( zero.ok ).toBe( true );
+	expect( zero.result.result_count ).toBe( 0 );
+	expect( zero.result.opportunity_signal ).toMatchObject( {
+		evidence_status: "verified",
+		signal_code: "zero_results",
+		source: "site_observed",
+	} );
+	expect( policy.ok ).toBe( true );
+
+	const feedback = await executeActiveTool( page, "report_agent_feedback", {
+		evidence_event_ids: [ zero.event_id ],
+		feedback_type: "missing_product",
+		outcome: "blocked",
+		reason_code: "zero_results",
+		requested_metrics: [ "eligible_product_count" ],
+		step: "discovery",
+		suggested_owner_action: "improve_product_coverage",
+	} );
+
+	expect( feedback.ok ).toBe( true );
+	expect( feedback.result ).toMatchObject( {
+		evidence_status: "linked",
+		recorded: true,
+		trust: "agent_reported",
+	} );
+	expect( feedback.result.measured_context.eligible_product_count ).toEqual( {
+		status: "verified",
+		value: 0,
+	} );
+} );
+
 test( "opens a bounded partial replay for a large Agent Sessions workflow", async ( { context, page } ) => {
 	await installModelContextMock( context );
 	await page.goto( "/storefront-demo/" );

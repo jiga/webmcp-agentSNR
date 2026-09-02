@@ -11,7 +11,7 @@ JavaScript, Playwright, REST, or WooCommerce lifecycle suites.
 |---|---|---|
 | Schema parity | `schemas/*-tools.json` | Static eval schemas are generated from the canonical public `ToolCatalog`. |
 | Native smoke | `*-smoke.json` | Chrome discovers and successfully invokes safe concrete read tools on both top-level pages. |
-| Static selection | `*-selection.json` | A fixed model selects the right tool and arguments for direct, paraphrased, recovery, ambiguous, feedback-vs-gap, and safety prompts. |
+| Static selection | `*-selection.json` | A fixed model selects one next action for direct, paraphrased, recovery, ambiguous-recovery, feedback-vs-gap, and safety-boundary prompts. |
 | Live journey | `browser-journeys.json` | A model uses live results to recover from zero coverage and reaches the human checkout handoff without placing an order. |
 
 The public eval schemas intentionally contain 12 storefront tools and 8 Agent
@@ -71,6 +71,7 @@ times:
   --backend vercel \
   --model '<provider:model>' \
   --runs 3 \
+  --max-steps 1 \
   --reporter console json \
   --output-dir .evals/storefront
 
@@ -80,9 +81,27 @@ times:
   --backend vercel \
   --model '<provider:model>' \
   --runs 3 \
+  --max-steps 1 \
   --reporter console json \
   --output-dir .evals/agentops
 ```
+
+The static suites are deliberately one-step next-action checks. Storefront
+cases after guide discovery carry compact prior guide/context calls and
+results, and recovery state is authored in the same message history. This
+history establishes that Guide 1.1 and entry context are loaded; it does not
+stand in for full guide-content evaluation. The cold-start guide case and live
+journey cover guide discovery and use. The storefront-context case explicitly
+requests and verifies the page, categories, and cart-summary sections.
+`--max-steps 1` prevents the local evaluator's empty default tool result from
+turning one correct selection into unrelated follow-up calls; large fake mock
+outputs are intentionally avoided. Ambiguous and safety-boundary cases
+enumerate only narrowly allowed optional read tools, so either no call or that
+safe read can pass while every unlisted or state-changing call still fails.
+The repository postinstall patch disables OpenAI parallel tool calls only for
+local selection and records `parallelToolCalls: false` in the JSON report.
+Duplicate calls therefore remain strict failures. Browser journeys retain
+parallel execution for independent live reads.
 
 Run the live shopper journey only against the disposable localhost demo:
 
@@ -105,6 +124,17 @@ binding it to the exact fixture, model ID, and authored run count:
 
 ```bash
 npm run check:webmcp:report -- \
+  --report .evals/storefront/report-<timestamp>.json \
+  --fixture evals/storefront-selection.json \
+  --model '<provider:model>' \
+  --runs 3 \
+  --backend vercel \
+  --mode local \
+  --max-steps 1 \
+  --parallel-tool-calls false \
+  --schema evals/schemas/storefront-tools.json
+
+npm run check:webmcp:report -- \
   --report .evals/browser/report-<timestamp>.json \
   --fixture evals/browser-journeys.json \
   --model '<provider:model>' \
@@ -115,14 +145,17 @@ npm run check:webmcp:report -- \
   --chrome-channel chrome
 ```
 
-For a local report, use `--mode local --backend vercel` and pass the exact
-generated schema with `--schema evals/schemas/<surface>-tools.json` instead of
-the browser URL/channel options.
+Repeat the local checker command with the Agent SNR fixture, schema, and report
+paths for that surface. Browser checking uses the exact URL and Chrome channel
+instead of a schema or local max-step setting.
 
-The checker requires exact report config provenance, hashes the selected
-fixture, compares every reported case and expected call with it, proves every
-case/run and required step is present exactly once, and rejects any failed or
-error row, browser console error, duplicate, or omission. Smoke remains
+The checker requires exact report config provenance (including the one-step
+limit for local selection), hashes the selected fixture, compares every
+reported case and expected call with it, proves every case/run and required
+step is present exactly once, and rejects any failed or error row, browser
+console error, duplicate, or omission. For local static suites, it also
+recognizes the package's single full-test pass row when an all-optional
+boundary case makes no call. Smoke remains
 intentionally narrower: it verifies discovery and successful invocation, with
 an adapter that turns an application `{ "ok": false }` result into a nonzero
 run. It cannot pipe a dynamic result into the next authored smoke input.

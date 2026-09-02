@@ -12,8 +12,10 @@ const CLI_OPTIONS = new Map( [
 	[ "--backend", "expectedBackend" ],
 	[ "--chrome-channel", "expectedChromeChannel" ],
 	[ "--fixture", "fixturePath" ],
+	[ "--max-steps", "expectedMaxSteps" ],
 	[ "--mode", "expectedMode" ],
 	[ "--model", "expectedModel" ],
+	[ "--parallel-tool-calls", "expectedParallelToolCalls" ],
 	[ "--report", "reportPath" ],
 	[ "--runs", "expectedRuns" ],
 	[ "--schema", "expectedSchemaPath" ],
@@ -21,7 +23,7 @@ const CLI_OPTIONS = new Map( [
 ] );
 
 const USAGE =
-	"Usage: node bin/check-webmcp-eval-report.mjs --report <report.json> --fixture <evals.json> --model <exact-model-id> --runs <positive-integer> --backend <exact-backend> --mode <local|browser> [--schema <tools.json> | --url <loopback-url> --chrome-channel <channel>]";
+	"Usage: node bin/check-webmcp-eval-report.mjs --report <report.json> --fixture <evals.json> --model <exact-model-id> --runs <positive-integer> --backend <exact-backend> --mode <local|browser> [--schema <tools.json> --max-steps 1 --parallel-tool-calls false | --url <loopback-url> --chrome-channel <channel>]";
 
 export function parseReleaseBrowserUrl( value, field = "browser URL" ) {
 	let url;
@@ -101,6 +103,22 @@ function requiredExpectedRowCount( nodes ) {
 	}, 0 );
 }
 
+function allExpectedNodesOptional( nodes ) {
+	return (
+		Array.isArray( nodes ) &&
+		nodes.length > 0 &&
+		nodes.every( ( node ) => {
+			if ( node && typeof node === "object" && Array.isArray( node.ordered ) ) {
+				return allExpectedNodesOptional( node.ordered );
+			}
+			if ( node && typeof node === "object" && Array.isArray( node.unordered ) ) {
+				return allExpectedNodesOptional( node.unordered );
+			}
+			return node?.optional === true;
+		} )
+	);
+}
+
 function matchExpectedSequence( nodes, reportedTests, startIndex, testCase ) {
 	let positions = new Set( [ startIndex ] );
 	for ( const node of nodes ) {
@@ -158,12 +176,27 @@ function matchExpectedNode( node, reportedTests, startIndex, testCase ) {
 	return endings;
 }
 
-function reportedTestsMatchFixtureTree( testCase, reportedTests ) {
+function reportedTestsMatchFixtureTree(
+	testCase,
+	reportedRows,
+	allowLocalAllOptionalNoCallRow
+) {
+	const reportedTests = reportedRows.map( ( row ) => row.reportedTest );
 	if ( testCase.expectedCall === null || testCase.expectedCall?.length === 0 ) {
 		return reportedTests.length === 1 && isDeepStrictEqual( reportedTests[ 0 ], testCase );
 	}
 	if ( ! Array.isArray( testCase.expectedCall ) ) {
 		return false;
+	}
+	if (
+		allowLocalAllOptionalNoCallRow &&
+		allExpectedNodesOptional( testCase.expectedCall ) &&
+		reportedRows.length === 1 &&
+		reportedRows[ 0 ].outcome === "pass" &&
+		reportedRows[ 0 ].response === null &&
+		isDeepStrictEqual( reportedRows[ 0 ].reportedTest, testCase )
+	) {
+		return true;
 	}
 	return matchExpectedSequence( testCase.expectedCall, reportedTests, 0, testCase ).has(
 		reportedTests.length
@@ -183,8 +216,10 @@ export function validateWebmcpEvalReport(
 	{
 		expectedBackend,
 		expectedChromeChannel,
+		expectedMaxSteps,
 		expectedMode,
 		expectedModel,
+		expectedParallelToolCalls,
 		expectedRuns,
 		expectedSchemaPath,
 		expectedUrl,
@@ -254,6 +289,22 @@ export function validateWebmcpEvalReport(
 	let chromeChannel;
 	let schemaPath;
 	if ( expectedMode === "local" ) {
+		if ( expectedMaxSteps !== 1 ) {
+			throw new Error( `${ source }: local selection reports require expectedMaxSteps 1.` );
+		}
+		if ( config.maxSteps !== expectedMaxSteps ) {
+			throw new Error(
+				`${ source }: max-step mismatch (expected ${ expectedMaxSteps }, got ${ String( config.maxSteps ) }).`
+			);
+		}
+		if ( expectedParallelToolCalls !== false ) {
+			throw new Error( `${ source }: local selection reports require expectedParallelToolCalls false.` );
+		}
+		if ( config.parallelToolCalls !== expectedParallelToolCalls ) {
+			throw new Error(
+				`${ source }: parallel-tool-call mismatch (expected false, got ${ String( config.parallelToolCalls ) }).`
+			);
+		}
 		if ( typeof expectedSchemaPath !== "string" || expectedSchemaPath.length === 0 ) {
 			throw new Error( `${ source }: local mode requires expectedSchemaPath.` );
 		}
@@ -349,7 +400,12 @@ export function validateWebmcpEvalReport(
 
 		const groupIdentity = caseRunIdentity( reportedTest.name, result.runIndex );
 		const rows = caseRunRows.get( groupIdentity ) || [];
-		rows.push( { reportedTest, stepIndex: result.stepIndex } );
+		rows.push( {
+			outcome: result.outcome,
+			reportedTest,
+			response: result.response,
+			stepIndex: result.stepIndex,
+		} );
 		caseRunRows.set( groupIdentity, rows );
 
 		if ( result.browserConsoleErrors !== undefined ) {
@@ -392,7 +448,8 @@ export function validateWebmcpEvalReport(
 			if (
 				! reportedTestsMatchFixtureTree(
 					fixtureCase,
-					rows.map( ( row ) => row.reportedTest )
+					rows,
+					expectedMode === "local"
 				)
 			) {
 				throw new Error(
@@ -438,7 +495,11 @@ export function validateWebmcpEvalReport(
 		suiteSha256: fixtureSha256,
 		...( expectedMode === "browser"
 			? { browserUrl, chromeChannel }
-			: { schemaPath } ),
+			: {
+				maxSteps: expectedMaxSteps,
+				parallelToolCalls: expectedParallelToolCalls,
+				schemaPath,
+			} ),
 	};
 }
 
@@ -458,8 +519,10 @@ async function readJson( filePath, label ) {
 export async function checkWebmcpEvalReport( {
 	expectedBackend,
 	expectedChromeChannel,
+	expectedMaxSteps,
 	expectedMode,
 	expectedModel,
+	expectedParallelToolCalls,
 	expectedRuns,
 	expectedSchemaPath,
 	expectedUrl,
@@ -484,8 +547,10 @@ export async function checkWebmcpEvalReport( {
 	return validateWebmcpEvalReport( reportFile.parsed, {
 		expectedBackend,
 		expectedChromeChannel,
+		expectedMaxSteps,
 		expectedMode,
 		expectedModel,
+		expectedParallelToolCalls,
 		expectedRuns,
 		expectedSchemaPath,
 		expectedUrl,
@@ -530,6 +595,14 @@ export function parseReportCheckerArguments( argumentsList ) {
 	parsed.expectedRuns = Number( parsed.expectedRuns );
 	positiveInteger( parsed.expectedRuns, "--runs", "arguments" );
 	if ( parsed.expectedMode === "local" ) {
+		if ( ! /^\d+$/.test( parsed.expectedMaxSteps || "" ) ) {
+			throw new Error( "Local mode requires --max-steps 1." );
+		}
+		parsed.expectedMaxSteps = Number( parsed.expectedMaxSteps );
+		if ( parsed.expectedParallelToolCalls !== "false" ) {
+			throw new Error( "Local mode requires --parallel-tool-calls false." );
+		}
+		parsed.expectedParallelToolCalls = false;
 		if (
 			! parsed.expectedSchemaPath ||
 			parsed.expectedUrl ||
@@ -537,14 +610,19 @@ export function parseReportCheckerArguments( argumentsList ) {
 		) {
 			throw new Error( "Local mode requires --schema and rejects --url/--chrome-channel." );
 		}
+		if ( parsed.expectedMaxSteps !== 1 ) {
+			throw new Error( "Local mode requires --max-steps 1." );
+		}
 	} else if ( parsed.expectedMode === "browser" ) {
 		if (
 			! parsed.expectedUrl ||
 			! parsed.expectedChromeChannel ||
-			parsed.expectedSchemaPath
+			parsed.expectedSchemaPath ||
+			parsed.expectedMaxSteps ||
+			Object.hasOwn( parsed, "expectedParallelToolCalls" )
 		) {
 			throw new Error(
-				"Browser mode requires --url and --chrome-channel and rejects --schema."
+				"Browser mode requires --url and --chrome-channel and rejects --schema/--max-steps/--parallel-tool-calls."
 			);
 		}
 		parseReleaseBrowserUrl( parsed.expectedUrl, "--url" );

@@ -79,7 +79,20 @@ final class CartSession
             $cart->set_session();
         }
 
-        $session = $this->session();
+        $this->set_session_cookie($this->session());
+    }
+
+    /**
+     * Establish the stable Woo guest identity without recalculating totals or
+     * writing cart contents during a read-only manifest request.
+     */
+    public function prime_cookie(): void
+    {
+        $this->set_session_cookie($this->session());
+    }
+
+    private function set_session_cookie(object $session): void
+    {
         if (method_exists($session, 'set_customer_session_cookie') && ! headers_sent()) {
             $session->set_customer_session_cookie(true);
         }

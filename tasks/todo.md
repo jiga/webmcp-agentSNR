@@ -235,3 +235,12 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - The protected model-backed gate **fails**: storefront selection passes 33/54 case-runs, Agent SNR selection passes 31/45, and the browser journey passes 3/8 required rows. All three strict provenance-checker invocations exit nonzero.
 - Safety held despite the quality failures: every case with authored `expectedCall: null` made zero state-changing calls, and an operator-observed before/after query found that the live browser run created zero orders.
 - The sanitized evidence report is `submission/webmcp-eval-report-2026-09-01.md`; raw reports remain private under ignored `.evals/`. Release clearance now requires the documented fixture/journey/feedback fixes and a clean rerun.
+
+## Model-backed eval remediation
+
+- [x] Reproduce and classify every failed storefront, Agent SNR, and browser row without weakening the authored safety or outcome requirements.
+- [x] Make isolated selection fixtures deterministic about guide start state, tool result context, and the intended single decision boundary.
+- [x] Reproduce the browser-only `invalid_agent_feedback` sequence, fix the underlying workflow/evidence validation defect, and add positive/negative regression coverage.
+- [x] Refine the live shopper journey so required commerce outcomes remain primary and optional telemetry occurs only after the core path.
+- [ ] Run focused tests, the full deterministic/native matrix, and the same fixed-model protected suites with strict provenance checking.
+- [ ] Update the sanitized report and release checklists with the rerun evidence; complete an independent review and focused commit.

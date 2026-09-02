@@ -163,6 +163,9 @@ final class ManifestService
     {
         try {
             $cart = $this->cart_session->cart();
+            // Prime one stable Woo guest session before an agent can issue
+            // concurrent first-touch storefront tools with different IDs.
+            $this->cart_session->prime_cookie();
         } catch (ToolException $exception) {
             return null;
         }

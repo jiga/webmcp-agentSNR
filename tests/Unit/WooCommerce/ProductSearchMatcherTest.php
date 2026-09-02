@@ -61,6 +61,65 @@ final class ProductSearchMatcherTest extends TestCase
         self::assertFalse($matcher->matches($this->facts, array('query' => 'pack', 'attributes' => array('supplier_cost' => '20'))));
     }
 
+    public function test_redundant_structured_filters_do_not_become_product_name_terms(): void
+    {
+        $matcher = new ProductSearchMatcher();
+        $input   = array(
+            'query'         => 'waterproof backpack under $120 with at least IPX6 protection in stock',
+            'max_price'     => 120,
+            'attributes'    => array('water_rating' => 'IPX6'),
+            'in_stock_only' => true,
+        );
+
+        self::assertTrue($matcher->matches($this->facts, $input));
+        self::assertFalse(
+            $matcher->matches(
+                $this->facts,
+                array_merge(
+                    $input,
+                    array('query' => 'waterproof suitcase under $120 with at least IPX6 protection in stock')
+                )
+            ),
+            'A real unmatched product term must remain significant.'
+        );
+        self::assertFalse(
+            $matcher->matches(
+                $this->facts,
+                array_merge($input, array('attributes' => array('water_rating' => 'IPX7')))
+            ),
+            'Removing a repeated query value must not weaken the structured attribute filter.'
+        );
+    }
+
+    public function test_text_price_bounds_cannot_be_weakened_by_structured_values(): void
+    {
+        $facts          = $this->facts;
+        $facts['price'] = 75.0;
+        $matcher        = new ProductSearchMatcher();
+
+        self::assertFalse(
+            $matcher->matches($facts, array('query' => 'backpack under $50', 'max_price' => 100)),
+            'The stricter textual maximum must win.'
+        );
+        self::assertFalse(
+            $matcher->matches($facts, array('query' => 'backpack over $100', 'min_price' => 50)),
+            'The stricter textual minimum must win.'
+        );
+        self::assertFalse(
+            $matcher->matches(
+                $facts,
+                array('query' => 'backpack at least $100 and under $50', 'min_price' => 25, 'max_price' => 125)
+            ),
+            'Conflicting effective bounds must fail closed.'
+        );
+        self::assertTrue(
+            $matcher->matches($facts, array('query' => 'backpack under $100', 'max_price' => 120))
+        );
+        self::assertTrue(
+            $matcher->matches($facts, array('query' => 'backpack over $50', 'min_price' => 25))
+        );
+    }
+
     public function test_public_query_is_strictly_published_and_visible(): void
     {
         $args = ProductCatalog::public_query_args(array('query' => 'pack', 'in_stock_only' => true));
