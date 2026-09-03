@@ -13,7 +13,7 @@ Two consecutive clean builds produced identical bytes:
 
 These hashes identify the last fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. Its Playground bundle executed successfully with `@wp-playground/cli` 3.1.51, and its plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 16-scenario Chromium, and Plugin Check acceptance passed against that exact candidate.
 
-They are deliberately **not** labeled final-submission hashes. This compliance pass changes root `THIRD_PARTY_NOTICES.md`, which the build copies into both release artifacts, and the entrant still needs to resolve public naming and plugin contributor metadata. After those owner changes, validate the exact deployed build from the frozen public commit. If publishing the optional `v0.1.0` release artifacts, rerun their exact-artifact gates before filling the optional hash fields in `devpost-rules-checklist.md`.
+They are deliberately **not** labeled final-submission hashes. This compliance pass changes root `THIRD_PARTY_NOTICES.md`, which the build copies into both release artifacts, and later removes a public demo-store candidate name and unresolved contributor placeholder. The entrant still needs formal Agent SNR and `AgentOps` compatibility-identifier clearance. Validate the exact deployed build from the frozen public commit. If publishing the optional `v0.1.0` release artifacts, rerun their exact-artifact gates before filling the optional hash fields in `devpost-rules-checklist.md`.
 
 ## Green automated gates
 
@@ -23,7 +23,7 @@ They are deliberately **not** labeled final-submission hashes. This compliance p
 | PHPUnit, PHP 8.1 | 111 tests, 1,964 assertions |
 | PHPUnit, PHP 8.4 | 111 tests, 1,964 assertions |
 | WordPress Coding Standards | Zero errors; line-length warnings only |
-| JavaScript | 112 tests, including provenance/sample labeling, safe rendering, stale-opportunity clearing, WebMCP eval fixture/provenance enforcement, application-error-aware smoke, and fail-closed showcase configuration; ESLint passes |
+| JavaScript | 125 tests, including provenance/sample labeling, safe rendering, stale-opportunity clearing, WebMCP eval fixture/provenance enforcement, application-error-aware smoke, fail-closed showcase configuration, rendered-refund capture readiness, and 12 Render deployment guards; ESLint passes |
 | Showcase launcher guards | Automated invalid-port, reset-confirmation, project/loopback, checksum, symlink-entry, and extracted-cache integrity/repair checks pass |
 | CSS | Stylelint passes |
 | Dependency audit | Zero npm vulnerabilities |
@@ -48,8 +48,10 @@ The following artifact-level checks were performed locally in addition to `npm r
 - `./bin/start-showcase.sh start` built a missing release ZIP when needed, mounted the verified artifact under the isolated `agent-snr-showcase` project on `127.0.0.1`, and verified WooCommerce 11.0.1, 12 products, and all four public pages.
 - Mixed class-string/object WooCommerce gateway compatibility remains covered by dedicated regression tests. The clean exact-ZIP showcase completed the full no-charge order/refund capture with zero console errors.
 - `npm run showcase:capture` completed one nine-call Guide → IPX5 zero-result → IPX4 recovery → linked feedback → HarborLite human order → full-refund workflow with zero console errors. Ten 1440×900 captures and machine-readable evidence are in `demo-screenshots/`.
+- After removing the former public demo-store candidate name and unresolved contributor placeholder, a clean guarded reset rebuilt and verified plugin ZIP SHA-256 `9680f3e575d9ae6a24ea3588a20d0fc983749c3d569dcba7f798c70a0cd1c800`. The brand-safe recapture's `showcase-summary.json` has SHA-256 `69f70795eb2b10d67f0380cd0203f92f0c8d35157cd7dc2be0c12ac19b7df431`; all ten PNGs are 1440×900, visual/OCR review found no former-name occurrence, and the final frame visibly shows one paid order, `$69.00` refunded, and `$0.00` net attributed.
+- The refund-frame readiness race is regression-covered: blank or whitespace-wrapped em-dash placeholders are rejected, the script waits for the real `orders_paid`, refund, and net metrics, and populated text is accepted.
 - Representative native-smoke response envelopes measured 455–1,132 characters for nine of eleven calls. The one-start Agent Guide (4,706) and nine-stage funnel (2,157) are documented exceptions to Chrome's current 1.5K recommendation; both remain below the enforced 8 KiB ceiling and are bounded structured results.
-- `agent-snr-hackathon-demo.pptx` (SHA-256 `84bcc14bebffc80186b63473a31f07361ef15788890012d19fcaba0ad4642071`) rendered as 12 editable slides. Nonessential comparative product marks were replaced with generic workflow categories, and the proof slide now records 112 JavaScript tests, 111 PHP tests / 1,964 assertions, and 16/16 Chromium scenarios. All 12 speaker-note source blocks, imported theme fidelity, template fidelity, package integrity, zero-placeholder audit, and overflow checks passed; every exported slide was inspected individually.
+- `agent-snr-hackathon-demo.pptx` (SHA-256 `976d9ed38a9d353c2cb2dc94911aea35e8ea1d57656cba1997c2358f5afa637b`) rendered as 12 editable slides. Nonessential comparative product marks were replaced with generic workflow categories, the regenerated brand-safe screenshot is embedded, and the proof slide records 125 JavaScript tests, 111 PHP tests / 1,964 assertions, and 16/16 Chromium scenarios. All 12 speaker-note source blocks, imported theme fidelity, template fidelity, package integrity, zero-placeholder audit, OCR, and overflow checks passed; every exported slide was inspected individually.
 
 The runtime capture and presentation render are recorded local artifact checks, not hidden steps inside `npm run verify`. The hosted HTTPS capture and real-client checks remain owner gates.
 
@@ -91,8 +93,8 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 
 - Complete formal trademark/domain clearance for Agent SNR and confirm the public repository/product slug.
 - Confirm the Git author identity, create the public remote, and push the unsquashed history.
-- Supply/remove the unresolved plugin contributor placeholder and complete entrant/team ownership and third-party-rights declarations.
-- Clear or replace the Agent SNR, `AgentOps` compatibility-identifier, and TrailForge Lab screening items before public capture.
+- Complete entrant/team ownership and third-party-rights declarations; the unresolved plugin contributor placeholder has been removed without inventing an ID.
+- Complete formal Agent SNR clearance and resolve the `AgentOps` compatibility-identifier screening item before public capture; the former public demo-store candidate name has been replaced with generic Agent SNR demo-store wording.
 - Deploy the exact build from the frozen public commit to stable top-level HTTPS WordPress hosting.
 - Validate both frozen top-level pages through at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP enabled.
 - Optionally complete the Workbench evidence sheet and WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.

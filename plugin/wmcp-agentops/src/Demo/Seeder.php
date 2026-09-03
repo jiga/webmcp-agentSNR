@@ -30,7 +30,7 @@ final class Seeder
         }
 
         update_option('wmcp_agentops_enabled', true, false);
-        update_option('blogname', 'TrailForge Lab');
+        update_option('blogname', 'Agent SNR Demo Store');
         update_option('blogdescription', 'Field-tested gear with Agent SNR outcome monitoring');
         update_option('woocommerce_currency', 'USD');
         update_option('woocommerce_calc_taxes', 'no');
@@ -88,7 +88,7 @@ final class Seeder
             'warranty'   => array(
                 'Warranty policy',
                 'warranty-policy',
-                'TrailForge Lab demo products include a fictional 365-day workmanship warranty. This demonstration does not create a real warranty claim.',
+                'The demo catalog includes a fictional 365-day workmanship warranty. This demonstration does not create a real warranty claim.',
             ),
             'privacy'    => array(
                 'Privacy policy',

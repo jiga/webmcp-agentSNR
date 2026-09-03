@@ -1,5 +1,4 @@
 === Agent SNR ===
-Contributors: owner-to-set
 Tags: webmcp, woocommerce, monitoring, analytics, ai
 Requires at least: 6.9
 Tested up to: 7.1

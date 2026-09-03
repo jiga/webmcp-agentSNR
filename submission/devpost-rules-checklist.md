@@ -78,7 +78,7 @@ Evidence: Official Rules “How To Enter,” “Submission Requirements,” and 
 - [x] Secrets, `.env`, raw eval reports, browser profiles, dependencies, release-test state, and generated release binaries are excluded from Git.
 - [x] Commit history is linear, timestamped, and wholly inside the submission period.
 - [ ] Entrant confirms the Git author name/email embedded in history are acceptable for public release.
-- [ ] Remove or replace `Contributors: owner-to-set` using the entrant's confirmed WordPress.org ID before the final artifact is published.
+- [x] Remove the unresolved WordPress.org contributor placeholder from the final plugin metadata; no contributor ID is fabricated.
 - [ ] Create the public GitHub/GitLab/Bitbucket remote and push without squashing or rewriting provenance.
 - [ ] Confirm the hosting service detects `LICENSE` and visibly shows the license in the repository header/About area.
 - [ ] Recommended repository hygiene: add description/topics and immutable release links without implying affiliation with a third party.
@@ -142,7 +142,8 @@ Evidence: Official Rules “demonstration video” requirements. The challenge s
 - [x] Checked-in demo data is fictional; checkout uses `.invalid` customer data and a no-charge gateway.
 - [x] The Agent SNR workflow ledger stores no raw prompts, addresses, payment fields, or free-form feedback; ordinary WooCommerce remains the system of record for human-submitted order data, and that boundary is documented.
 - [x] Root notices state that product artwork/copy is original and no third-party logo, font, music, or executable runtime library is bundled.
-- [ ] Complete formal Agent SNR clearance and resolve the known `AgentOps` compatibility-identifier and `TrailForge Lab` screening items before public launch/video.
+- [x] Replace the former public demo-store candidate name with generic **Agent SNR Demo Store** / **Agent SNR / Demo Store** wording before public capture.
+- [ ] Complete formal Agent SNR clearance and resolve the known `AgentOps` compatibility-identifier screening item before public launch/video.
 - [ ] Confirm necessary descriptive WordPress, WooCommerce, WebMCP, ChatGPT, and Chrome references comply with each owner's brand/trademark terms and do not imply endorsement.
 - [ ] Confirm the final repository and release contain no malicious code, secrets, PII, or material that violates another party's rights.
 

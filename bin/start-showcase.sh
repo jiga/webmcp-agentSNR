@@ -266,7 +266,7 @@ provision_wordpress() {
   if ! wp_cli core is-installed >/dev/null 2>&1; then
     wp_cli core install \
       --url="${SITE_URL}" \
-      --title="TrailForge Lab" \
+      --title="Agent SNR Demo Store" \
       --admin_user="${ADMIN_USER}" \
       --admin_password="${ADMIN_PASSWORD}" \
       --admin_email="showcase-operator@example.invalid" \

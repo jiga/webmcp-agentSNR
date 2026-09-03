@@ -110,13 +110,17 @@ Prerequisites: Docker Desktop (or Docker Engine with Compose) and a free local p
 ./bin/start-demo.sh
 ```
 
-The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional TrailForge Lab store; and prints the dedicated storefront demo, Agent SNR, readiness, and admin URLs. Local-only credentials are printed by the command.
+The command starts WordPress 7.1/PHP 8.3, MariaDB 11.8, and WooCommerce 11.0.1; activates the plugin; seeds the fictional Agent SNR Demo Store; and prints the dedicated storefront demo, Agent SNR, readiness, and admin URLs. Local-only credentials are printed by the command.
 
 Stop without deleting data:
 
 ```bash
 ./bin/stop-demo.sh
 ```
+
+### Deploy on Render
+
+The production Blueprint creates a public WordPress service and a private MariaDB service from pinned images, with generated secrets, persistent uploads/database storage, HTTPS-aware configuration, disabled auto-deploys, and idempotent demo setup. Review the cost and credential steps in the [Render deployment runbook](submission/render-deployment.md), then [create the Blueprint from the public repository](https://render.com/deploy?repo=https://github.com/jiga/wp-webmcp).
 
 Reset only this repository's named Docker volumes and rebuild:
 
@@ -226,7 +230,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The current checkout passes 112 JavaScript/configuration tests and the submission-package static checks. The fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4 and 16 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, fresh-session correlation, real classic checkout, cross-tab cart synchronization, and bounded replay. Its REST/security smoke covered 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passed 11/11 calls; protected model-backed selection passed 54/54 storefront and 45/45 Agent SNR case-runs; and the live browser journey passed 8/8 with zero console errors and no new order. Its Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, Playground execution, and Plugin Check with zero errors also passed. Compliance copy and owner metadata change future artifact bytes, so validation of the exact final deployed build remains an unchecked owner gate in [submission/verification-report.md](submission/verification-report.md).
+The current checkout passes 125 JavaScript/configuration tests—including Render Blueprint/bootstrap guards and the refund-evidence capture regression—plus the submission-package static checks. The fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4 and 16 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, fresh-session correlation, real classic checkout, cross-tab cart synchronization, and bounded replay. Its REST/security smoke covered 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passed 11/11 calls; protected model-backed selection passed 54/54 storefront and 45/45 Agent SNR case-runs; and the live browser journey passed 8/8 with zero console errors and no new order. Its Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, Playground execution, and Plugin Check with zero errors also passed. The current brand-safe source and Render image pass PHP, package, cold-start, restart, health, and seeded-state checks; validation of the exact public deployed commit remains an unchecked owner gate in [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

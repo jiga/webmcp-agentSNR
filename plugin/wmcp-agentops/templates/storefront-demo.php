@@ -79,8 +79,8 @@ $guide_step_copy = array(
 <div id="wmcp-storefront-main" class="wmcp-field wmcp-storefront alignfull" data-wmcp-surface="storefront" tabindex="-1">
 	<header class="wmcp-store-header">
 		<a class="wmcp-wordmark" href="<?php echo esc_url((string) $view['landing_url']); ?>" aria-label="<?php esc_attr_e('Return to Agent SNR', 'wmcp-agentops'); ?>">
-			<span class="wmcp-wordmark-mark" aria-hidden="true">TF</span>
-			<span>TrailForge<br><em>Field Supply</em></span>
+			<span class="wmcp-wordmark-mark" aria-hidden="true">SNR</span>
+			<span>Agent SNR<br><em>Demo Store</em></span>
 		</a>
 		<nav class="wmcp-store-nav" aria-label="<?php esc_attr_e('Storefront navigation', 'wmcp-agentops'); ?>">
 			<a href="#wmcp-agent-guide"><?php esc_html_e('Agent guide', 'wmcp-agentops'); ?></a>

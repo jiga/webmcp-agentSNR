@@ -1,6 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import {
 	assertShowcaseOrigin,
@@ -24,6 +25,48 @@ const SHOWCASE_CREDENTIALS_FILE = path.resolve(
 );
 
 let adminCredentials;
+
+export function hasRenderedMetricValue( value ) {
+	const normalized = typeof value === "string" ? value.trim() : "";
+	return normalized !== "" && normalized !== "—";
+}
+
+async function waitForRefundEvidence( page, timeout = 20_000 ) {
+	const expected = {
+		netAttributed: "$0.00",
+		ordersPaid: "1",
+		refundValue: "$69.00",
+	};
+	const selectors = {
+		netAttributed: '[data-metric="revenue.net"]',
+		ordersPaid: '[data-metric="commerce.orders_paid"]',
+		refundValue: '[data-metric="revenue.refunds"]',
+	};
+	const deadline = Date.now() + timeout;
+	let actual = {};
+
+	do {
+		actual = Object.fromEntries(
+			await Promise.all(
+				Object.entries( selectors ).map( async ( [ key, selector ] ) => [
+					key,
+					( ( await page.locator( selector ).textContent() ) || "" ).trim(),
+				] )
+			)
+		);
+		if (
+			Object.values( actual ).every( hasRenderedMetricValue ) &&
+			Object.entries( expected ).every( ( [ key, value ] ) => actual[ key ] === value )
+		) {
+			return actual;
+		}
+		await page.waitForTimeout( 100 );
+	} while ( Date.now() < deadline );
+
+	throw new Error(
+		`Refund evidence did not render the expected paid-order, refund, and net values: ${ JSON.stringify( actual ) }`
+	);
+}
 
 async function getAdminCredentials() {
 	if ( adminCredentials ) {
@@ -356,11 +399,7 @@ async function runShowcase( browser, outputDirectory ) {
 	await page.goto( "/agentops-demo/" );
 	await waitForTools( page, AGENT_SNR_TOOL_COUNT );
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
-	await page.waitForFunction(
-		() => document.querySelector( '[data-metric="commerce.paid_orders"]' )?.textContent !== "—",
-		undefined,
-		{ timeout: 20_000 }
-	);
+	await waitForRefundEvidence( page );
 	const refundScreenshot = await captureViewport(
 		page,
 		outputDirectory,
@@ -484,7 +523,9 @@ async function main() {
 	}
 }
 
-main().catch( ( error ) => {
-	console.error( error );
-	process.exitCode = 1;
-} );
+if ( process.argv[ 1 ] && import.meta.url === pathToFileURL( path.resolve( process.argv[ 1 ] ) ).href ) {
+	main().catch( ( error ) => {
+		console.error( error );
+		process.exitCode = 1;
+	} );
+}

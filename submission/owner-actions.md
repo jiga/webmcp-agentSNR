@@ -7,9 +7,9 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 ## Identity, release, and hosting
 
 - [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains; resolve the established AgentOps.ai overlap in technical/public identifiers.
-- [ ] Clear or replace the publicly visible fictional **TrailForge Lab** store name before recording; current outdoor and backpack uses make it unsuitable to treat as cleared without review.
+- [x] Replace the former public demo-store candidate name with the generic **Agent SNR Demo Store** site title and **Agent SNR / Demo Store** storefront lockup.
 - [ ] Confirm the current Git author name and email embedded in every commit are appropriate for public history; do not rewrite provenance casually.
-- [ ] Supply the real WordPress.org contributor ID or remove `Contributors: owner-to-set` before publishing the final plugin artifact.
+- [x] Remove the unresolved WordPress.org contributor placeholder from the plugin metadata; do not invent a contributor ID.
 - [ ] Record the entrant/team/organization's public copyright holder and contributor-rights basis.
 - [ ] Create the public GitHub/GitLab/Bitbucket repository, set About/license metadata, add the remote, and push without squashing the submission-period commits.
 - [ ] Choose entrant type/team roster; confirm age, supported jurisdiction, exclusions/conflicts, prize ownership, and the eligible authorized Representative where applicable.

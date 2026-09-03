@@ -267,6 +267,27 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Package: README, hackathon provenance, security/testing guidance, notices, Devpost story, marked testing-instructions copy, owner runbook, media plan, video script, presentation, optional external-evidence templates, and the rule-by-rule checklist agree on one submission contract.
 - Verification: 112/112 JavaScript/configuration tests, showcase launcher guards, schema parity, 45/45 local Markdown links, JSON parsing, diff hygiene, credential-pattern scan, and plugin/Playground package integrity pass. Two consecutive current pre-owner builds match (`24a6a9152f814433877a90fc6c82ac23f6d42787faae9df154b68854fbfef704` plugin; `75436495986664e96dcd9b50a73c1060a622628b6064aa6b1ded12538041c6cc` Playground).
 - Evidence boundary: those current hashes prove reproducible packaging only; the complete exact-ZIP/PHP/Woo/Chromium/native/model matrix remains bound to engineering candidate `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. The exact final deployed build must be revalidated after entrant metadata/name decisions.
-- Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, and template-fidelity review; SHA-256 is `84bcc14bebffc80186b63473a31f07361ef15788890012d19fcaba0ad4642071`.
+- Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, OCR, and template-fidelity review; after the brand-safe screenshot and 125-test proof update, SHA-256 is `976d9ed38a9d353c2cb2dc94911aea35e8ea1d57656cba1997c2358f5afa637b`.
 - Independent review: compliance and deck reviewers approved with no remaining repository-local finding.
 - Honest blockers: no remote/tag, public repository, public HTTPS demo, real-client hosted result, public YouTube video, final form entry, entrant eligibility/authority/ownership attestation, contributor identity, or name/mark clearance is fabricated. These stay unchecked and must be completed before the deadline.
+
+## Render production deployment
+
+- [x] Confirm the current Render account/credit state and the Git-hosting path without exposing credentials or redemption codes.
+- [x] Lock a production topology that preserves WordPress, WooCommerce, MySQL, persistent uploads, same-origin REST, top-level HTTPS WebMCP, and judge-session state.
+- [x] Add the smallest production-safe Render Blueprint/container/bootstrap files with generated secrets, final-URL handling, cache/header safety, idempotent seeding, and no local development defaults.
+- [x] Fix the showcase refund-evidence wait so regenerated public screenshots cannot capture whitespace-wrapped placeholder values; add regression coverage and recapture the final outcome.
+- [x] Validate configuration syntax, deterministic plugin packaging, container startup/bootstrap behavior, persistence assumptions, health endpoints, and local regression checks.
+- [ ] Publish the required public repository and deploy the frozen commit to Render, completing user-owned authorization or billing steps only with the user's approval in the Render UI.
+- [ ] Verify the public URLs logged out, confirm HTTPS/same-origin/readiness, test 12 storefront and 8 Agent SNR tools in an official WebMCP client, update submission URLs/evidence, and commit the deployment record before the deadline.
+
+### Render deployment review
+
+- Account: the intended Render Hobby workspace is authenticated and contains the $50 Hackathon Participant credit, valid through August 31, 2027. No credit/redemption value is stored or logged. A user-managed payment method is still required before paid services can be created.
+- Architecture: one `1c-2g` public WordPress service and one `1c-2g` private MariaDB service run in Oregon with automatic deploys/previews disabled. Only uploads and MariaDB data persist; application code comes from pinned images and the frozen Git commit on every start.
+- Supply chain: WordPress 7.1/PHP 8.3, WP-CLI 2.12, and MariaDB 11.8 images are digest-pinned. WooCommerce 11.0.1 is downloaded only over HTTPS/TLS with retries and must match SHA-256 `da189b6616c610d15a2106f93151dab81b78f83e075bcefce221ac0d00b4fa21` before extraction.
+- Bootstrap: Render-generated database/admin/salt secrets stay out of Git; proxy-aware HTTPS, same-origin URLs, production/demo constants, bounded DB wait, least-privilege WP-CLI, version checks, activation, and idempotent seeding all fail closed before Apache starts.
+- Public evidence: the unresolved contributor placeholder and former demo-store candidate name are removed. Ten 1440×900 screenshots were regenerated with zero console errors; the refund frame verifies one paid order, `$69.00` refunded, and `$0.00` net. The capture wait now rejects trimmed placeholder values.
+- Verification: official Blueprint schema, Bash syntax, build-context allowlist, npm audit, 125/125 JavaScript tests, 111 PHP tests / 1,964 assertions, deterministic plugin/Playground builds, both Docker builds, exact baked plugin contents, and two cold web starts against one persistent MariaDB pass. The second start preserves 12 products and 10 pages; health and storefront return HTTP 200.
+- Presentation: all 12 slides were re-rendered and inspected after replacing the stale screenshot and updating the proof count; theme/fidelity/notes/placeholders/overflow/package/OCR pass. SHA-256 is `976d9ed38a9d353c2cb2dc94911aea35e8ea1d57656cba1997c2358f5afa637b`.
+- Pending external gates: commit/push the public GitHub repository, add the user-managed Render payment method, review and explicitly approve the paid Blueprint creation, then complete public HTTPS and real-client validation before updating Devpost URLs.

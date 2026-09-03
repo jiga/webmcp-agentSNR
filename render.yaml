@@ -1,0 +1,114 @@
+previews:
+  generation: off
+
+services:
+  - type: web
+    name: agent-snr
+    runtime: docker
+    region: oregon
+    plan: 1c-2g
+    numInstances: 1
+    autoDeployTrigger: off
+    dockerContext: .
+    dockerfilePath: ./deploy/render/Dockerfile
+    healthCheckPath: /wp-json/wmcp-agentops/v1/health
+    disk:
+      name: agent-snr-uploads
+      mountPath: /var/www/html/wp-content/uploads
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: "80"
+      - key: WORDPRESS_DB_HOST
+        fromService:
+          type: pserv
+          name: agent-snr-mariadb
+          property: hostport
+      - key: WORDPRESS_DB_NAME
+        fromService:
+          type: pserv
+          name: agent-snr-mariadb
+          envVarKey: MARIADB_DATABASE
+      - key: WORDPRESS_DB_USER
+        fromService:
+          type: pserv
+          name: agent-snr-mariadb
+          envVarKey: MARIADB_USER
+      - key: WORDPRESS_DB_PASSWORD
+        fromService:
+          type: pserv
+          name: agent-snr-mariadb
+          envVarKey: MARIADB_PASSWORD
+      - key: WMCP_ADMIN_USER
+        value: agent-snr-admin
+      - key: WMCP_ADMIN_PASSWORD
+        generateValue: true
+      - key: WMCP_ADMIN_EMAIL
+        value: demo-admin@example.invalid
+      - key: WMCP_REPOSITORY_URL
+        value: https://github.com/jiga/wp-webmcp
+      - key: WORDPRESS_AUTH_KEY
+        generateValue: true
+      - key: WORDPRESS_SECURE_AUTH_KEY
+        generateValue: true
+      - key: WORDPRESS_LOGGED_IN_KEY
+        generateValue: true
+      - key: WORDPRESS_NONCE_KEY
+        generateValue: true
+      - key: WORDPRESS_AUTH_SALT
+        generateValue: true
+      - key: WORDPRESS_SECURE_AUTH_SALT
+        generateValue: true
+      - key: WORDPRESS_LOGGED_IN_SALT
+        generateValue: true
+      - key: WORDPRESS_NONCE_SALT
+        generateValue: true
+      - key: WORDPRESS_CONFIG_EXTRA
+        value: |
+          $wmcp_forwarded_proto = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? strtolower(trim(explode(',', (string) $_SERVER['HTTP_X_FORWARDED_PROTO'])[0])) : '';
+          if ('https' === $wmcp_forwarded_proto) {
+              $_SERVER['HTTPS'] = 'on';
+              $_SERVER['SERVER_PORT'] = '443';
+          }
+          $wmcp_public_url = getenv('WMCP_PUBLIC_URL');
+          if (false === $wmcp_public_url || '' === trim((string) $wmcp_public_url)) {
+              $wmcp_public_url = getenv('RENDER_EXTERNAL_URL');
+          }
+          $wmcp_public_url = rtrim((string) $wmcp_public_url, '/');
+          if (! str_starts_with($wmcp_public_url, 'https://')) {
+              throw new RuntimeException('Agent SNR requires a public HTTPS URL.');
+          }
+          define('WP_HOME', $wmcp_public_url);
+          define('WP_SITEURL', $wmcp_public_url);
+          define('FORCE_SSL_ADMIN', true);
+          define('WP_ENVIRONMENT_TYPE', 'production');
+          define('WMCP_AGENTOPS_DEMO_MODE', true);
+          define('DISALLOW_FILE_EDIT', true);
+          define('DISALLOW_FILE_MODS', true);
+          define('AUTOMATIC_UPDATER_DISABLED', true);
+          define('WP_AUTO_UPDATE_CORE', false);
+          define('WP_MEMORY_LIMIT', '256M');
+          define('WP_MAX_MEMORY_LIMIT', '512M');
+
+  - type: pserv
+    name: agent-snr-mariadb
+    runtime: docker
+    region: oregon
+    plan: 1c-2g
+    numInstances: 1
+    autoDeployTrigger: off
+    dockerContext: .
+    dockerfilePath: ./deploy/render/mariadb.Dockerfile
+    disk:
+      name: agent-snr-mariadb-data
+      mountPath: /var/lib/mysql
+      sizeGB: 10
+    envVars:
+      - key: MARIADB_DATABASE
+        value: wordpress
+      - key: MARIADB_USER
+        value: wordpress
+      - key: MARIADB_PASSWORD
+        generateValue: true
+      - key: MARIADB_ROOT_PASSWORD
+        generateValue: true

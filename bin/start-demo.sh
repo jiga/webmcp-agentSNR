@@ -29,7 +29,7 @@ done
 if ! docker compose run --rm cli wp core is-installed >/dev/null 2>&1; then
   docker compose run --rm cli wp core install \
     --url="${SITE_URL}" \
-    --title="TrailForge Lab" \
+    --title="Agent SNR Demo Store" \
     --admin_user="${ADMIN_USER}" \
     --admin_password="${ADMIN_PASSWORD}" \
     --admin_email="${ADMIN_EMAIL}" \

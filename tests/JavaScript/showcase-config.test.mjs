@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 
+import { hasRenderedMetricValue } from "../../demo/showcase-capture.mjs";
 import {
 	assertShowcaseOrigin,
 	CAPTURE_OUTPUT_MARKER,
@@ -12,6 +13,13 @@ import {
 } from "../../demo/showcase-config.mjs";
 
 describe( "showcase capture configuration", () => {
+	it( "rejects whitespace-wrapped placeholders and accepts rendered metric text", () => {
+		assert.equal( hasRenderedMetricValue( " \n — \t" ), false );
+		assert.equal( hasRenderedMetricValue( "  " ), false );
+		assert.equal( hasRenderedMetricValue( undefined ), false );
+		assert.equal( hasRenderedMetricValue( " $69.00 \n" ), true );
+	} );
+
 	it( "defaults to the isolated localhost showcase origin", () => {
 		assert.deepEqual( resolveShowcaseBaseUrl( {} ), {
 			baseUrl: "http://localhost:18084",

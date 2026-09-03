@@ -25,7 +25,7 @@ Target: **2:40**, English narration, public YouTube, no music, and no third-part
 - Use clear English narration throughout; review auto-captions and correct them if captions are published.
 - Use original artwork and narration only; no copyrighted music.
 - Crop browser/app chrome, other tabs, profile details, notifications, and nonessential third-party names or logos from every frame.
-- Resolve the Agent SNR, `AgentOps` compatibility-identifier, and TrailForge Lab screening items before recording; otherwise rename or remove the affected public material and rerun release evidence.
+- Confirm that the generic Agent SNR demo-store wording is present in the frozen build and regenerated evidence; resolve the Agent SNR and `AgentOps` compatibility-identifier screening items before recording.
 - Audit necessary descriptive compatibility references against the applicable brand terms and record the entrant's approval.
 - Publish as **Public**, verify playback and audio logged out, and confirm the video embeds on the Devpost project page.
 - Open all public links logged out before and immediately after publishing.

@@ -56,7 +56,8 @@ Checked exact-artifact items in this section describe the fully exercised engine
 - [ ] Entrant has joined the challenge and personally confirmed age, supported jurisdiction, no exclusion/conflict, entry type, team roster, and authorized Representative where applicable.
 - [ ] Entrant personally confirms originality, sole ownership/contributor rights, third-party authorizations, no prohibited Sponsor/Administrator support, no malicious code, and accuracy of every claim.
 - [ ] Formal trademark and domain clearance for Agent SNR is complete.
-- [ ] The known `AgentOps` technical-identifier and TrailForge Lab screening items are cleared or removed from the final public repo/site/video.
+- [x] The former public demo-store candidate name is removed; site title, storefront lockup, policy copy, launchers, and reference captures use generic Agent SNR demo-store wording.
+- [ ] The known `AgentOps` technical-identifier screening item is cleared or removed from the final public repo/site/video.
 - [x] Description covers WebMCP fit, UX improvement, human-agent collaboration, and implementation.
 - [x] Local reference screenshots contain only fictional demo data and original project assets.
 - [ ] Public source/license, live URL, test instructions, and any credentials are complete.
