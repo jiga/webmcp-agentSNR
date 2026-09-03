@@ -550,9 +550,37 @@
             },
             "categories": [],
             "cart_summary": {
-              "item_count": 0,
+              "item_count": 1,
               "state": "loaded"
             }
+          }
+        }
+      },
+      {
+        "role": "model",
+        "type": "functioncall",
+        "name": "get_cart",
+        "arguments": {}
+      },
+      {
+        "role": "user",
+        "type": "functionresponse",
+        "name": "get_cart",
+        "response": {
+          "result": {
+            "items": [
+              {
+                "cart_item_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "product_id": 101,
+                "quantity": 1
+              }
+            ],
+            "item_count": 1,
+            "subtotal": 69,
+            "discount_total": 0,
+            "currency": "USD",
+            "cart_revision": "cartrev_0123456789abcdef01234567",
+            "checkout_ready": true
           }
         }
       },
@@ -623,9 +651,37 @@
             },
             "categories": [],
             "cart_summary": {
-              "item_count": 0,
+              "item_count": 1,
               "state": "loaded"
             }
+          }
+        }
+      },
+      {
+        "role": "model",
+        "type": "functioncall",
+        "name": "get_cart",
+        "arguments": {}
+      },
+      {
+        "role": "user",
+        "type": "functionresponse",
+        "name": "get_cart",
+        "response": {
+          "result": {
+            "items": [
+              {
+                "cart_item_key": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "product_id": 101,
+                "quantity": 1
+              }
+            ],
+            "item_count": 1,
+            "subtotal": 69,
+            "discount_total": 0,
+            "currency": "USD",
+            "cart_revision": "cartrev_0123456789abcdef01234567",
+            "checkout_ready": true
           }
         }
       },
@@ -1063,7 +1119,7 @@
       {
         "role": "user",
         "type": "message",
-        "content": "Add it to my cart."
+        "content": "I have not named or selected a product. Add it to my cart."
       }
     ],
     "expectedCall": [

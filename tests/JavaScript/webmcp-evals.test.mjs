@@ -412,6 +412,50 @@ describe( "WebMCP eval fixtures", () => {
 			"categories",
 			"cart_summary",
 		] );
+		for ( const caseName of [
+			"Direct: update a cart line with optimistic state",
+			"Direct: remove a cart line with optimistic state",
+		] ) {
+			const cartCase = suite.find( ( testCase ) => testCase.name === caseName );
+			const cartCallIndex = cartCase.messages.findIndex(
+				( message ) => message.type === "functioncall" && message.name === "get_cart"
+			);
+			const cartResponseIndex = cartCase.messages.findIndex(
+				( message ) => message.type === "functionresponse" && message.name === "get_cart"
+			);
+			assert.ok( cartCallIndex >= 0, caseName );
+			assert.equal( cartResponseIndex, cartCallIndex + 1, caseName );
+
+			const storefrontResponse = cartCase.messages.find(
+				( message ) =>
+					message.type === "functionresponse" && message.name === "get_storefront_context"
+			);
+			const cartResult = cartCase.messages[ cartResponseIndex ].response.result;
+			assert.equal(
+				storefrontResponse.response.result.cart_summary.item_count,
+				cartResult.item_count,
+				caseName
+			);
+
+			const expectedArguments = expectedFunctionCalls( cartCase.expectedCall )[ 0 ].arguments;
+			assert.equal(
+				cartResult.cart_revision,
+				expectedArguments.expected_cart_revision,
+				caseName
+			);
+			assert.equal(
+				cartResult.items[ 0 ].cart_item_key,
+				expectedArguments.cart_item_key,
+				caseName
+			);
+		}
+		const ambiguousCartCase = suite.find(
+			( testCase ) => testCase.name === "Ambiguous recovery: missing product and cart context"
+		);
+		assert.match(
+			ambiguousCartCase.messages.at( -1 ).content,
+			/not named or selected a product/
+		);
 		assert.equal( suite[ 11 ].expectedCall[ 0 ].arguments.outcome, "blocked" );
 	} );
 
