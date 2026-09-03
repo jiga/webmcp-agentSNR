@@ -18,7 +18,7 @@ Do not treat a pre-listing API response with `"supported": false` as a scanner f
 |---|---|
 | Public storefront URL | `[PUBLIC_STOREFRONT_URL]` |
 | Public Agent SNR URL | `[PUBLIC_AGENT_SNR_URL]` |
-| Public repository URL | `[PUBLIC_REPOSITORY_URL]` |
+| Public repository URL | `https://github.com/jiga/webmcp-agentSNR` |
 | Commit | `[FULL COMMIT SHA]` |
 | Release tag | `[TAG]` |
 | Plugin ZIP SHA-256 | `[SHA-256]` |
@@ -97,7 +97,7 @@ Primary storefront: `[PUBLIC_STOREFRONT_URL]`
 
 Agent SNR monitor: `[PUBLIC_AGENT_SNR_URL]`
 
-Source: `[PUBLIC_REPOSITORY_URL]`
+Source: `https://github.com/jiga/webmcp-agentSNR`
 Release/tag: `[TAG]` / `[FULL COMMIT SHA]`
 
 ### Classification requested

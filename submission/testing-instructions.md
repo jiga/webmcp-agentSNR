@@ -9,7 +9,7 @@ Complete these against one exact frozen release before placing the judge-start U
 1. Recheck the [Official Rules](https://webmcp.devpost.com/rules) and complete [`devpost-rules-checklist.md`](devpost-rules-checklist.md).
 2. Deploy the exact build from the frozen public-repository commit to stable, top-level HTTPS hosting and confirm every submitted URL works logged out, free of charge, with no local-build or iframe-only dependency.
 3. Test the storefront and Agent SNR pages through at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP testing enabled. Confirm the expected 12 and 8 tool catalogs and the complete judge path below.
-4. Verify the public repository contains the frozen source/assets/instructions and visible root license, and record the public commit. If using the project's optional tag/checksum provenance, verify those values too.
+4. Verify [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) contains the frozen source/assets/instructions and visible root license, and record the public commit. If using the project's optional tag/checksum provenance, verify those values too.
 5. Publish the narrated demo publicly on YouTube, verify its processed duration is below 3:00, and audit every frame/audio element for rights, privacy, credentials, and unrelated marks.
 6. Confirm all linked evidence excludes keys, cookies, session material, customer data, private logs, and mutable placeholder URLs.
 

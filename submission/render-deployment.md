@@ -2,6 +2,8 @@
 
 This runbook deploys the frozen Agent SNR repository as one public WordPress service and one private MariaDB service. The checked-in [`render.yaml`](../render.yaml) creates both services from Dockerfiles in this repository; it does not pull application code from a mutable external repository.
 
+Repository precondition: **complete**. [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is public with default branch `main`, anonymous access, detected GPL-2.0 licensing, and unsquashed history. Verify the final remote commit again immediately before applying the paid Blueprint.
+
 ## Before provisioning
 
 1. Push the exact release commit to `https://github.com/jiga/webmcp-agentSNR` and confirm that repository is public. The Render Blueprint and Devpost source link must resolve without account access.

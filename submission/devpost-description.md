@@ -7,7 +7,7 @@
 - **Built With:** WebMCP, WordPress, WooCommerce, PHP, JavaScript, REST API, Docker, Playwright, Chrome
 - **Thumbnail candidate:** `demo-screenshots/01-agent-snr-overview.png`
 
-Replace every bracketed link only after the public repository, hosted demo, and YouTube video are frozen and verified logged out. If linking an optional tagged release, verify and freeze it too. The entrant must complete name/trademark and rights clearance before using this copy in the final form.
+The public repository link below is verified logged out. Replace every remaining bracketed link only after the hosted demo and YouTube video are frozen and verified logged out. If linking an optional tagged release, verify and freeze it too. The entrant must complete name/trademark and rights clearance before using this copy in the final form.
 
 ## Project story — paste from here
 
@@ -79,7 +79,7 @@ The creative leap is the quality loop: the website teaches agents how to use it,
 - Storefront: **[STOREFRONT_URL]**
 - Agent SNR: **[AGENTSNR_URL]**
 - Readiness: **[HEALTH_URL]**
-- Public repository: **[REPOSITORY_URL]**
+- Public repository: **https://github.com/jiga/webmcp-agentSNR**
 - Optional frozen release and plugin ZIP, if published: **[RELEASE_URL]**
 - Optional Playground portability demo, if included: **[PLAYGROUND_URL]**
 - Public video (<3 minutes): **[YOUTUBE_URL]**

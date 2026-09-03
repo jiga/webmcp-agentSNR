@@ -6,7 +6,7 @@ Agent SNR separates trustworthy business signal from raw agent noise: browser ag
 
 > See what agents did. Hear what they experienced. Discover what your site is missing.
 
-> **Devpost status:** repository-local preparation is complete, but the entry still requires the entrant's public repository, frozen HTTPS demo, public sub-three-minute YouTube video, identity/eligibility/IP sign-off, and final submission before **September 3, 2026 at 1:00 p.m. PDT**. Follow the [official-rule checklist](submission/devpost-rules-checklist.md); unchecked items are not claimed complete.
+> **Devpost status:** the [public repository](https://github.com/jiga/webmcp-agentSNR) is live and anonymously accessible. The entry still requires a frozen HTTPS demo, public sub-three-minute YouTube video, identity/eligibility/IP sign-off, and final submission before **September 3, 2026 at 1:00 p.m. PDT**. Follow the [official-rule checklist](submission/devpost-rules-checklist.md); unchecked items are not claimed complete.
 
 The familiar investigation pattern combines journey replay, tool observability, and product analytics for website agents. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model, comparative research, and MVP boundaries.
 
@@ -17,7 +17,7 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 | Submission resource | Status |
 |---|---|
 | Live HTTPS demo | Owner must deploy and add the public URL |
-| Public repository | Local Git history is ready; owner must create and push the public remote |
+| Public repository | [jiga/webmcp-agentSNR](https://github.com/jiga/webmcp-agentSNR) — public `main`, unsquashed history, GPL-2.0 detected |
 | Video | Script and run sheet are included; owner must record and publish a sub-three-minute YouTube video |
 | Presentation | Editable 12-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
 | Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |

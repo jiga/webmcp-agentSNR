@@ -71,7 +71,7 @@ Implementation and the definitive local verification matrix are complete. Indepe
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
 - Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and formal Agent SNR clearance action are documented.
 
-Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate an official real-client path, capture media, replace URLs, submit, and freeze. A WooCommerce 11.1 run is optional newest-release evidence if a stable build is available and time permits.
+Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, deploy top-level HTTPS, validate an official real-client path, capture media, replace the remaining URLs, submit, and freeze. The public repository and author/history decisions are complete. A WooCommerce 11.1 run is optional newest-release evidence if a stable build is available and time permits.
 
 ## Agent Experience Monitoring iteration
 
@@ -149,7 +149,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Evidence: the checked-in 1440×900 capture set records an eight-call workflow, out-of-stock TerraRoll 25 capability signal (`recorded=true`, `fulfilled=false`), human order, direct attribution, session control, full `$109.00` refund, `$0.00` net, and zero console errors.
 - Safety: capture credentials fail closed; remote capture requires HTTPS, explicit opt-in, explicit credentials, and same-origin admin redirects. Public cookies are restored from the exact pre-login snapshot. Output promotion is marker-gated, failure-atomic, and rejects broad or unmarked directories.
 - Verification: `npm run verify` passes 79 JavaScript/configuration tests plus launcher guard tests; exact artifact start/capture/verify/stop passes; Plugin ZIP and Playground checksums remain unchanged; the PPTX ZIP and slide-overflow checks pass; `git diff --check` is clean.
-- Remaining publication gates are still owner/external: formal Agent SNR clearance, public remote, hosted top-level HTTPS deployment, real-client validation, hosted recapture/video, Devpost submission, and freeze.
+- Remaining publication gates are still owner/external: formal Agent SNR clearance, hosted top-level HTTPS deployment, real-client validation, hosted recapture/video, Devpost submission, and freeze; the public repository is live.
 
 ## Mixed WooCommerce gateway compatibility
 
@@ -195,7 +195,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Presentation: the editable 11-slide deck is updated in place with the new architecture/demo/provenance story. Template/theme fidelity, speaker-note sources, package, placeholder, exported-render, and overflow checks pass.
 - Verification: 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 20 public + 2 legacy REST/security smoke, 11/11 native WebMCP smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Final deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are owner/external only: formal Agent SNR clearance, public remote/tag, hosted top-level HTTPS deployment, one official real-client validation path, hosted media/video, Devpost URLs/submission, and freeze. A final WooCommerce 11.1 rerun is optional newest-release evidence.
+- Remaining gates are owner/external only: formal Agent SNR clearance, hosted top-level HTTPS deployment, one official real-client validation path, hosted media/video, remaining Devpost URLs/submission, and freeze. The public repository is live; a release tag and final WooCommerce 11.1 rerun are optional evidence.
 
 ## X-post hackathon readiness alignment
 
@@ -217,7 +217,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
 - Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, one official real-client path, hosted media/video, Devpost submission, and freeze. Workbench, scanner/directory review, and a WooCommerce 11.1 rerun are optional evidence if pursued.
+- Remaining gates are external/owner actions for formal Agent SNR clearance, frozen HTTPS deployment, one official real-client path, hosted media/video, Devpost submission, and freeze. The public repository is live; a tag, Workbench, scanner/directory review, and a WooCommerce 11.1 rerun are optional evidence if pursued.
 
 ## Live model-backed WebMCP eval report
 
@@ -269,7 +269,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Evidence boundary: current package hashes and the complete exact-ZIP/PHP/Woo/Chromium/native matrix cover the renamed artifact; protected model evidence is bound to rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. The exact final deployed build must still be validated after entrant metadata and hosting decisions.
 - Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, OCR, and template-fidelity review; after the post-rename screenshot, note-path, and 125-test proof updates, SHA-256 is `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`.
 - Independent review: compliance and deck reviewers approved with no remaining repository-local finding.
-- Honest blockers: no remote/tag, public repository, public HTTPS demo, real-client hosted result, public YouTube video, final form entry, entrant eligibility/authority/ownership attestation, contributor identity, or name/mark clearance is fabricated. These stay unchecked and must be completed before the deadline.
+- Honest blockers: the public repository is verified; no optional tag, public HTTPS demo, real-client hosted result, public YouTube video, final form entry, entrant eligibility/authority/ownership attestation, contributor identity, or name/mark clearance is fabricated. Those remaining items stay unchecked and must be completed before the deadline.
 
 ## Render production deployment
 
@@ -278,7 +278,8 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - [x] Add the smallest production-safe Render Blueprint/container/bootstrap files with generated secrets, final-URL handling, cache/header safety, idempotent seeding, and no local development defaults.
 - [x] Fix the showcase refund-evidence wait so regenerated public screenshots cannot capture whitespace-wrapped placeholder values; add regression coverage and recapture the final outcome.
 - [x] Validate configuration syntax, deterministic plugin packaging, container startup/bootstrap behavior, persistence assumptions, health endpoints, and local regression checks.
-- [ ] Publish the required public repository and deploy the frozen commit to Render, completing user-owned authorization or billing steps only with the user's approval in the Render UI.
+- [x] Publish the required public repository with approved author identity and unsquashed history; verify public `main`, GPL-2.0 detection, anonymous README access, description/topics, and secret scanning.
+- [ ] Deploy the frozen public commit to Render, completing user-owned authorization or billing steps only with the user's explicit approval in the Render UI.
 - [ ] Verify the public URLs logged out, confirm HTTPS/same-origin/readiness, test 12 storefront and 8 Agent SNR tools in an official WebMCP client, update submission URLs/evidence, and commit the deployment record before the deadline.
 
 ### Render deployment review
@@ -290,7 +291,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Public evidence: the unresolved contributor placeholder and former demo-store candidate name are removed. Ten 1440×900 screenshots were regenerated with zero console errors; the refund frame verifies one paid order, `$69.00` refunded, and `$0.00` net. The capture wait now rejects trimmed placeholder values.
 - Verification: official Blueprint schema, Bash syntax, build-context allowlist, npm audit, 125/125 JavaScript tests, 111 PHP tests / 1,964 assertions, deterministic plugin/Playground builds, both Docker builds, exact baked plugin contents, and two cold web starts against one persistent MariaDB pass. The second start preserves 12 products and 10 pages; health and storefront return HTTP 200.
 - Presentation: all 12 slides were re-rendered and inspected after replacing all four embedded screenshots, updating the source-note paths and proof count, and removing retired identifiers; theme/fidelity/notes/placeholders/overflow/package/OCR pass. SHA-256 is `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`.
-- Pending external gates: commit/push the public GitHub repository, add the user-managed Render payment method, review and explicitly approve the paid Blueprint creation, then complete public HTTPS and real-client validation before updating Devpost URLs.
+- Pending external gates: add the user-managed Render payment method, review and explicitly approve the paid Blueprint creation, then complete public HTTPS and real-client validation before updating the remaining Devpost URLs. The public GitHub repository is live and verified.
 
 ## Canonical Agent SNR technical-identity cleanup
 
@@ -305,7 +306,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 ### Agent SNR identity-cleanup review
 
 - Source identity: tracked plugin, template/runtime/test, eval, package, CI-artifact, REST, option, hook, shortcode, surface, hash/log, Docker, and submission paths now use the locked Agent SNR forms. The Render repository URL and one-click deploy link target `https://github.com/jiga/webmcp-agentSNR`.
-- History boundary: the current release tree and all post-rename commits contain no retired identifier. Nineteen earlier commit trees and one earlier commit subject retain the development codename; preserving them is recommended for timestamped hackathon provenance, but the owner must explicitly choose that policy before the public push.
+- History boundary: the current release tree and all post-rename commits contain no retired identifier. The owner explicitly approved preserving 19 earlier commit trees and one earlier commit subject with the development codename for timestamped hackathon provenance.
 - Persistence boundary: `wmcp_workflows`, `wmcp_events`, `wmcp_order_links`, `wmcp_capability_gaps`, neutral `_wmcp_*` metadata, `wmcp_demo_session`, `manage_wmcp_*` capabilities, and public tool names remain unchanged.
 - Focused verification: PHP syntax passes; PHPUnit passes 111 tests / 1,964 assertions; JavaScript/configuration passes 125 tests; JavaScript/CSS lint and Coding Standards pass with zero errors; schema parity and Render tests pass; two renamed plugin/Playground builds are byte-identical (`514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` and `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280`).
 - Evidence refresh: a clean exact-ZIP showcase reset and recapture, REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, four-image deck refresh, speaker-note path update, and full deck QA pass. The same renamed ZIP also passes the isolated WordPress 6.9 / WooCommerce 10.9.4 legacy, WordPress 7.0.4 / WooCommerce 11.0.1 legacy, and WordPress 7.1 / WooCommerce 11.0.1 HPOS matrix. Retired ignored ZIPs were quarantined outside `dist/`.

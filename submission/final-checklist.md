@@ -6,7 +6,7 @@ The rule-by-rule source of truth is [`devpost-rules-checklist.md`](devpost-rules
 
 ## Code and artifacts
 
-Checked exact-artifact items in this section describe the current renamed pre-public package. Protected model-backed results are bound to rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Owner metadata changes future artifact bytes, so published-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
+Checked exact-artifact items in this section describe the current renamed package. Protected model-backed results are bound to rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Documentation-only publication records do not change artifact bytes; published release-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
 
 - [x] The renamed package's automated JavaScript, PHP, security, browser, WooCommerce, HPOS-on/off, and artifact tests pass from a clean checkout; current submission-copy static checks also pass.
 - [x] The renamed exact ZIP passes WordPress 6.9 / WooCommerce 10.9.4, WordPress 7.0.4 / WooCommerce 11.0.1, and WordPress 7.1 / WooCommerce 11.0.1 HPOS.
@@ -17,6 +17,7 @@ Checked exact-artifact items in this section describe the current renamed pre-pu
 - [x] Docker one-command bootstrap succeeds with a new named volume.
 - [x] Isolated `agent-snr-showcase` rehearsal runs the verified release ZIP without touching development volumes.
 - [x] Editable 12-slide architecture/demo presentation and ten real exact-artifact local-flow reference screenshots are included.
+- [x] The public repository is anonymously accessible at `https://github.com/jiga/webmcp-agentSNR`, with `main` as the default branch and the full unsquashed history preserved.
 - [ ] Recommended project provenance—not a Devpost requirement: release tag, ZIP checksum, hosted plugin version, and repository commit match. Do not delay submission past the deadline for optional release automation.
 
 ## WebMCP quality and external evidence
@@ -64,7 +65,7 @@ Checked exact-artifact items in this section describe the current renamed pre-pu
 - [ ] Public YouTube video has audio, shows actual WebMCP usage, and is under three minutes.
 - [ ] Required thumbnail accurately represents the frozen release and contains no secret, private data, or unapproved asset.
 - [ ] Recommended gallery evidence: if gallery images are included, use frozen hosted-release captures that contain no secret, private data, or unapproved asset.
-- [ ] Repository/About license is detectable; timestamped history is unsquashed.
+- [x] GitHub detects GPL-2.0 from the root license; timestamped history is unsquashed, and anonymous repository/API/raw README requests return HTTP 200.
 - [ ] Every link is verified from a logged-out external device.
 - [ ] Required Devpost name, tagline, thumbnail, story, Built With tags, Try It Out URL, YouTube link, public-repository URL, team, country/category/custom answers, and terms checkbox are complete in English.
 - [ ] Recommended gallery images, if used, are uploaded, legible, rights-cleared, and consistent with the frozen release.

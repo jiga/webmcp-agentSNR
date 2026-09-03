@@ -10,7 +10,7 @@ Repository-local preparation is complete or explicitly tracked below. The entry 
 
 - [ ] Entrant has joined the challenge and can reach the final Devpost Submit step.
 - [ ] Entrant eligibility, entry type, team/representative authority, ownership, conflicts, and third-party rights are personally confirmed.
-- [ ] Public GitHub, GitLab, or Bitbucket repository is live with unsquashed history and a detected root open-source license.
+- [x] Public repository [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is live with unsquashed history and a detected root GPL-2.0 license.
 - [ ] Frozen top-level HTTPS demo is publicly reachable and verified in ChatGPT's in-app browser or Chrome 149+ with WebMCP enabled.
 - [ ] Public YouTube demo is audible, shows the working project and WebMCP use, contains only rights-cleared material, and is strictly under 3:00 after processing.
 - [ ] All Devpost required fields and challenge-specific questions are complete in English.
@@ -77,12 +77,12 @@ Evidence: Official Rules “How To Enter,” “Submission Requirements,” and 
 - [x] README contains a recognizable `document.modelContext.registerTool({ name, description, inputSchema, execute })` example and links to the real dynamic implementation.
 - [x] Secrets, `.env`, raw eval reports, browser profiles, dependencies, release-test state, and generated release binaries are excluded from Git.
 - [x] Commit history is linear, timestamped, and wholly inside the submission period.
-- [ ] Entrant confirms the Git author name/email embedded in history are acceptable for public release.
+- [x] Entrant explicitly confirmed the Git author `jiga <i.digg.tech@gmail.com>` and preservation of the existing history for public release.
 - [x] Remove the unresolved WordPress.org contributor placeholder from the final plugin metadata; no contributor ID is fabricated.
-- [ ] Create the public GitHub/GitLab/Bitbucket remote and push without squashing or rewriting provenance.
-- [ ] Confirm the hosting service detects `LICENSE` and visibly shows the license in the repository header/About area.
-- [ ] Recommended repository hygiene: add description/topics and immutable release links without implying affiliation with a third party.
-- [ ] Recommended security evidence: enable secret scanning and run a full-history scan after the public push.
+- [x] Public GitHub remote is `https://github.com/jiga/webmcp-agentSNR`; the complete linear history is pushed to default branch `main` without squashing or rewriting provenance.
+- [x] GitHub detects the root license as GPL-2.0 and exposes the repository, API README, and raw README anonymously.
+- [x] Repository description and six scoped topics are configured without implying third-party affiliation; no optional release/tag is claimed.
+- [x] GitHub secret scanning and push protection are enabled; a local full-history high-confidence credential scan passes, and private `.env`/`.evals` paths were never tracked.
 
 Evidence: Official Rules “Public code repository” and “Intellectual Property”; Resources FAQ confirms there is no private-repository alternative.
 
@@ -167,7 +167,7 @@ Complete this table after the final owner decisions—and after the artifact bui
 |---|---|
 | Entrant type / authorized Representative | **TO BE CONFIRMED BY ENTRANT** |
 | Rules rechecked at, with timezone | **PENDING** |
-| Public repository URL | **PENDING** |
+| Public repository URL | `https://github.com/jiga/webmcp-agentSNR` |
 | Optional annotated release tag | `v0.1.0` if used |
 | Optional plugin ZIP SHA-256 | **PENDING IF PUBLISHED** |
 | Optional Playground ZIP SHA-256 | **PENDING IF PUBLISHED** |

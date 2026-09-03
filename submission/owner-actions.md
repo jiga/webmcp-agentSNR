@@ -8,11 +8,11 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 
 - [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains. The retired third-party-overlapping technical identifiers have been removed from the current tree.
 - [x] Replace the former public demo-store candidate name with the generic **Agent SNR Demo Store** site title and **Agent SNR / Demo Store** storefront lockup.
-- [ ] Choose the public-history policy before pushing: the current release tree and all post-rename commits contain no retired identifier, but 19 earlier commit trees and one earlier commit subject preserve the development codename. Keeping that unsquashed history is recommended for hackathon provenance; any history rewrite must be an explicit owner decision because it changes documented commit identities.
-- [ ] Confirm the current Git author name and email embedded in every commit are appropriate for public history; do not rewrite provenance casually.
+- [x] The owner explicitly chose to preserve the unsquashed history, including the development codename in 19 earlier commit trees and one earlier commit subject, for hackathon provenance.
+- [x] The owner explicitly approved public history with Git author `jiga <i.digg.tech@gmail.com>`.
 - [x] Remove the unresolved WordPress.org contributor placeholder from the plugin metadata; do not invent a contributor ID.
 - [ ] Record the entrant/team/organization's public copyright holder and contributor-rights basis.
-- [ ] Create the public GitHub/GitLab/Bitbucket repository, set About/license metadata, add the remote, and push without squashing the submission-period commits.
+- [x] Public repository [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is live with default branch `main`, description/topics, detected GPL-2.0 license, and unsquashed submission-period commits.
 - [ ] Choose entrant type/team roster; confirm age, supported jurisdiction, exclusions/conflicts, prize ownership, and the eligible authorized Representative where applicable.
 - [ ] Confirm originality/sole ownership, employer/school/client/contractor rights, every third-party authorization, no prohibited Sponsor/Administrator support, and no other substantially similar entry.
 - [ ] Provision stable WordPress hosting at any durable public HTTPS URL; confirm the provider permits uninterrupted, free judge access and configure production secrets safely.

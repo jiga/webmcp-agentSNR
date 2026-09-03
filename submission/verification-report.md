@@ -1,6 +1,6 @@
 # Repository verification report
 
-Prepared locally on September 1–3, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, or formal trademark/domain clearance.
+Prepared locally and published on September 1–3, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, or formal trademark/domain clearance.
 
 ## Current Agent SNR package build
 
@@ -12,6 +12,10 @@ Two consecutive post-rename builds produced byte-identical packages:
 | `wmcp-agentsnr-playground-0.1.0.zip` | `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280` |
 
 The renamed source passes PHP syntax, 111 PHPUnit tests / 1,964 assertions, 125 JavaScript/configuration tests, JavaScript/CSS lint, Coding Standards with zero errors, schema parity, Render configuration tests, showcase-launcher guards, and package ZIP integrity. The same renamed ZIP passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the isolated three-environment cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, and presentation QA. Protected model-backed evals also pass against rename-bound commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; only hosted HTTPS and official-client checks remain external evidence gates.
+
+## Public repository verification
+
+[`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is public with default branch `main`. The existing linear history and approved author identity were preserved without squashing or rewriting. GitHub reports GPL-2.0 licensing, the intended description and topics, secret scanning plus push protection enabled, and no tag or release. Anonymous repository, API README, and raw README requests returned HTTP 200, and the remote README hash matched the corresponding local commit.
 
 ## Retired exact engineering candidate
 
@@ -102,8 +106,7 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 
 ## Intentionally open owner gates
 
-- Complete formal trademark/domain clearance for Agent SNR and confirm the public repository/product slug.
-- Confirm the Git author identity, create the public remote, and push the unsquashed history.
+- Complete formal trademark/domain clearance for Agent SNR; the public repository and technical slug are now fixed as `jiga/webmcp-agentSNR` and `wmcp-agentsnr`.
 - Complete entrant/team ownership and third-party-rights declarations; the unresolved plugin contributor placeholder has been removed without inventing an ID.
 - Complete formal Agent SNR trademark/domain clearance before public capture; the current tree uses the canonical `webmcp-agentSNR` repository slug and `wmcp-agentsnr` plugin slug.
 - Deploy the exact build from the frozen public commit to stable top-level HTTPS WordPress hosting.
