@@ -4,6 +4,23 @@ This runbook deploys the frozen Agent SNR repository as one public WordPress ser
 
 Repository precondition: **complete**. [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is public with default branch `main`, anonymous access, detected GPL-2.0 licensing, and unsquashed history. Verify the final remote commit again immediately before applying the paid Blueprint.
 
+## Deployed release record
+
+The paid `agent-snr-production` Blueprint was applied on September 3, 2026 from public commit `e46c9c539ea649a7701e59bad9784cb7012be5b9`.
+
+| Field | Verified value |
+|---|---|
+| Public origin | `https://agent-snr.onrender.com` |
+| Storefront | `https://agent-snr.onrender.com/storefront-demo/` |
+| Agent SNR | `https://agent-snr.onrender.com/agentsnr-demo/` |
+| Readiness | `https://agent-snr.onrender.com/webmcp-health/` |
+| REST health | `https://agent-snr.onrender.com/wp-json/wmcp-agentsnr/v1/health` |
+| Compute | Two Oregon `1c-2g` services, one instance each |
+| Storage | 1 GB uploads disk plus 10 GB MariaDB disk |
+| Versions | WordPress 7.1, PHP 8.3.33, WooCommerce 11.0.1, Agent SNR 0.1.0 |
+
+The first deploy and a manual second deploy both reached **Live**. Before and after the second deploy, the public catalog contained 12 products and WordPress exposed 13 pages. The second seeder run reported `products_created: 0` and `products_updated: 12`; the serialized health response retained SHA-256 `23c02c77b9e86f03cd20b63d637774440e8a7fedd22dd695a281e9c60e39a260`. Root, storefront, Agent SNR, readiness, and REST health returned HTTP 200. The ChatGPT in-app browser discovered 12 storefront and 8 Agent SNR tools and successfully invoked safe tools on both surfaces.
+
 ## Before provisioning
 
 1. Push the exact release commit to `https://github.com/jiga/webmcp-agentSNR` and confirm that repository is public. The Render Blueprint and Devpost source link must resolve without account access.

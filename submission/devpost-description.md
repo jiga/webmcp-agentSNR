@@ -7,7 +7,7 @@
 - **Built With:** WebMCP, WordPress, WooCommerce, PHP, JavaScript, REST API, Docker, Playwright, Chrome
 - **Thumbnail candidate:** `demo-screenshots/01-agent-snr-overview.png`
 
-The public repository link below is verified logged out. Replace every remaining bracketed link only after the hosted demo and YouTube video are frozen and verified logged out. If linking an optional tagged release, verify and freeze it too. The entrant must complete name/trademark and rights clearance before using this copy in the final form.
+The public repository and hosted-demo links below are verified logged out. Replace the remaining video link only after it is frozen and verified logged out. If linking an optional tagged release or Playground demo, verify and freeze it too. The entrant must complete name/trademark and rights clearance before using this copy in the final form.
 
 ## Project story — paste from here
 
@@ -65,7 +65,7 @@ Afterward, the merchant and agent work together on operations. They inspect the 
 - WooCommerce APIs and HPOS-safe CRUD handle catalog, cart, order, status, and refund state. Revenue is counted only from paid orders and always shows gross, refunds, and net by currency.
 - Public monitoring SQL is scoped to the current demo-session hash before rows are fetched. Persistent admin policy uses dedicated WordPress capabilities.
 - GPL-2.0-or-later source, original fictional products/artwork, checksummed plugin ZIP, Docker reproduction, and Playground portability bundle.
-- Pinned `webmcp-evals@0.0.4` schemas and natural-language fixtures, a keyless native Chrome smoke adapter that fails on application error envelopes, and provenance-bound model reports at rename commit `410c198`: 54/54 storefront selections, 45/45 Agent SNR selections, and an 8/8 live browser journey pass. Hosted real-client validation remains a release-owner gate; Workbench, scanner, and directory evidence are optional additional checks.
+- Pinned `webmcp-evals@0.0.4` schemas and natural-language fixtures, a keyless native Chrome smoke adapter that fails on application error envelopes, and provenance-bound model reports at rename commit `410c198`: 54/54 storefront selections, 45/45 Agent SNR selections, and an 8/8 live browser journey pass. The hosted ChatGPT in-app browser also discovers 12 storefront and 8 Agent SNR tools and successfully invokes safe calls; Workbench, scanner, and directory evidence are optional additional checks.
 
 ## Impact, creativity, and ambition
 
@@ -75,10 +75,10 @@ The creative leap is the quality loop: the website teaches agents how to use it,
 
 ## Links
 
-- Live judge start: **[PRIMARY_DEMO_URL]**
-- Storefront: **[STOREFRONT_URL]**
-- Agent SNR: **[AGENTSNR_URL]**
-- Readiness: **[HEALTH_URL]**
+- Live judge start: **https://agent-snr.onrender.com/**
+- Storefront: **https://agent-snr.onrender.com/storefront-demo/**
+- Agent SNR: **https://agent-snr.onrender.com/agentsnr-demo/**
+- Readiness: **https://agent-snr.onrender.com/webmcp-health/**
 - Public repository: **https://github.com/jiga/webmcp-agentSNR**
 - Optional frozen release and plugin ZIP, if published: **[RELEASE_URL]**
 - Optional Playground portability demo, if included: **[PLAYGROUND_URL]**

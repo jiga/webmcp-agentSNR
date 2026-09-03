@@ -24,7 +24,7 @@ Checked exact-artifact items in this section describe the current renamed packag
 
 - [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the renamed exact ZIP, including application-error-envelope enforcement.
 - [x] Protected model-backed selection and browser evals pass all three strict provenance checks against rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`: storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
-- [ ] At least one official judge path—the latest ChatGPT desktop in-app browser or Chrome 149+ with the WebMCP flag—discovers exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages.
+- [x] The ChatGPT desktop in-app browser discovers exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages; safe guide/context/overview/diagnostic/workflow calls succeed.
 - [ ] Optional quality evidence: the owner completed [`workbench-validation.md`](workbench-validation.md) with the actual installed version, exact release identity, manual calls, Audit findings, saved-call replay, repeated evals, approval/log review, and User Mode evidence.
 - [x] Provider keys and raw `.evals/` reports remain private and ignored; no Workbench log is included, and every linked excerpt or screenshot is sanitized.
 - [ ] Optional quality evidence: the WebMCP.com public scanner passes both frozen pages with expected catalogs and no API/load/blocking or unexplained Sensitive Action result.
@@ -32,7 +32,7 @@ Checked exact-artifact items in this section describe the current renamed packag
 
 ## Judged workflow
 
-- [ ] Both top-level HTTPS pages register their current imperative catalogs in at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with the WebMCP flag.
+- [x] Both top-level HTTPS pages register their current imperative catalogs in the ChatGPT desktop in-app browser.
 - [x] Site remains human-usable with WebMCP absent.
 - [x] Shopper prompt visibly completes search, compare, policy, and cart.
 - [x] Agent discovers the guide; a zero-result search records a site-observed opportunity without feedback.
@@ -49,7 +49,8 @@ Checked exact-artifact items in this section describe the current renamed packag
 - [x] Redaction/secret checks are clean; raw prompt/search/free-form feedback is absent and cacheable page HTML contains no session or credential values.
 - [x] Demo gateway is absent outside explicit demo mode and outbound demo email is disabled in the demo configuration.
 - [ ] Recommended reliability evidence: monitoring and backups are active, and a restore has been rehearsed.
-- [ ] All public routes and artifacts work logged out and remain free through judging.
+- [x] Root, storefront, Agent SNR, readiness, REST health, catalog, and WordPress page routes work without authentication after two deploys.
+- [ ] Keep the paid Render services and unrestricted public access available through the required judging window.
 
 ## Devpost and media
 
@@ -61,7 +62,7 @@ Checked exact-artifact items in this section describe the current renamed packag
 - [ ] The Agent SNR name, `webmcp-agentSNR` repository slug, and `wmcp-agentsnr` plugin slug have completed formal trademark/domain screening.
 - [x] Description covers WebMCP fit, UX improvement, human-agent collaboration, and implementation.
 - [x] Local reference screenshots contain only fictional demo data and original project assets.
-- [ ] Public source/license, live URL, test instructions, and any credentials are complete.
+- [x] Public source/license, live URL, and testing instructions are complete; public judging requires no credentials.
 - [ ] Public YouTube video has audio, shows actual WebMCP usage, and is under three minutes.
 - [ ] Required thumbnail accurately represents the frozen release and contains no secret, private data, or unapproved asset.
 - [ ] Recommended gallery evidence: if gallery images are included, use frozen hosted-release captures that contain no secret, private data, or unapproved asset.

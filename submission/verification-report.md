@@ -11,11 +11,19 @@ Two consecutive post-rename builds produced byte-identical packages:
 | `wmcp-agentsnr-0.1.0.zip` | `514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` |
 | `wmcp-agentsnr-playground-0.1.0.zip` | `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280` |
 
-The renamed source passes PHP syntax, 111 PHPUnit tests / 1,964 assertions, 125 JavaScript/configuration tests, JavaScript/CSS lint, Coding Standards with zero errors, schema parity, Render configuration tests, showcase-launcher guards, and package ZIP integrity. The same renamed ZIP passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the isolated three-environment cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, and presentation QA. Protected model-backed evals also pass against rename-bound commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; only hosted HTTPS and official-client checks remain external evidence gates.
+The renamed source passes PHP syntax, 111 PHPUnit tests / 1,964 assertions, 125 JavaScript/configuration tests, JavaScript/CSS lint, Coding Standards with zero errors, schema parity, Render configuration tests, showcase-launcher guards, and package ZIP integrity. The same renamed ZIP passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the isolated three-environment cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, and presentation QA. Protected model-backed evals also pass against rename-bound commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Hosted HTTPS and official ChatGPT in-app browser validation pass for deployed public commit `e46c9c539ea649a7701e59bad9784cb7012be5b9`.
 
 ## Public repository verification
 
 [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is public with default branch `main`. The existing linear history and approved author identity were preserved without squashing or rewriting. GitHub reports GPL-2.0 licensing, the intended description and topics, secret scanning plus push protection enabled, and no tag or release. Anonymous repository, API README, and raw README requests returned HTTP 200, and the remote README hash matched the corresponding local commit.
+
+## Hosted release verification
+
+Render deployed public commit `e46c9c539ea649a7701e59bad9784cb7012be5b9` as `https://agent-snr.onrender.com/` using one `1c-2g` WordPress web service, one `1c-2g` private MariaDB service, and 11 GB of persistent storage. The initial deploy and a manual persistence redeploy both reached **Live**. The second bootstrap preserved 12 products and 13 WordPress pages, created no duplicate product, and returned the same health-response SHA-256 before and after restart.
+
+Root, storefront, Agent SNR, readiness, and REST health return HTTP 200 over HTTPS. The health contract reports `ok: true`, WordPress 7.1, PHP 8.3.33, WooCommerce 11.0.1, Agent SNR 0.1.0, passed database/manifest/REST/session checks, and 12 storefront plus 8 Agent SNR tools. Response headers include `Origin-Agent-Cluster: ?1`, `Permissions-Policy: tools=(self)`, and `X-Content-Type-Options: nosniff`.
+
+The ChatGPT desktop in-app browser discovered all 20 page-scoped tools on their intended top-level pages. `get_agent_guide`, `get_storefront_context`, `get_agent_analytics_overview`, `run_webmcp_diagnostics`, and `query_agent_workflows` returned `ok: true`; the monitor saw the same storefront workflow with two successful calls, proving same-browser scope correlation without raw prompt or customer data.
 
 ## Retired exact engineering candidate
 
@@ -68,7 +76,7 @@ The following artifact-level checks were performed locally in addition to `npm r
 - Representative native-smoke response envelopes measured 455–1,132 characters for nine of eleven calls. The one-start Agent Guide (4,706) and nine-stage funnel (2,157) are documented exceptions to Chrome's current 1.5K recommendation; both remain below the enforced 8 KiB ceiling and are bounded structured results.
 - `agent-snr-hackathon-demo.pptx` (SHA-256 `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`) rendered as 12 editable slides. All four embedded screenshots match the post-rename captures, the speaker-note source paths use `plugin/wmcp-agentsnr`, and the proof slide records 125 JavaScript tests, 111 PHP tests / 1,964 assertions, and 16/16 Chromium scenarios. All 12 source blocks, imported theme fidelity, template fidelity, package integrity, zero-placeholder audit, XML/text and raster OCR, and overflow checks passed; every exported slide was inspected individually.
 
-The runtime capture and presentation render are recorded local artifact checks, not hidden steps inside `npm run verify`. The hosted HTTPS capture and real-client checks remain owner gates.
+The runtime capture and presentation render are recorded local artifact checks, not hidden steps inside `npm run verify`. Hosted HTTPS and real-client checks now pass; recapturing the optional Devpost gallery from the hosted release remains a media-owner action.
 
 ## Current renamed exact-ZIP matrix
 
@@ -109,8 +117,6 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 - Complete formal trademark/domain clearance for Agent SNR; the public repository and technical slug are now fixed as `jiga/webmcp-agentSNR` and `wmcp-agentsnr`.
 - Complete entrant/team ownership and third-party-rights declarations; the unresolved plugin contributor placeholder has been removed without inventing an ID.
 - Complete formal Agent SNR trademark/domain clearance before public capture; the current tree uses the canonical `webmcp-agentSNR` repository slug and `wmcp-agentsnr` plugin slug.
-- Deploy the exact build from the frozen public commit to stable top-level HTTPS WordPress hosting.
-- Validate both frozen top-level pages through at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP enabled.
 - Optionally complete the Workbench evidence sheet and WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.
 - Optionally rerun the matrix against WooCommerce 11.1 if a stable build exists and time permits before final deployment; the declared 10.9.4/11.0.1 range already passes.
 - Capture original screenshots, record/publish the sub-three-minute YouTube video, replace URL placeholders, submit Devpost, and freeze all judged resources.

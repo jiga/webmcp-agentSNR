@@ -1,6 +1,6 @@
 # WebMCP.com scanner and directory handoff
 
-Status: **PENDING FROZEN HTTPS DEPLOYMENT AND HUMAN SUBMISSION**
+Status: **FROZEN HTTPS DEPLOYMENT COMPLETE; OPTIONAL SCANNER AND HUMAN SUBMISSION PENDING**
 
 This is optional supplemental discovery evidence, not a Devpost submission requirement or release blocker.
 
@@ -16,13 +16,13 @@ Do not treat a pre-listing API response with `"supported": false` as a scanner f
 
 | Field | Recorded value |
 |---|---|
-| Public storefront URL | `[PUBLIC_STOREFRONT_URL]` |
-| Public Agent SNR URL | `[PUBLIC_AGENT_SNR_URL]` |
+| Public storefront URL | `https://agent-snr.onrender.com/storefront-demo/` |
+| Public Agent SNR URL | `https://agent-snr.onrender.com/agentsnr-demo/` |
 | Public repository URL | `https://github.com/jiga/webmcp-agentSNR` |
-| Commit | `[FULL COMMIT SHA]` |
+| Commit | `e46c9c539ea649a7701e59bad9784cb7012be5b9` |
 | Release tag | `[TAG]` |
-| Plugin ZIP SHA-256 | `[SHA-256]` |
-| Hosted plugin version | `[VERSION]` |
+| Plugin ZIP SHA-256 | `514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` |
+| Hosted plugin version | `0.1.0` |
 | Public contact email | `[PUBLIC_CONTACT_EMAIL]` |
 | Freeze date/time and timezone | `[YYYY-MM-DD HH:MM TZ]` |
 
@@ -49,8 +49,8 @@ The scanner infers Answer, Action, and Sensitive Action from names, descriptions
 The [API documentation](https://webmcp.com/api-docs) identifies `GET /api/v1/lookup?url=…` as the one-shot directory lookup. Set these values locally, then save the JSON response as private release evidence:
 
 ```bash
-AGENT_SNR_STOREFRONT_URL='https://replace.example/storefront-demo/'
-AGENT_SNR_MONITOR_URL='https://replace.example/agentsnr-demo/'
+AGENT_SNR_STOREFRONT_URL='https://agent-snr.onrender.com/storefront-demo/'
+AGENT_SNR_MONITOR_URL='https://agent-snr.onrender.com/agentsnr-demo/'
 
 curl --fail-with-body --silent --show-error --get \
   'https://webmcp.com/api/v1/lookup' \
@@ -67,8 +67,8 @@ Record the final result:
 
 | URL | `supported` | Matched host/path | Tool count | Schema/category review | Evidence |
 |---|---:|---|---:|---|---|
-| `[PUBLIC_STOREFRONT_URL]` | `[true/false]` | `[VALUE]` | `[COUNT]` | `[PASS/FAIL]` | `[PRIVATE JSON / PUBLIC LINK]` |
-| `[PUBLIC_AGENT_SNR_URL]` | `[true/false]` | `[VALUE]` | `[COUNT]` | `[PASS/FAIL]` | `[PRIVATE JSON / PUBLIC LINK]` |
+| `https://agent-snr.onrender.com/storefront-demo/` | `[true/false]` | `[VALUE]` | `[COUNT]` | `[PASS/FAIL]` | `[PRIVATE JSON / PUBLIC LINK]` |
+| `https://agent-snr.onrender.com/agentsnr-demo/` | `[true/false]` | `[VALUE]` | `[COUNT]` | `[PASS/FAIL]` | `[PRIVATE JSON / PUBLIC LINK]` |
 
 ## 3. Request the human listing
 
@@ -93,12 +93,12 @@ Co-browsing WooCommerce demo where agents discover products and prepare a revers
 
 Agent SNR is an open-source hackathon demo with two top-level WebMCP surfaces on one WordPress site. The storefront exposes 12 canonical tools for guide discovery, product search and comparison, published policy facts, reversible cart changes, checkout preparation, and optional structured feedback. The Agent SNR page exposes 8 canonical tools for session-scoped workflow evidence, funnel and health analysis, opportunity signals, diagnostics, and reversible session policy. No WebMCP tool can place, cancel, or refund an order, accept terms, submit customer data, or process payment. The ordinary WooCommerce checkout UI is the human confirmation boundary. Both pages remain useful when WebMCP is unavailable.
 
-Primary storefront: `[PUBLIC_STOREFRONT_URL]`
+Primary storefront: `https://agent-snr.onrender.com/storefront-demo/`
 
-Agent SNR monitor: `[PUBLIC_AGENT_SNR_URL]`
+Agent SNR monitor: `https://agent-snr.onrender.com/agentsnr-demo/`
 
 Source: `https://github.com/jiga/webmcp-agentSNR`
-Release/tag: `[TAG]` / `[FULL COMMIT SHA]`
+Release/tag: no optional tag / `e46c9c539ea649a7701e59bad9784cb7012be5b9`
 
 ### Classification requested
 

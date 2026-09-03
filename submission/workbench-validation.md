@@ -16,12 +16,12 @@ This is a fill-in evidence sheet, not proof that an external test has run. Compl
 |---|---|
 | Test date/time and timezone | `[YYYY-MM-DD HH:MM TZ]` |
 | Tester | `[OWNER NAME]` |
-| Public repository commit | `[FULL COMMIT SHA]` |
+| Public repository commit | `e46c9c539ea649a7701e59bad9784cb7012be5b9` |
 | Release tag | `[TAG]` |
-| Plugin ZIP SHA-256 | `[SHA-256]` |
-| Hosted plugin version | `[VERSION]` |
-| Storefront URL | `[PUBLIC_STOREFRONT_URL]` |
-| Agent SNR URL | `[PUBLIC_AGENT_SNR_URL]` |
+| Plugin ZIP SHA-256 | `514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` |
+| Hosted plugin version | `0.1.0` |
+| Storefront URL | `https://agent-snr.onrender.com/storefront-demo/` |
+| Agent SNR URL | `https://agent-snr.onrender.com/agentsnr-demo/` |
 | Chrome version | `[VERSION]` |
 | WebMCP testing flag | `[ENABLED / ORIGIN-TRIAL DETAILS]` |
 | Workbench version | `[1.2.1 OR REVIEWED NEWER VERSION]` |

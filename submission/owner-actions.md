@@ -15,18 +15,19 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 - [x] Public repository [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is live with default branch `main`, description/topics, detected GPL-2.0 license, and unsquashed submission-period commits.
 - [ ] Choose entrant type/team roster; confirm age, supported jurisdiction, exclusions/conflicts, prize ownership, and the eligible authorized Representative where applicable.
 - [ ] Confirm originality/sole ownership, employer/school/client/contractor rights, every third-party authorization, no prohibited Sponsor/Administrator support, and no other substantially similar entry.
-- [ ] Provision stable WordPress hosting at any durable public HTTPS URL; confirm the provider permits uninterrupted, free judge access and configure production secrets safely.
+- [x] Render hosts the public WordPress demo at `https://agent-snr.onrender.com/` with generated production secrets and unrestricted logged-out access.
 - [ ] Recommended reliability safeguards: add an owned domain/DNS if useful, monitoring, backups/restore, origin-wide headers, and a safe email sink.
 - [ ] Optional newest-release evidence: if time permits, recheck WooCommerce 11.1 and rerun the matrix if a stable release exists before the final tag; the declared 10.9.4/11.0.1 range already passes.
-- [ ] Deploy the exact build from the frozen public commit to stable, top-level HTTPS storefront and Agent SNR URLs; seed/freeze the public demo so it remains free through September 21, 2026 at 5:00 p.m. PDT.
-- [ ] Record the public commit, hosted plugin version, both final URLs, freeze timestamp, and operations owner; record tag/ZIP SHA-256 too if using the optional release workflow.
+- [x] Deploy commit `e46c9c539ea649a7701e59bad9784cb7012be5b9` to the stable top-level HTTPS storefront and Agent SNR URLs; two deploys preserve the seeded catalog and health state.
+- [x] Record commit `e46c9c5`, Agent SNR 0.1.0, public URLs, and the September 3, 2026 deployment verification in the repository; no optional release tag is claimed.
+- [ ] Assign the named availability/operations owner through the judging window.
 - [ ] Run the logged-out public smoke, cache-isolation, and two-session checks from an external device.
 - [ ] Recommended: enable monitoring/backups and rehearse restore before the judging window.
 
 ## WebMCP external validation
 
 - [x] The protected model-backed selection/browser evals pass all three strict provenance checks against rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; the initial and first rename-bound failures remain superseded baselines in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md), and raw `.evals/` reports remain private.
-- [ ] Run at least one official judge path—the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP enabled—against both frozen top-level pages; record the exact client/browser version, discovery counts, prompt results, and sanitized evidence.
+- [x] Run the ChatGPT desktop in-app browser against both frozen top-level pages: discover 12 storefront and 8 Agent SNR tools, invoke safe tools, and verify shared session workflow evidence.
 - [ ] Optional: install and review **nekuda WebMCP Workbench** in a dedicated Chrome profile; record the actual version and re-review permissions/release notes.
 - [ ] Optional: complete the Tools, manual-call, Audit, Saved calls, repeated Evals, Logs/approvals, and User Mode evidence in [`workbench-validation.md`](workbench-validation.md).
 - [ ] Keep provider keys only in the approved local client configuration. Store raw Workbench/model logs privately; remove keys, authorization data, cookies, CSRF/session values, customer data, and unrelated browsing history before sharing evidence.

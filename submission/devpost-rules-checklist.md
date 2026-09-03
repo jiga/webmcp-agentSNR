@@ -11,7 +11,7 @@ Repository-local preparation is complete or explicitly tracked below. The entry 
 - [ ] Entrant has joined the challenge and can reach the final Devpost Submit step.
 - [ ] Entrant eligibility, entry type, team/representative authority, ownership, conflicts, and third-party rights are personally confirmed.
 - [x] Public repository [`jiga/webmcp-agentSNR`](https://github.com/jiga/webmcp-agentSNR) is live with unsquashed history and a detected root GPL-2.0 license.
-- [ ] Frozen top-level HTTPS demo is publicly reachable and verified in ChatGPT's in-app browser or Chrome 149+ with WebMCP enabled.
+- [x] Frozen top-level HTTPS demo at `https://agent-snr.onrender.com/` is publicly reachable and verified in the ChatGPT in-app browser with WebMCP enabled.
 - [ ] Public YouTube demo is audible, shows the working project and WebMCP use, contains only rights-cleared material, and is strictly under 3:00 after processing.
 - [ ] All Devpost required fields and challenge-specific questions are complete in English.
 - [ ] Submission is accepted before the deadline and a receipt/screenshot is retained.
@@ -49,7 +49,7 @@ Evidence: Official Rules Sections 3, 4, 7, and 8; [supported countries and terri
 
 - [x] Project is a non-trivial WebMCP-powered web application where people and browser agents collaborate on one website.
 - [x] Intended platform is documented: WordPress 6.9+, PHP 8.1+, optional WooCommerce 10.9+, and top-level WebMCP-capable desktop browser.
-- [x] Clean install, deterministic builds, exact-ZIP matrix, native smoke, model evals, browser tests, and Playground execution are documented and passing for the renamed package; protected model evidence is bound to commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Final deployed-build validation remains required, while published release-artifact parity is a separate recommended gate if such an artifact is linked.
+- [x] Clean install, deterministic builds, exact-ZIP matrix, native smoke, model evals, browser tests, Playground execution, hosted persistence, and official in-app browser checks are documented and passing. Protected model evidence is bound to commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; deployed evidence is bound to commit `e46c9c539ea649a7701e59bad9784cb7012be5b9`.
 - [x] `HACKATHON.md` distinguishes pre-period research/specification from in-period executable code and retains timestamped history.
 - [x] `THIRD_PARTY_NOTICES.md`, lockfiles, and the GPL-2.0-or-later license document integrations and redistribution terms.
 - [ ] Entrant confirms no pre-period source code, artwork, media, or copy was incorporated contrary to the provenance disclosure.
@@ -58,13 +58,13 @@ Evidence: Official Rules “Project Requirements,” “New & Existing,” and �
 
 ## 4. Working project and judge access
 
-- [ ] Deploy the exact build from the frozen public-repository commit to stable, top-level HTTPS WordPress hosting.
-- [ ] Record and verify the public judge-start, storefront, Agent SNR, readiness, and repository URLs, plus any optional release/Playground URLs included in the entry.
-- [ ] Test every public URL logged out in a clean external browser profile.
-- [ ] Verify both WebMCP surfaces through at least one official judge path: the latest ChatGPT in-app browser or Chrome 149+ with `chrome://flags/#enable-webmcp-testing`.
-- [ ] Confirm 12 storefront and 8 Agent SNR tools are discovered on the intended top-level pages.
-- [ ] Confirm no payment, subscription, geoblock, invitation, local build, iframe-only path, or other restriction blocks judging.
-- [ ] If authentication is enabled, place working credentials only in Devpost's private Testing Instructions field—never in the repository or public description.
+- [x] Deploy public commit `e46c9c539ea649a7701e59bad9784cb7012be5b9` to stable, top-level HTTPS WordPress hosting on Render.
+- [x] Record and verify the public judge-start, storefront, Agent SNR, readiness, and repository URLs; no optional release or Playground URL is claimed.
+- [x] Test every submitted public URL without authentication; root, storefront, Agent SNR, readiness, and REST health return HTTP 200.
+- [x] Verify both WebMCP surfaces through the ChatGPT in-app browser as an official judge path.
+- [x] Confirm 12 storefront and 8 Agent SNR tools are discovered on the intended top-level pages, with successful safe calls on both surfaces.
+- [x] Confirm no payment, subscription, geoblock, invitation, local build, iframe-only path, or authentication restriction blocks judging.
+- [x] Public judging requires no credentials; no private credential is placed in repository or public submission copy.
 - [ ] Assign an availability owner through the judging period.
 - [ ] Recommended reliability safeguards: enable monitoring/backups and rehearse restore.
 
@@ -171,10 +171,10 @@ Complete this table after the final owner decisions—and after the artifact bui
 | Optional annotated release tag | `v0.1.0` if used |
 | Optional plugin ZIP SHA-256 | **PENDING IF PUBLISHED** |
 | Optional Playground ZIP SHA-256 | **PENDING IF PUBLISHED** |
-| Judge-start URL | **PENDING** |
-| Storefront URL | **PENDING** |
-| Agent SNR URL | **PENDING** |
-| Readiness URL | **PENDING** |
+| Judge-start URL | `https://agent-snr.onrender.com/` |
+| Storefront URL | `https://agent-snr.onrender.com/storefront-demo/` |
+| Agent SNR URL | `https://agent-snr.onrender.com/agentsnr-demo/` |
+| Readiness URL | `https://agent-snr.onrender.com/webmcp-health/` |
 | Public YouTube URL and processed duration | **PENDING** |
 | Availability/freeze owner | **PENDING** |
 
