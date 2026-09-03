@@ -5,7 +5,7 @@
 - **Project name:** Agent SNR
 - **Tagline (118 characters):** See what website agents did, hear what they experienced, and connect WordPress journeys to verified business outcomes.
 - **Built With:** WebMCP, WordPress, WooCommerce, PHP, JavaScript, REST API, Docker, Playwright, Chrome
-- **Thumbnail candidate:** `demo-screenshots/01-agent-snr-overview.png`
+- **Thumbnail candidate:** `agent-snr-devpost-thumbnail.png` (original 1536×1024, exact 3:2 PNG)
 
 The public repository and hosted-demo links below are verified logged out. Replace the remaining video link only after it is frozen and verified logged out. If linking an optional tagged release or Playground demo, verify and freeze it too. The entrant must complete name/trademark and rights clearance before using this copy in the final form.
 

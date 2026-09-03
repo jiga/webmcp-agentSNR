@@ -64,7 +64,7 @@ Checked exact-artifact items in this section describe the current renamed packag
 - [x] Local reference screenshots contain only fictional demo data and original project assets.
 - [x] Public source/license, live URL, and testing instructions are complete; public judging requires no credentials.
 - [ ] Public YouTube video has audio, shows actual WebMCP usage, and is under three minutes.
-- [ ] Required thumbnail accurately represents the frozen release and contains no secret, private data, or unapproved asset.
+- [x] `submission/agent-snr-devpost-thumbnail.png` accurately represents Agent SNR's signal-to-noise workflow, is exact 3:2, and contains no secret, private data, screenshot, or third-party logo.
 - [ ] Recommended gallery evidence: if gallery images are included, use frozen hosted-release captures that contain no secret, private data, or unapproved asset.
 - [x] GitHub detects GPL-2.0 from the root license; timestamped history is unsquashed, and anonymous repository/API/raw README requests return HTTP 200.
 - [ ] Every link is verified from a logged-out external device.

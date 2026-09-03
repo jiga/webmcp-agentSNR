@@ -108,7 +108,7 @@ Evidence: Official Rules “Submission Requirements” and the equally weighted 
 - [x] Story source: `submission/devpost-description.md`.
 - [x] Testing-instructions source: the marked Devpost paste section in `submission/testing-instructions.md`.
 - [x] Gallery candidates: ten 1440×900 PNGs listed in `submission/demo-screenshots.md`.
-- [x] Thumbnail candidate: `submission/demo-screenshots/01-agent-snr-overview.png` (PNG, under 5 MB); crop to Devpost's recommended 3:2 ratio if Preview requires it.
+- [x] Thumbnail candidate: `submission/agent-snr-devpost-thumbnail.png` (original 1536×1024, exact 3:2 PNG, under 5 MB, no third-party logos or source screenshot).
 - [ ] Team members/invitations and entrant type are final.
 - [ ] Required project thumbnail is uploaded and legible in Preview.
 - [ ] Recommended gallery images are uploaded and legible in Preview.
