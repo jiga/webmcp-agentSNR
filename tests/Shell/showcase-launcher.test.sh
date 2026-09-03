@@ -89,10 +89,10 @@ if zip_output="$(WMCP_SHOWCASE_ZIP="${missing_zip}" "${SHOWCASE}" verify 2>&1)";
 fi
 grep -Fq 'Release ZIP not found' <<< "${zip_output}"
 
-mkdir -p "${TEST_ROOT}/checksum/wmcp-agentops"
-printf '%s\n' '<?php // checksum fixture' > "${TEST_ROOT}/checksum/wmcp-agentops/wmcp-agentops.php"
+mkdir -p "${TEST_ROOT}/checksum/wmcp-agentsnr"
+printf '%s\n' '<?php // checksum fixture' > "${TEST_ROOT}/checksum/wmcp-agentsnr/wmcp-agentsnr.php"
 checksum_zip="${TEST_ROOT}/checksum-mismatch.zip"
-( cd "${TEST_ROOT}/checksum" && zip -q -r "${checksum_zip}" wmcp-agentops )
+( cd "${TEST_ROOT}/checksum" && zip -q -r "${checksum_zip}" wmcp-agentsnr )
 printf '%064d  %s\n' 0 "$(basename "${checksum_zip}")" > "${checksum_zip}.sha256"
 checksum_output=""
 if checksum_output="$(WMCP_SHOWCASE_ZIP="${checksum_zip}" "${SHOWCASE}" verify 2>&1)"; then
@@ -101,11 +101,11 @@ if checksum_output="$(WMCP_SHOWCASE_ZIP="${checksum_zip}" "${SHOWCASE}" verify 2
 fi
 grep -Fq 'checksum does not match' <<< "${checksum_output}"
 
-mkdir -p "${TEST_ROOT}/symlink/wmcp-agentops"
-printf '%s\n' '<?php // symlink fixture' > "${TEST_ROOT}/symlink/wmcp-agentops/wmcp-agentops.php"
-ln -s wmcp-agentops.php "${TEST_ROOT}/symlink/wmcp-agentops/linked.php"
+mkdir -p "${TEST_ROOT}/symlink/wmcp-agentsnr"
+printf '%s\n' '<?php // symlink fixture' > "${TEST_ROOT}/symlink/wmcp-agentsnr/wmcp-agentsnr.php"
+ln -s wmcp-agentsnr.php "${TEST_ROOT}/symlink/wmcp-agentsnr/linked.php"
 symlink_zip="${TEST_ROOT}/symlink-entry.zip"
-( cd "${TEST_ROOT}/symlink" && zip -y -q -r "${symlink_zip}" wmcp-agentops )
+( cd "${TEST_ROOT}/symlink" && zip -y -q -r "${symlink_zip}" wmcp-agentsnr )
 ( cd "${TEST_ROOT}" && shasum -a 256 "$(basename "${symlink_zip}")" > "$(basename "${symlink_zip}").sha256" )
 symlink_output=""
 if symlink_output="$(WMCP_SHOWCASE_ZIP="${symlink_zip}" "${SHOWCASE}" verify 2>&1)"; then
@@ -124,12 +124,12 @@ if foreign_output="$(WMCP_SHOWCASE_ZIP="${foreign_zip}" "${SHOWCASE}" verify 2>&
   echo "Expected the showcase launcher to reject a foreign archive root." >&2
   exit 1
 fi
-grep -Fq 'one safe top-level wmcp-agentops' <<< "${foreign_output}"
+grep -Fq 'one safe top-level wmcp-agentsnr' <<< "${foreign_output}"
 
-mkdir -p "${TEST_ROOT}/cache/wmcp-agentops"
-printf '%s\n' "<?php // cache fixture $$" > "${TEST_ROOT}/cache/wmcp-agentops/wmcp-agentops.php"
+mkdir -p "${TEST_ROOT}/cache/wmcp-agentsnr"
+printf '%s\n' "<?php // cache fixture $$" > "${TEST_ROOT}/cache/wmcp-agentsnr/wmcp-agentsnr.php"
 cache_zip="${TEST_ROOT}/cache-integrity.zip"
-( cd "${TEST_ROOT}/cache" && zip -q -r "${cache_zip}" wmcp-agentops )
+( cd "${TEST_ROOT}/cache" && zip -q -r "${cache_zip}" wmcp-agentsnr )
 ( cd "${TEST_ROOT}" && shasum -a 256 "$(basename "${cache_zip}")" > "$(basename "${cache_zip}").sha256" )
 TEST_HASH="$(shasum -a 256 "${cache_zip}" | awk '{ print $1 }')"
 TEST_CACHE="${ARTIFACTS_DIR}/${TEST_HASH}"
@@ -138,11 +138,11 @@ SHOWCASE_DOCKER_EXIT=1 \
   PATH="${TEST_ROOT}/bin:${PATH}" \
   WMCP_SHOWCASE_ZIP="${cache_zip}" \
   "${SHOWCASE}" verify >/dev/null 2>&1 || true
-[[ -f "${TEST_CACHE}/wmcp-agentops/wmcp-agentops.php" ]] || {
+[[ -f "${TEST_CACHE}/wmcp-agentsnr/wmcp-agentsnr.php" ]] || {
   echo "Expected verify to prepare the checked release cache before service checks." >&2
   exit 1
 }
-printf '%s\n' '// tampered' >> "${TEST_CACHE}/wmcp-agentops/wmcp-agentops.php"
+printf '%s\n' '// tampered' >> "${TEST_CACHE}/wmcp-agentsnr/wmcp-agentsnr.php"
 
 : > "${docker_trace}"
 cache_output=""
@@ -164,7 +164,7 @@ repair_output="$(SHOWCASE_DOCKER_EXIT=1 \
   WMCP_SHOWCASE_ZIP="${cache_zip}" \
   "${SHOWCASE}" start 2>&1 || true)"
 grep -Fq 'Replaced a modified artifact cache' <<< "${repair_output}"
-cmp "${TEST_ROOT}/cache/wmcp-agentops/wmcp-agentops.php" \
-  "${TEST_CACHE}/wmcp-agentops/wmcp-agentops.php"
+cmp "${TEST_ROOT}/cache/wmcp-agentsnr/wmcp-agentsnr.php" \
+  "${TEST_CACHE}/wmcp-agentsnr/wmcp-agentsnr.php"
 
 echo "Showcase launcher guards passed."

@@ -80,24 +80,24 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
-          plugin="dist/wmcp-agentops-${version}.zip"
-          playground="dist/wmcp-agentops-playground-${version}.zip"
+          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
+          plugin="dist/wmcp-agentsnr-${version}.zip"
+          playground="dist/wmcp-agentsnr-playground-${version}.zip"
           (
             cd dist
-            shasum -a 256 -c "wmcp-agentops-${version}.zip.sha256"
-            shasum -a 256 -c "wmcp-agentops-playground-${version}.zip.sha256"
+            shasum -a 256 -c "wmcp-agentsnr-${version}.zip.sha256"
+            shasum -a 256 -c "wmcp-agentsnr-playground-${version}.zip.sha256"
           )
-          test "$(unzip -Z1 "${plugin}" | cut -d/ -f1 | sort -u)" = "wmcp-agentops"
+          test "$(unzip -Z1 "${plugin}" | cut -d/ -f1 | sort -u)" = "wmcp-agentsnr"
           test "$(unzip -Z1 "${playground}" | head -n 1)" = "blueprint.json"
-          unzip -Z1 "${playground}" | grep -Fx 'wmcp-agentops.zip'
+          unzip -Z1 "${playground}" | grep -Fx 'wmcp-agentsnr.zip'
           unzip -tq "${plugin}"
           unzip -tq "${playground}"
 
       - name: Upload checksummed artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: wp-webmcp-agentops-${{ github.sha }}
+          name: wmcp-agentsnr-${{ github.sha }}
           path: |
             dist/*.zip
             dist/*.sha256
@@ -127,9 +127,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
+          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
           npx --yes @wp-playground/cli@3.1.51 run-blueprint \
-            --blueprint="dist/wmcp-agentops-playground-${version}.zip" \
+            --blueprint="dist/wmcp-agentsnr-playground-${version}.zip" \
             --verbosity=normal
 
   docker-smoke:
@@ -189,13 +189,13 @@ jobs:
         run: |
           set -euo pipefail
           docker compose run --rm cli wp plugin is-active woocommerce
-          docker compose run --rm cli wp plugin is-active wmcp-agentops
+          docker compose run --rm cli wp plugin is-active wmcp-agentsnr
           before="$(docker compose run --rm cli wp post list --post_type=product --format=count | tr -d '\r')"
           test "${before}" = "12"
           docker compose run --rm cli wp eval-file /workspace/bin/seed-demo.php
           after="$(docker compose run --rm cli wp post list --post_type=product --format=count | tr -d '\r')"
           test "${after}" = "${before}"
-          for path in / /storefront-demo/ /agentops-demo/ /webmcp-health/ /shop/ /cart/ /checkout/; do
+          for path in / /storefront-demo/ /agentsnr-demo/ /webmcp-health/ /shop/ /cart/ /checkout/; do
             curl --fail --silent --show-error \
               --retry 10 --retry-all-errors --retry-delay 2 \
               "http://127.0.0.1:18080${path}" >/dev/null
@@ -205,7 +205,7 @@ jobs:
         if: matrix.name == 'primary'
         run: |
           docker compose run --rm cli wp plugin install plugin-check --activate
-          docker compose run --rm cli wp plugin check wmcp-agentops --format=table
+          docker compose run --rm cli wp plugin check wmcp-agentsnr --format=table
 
       - name: Use Node.js 22 for browser acceptance tests
         if: matrix.name == 'primary'

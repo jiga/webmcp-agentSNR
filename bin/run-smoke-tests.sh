@@ -28,8 +28,8 @@ fetch_manifest() {
   local surface="$1"
   local output="$2"
   local referer_path="/storefront-demo/"
-  if [[ "${surface}" == "agentops" ]]; then
-    referer_path="/agentops-demo/"
+  if [[ "${surface}" == "agentsnr" ]]; then
+    referer_path="/agentsnr-demo/"
   fi
   curl --fail-with-body --silent --show-error \
     --cookie "${COOKIE_JAR}" \
@@ -37,13 +37,13 @@ fetch_manifest() {
     --header "Origin: ${BASE_URL}" \
     --header 'Content-Type: application/json' \
     --data-binary "{\"surface\":\"${surface}\"}" \
-    "${BASE_URL}/wp-json/wmcp-agentops/v1/session" >/dev/null
+    "${BASE_URL}/wp-json/wmcp-agentsnr/v1/session" >/dev/null
   curl --fail --silent --show-error \
     --cookie "${COOKIE_JAR}" \
     --cookie-jar "${COOKIE_JAR}" \
     --header 'Accept: application/json' \
     --header "Referer: ${BASE_URL}${referer_path}" \
-    "${BASE_URL}/wp-json/wmcp-agentops/v1/manifest?surface=${surface}" > "${output}"
+    "${BASE_URL}/wp-json/wmcp-agentsnr/v1/manifest?surface=${surface}" > "${output}"
   jq -e '.schema_version == "1.0" and (.manifest_revision | startswith("rev_"))' "${output}" >/dev/null
 }
 
@@ -69,21 +69,21 @@ invoke_tool() {
     --header 'Content-Type: application/json' \
     --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${manifest}")" \
     --data-binary "${payload}" \
-    "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/${tool}" > "${output}"
+    "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/${tool}" > "${output}"
   jq -e '.ok == true' "${output}" >/dev/null
 }
 
-for path in / /storefront-demo/ /agentops-demo/ /webmcp-health/ /shop/ /cart/ /checkout/; do
+for path in / /storefront-demo/ /agentsnr-demo/ /webmcp-health/ /shop/ /cart/ /checkout/; do
   curl --fail --silent --show-error "${BASE_URL}${path}" >/dev/null
 done
 
-curl --fail --silent --show-error "${BASE_URL}/wp-json/wmcp-agentops/v1/health" \
+curl --fail --silent --show-error "${BASE_URL}/wp-json/wmcp-agentsnr/v1/health" \
   | jq -e '.ok == true and .diagnostics.checks.database.status == "passed" and .diagnostics.checks.woocommerce.status == "passed"' >/dev/null
 
 NO_SESSION_STATUS="$(curl --silent --show-error \
   --output "${SMOKE_TEMP_DIR}/session-required.json" --write-out '%{http_code}' \
   --header "Referer: ${BASE_URL}/storefront-demo/" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/manifest?surface=storefront")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/manifest?surface=storefront")"
 test "${NO_SESSION_STATUS}" = "401"
 jq -e '.error.code == "session_required"' "${SMOKE_TEMP_DIR}/session-required.json" >/dev/null
 
@@ -92,7 +92,7 @@ CROSS_ORIGIN_STATUS="$(curl --silent --show-error \
   --header 'Origin: https://attacker.invalid' \
   --header 'Content-Type: application/json' \
   --data-binary '{"surface":"storefront"}' \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/session")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/session")"
 test "${CROSS_ORIGIN_STATUS}" = "403"
 jq -e '.error.code == "origin_denied"' "${SMOKE_TEMP_DIR}/origin-denied.json" >/dev/null
 
@@ -104,12 +104,12 @@ curl --fail-with-body --silent --show-error \
   --header 'Content-Type: application/json' \
   --header "Cookie: wmcp_demo_session=${FIXED_COOKIE}" \
   --data-binary '{"surface":"storefront"}' \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/session"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/session"
 jq -e '.ok == true' "${SMOKE_TEMP_DIR}/fixation.json" >/dev/null
 ! grep -q "wmcp_demo_session=${FIXED_COOKIE}" "${SMOKE_TEMP_DIR}/fixation-headers.txt"
 
 STOREFRONT_MANIFEST="${SMOKE_TEMP_DIR}/storefront.json"
-AGENTOPS_MANIFEST="${SMOKE_TEMP_DIR}/agentops.json"
+AGENTSNR_MANIFEST="${SMOKE_TEMP_DIR}/agentsnr.json"
 fetch_manifest storefront "${STOREFRONT_MANIFEST}"
 jq -e '
   ([.tools[].name] | length) == 12
@@ -133,7 +133,7 @@ BAD_CSRF_STATUS="$(curl --silent --show-error \
   --header "Origin: ${BASE_URL}" --header 'Content-Type: application/json' \
   --header 'X-WMCP-CSRF: invalid-token' \
   --data-binary "${BAD_CSRF_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/get_storefront_context")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/get_storefront_context")"
 test "${BAD_CSRF_STATUS}" = "403"
 jq -e '.error.code == "csrf_invalid"' "${SMOKE_TEMP_DIR}/csrf-denied.json" >/dev/null
 
@@ -191,7 +191,7 @@ STALE_CART_STATUS="$(curl --silent --show-error --output "${SMOKE_TEMP_DIR}/stal
   --header "Origin: ${BASE_URL}" --header 'Content-Type: application/json' \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${STOREFRONT_MANIFEST}")" \
   --data-binary "${STALE_CART_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/prepare_checkout_handoff")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/prepare_checkout_handoff")"
 test "${STALE_CART_STATUS}" = "409"
 jq -e '.error.code == "stale_cart_revision"' "${SMOKE_TEMP_DIR}/stale-cart.json" >/dev/null
 invoke_tool "${STOREFRONT_MANIFEST}" report_capability_gap \
@@ -234,7 +234,7 @@ curl --fail-with-body --silent --show-error \
   --header "Origin: ${BASE_URL}" --header 'Content-Type: application/json' \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${STOREFRONT_MANIFEST}")" \
   --data-binary "${REPLAY_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/compare_products" \
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/compare_products" \
   | jq -e '.ok == true' >/dev/null
 
 CONFLICT_PAYLOAD="$(jq -cn \
@@ -248,30 +248,30 @@ CONFLICT_STATUS="$(curl --silent --show-error --output "${SMOKE_TEMP_DIR}/reques
   --header "Origin: ${BASE_URL}" --header 'Content-Type: application/json' \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${STOREFRONT_MANIFEST}")" \
   --data-binary "${CONFLICT_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/get_cart")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/get_cart")"
 test "${CONFLICT_STATUS}" = "409"
 jq -e '.error.code == "request_id_conflict"' "${SMOKE_TEMP_DIR}/request-conflict.json" >/dev/null
 
-fetch_manifest agentops "${AGENTOPS_MANIFEST}"
-jq -e '([.tools[].name] | length) == 8 and ([.tools[].name] | index("get_capability_gaps")) == null and ([.tools[].name] | index("get_opportunity_signals")) != null and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTOPS_MANIFEST}" >/dev/null
-invoke_tool "${AGENTOPS_MANIFEST}" get_agent_analytics_overview '{}' "${SMOKE_TEMP_DIR}/overview.json"
+fetch_manifest agentsnr "${AGENTSNR_MANIFEST}"
+jq -e '([.tools[].name] | length) == 8 and ([.tools[].name] | index("get_capability_gaps")) == null and ([.tools[].name] | index("get_opportunity_signals")) != null and ([.tools[].name] | index("set_tool_enabled")) != null' "${AGENTSNR_MANIFEST}" >/dev/null
+invoke_tool "${AGENTSNR_MANIFEST}" get_agent_analytics_overview '{}' "${SMOKE_TEMP_DIR}/overview.json"
 jq -e '.result.workflows.total >= 1 and .result.tool_calls.total >= 1 and .result.capability_gaps.requests >= 1' "${SMOKE_TEMP_DIR}/overview.json" >/dev/null
-invoke_tool "${AGENTOPS_MANIFEST}" get_opportunity_signals '{}' "${SMOKE_TEMP_DIR}/signals.json"
+invoke_tool "${AGENTSNR_MANIFEST}" get_opportunity_signals '{}' "${SMOKE_TEMP_DIR}/signals.json"
 jq -e '
   any(.result.items[]; .sources.site_observed == true)
   and any(.result.items[]; .sources.agent_reported == true)
   and all(.result.items[]; (.title | test("lost revenue"; "i") | not))
 ' "${SMOKE_TEMP_DIR}/signals.json" >/dev/null
-invoke_tool "${AGENTOPS_MANIFEST}" query_agent_workflows '{"limit":20}' "${SMOKE_TEMP_DIR}/workflows.json"
+invoke_tool "${AGENTSNR_MANIFEST}" query_agent_workflows '{"limit":20}' "${SMOKE_TEMP_DIR}/workflows.json"
 WORKFLOW_ID="$(jq -r '.result.items[0].workflow_id' "${SMOKE_TEMP_DIR}/workflows.json")"
 test "${#WORKFLOW_ID}" = "26"
-invoke_tool "${AGENTOPS_MANIFEST}" explain_agent_workflow \
+invoke_tool "${AGENTSNR_MANIFEST}" explain_agent_workflow \
   "{\"workflow_id\":\"${WORKFLOW_ID}\"}" \
   "${SMOKE_TEMP_DIR}/workflow-replay.json"
 jq -e --arg workflow_id "${WORKFLOW_ID}" '.result.workflow.workflow_id == $workflow_id and (.result.timeline | length) >= 1 and (.result.truncated | type) == "boolean"' "${SMOKE_TEMP_DIR}/workflow-replay.json" >/dev/null
 test "$(jq -c '.result' "${SMOKE_TEMP_DIR}/workflow-replay.json" | wc -c | tr -d ' ')" -le 7001
 
-invoke_tool "${AGENTOPS_MANIFEST}" set_tool_enabled \
+invoke_tool "${AGENTSNR_MANIFEST}" set_tool_enabled \
   '{"tool_name":"compare_products","enabled":false,"scope":"demo_session","reason":"Automated session-governance smoke test"}' \
   "${SMOKE_TEMP_DIR}/disabled.json"
 jq -e '.result.after.enabled == false' "${SMOKE_TEMP_DIR}/disabled.json" >/dev/null
@@ -295,12 +295,12 @@ DENIED_STATUS="$(curl --silent --show-error \
   --header 'Content-Type: application/json' \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${SMOKE_TEMP_DIR}/storefront-disabled.json")" \
   --data-binary "${DENIED_PAYLOAD}" \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/tools/compare_products")"
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/tools/compare_products")"
 test "${DENIED_STATUS}" = "403"
 jq -e '.error.code == "tool_disabled"' "${SMOKE_TEMP_DIR}/denied.json" >/dev/null
 
-fetch_manifest agentops "${SMOKE_TEMP_DIR}/agentops-current.json"
-invoke_tool "${SMOKE_TEMP_DIR}/agentops-current.json" set_tool_enabled \
+fetch_manifest agentsnr "${SMOKE_TEMP_DIR}/agentsnr-current.json"
+invoke_tool "${SMOKE_TEMP_DIR}/agentsnr-current.json" set_tool_enabled \
   '{"tool_name":"compare_products","enabled":true,"scope":"demo_session","reason":"Restore the smoke-test baseline"}' \
   "${SMOKE_TEMP_DIR}/restored.json"
 fetch_manifest storefront "${SMOKE_TEMP_DIR}/storefront-restored.json"
@@ -313,7 +313,7 @@ curl --fail-with-body --silent --show-error \
   --header "Origin: ${BASE_URL}" \
   --header "X-WMCP-CSRF: $(jq -r '.session.csrf_token' "${SMOKE_TEMP_DIR}/before-reset.json")" \
   --request POST \
-  "${BASE_URL}/wp-json/wmcp-agentops/v1/demo/reset?surface=storefront" \
+  "${BASE_URL}/wp-json/wmcp-agentsnr/v1/demo/reset?surface=storefront" \
   --output "${SMOKE_TEMP_DIR}/reset-manifest.json"
 jq -e '.ok == true and .manifest.surface == "storefront"' "${SMOKE_TEMP_DIR}/reset-manifest.json" >/dev/null
 

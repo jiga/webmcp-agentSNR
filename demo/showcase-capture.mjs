@@ -325,7 +325,7 @@ async function runShowcase( browser, outputDirectory ) {
 
 	await page.goto( handoff.result.checkout_url );
 	await page.locator( "form.checkout" ).waitFor( { state: "visible", timeout: 20_000 } );
-	await page.locator( "#payment_method_wmcp_agentops_demo" ).check();
+	await page.locator( "#payment_method_wmcp_agentsnr_demo" ).check();
 	await Promise.all( [
 		page.waitForURL( /\/checkout\/order-received\//, { timeout: 20_000 } ),
 		page.locator( "#place_order" ).click(),
@@ -341,7 +341,7 @@ async function runShowcase( browser, outputDirectory ) {
 		"05-human-order-confirmation.png"
 	);
 
-	await page.goto( "/agentops-demo/" );
+	await page.goto( "/agentsnr-demo/" );
 	await waitForTools( page, AGENT_SNR_TOOL_COUNT );
 	const verifiedSignals = await callTool( page, "get_opportunity_signals" );
 	const corroboratedSignal = verifiedSignals.result.items.find(
@@ -396,7 +396,7 @@ async function runShowcase( browser, outputDirectory ) {
 	);
 
 	await refundOrder( page, orderId, Number( add.result.cart.subtotal ) );
-	await page.goto( "/agentops-demo/" );
+	await page.goto( "/agentsnr-demo/" );
 	await waitForTools( page, AGENT_SNR_TOOL_COUNT );
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
 	await waitForRefundEvidence( page );

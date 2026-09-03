@@ -76,14 +76,14 @@ times:
   --output-dir .evals/storefront
 
 ./node_modules/.bin/webmcp-evals local \
-  --tools evals/schemas/agentops-tools.json \
-  --evals evals/agentops-selection.json \
+  --tools evals/schemas/agentsnr-tools.json \
+  --evals evals/agentsnr-selection.json \
   --backend vercel \
   --model '<provider:model>' \
   --runs 3 \
   --max-steps 1 \
   --reporter console json \
-  --output-dir .evals/agentops
+  --output-dir .evals/agentsnr
 ```
 
 The static suites are deliberately one-step next-action checks. Storefront

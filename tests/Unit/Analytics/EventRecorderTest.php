@@ -3,16 +3,16 @@
 /**
  * Event recorder integrity tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
-use WPWebMCP\AgentOps\Analytics\EventRecorder;
-use WPWebMCP\AgentOps\Contract\EventName;
-use WPWebMCP\AgentOps\Contract\RiskClass;
+use WPWebMCP\AgentSNR\Analytics\EventRecorder;
+use WPWebMCP\AgentSNR\Contract\EventName;
+use WPWebMCP\AgentSNR\Contract\RiskClass;
 
 require_once __DIR__ . '/AnalyticsTestCase.php';
 

@@ -6,7 +6,7 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 
 ## Identity, release, and hosting
 
-- [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains; resolve the established AgentOps.ai overlap in technical/public identifiers.
+- [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains. The retired third-party-overlapping technical identifiers have been removed from the current tree.
 - [x] Replace the former public demo-store candidate name with the generic **Agent SNR Demo Store** site title and **Agent SNR / Demo Store** storefront lockup.
 - [ ] Confirm the current Git author name and email embedded in every commit are appropriate for public history; do not rewrite provenance casually.
 - [x] Remove the unresolved WordPress.org contributor placeholder from the plugin metadata; do not invent a contributor ID.

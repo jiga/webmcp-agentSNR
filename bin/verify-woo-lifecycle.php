@@ -7,14 +7,14 @@
  * verifies the plugin's paid-only attribution, refund recomputation,
  * cancellation removal, and human re-add boundary in the active storage mode.
  *
- * @package WPWebMCP\AgentOps\Acceptance
+ * @package WPWebMCP\AgentSNR\Acceptance
  */
 
 use Automattic\WooCommerce\Utilities\OrderUtil;
-use WPWebMCP\AgentOps\Analytics\EventRecorder;
-use WPWebMCP\AgentOps\Analytics\WorkflowService;
-use WPWebMCP\AgentOps\Contract\EventName;
-use WPWebMCP\AgentOps\Contract\Versions;
+use WPWebMCP\AgentSNR\Analytics\EventRecorder;
+use WPWebMCP\AgentSNR\Analytics\WorkflowService;
+use WPWebMCP\AgentSNR\Contract\EventName;
+use WPWebMCP\AgentSNR\Contract\Versions;
 
 if (! defined('WP_CLI') || ! WP_CLI) {
     throw new RuntimeException('Run this acceptance script with WP-CLI.');

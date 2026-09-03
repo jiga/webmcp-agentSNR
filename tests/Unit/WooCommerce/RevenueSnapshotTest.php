@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\WooCommerce\RevenueSnapshot;
+use WPWebMCP\AgentSNR\WooCommerce\RevenueSnapshot;
 
 final class RevenueSnapshotTest extends TestCase
 {

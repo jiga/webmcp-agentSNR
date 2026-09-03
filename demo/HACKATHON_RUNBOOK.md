@@ -37,7 +37,7 @@ That reset removes only the `agent-snr-showcase` containers, network, and named 
 
 ## 2. Start with a fresh private session
 
-1. In a WebMCP-capable top-level browser, open `http://localhost:18084/agentops-demo/`.
+1. In a WebMCP-capable top-level browser, open `http://localhost:18084/agentsnr-demo/`.
 2. Select **Start fresh session**. This rotates only the current browser scope and clears its demo cart and scoped evidence.
 3. Open `http://localhost:18084/storefront-demo/` in another tab in the same browser profile.
 4. Keep both tabs open for the entire demo. Do not switch to a private window or another browser midway.

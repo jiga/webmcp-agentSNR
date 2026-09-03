@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\WooCommerce\ProductCatalog;
-use WPWebMCP\AgentOps\WooCommerce\ProductSearchMatcher;
+use WPWebMCP\AgentSNR\WooCommerce\ProductCatalog;
+use WPWebMCP\AgentSNR\WooCommerce\ProductSearchMatcher;
 
 final class ProductSearchMatcherTest extends TestCase
 {

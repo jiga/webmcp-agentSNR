@@ -6,7 +6,7 @@ const assert = require( "node:assert/strict" );
 const {
 	EVENTS,
 	WebMCPRuntime,
-} = require( "../../plugin/wmcp-agentops/assets/js/webmcp-runtime.js" );
+} = require( "../../plugin/wmcp-agentsnr/assets/js/webmcp-runtime.js" );
 
 class MockCustomEvent {
 	constructor( type, options = {} ) {
@@ -220,9 +220,9 @@ function runtimeHarness( options = {} ) {
 		Object.assign(
 			{
 				broadcastChannelName: "runtime-tests",
-				executionBaseUrl: "/wp-json/wmcp-agentops/v1",
+				executionBaseUrl: "/wp-json/wmcp-agentsnr/v1",
 				invalidationStorageKey: "runtime-tests:manifest",
-				manifestUrl: "/wp-json/wmcp-agentops/v1/manifest?surface=storefront",
+				manifestUrl: "/wp-json/wmcp-agentsnr/v1/manifest?surface=storefront",
 				requestIdFactory: () => `req_test_${ ++nextRequestId }`,
 				siteId: "site_test",
 				surface: "storefront",
@@ -346,7 +346,7 @@ test( "a valid server session loads the manifest without a redundant bootstrap P
 		jsonResponse( manifest( "rev_1" ) ),
 	] );
 	const harness = runtimeHarness( {
-		config: { sessionUrl: "/wp-json/wmcp-agentops/v1/session" },
+		config: { sessionUrl: "/wp-json/wmcp-agentsnr/v1/session" },
 		fetch,
 	} );
 
@@ -366,7 +366,7 @@ test( "a missing server session bootstraps only after manifest 401 and retries",
 		jsonResponse( manifest( "rev_1" ) ),
 	] );
 	const harness = runtimeHarness( {
-		config: { sessionUrl: "/wp-json/wmcp-agentops/v1/session" },
+		config: { sessionUrl: "/wp-json/wmcp-agentsnr/v1/session" },
 		fetch,
 	} );
 
@@ -376,7 +376,7 @@ test( "a missing server session bootstraps only after manifest 401 and retries",
 		fetch.calls.map( ( call ) => call.options.method ),
 		[ "GET", "POST", "GET" ]
 	);
-	assert.equal( fetch.calls[ 1 ].url, "/wp-json/wmcp-agentops/v1/session" );
+	assert.equal( fetch.calls[ 1 ].url, "/wp-json/wmcp-agentsnr/v1/session" );
 } );
 
 test( "partial registration failure rolls back and remains retryable", async () => {
@@ -966,7 +966,7 @@ test( "cross-transport invalidations dedupe matching nonces after scope filterin
 
 	const filteredMessage = Object.assign( {}, sharedMessage, {
 		nonce: "invalidation_filtered_first",
-		surface: "agentops",
+		surface: "agentsnr",
 	} );
 	harness.runtime.invalidationChannel.emit( filteredMessage );
 	await harness.runtime.whenIdle();
@@ -1006,16 +1006,16 @@ test( "accepted invalidation nonce memory remains bounded", () => {
 
 test( "successful policy tools refresh locally and notify other tabs", async () => {
 	const fetch = fetchQueue( [
-		jsonResponse( manifest( "rev_1", [ "set_tool_enabled" ], { surface: "agentops" } ) ),
+		jsonResponse( manifest( "rev_1", [ "set_tool_enabled" ], { surface: "agentsnr" } ) ),
 		jsonResponse( {
 			manifest_revision: "rev_2",
 			ok: true,
 			result: { effective_manifest_revision: "rev_2" },
 		} ),
-		jsonResponse( manifest( "rev_2", [], { surface: "agentops" } ) ),
+		jsonResponse( manifest( "rev_2", [], { surface: "agentsnr" } ) ),
 	] );
 	const harness = runtimeHarness( {
-		config: { surface: "agentops" },
+		config: { surface: "agentsnr" },
 		fetch,
 	} );
 	await harness.runtime.start();

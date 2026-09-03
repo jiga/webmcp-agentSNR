@@ -31,7 +31,7 @@ const REPOSITORY_ROOT = path.resolve(
 const EVAL_ROOT = path.join( REPOSITORY_ROOT, "evals" );
 
 const SURFACES = {
-	agentops: {
+	agentsnr: {
 		expectedNames: [
 			"get_agent_analytics_overview",
 			"get_agent_conversion_funnel",
@@ -492,8 +492,8 @@ describe( "WebMCP eval fixtures", () => {
 
 	it( "never defines legacy or sensitive-action function calls", async () => {
 		const fixtureNames = [
-			"agentops-selection.json",
-			"agentops-smoke.json",
+			"agentsnr-selection.json",
+			"agentsnr-smoke.json",
 			"browser-journeys.json",
 			"storefront-selection.json",
 			"storefront-smoke.json",
@@ -1167,7 +1167,7 @@ describe( "WebMCP smoke runner safety", () => {
 			buildSmokeRuns( baseUrl ).map( ( run ) => ( { name: run.name, url: run.url } ) ),
 			[
 				{ name: "storefront", url: "http://127.0.0.1:18080/storefront-demo/" },
-				{ name: "agentops", url: "http://127.0.0.1:18080/agentops-demo/" },
+				{ name: "agentsnr", url: "http://127.0.0.1:18080/agentsnr-demo/" },
 			]
 		);
 	} );

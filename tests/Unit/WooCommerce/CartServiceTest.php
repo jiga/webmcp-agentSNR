@@ -3,17 +3,17 @@
 /**
  * Cart service concurrency contract tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use WPWebMCP\AgentOps\WebMCP\ToolException;
-use WPWebMCP\AgentOps\WooCommerce\CartService;
+use WPWebMCP\AgentSNR\WebMCP\ToolException;
+use WPWebMCP\AgentSNR\WooCommerce\CartService;
 
 final class CartServiceTest extends TestCase
 {

@@ -13,7 +13,7 @@ Target: **2:40**, English narration, public YouTube, no music, and no third-part
 | 1:35–2:03 | Agent SNR, Workflow Replay, Opportunity Signals, outcomes | “Agent SNR replays the same workflow and keeps three evidence classes visible: Site observed demand, Agent reported feedback, and Site verified catalog and WooCommerce outcomes. Its monitoring ledger excludes raw prompts, addresses, and payment details.” |
 | 2:03–2:16 | Signals card and server measurements | “The merchant sees what users asked for but could not get—IPX5 protection under this budget—and a concrete product-coverage action, never invented lost revenue.” |
 | 2:16–2:30 | Disable comparison; manifest/tool list changes | “Now I disable comparison for only this demo session. The server blocks it immediately and the browser refreshes the catalog. Another judge is unaffected.” |
-| 2:30–2:40 | Eval fixtures, repo, ZIP, Docker/Playground artifacts, closing rail | “The exact release ships with pinned native WebMCP smoke, model-backed evals, and reproducible Docker and Playground artifacts—so this journey can be tested, published, and improved.” |
+| 2:30–2:40 | Eval fixtures, repo, ZIP, Docker/Playground artifacts, closing rail | “The exact release ships with pinned native WebMCP smoke, reproducible eval fixtures, and Docker and Playground artifacts—so this journey can be tested, published, and improved.” |
 
 ## Recording checklist
 
@@ -25,7 +25,7 @@ Target: **2:40**, English narration, public YouTube, no music, and no third-part
 - Use clear English narration throughout; review auto-captions and correct them if captions are published.
 - Use original artwork and narration only; no copyrighted music.
 - Crop browser/app chrome, other tabs, profile details, notifications, and nonessential third-party names or logos from every frame.
-- Confirm that the generic Agent SNR demo-store wording is present in the frozen build and regenerated evidence; resolve the Agent SNR and `AgentOps` compatibility-identifier screening items before recording.
+- Confirm that the generic Agent SNR demo-store wording is present in the frozen build and regenerated evidence; complete Agent SNR trademark/domain clearance before recording.
 - Audit necessary descriptive compatibility references against the applicable brand terms and record the entrant's approval.
 - Publish as **Public**, verify playback and audio logged out, and confirm the video embeds on the Devpost project page.
 - Open all public links logged out before and immediately after publishing.

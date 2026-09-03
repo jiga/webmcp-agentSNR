@@ -17,7 +17,7 @@ const STOREFRONT_TOOLS = [
 	"update_cart_quantity",
 ];
 
-const AGENTOPS_TOOLS = [
+const AGENTSNR_TOOLS = [
 	"explain_agent_workflow",
 	"get_agent_analytics_overview",
 	"get_agent_conversion_funnel",
@@ -38,7 +38,7 @@ function observePage( page, diagnostics ) {
 			const locationUrl = message.location().url || "";
 			if (
 				message.text().includes( "status of 401" ) &&
-				locationUrl.includes( "/wp-json/wmcp-agentops/v1/manifest" )
+				locationUrl.includes( "/wp-json/wmcp-agentsnr/v1/manifest" )
 			) {
 				// A fresh browser intentionally probes the no-side-effect manifest
 				// endpoint before bootstrapping its private server session.
@@ -96,7 +96,7 @@ async function installModelContextMock( context ) {
 
 		const originalSetItem = globalThis.Storage.prototype.setItem;
 		globalThis.Storage.prototype.setItem = function ( key, value ) {
-			if ( key === "wmcp-agentops:manifest-invalidation" ) {
+			if ( key === "wmcp-agentsnr:manifest-invalidation" ) {
 				try {
 					state.invalidations.push( JSON.parse( value ) );
 				} catch {
@@ -322,9 +322,9 @@ async function prepareCheckout( page ) {
 async function placeDemoOrder( page, checkoutUrl ) {
 	await page.goto( checkoutUrl );
 	await expect( page.locator( "form.checkout" ) ).toBeVisible();
-	await expect( page.locator( "#payment_method_wmcp_agentops_demo" ) ).toBeAttached();
-	await page.locator( "#payment_method_wmcp_agentops_demo" ).check();
-	await expect( page.locator( "label[for='payment_method_wmcp_agentops_demo']" ) ).toContainText( "Demo payment" );
+	await expect( page.locator( "#payment_method_wmcp_agentsnr_demo" ) ).toBeAttached();
+	await page.locator( "#payment_method_wmcp_agentsnr_demo" ).check();
+	await expect( page.locator( "label[for='payment_method_wmcp_agentsnr_demo']" ) ).toContainText( "Demo payment" );
 
 	await Promise.all( [
 		page.waitForURL( /\/checkout\/order-received\//, { timeout: 20_000 } ),
@@ -336,8 +336,8 @@ async function placeDemoOrder( page, checkoutUrl ) {
 }
 
 async function analyticsOverview( page ) {
-	await page.goto( "/agentops-demo/" );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.goto( "/agentsnr-demo/" );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 	const overview = await executeActiveTool( page, "get_agent_analytics_overview", {} );
 	expect( overview.ok ).toBe( true );
 
@@ -400,7 +400,7 @@ test( "registers every storefront and Agent SNR tool with standard imperative fi
 
 	for ( const surface of [
 		{ expected: STOREFRONT_TOOLS, path: "/storefront-demo/" },
-		{ expected: AGENTOPS_TOOLS, path: "/agentops-demo/" },
+		{ expected: AGENTSNR_TOOLS, path: "/agentsnr-demo/" },
 	] ) {
 		await page.goto( surface.path );
 		await waitForRuntime( page, surface.expected.length );
@@ -440,7 +440,7 @@ test( "registers every storefront and Agent SNR tool with standard imperative fi
 			}
 		}
 
-		if ( surface.path === "/agentops-demo/" ) {
+		if ( surface.path === "/agentsnr-demo/" ) {
 			await expect( page.locator( "[data-policy-tool]" ) ).toHaveCount( STOREFRONT_TOOLS.length );
 			await expect( page.locator( '[data-policy-tool="report_capability_gap"]' ) ).toHaveCount( 0 );
 		}
@@ -566,10 +566,10 @@ test( "withholds the no-charge gateway from a human-only cart", async ( { contex
 	await page.goto( "/?add-to-cart=" + productId );
 	await page.goto( "/checkout/" );
 	await expect( page.locator( "form.checkout" ) ).toBeVisible();
-	await expect( page.locator( "#payment_method_wmcp_agentops_demo" ) ).toHaveCount( 0 );
+	await expect( page.locator( "#payment_method_wmcp_agentsnr_demo" ) ).toHaveCount( 0 );
 
-	await page.goto( "/agentops-demo/" );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.goto( "/agentsnr-demo/" );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 } );
 
 test( "skips direct registration inside an iframe", async ( { context, page } ) => {
@@ -607,10 +607,10 @@ test( "manually loads current-session storefront evidence into Agent SNR", async
 		source: "site_observed",
 	} );
 
-	await page.goto( "/agentops-demo/" );
+	await page.goto( "/agentsnr-demo/" );
 	await expect( page ).toHaveTitle( /Agent SNR/ );
 	await expect( page.getByRole( "heading", { exact: true, name: "Agent SNR" } ).first() ).toBeVisible();
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
 
 	await expect( page.locator( "[data-wmcp-announcer]" ) ).toContainText( "Current-session evidence loaded" );
@@ -727,8 +727,8 @@ test( "discovers the guide, records missed demand, and separates agent feedback 
 	await expect( page.locator( "[data-wmcp-feedback-trust]" ) ).toContainText( "Agent reported" );
 	await expect( page.locator( "[data-wmcp-feedback-metrics]" ) ).toContainText( "IPX4" );
 
-	await page.goto( "/agentops-demo/" );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.goto( "/agentsnr-demo/" );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 	const signals = await executeActiveTool( page, "get_opportunity_signals", {} );
 	expect( signals.ok ).toBe( true );
 	expect( signals.result.items.some( ( item ) => item.sources.site_observed ) ).toBe( true );
@@ -801,8 +801,8 @@ test( "opens a bounded partial replay for a large Agent Sessions workflow", asyn
 	}
 	const workflowId = cart.workflow_id;
 
-	await page.goto( "/agentops-demo/" );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.goto( "/agentsnr-demo/" );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 	await page.locator( "[data-wmcp-load-dashboard]" ).click();
 	await expect( page.locator( "[data-wmcp-announcer]" ) ).toContainText( "Current-session evidence loaded" );
 
@@ -822,11 +822,11 @@ test( "disabling compare removes its registration and denies stale or direct exe
 	await waitForRuntime( page, STOREFRONT_TOOLS.length );
 	expect( await activeToolNames( page ) ).toContain( "compare_products" );
 
-	const agentOpsPage = await context.newPage();
-	await agentOpsPage.goto( "/agentops-demo/" );
-	await waitForRuntime( agentOpsPage, AGENTOPS_TOOLS.length );
+	const agentSNRPage = await context.newPage();
+	await agentSNRPage.goto( "/agentsnr-demo/" );
+	await waitForRuntime( agentSNRPage, AGENTSNR_TOOLS.length );
 
-	const policy = await executeActiveTool( agentOpsPage, "set_tool_enabled", {
+	const policy = await executeActiveTool( agentSNRPage, "set_tool_enabled", {
 		enabled: false,
 		reason: "Browser acceptance test for current-session governance",
 		scope: "demo_session",
@@ -835,7 +835,7 @@ test( "disabling compare removes its registration and denies stale or direct exe
 	expect( policy.ok ).toBe( true );
 	expect( policy.result.after.enabled ).toBe( false );
 
-	const crossSurfaceMessage = await agentOpsPage.evaluate( () =>
+	const crossSurfaceMessage = await agentSNRPage.evaluate( () =>
 		globalThis.__wmcpBrowserTest.invalidations.find(
 			( message ) => message.reason === "tool_result"
 		)
@@ -903,8 +903,8 @@ test( "reset rotates the private scope and clears the current cart", async ( { c
 	await searchAndAddProduct( page );
 	await expect( page.locator( "[data-wmcp-cart-count]" ).first() ).toHaveText( "1" );
 
-	await page.goto( "/agentops-demo/" );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await page.goto( "/agentsnr-demo/" );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 	const resetResponse = page.waitForResponse(
 		( response ) => response.request().method() === "POST" && response.url().includes( "/demo/reset" )
 	);
@@ -915,10 +915,10 @@ test( "reset rotates the private scope and clears the current cart", async ( { c
 	const reset = await resetResponse;
 	expect( reset.ok() ).toBe( true );
 	expect( await reset.json() ).toMatchObject( {
-		manifest: { surface: "agentops" },
+		manifest: { surface: "agentsnr" },
 		ok: true,
 	} );
-	await waitForRuntime( page, AGENTOPS_TOOLS.length );
+	await waitForRuntime( page, AGENTSNR_TOOLS.length );
 
 	await page.goto( "/storefront-demo/" );
 	await waitForRuntime( page, STOREFRONT_TOOLS.length );
@@ -947,13 +947,13 @@ test( "separate browser sessions cannot see analytics or policy overrides", asyn
 			query: "waterproof backpack",
 		} );
 
-		await page.goto( "/agentops-demo/" );
-		await waitForRuntime( page, AGENTOPS_TOOLS.length );
+		await page.goto( "/agentsnr-demo/" );
+		await waitForRuntime( page, AGENTSNR_TOOLS.length );
 		const ownOverview = await executeActiveTool( page, "get_agent_analytics_overview", {} );
 		expect( ownOverview.result.workflows.total ).toBeGreaterThan( 0 );
 
-		await otherPage.goto( "/agentops-demo/" );
-		await waitForRuntime( otherPage, AGENTOPS_TOOLS.length );
+		await otherPage.goto( "/agentsnr-demo/" );
+		await waitForRuntime( otherPage, AGENTSNR_TOOLS.length );
 		const otherOverview = await executeActiveTool( otherPage, "get_agent_analytics_overview", {} );
 		expect( otherOverview.result.workflows.total ).toBe( 0 );
 

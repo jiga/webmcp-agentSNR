@@ -81,7 +81,7 @@ build_release_archive_if_missing() {
   fi
 
   shopt -s nullglob
-  for candidate in "${REPO_DIR}"/dist/wmcp-agentops-*.zip; do
+  for candidate in "${REPO_DIR}"/dist/wmcp-agentsnr-*.zip; do
     [[ "$(basename "${candidate}")" == *-playground-* ]] || candidates+=("${candidate}")
   done
   shopt -u nullglob
@@ -110,7 +110,7 @@ resolve_release_archive() {
     candidates=("${requested}")
   else
     shopt -s nullglob
-    for candidate in "${REPO_DIR}"/dist/wmcp-agentops-*.zip; do
+    for candidate in "${REPO_DIR}"/dist/wmcp-agentsnr-*.zip; do
       [[ "$(basename "${candidate}")" == *-playground-* ]] || candidates+=("${candidate}")
     done
     shopt -u nullglob
@@ -140,13 +140,13 @@ verify_release_archive() {
     BEGIN { count = 0; bad = 0 }
     {
       count++
-      if ($0 !~ /^wmcp-agentops(\/[^\/]+)*\/?$/ || $0 ~ /(^|\/)\.\.?($|\/)/ || index($0, "\\") > 0) {
+      if ($0 !~ /^wmcp-agentsnr(\/[^\/]+)*\/?$/ || $0 ~ /(^|\/)\.\.?($|\/)/ || index($0, "\\") > 0) {
         bad = 1
       }
     }
     END { exit (count == 0 || bad) ? 1 : 0 }
   '; then
-    fail "Release ZIP must contain only one safe top-level wmcp-agentops/ directory."
+    fail "Release ZIP must contain only one safe top-level wmcp-agentsnr/ directory."
   fi
 
   if ! unzip -Z -l "${PLUGIN_ARCHIVE}" | awk '
@@ -181,7 +181,7 @@ prepare_release_plugin() {
   EXTRACTION_TMP="${RUNTIME_ROOT}/artifacts/${PLUGIN_SHA256}.tmp.$$"
   mkdir -p "${EXTRACTION_TMP}"
   unzip -q "${PLUGIN_ARCHIVE}" -d "${EXTRACTION_TMP}"
-  [[ -f "${EXTRACTION_TMP}/wmcp-agentops/wmcp-agentops.php" ]] || fail "The release ZIP is missing the plugin entry point."
+  [[ -f "${EXTRACTION_TMP}/wmcp-agentsnr/wmcp-agentsnr.php" ]] || fail "The release ZIP is missing the plugin entry point."
   printf '%s\n' "${PLUGIN_SHA256}" > "${EXTRACTION_TMP}/.artifact-sha256"
 
   if [[ ! -d "${extract_dir}" ]]; then
@@ -202,11 +202,11 @@ prepare_release_plugin() {
     EXTRACTION_TMP=""
   fi
 
-  [[ -f "${extract_dir}/wmcp-agentops/wmcp-agentops.php" ]] || fail "The extracted release directory is incomplete: ${extract_dir}"
+  [[ -f "${extract_dir}/wmcp-agentsnr/wmcp-agentsnr.php" ]] || fail "The extracted release directory is incomplete: ${extract_dir}"
   [[ -f "${marker}" ]] && [[ "$(sed -n '1p' "${marker}")" == "${PLUGIN_SHA256}" ]] \
     || fail "The extracted release directory failed its artifact marker check."
 
-  PLUGIN_DIR="${extract_dir}/wmcp-agentops"
+  PLUGIN_DIR="${extract_dir}/wmcp-agentsnr"
   printf 'archive=%s\nsha256=%s\nplugin_dir=%s\n' \
     "${PLUGIN_ARCHIVE}" "${PLUGIN_SHA256}" "${PLUGIN_DIR}" > "${STATE_FILE}"
   ARTIFACT_PREPARED=1
@@ -281,15 +281,15 @@ provision_wordpress() {
   wp_cli option update home "${SITE_URL}" >/dev/null
   wp_cli option update siteurl "${SITE_URL}" >/dev/null
   wp_cli config set WP_ENVIRONMENT_TYPE local --type=constant >/dev/null
-  wp_cli config set WMCP_AGENTOPS_DEMO_MODE true --raw --type=constant >/dev/null
-  wp_cli config set WMCP_AGENTOPS_ALLOW_DESTRUCTIVE_RESET true --raw --type=constant >/dev/null
+  wp_cli config set WMCP_AGENTSNR_DEMO_MODE true --raw --type=constant >/dev/null
+  wp_cli config set WMCP_AGENTSNR_ALLOW_DESTRUCTIVE_RESET true --raw --type=constant >/dev/null
   installed_woo_version="$(wp_cli plugin get woocommerce --field=version 2>/dev/null || true)"
   if [[ "${installed_woo_version}" == "${WOO_VERSION}" ]]; then
     wp_cli plugin activate woocommerce
   else
     wp_cli plugin install woocommerce --version="${WOO_VERSION}" --activate --force
   fi
-  wp_cli plugin activate wmcp-agentops
+  wp_cli plugin activate wmcp-agentsnr
   wp_cli eval-file /workspace/bin/seed-demo.php
   wp_cli option update woocommerce_coming_soon no >/dev/null
   wp_cli option update woocommerce_store_pages_only no >/dev/null
@@ -329,10 +329,10 @@ verify_showcase() {
   grep -qx 'wordpress' <<< "${running_services}" || fail "The showcase WordPress service is not running. Start the showcase first."
   compose ps --status running
   wordpress_container="$(compose ps -q wordpress)"
-  mounted_plugin="$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/var/www/html/wp-content/plugins/wmcp-agentops"}}{{.Source}}{{end}}{{end}}' "${wordpress_container}")"
+  mounted_plugin="$(docker inspect --format '{{range .Mounts}}{{if eq .Destination "/var/www/html/wp-content/plugins/wmcp-agentsnr"}}{{.Source}}{{end}}{{end}}' "${wordpress_container}")"
   [[ "${mounted_plugin}" == "${PLUGIN_DIR}" || "${mounted_plugin}" == "/host_mnt${PLUGIN_DIR}" ]] \
     || fail "WordPress is not mounted to the verified release artifact."
-  wp_cli plugin is-active wmcp-agentops || fail "Agent SNR is not active."
+  wp_cli plugin is-active wmcp-agentsnr || fail "Agent SNR is not active."
   wp_cli plugin is-active woocommerce || fail "WooCommerce is not active."
   installed_woo_version="$(wp_cli plugin get woocommerce --field=version)"
   [[ "${installed_woo_version}" == "${WOO_VERSION}" ]] || fail "WooCommerce ${installed_woo_version} is active; expected ${WOO_VERSION}."
@@ -344,7 +344,7 @@ verify_showcase() {
 
   verify_page "/" "Agent SNR" "judge landing"
   verify_page "/storefront-demo/" "Agent-ready Storefront" "storefront"
-  verify_page "/agentops-demo/" "Current browser evidence" "Agent SNR monitor"
+  verify_page "/agentsnr-demo/" "Current browser evidence" "Agent SNR monitor"
   verify_page "/webmcp-health/" "WebMCP Readiness" "readiness page"
   echo "  passed: release-artifact mount"
   echo "  passed: artifact ${PLUGIN_SHA256}"
@@ -361,7 +361,7 @@ start_showcase() {
   echo "Agent SNR isolated showcase is ready:"
   echo "  Judge start: ${SITE_URL}/"
   echo "  Storefront:  ${SITE_URL}/storefront-demo/"
-  echo "  Agent SNR:   ${SITE_URL}/agentops-demo/"
+  echo "  Agent SNR:   ${SITE_URL}/agentsnr-demo/"
   echo "  Readiness:   ${SITE_URL}/webmcp-health/"
   echo "  Artifact:    $(basename "${PLUGIN_ARCHIVE}") (${PLUGIN_SHA256})"
   echo "  Operator credentials are local-only; request them with:"

@@ -14,7 +14,7 @@
 /dist/*.sha256
 /dist/SHA256SUMS
 /node_modules/
-/plugin/wmcp-agentops/vendor/
+/plugin/wmcp-agentsnr/vendor/
 /vendor/
 
 !.gitkeep

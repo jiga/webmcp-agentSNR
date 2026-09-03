@@ -143,7 +143,7 @@ Evidence: Official Rules “demonstration video” requirements. The challenge s
 - [x] The Agent SNR workflow ledger stores no raw prompts, addresses, payment fields, or free-form feedback; ordinary WooCommerce remains the system of record for human-submitted order data, and that boundary is documented.
 - [x] Root notices state that product artwork/copy is original and no third-party logo, font, music, or executable runtime library is bundled.
 - [x] Replace the former public demo-store candidate name with generic **Agent SNR Demo Store** / **Agent SNR / Demo Store** wording before public capture.
-- [ ] Complete formal Agent SNR clearance and resolve the known `AgentOps` compatibility-identifier screening item before public launch/video.
+- [ ] Complete formal Agent SNR trademark/domain clearance before public launch/video; confirm the canonical `webmcp-agentSNR` repository slug and `wmcp-agentsnr` plugin slug are acceptable.
 - [ ] Confirm necessary descriptive WordPress, WooCommerce, WebMCP, ChatGPT, and Chrome references comply with each owner's brand/trademark terms and do not imply endorsement.
 - [ ] Confirm the final repository and release contain no malicious code, secrets, PII, or material that violates another party's rights.
 

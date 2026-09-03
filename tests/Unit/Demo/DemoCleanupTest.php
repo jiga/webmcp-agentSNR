@@ -3,18 +3,18 @@
 /**
  * Fail-closed demo cleanup tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Demo;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Demo;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Analytics\WorkflowService;
-use WPWebMCP\AgentOps\Demo\DemoCleanup;
-use WPWebMCP\AgentOps\Demo\DemoSession;
-use WPWebMCP\AgentOps\WebMCP\IdempotencyStore;
+use WPWebMCP\AgentSNR\Analytics\WorkflowService;
+use WPWebMCP\AgentSNR\Demo\DemoCleanup;
+use WPWebMCP\AgentSNR\Demo\DemoSession;
+use WPWebMCP\AgentSNR\WebMCP\IdempotencyStore;
 
 require_once __DIR__ . '/CleanupDatabaseDouble.php';
 require_once __DIR__ . '/CleanupOrderDouble.php';
@@ -165,7 +165,7 @@ final class DemoCleanupTest extends TestCase
     private function assert_rescheduled_once(): void
     {
         self::assertCount(1, $GLOBALS['wmcp_test_scheduled_events']);
-        self::assertSame('wmcp_agentops_cleanup_session', $GLOBALS['wmcp_test_scheduled_events'][0]['hook']);
+        self::assertSame('wmcp_agentsnr_cleanup_session', $GLOBALS['wmcp_test_scheduled_events'][0]['hook']);
         self::assertSame(array(self::SESSION_HASH), $GLOBALS['wmcp_test_scheduled_events'][0]['args']);
     }
 }

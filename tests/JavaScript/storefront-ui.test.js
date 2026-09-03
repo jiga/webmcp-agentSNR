@@ -12,7 +12,7 @@ const {
 	runBrowserScript,
 } = require( "./dom-harness.js" );
 
-const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentops/assets/js/storefront-ui.js" );
+const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentsnr/assets/js/storefront-ui.js" );
 
 function panel( document, stage, children ) {
 	return element( document, "section", {

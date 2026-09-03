@@ -59,9 +59,9 @@ export function buildSmokeRuns( baseUrl ) {
 			url: new URL( "/storefront-demo/", baseUrl ).href,
 		},
 		{
-			fixture: path.join( EVAL_ROOT, "agentops-smoke.json" ),
-			name: "agentops",
-			url: new URL( "/agentops-demo/", baseUrl ).href,
+			fixture: path.join( EVAL_ROOT, "agentsnr-smoke.json" ),
+			name: "agentsnr",
+			url: new URL( "/agentsnr-demo/", baseUrl ).href,
 		},
 	];
 }

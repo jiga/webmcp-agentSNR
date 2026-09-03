@@ -106,8 +106,8 @@ Client `AbortSignal` cancellation stops the browser fetch and UI wait. PHP/WooCo
 
 ## Artifact checks
 
-1. Build `dist/wmcp-agentops-0.1.0.zip` from a clean tag.
-2. Verify its SHA-256 file and confirm the ZIP has one `wmcp-agentops/` root.
+1. Build `dist/wmcp-agentsnr-0.1.0.zip` from a clean tag.
+2. Verify its SHA-256 file and confirm the ZIP has one `wmcp-agentsnr/` root.
 3. Scan for `.env`, Git metadata, tests, logs, caches, nested ZIPs, secrets, and development dependencies.
 4. Install and activate that exact ZIP on every matrix target.
 5. Run official WordPress Plugin Check against the extracted ZIP.

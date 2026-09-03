@@ -10,7 +10,7 @@ LABEL org.opencontainers.image.revision="${RENDER_GIT_COMMIT}"
 
 ENV WMCP_WORDPRESS_VERSION=7.1 \
     WMCP_WOOCOMMERCE_VERSION=11.0.1 \
-    WMCP_AGENTOPS_VERSION=0.1.0
+    WMCP_AGENTSNR_VERSION=0.1.0
 
 RUN set -eux; \
     apt-get update; \
@@ -25,8 +25,8 @@ RUN set -eux; \
     chown -R www-data:www-data /usr/src/wordpress/wp-content/plugins/woocommerce
 
 COPY --from=wp-cli /usr/local/bin/wp /usr/local/bin/wp
-COPY --chown=www-data:www-data plugin/wmcp-agentops /usr/src/wordpress/wp-content/plugins/wmcp-agentops
-COPY --chown=www-data:www-data LICENSE THIRD_PARTY_NOTICES.md /usr/src/wordpress/wp-content/plugins/wmcp-agentops/
+COPY --chown=www-data:www-data plugin/wmcp-agentsnr /usr/src/wordpress/wp-content/plugins/wmcp-agentsnr
+COPY --chown=www-data:www-data LICENSE THIRD_PARTY_NOTICES.md /usr/src/wordpress/wp-content/plugins/wmcp-agentsnr/
 COPY --chown=www-data:www-data bin/seed-demo.php /opt/agent-snr/bin/seed-demo.php
 COPY --chmod=0755 deploy/render/render-entrypoint.sh /usr/local/bin/agent-snr-render-entrypoint
 

@@ -3,12 +3,12 @@
 /**
  * Scoped WooCommerce-order cleanup test double.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Demo;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Demo;
 
 final class CleanupOrderDouble
 {

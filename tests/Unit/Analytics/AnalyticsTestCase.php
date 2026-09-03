@@ -3,7 +3,7 @@
 /**
  * Analytics test bootstrap and WordPress-function shims.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
@@ -60,7 +60,7 @@ namespace {
     }
 }
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics {
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics {
     use PHPUnit\Framework\TestCase;
 
     require_once __DIR__ . '/AnalyticsDatabaseDouble.php';

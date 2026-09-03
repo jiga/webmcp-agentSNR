@@ -13,7 +13,7 @@ All notable changes are documented here. This project follows semantic versionin
 - Bounded Agent Sessions replays beneath the existing tool-output ceiling, preserving first/latest and diagnostic evidence while making row loading and failures explicit.
 - Hydrated and synchronized the accessible storefront cart badge across existing and newly opened tabs through private manifest snapshots, without adding session state to cacheable HTML.
 - Reframed the monitoring surface around Agent Sessions, Workflow Replay, Signals, Tools, Outcomes, and Controls.
-- Adopted **Agent SNR** as the public brand with the descriptor “Agent outcome monitoring for WordPress,” while preserving internal compatibility identifiers.
+- Adopted **Agent SNR** as the public brand with the descriptor “Agent outcome monitoring for WordPress,” then aligned all pre-release public and technical identifiers before the first public deployment.
 
 ## [0.1.0] - Unreleased
 

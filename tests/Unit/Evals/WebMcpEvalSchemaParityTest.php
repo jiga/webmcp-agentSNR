@@ -3,16 +3,16 @@
 /**
  * Public ToolCatalog to webmcp-evals schema parity.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Evals;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Evals;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Abilities\ToolCatalog;
-use WPWebMCP\AgentOps\Contract\ToolName;
+use WPWebMCP\AgentSNR\Abilities\ToolCatalog;
+use WPWebMCP\AgentSNR\Contract\ToolName;
 
 final class WebMcpEvalSchemaParityTest extends TestCase
 {
@@ -21,9 +21,9 @@ final class WebMcpEvalSchemaParityTest extends TestCase
         $this->assert_surface_schema_matches_catalog('storefront', 12);
     }
 
-    public function test_agentops_eval_schema_matches_public_catalog(): void
+    public function test_agentsnr_eval_schema_matches_public_catalog(): void
     {
-        $this->assert_surface_schema_matches_catalog('agentops', 8);
+        $this->assert_surface_schema_matches_catalog('agentsnr', 8);
     }
 
     private function assert_surface_schema_matches_catalog(string $surface, int $expected_count): void

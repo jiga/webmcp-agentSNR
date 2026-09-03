@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
-use WPWebMCP\AgentOps\WooCommerce\DemoPaymentGateway;
-use WPWebMCP\AgentOps\WooCommerce\WooIntegration;
+use WPWebMCP\AgentSNR\WooCommerce\DemoPaymentGateway;
+use WPWebMCP\AgentSNR\WooCommerce\WooIntegration;
 
 require_once __DIR__ . '/PaymentGatewayBaseDouble.php';
 
@@ -20,7 +20,7 @@ final class WooIntegrationTest extends TestCase
     #[PreserveGlobalState(false)]
     public function test_demo_gateway_registration_preserves_mixed_entries_and_is_idempotent(): void
     {
-        define('WMCP_AGENTOPS_DEMO_MODE', true);
+        define('WMCP_AGENTSNR_DEMO_MODE', true);
         class_alias(PaymentGatewayBaseDouble::class, 'WC_Payment_Gateway');
 
         $integration        = (new ReflectionClass(WooIntegration::class))->newInstanceWithoutConstructor();
@@ -61,7 +61,7 @@ final class WooIntegrationTest extends TestCase
     #[PreserveGlobalState(false)]
     public function test_missing_woocommerce_gateway_base_preserves_mixed_entries(): void
     {
-        define('WMCP_AGENTOPS_DEMO_MODE', true);
+        define('WMCP_AGENTSNR_DEMO_MODE', true);
 
         $integration = (new ReflectionClass(WooIntegration::class))->newInstanceWithoutConstructor();
         $gateways    = array('legacy' => 'WC_Legacy_Gateway', 'object' => new stdClass());

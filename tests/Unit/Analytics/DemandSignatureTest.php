@@ -3,15 +3,15 @@
 /**
  * Privacy-safe demand-signature tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Analytics\DemandSignature;
+use WPWebMCP\AgentSNR\Analytics\DemandSignature;
 
 final class DemandSignatureTest extends TestCase
 {

@@ -3,17 +3,17 @@
 /**
  * Full-set catalog analysis and bounded out-of-stock fallback tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\WooCommerce\ProductCatalog;
-use WPWebMCP\AgentOps\WooCommerce\ProductNormalizer;
-use WPWebMCP\AgentOps\WooCommerce\ProductSearchMatcher;
+use WPWebMCP\AgentSNR\WooCommerce\ProductCatalog;
+use WPWebMCP\AgentSNR\WooCommerce\ProductNormalizer;
+use WPWebMCP\AgentSNR\WooCommerce\ProductSearchMatcher;
 
 require_once __DIR__ . '/CatalogProductDouble.php';
 

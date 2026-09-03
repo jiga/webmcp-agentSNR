@@ -2,7 +2,7 @@
 <ruleset name="Agent SNR">
   <description>PSR-12 plus WordPress security/API rules and PHP 8.1 compatibility.</description>
 
-  <file>plugin/wmcp-agentops</file>
+  <file>plugin/wmcp-agentsnr</file>
   <file>tests</file>
 
   <exclude-pattern>*/vendor/*</exclude-pattern>
@@ -21,7 +21,7 @@
   <rule ref="PSR12">
     <exclude name="PSR1.Methods.CamelCapsMethodName"/>
     <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
-    <exclude-pattern>plugin/wmcp-agentops/templates/*</exclude-pattern>
+    <exclude-pattern>plugin/wmcp-agentsnr/templates/*</exclude-pattern>
   </rule>
   <rule ref="Generic.Files.LineLength">
     <properties>

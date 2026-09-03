@@ -6,14 +6,14 @@ The rule-by-rule source of truth is [`devpost-rules-checklist.md`](devpost-rules
 
 ## Code and artifacts
 
-Checked exact-artifact items in this section describe the fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. Compliance copy and owner metadata change future artifact bytes, so published-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
+Checked exact-artifact items in this section describe the current renamed pre-public package. Protected model-backed results are explicitly identified as historical until the same suites are rerun against the rename commit. Owner metadata changes future artifact bytes, so published-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
 
-- [x] The engineering candidate's automated JavaScript, PHP, security, browser, WooCommerce, HPOS-on/off, and artifact tests pass from a clean checkout; current submission-copy static checks also pass.
-- [x] The engineering-candidate ZIP passes WordPress 6.9 / WooCommerce 10.9.4, WordPress 7.0.4 / WooCommerce 11.0.1, and WordPress 7.1 / WooCommerce 11.0.1 HPOS.
+- [x] The renamed package's automated JavaScript, PHP, security, browser, WooCommerce, HPOS-on/off, and artifact tests pass from a clean checkout; current submission-copy static checks also pass.
+- [x] The renamed exact ZIP passes WordPress 6.9 / WooCommerce 10.9.4, WordPress 7.0.4 / WooCommerce 11.0.1, and WordPress 7.1 / WooCommerce 11.0.1 HPOS.
 - [ ] Optional newest-release evidence: re-run the matrix against WooCommerce 11.1 if a stable build is available and time permits before final deployment; the declared 10.9.4/11.0.1 range already passes.
-- [x] Official Plugin Check reports zero errors against the extracted engineering-candidate ZIP; reviewed warnings are recorded in `verification-report.md`.
-- [x] The engineering-candidate ZIP contains one plugin root, local runtime assets, license/notices, and no development/private files.
-- [x] The engineering-candidate Playground bundle validates, installs, activates, seeds, and reports its iframe limitation accurately.
+- [x] Official Plugin Check reports zero errors against the extracted renamed ZIP; reviewed warnings are recorded in `verification-report.md`.
+- [x] The renamed ZIP contains one plugin root, local runtime assets, license/notices, and no development/private files.
+- [x] The renamed Playground bundle validates, installs, activates, seeds, and reports its iframe limitation accurately.
 - [x] Docker one-command bootstrap succeeds with a new named volume.
 - [x] Isolated `agent-snr-showcase` rehearsal runs the verified release ZIP without touching development volumes.
 - [x] Editable 12-slide architecture/demo presentation and ten real exact-artifact local-flow reference screenshots are included.
@@ -21,8 +21,8 @@ Checked exact-artifact items in this section describe the fully exercised engine
 
 ## WebMCP quality and external evidence
 
-- [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the exact engineering-candidate ZIP at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`, including application-error-envelope enforcement.
-- [x] Protected model-backed selection and browser evals pass the strict all-pass gate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`: storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the renamed exact ZIP, including application-error-envelope enforcement.
+- [ ] Protected model-backed selection and browser evals must be rerun and strict-checked against the rename commit. Historical evidence at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 - [ ] At least one official judge path—the latest ChatGPT desktop in-app browser or Chrome 149+ with the WebMCP flag—discovers exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages.
 - [ ] Optional quality evidence: the owner completed [`workbench-validation.md`](workbench-validation.md) with the actual installed version, exact release identity, manual calls, Audit findings, saved-call replay, repeated evals, approval/log review, and User Mode evidence.
 - [ ] Provider keys and raw `.evals/`/Workbench logs remain private; every linked excerpt or screenshot is sanitized.
@@ -57,7 +57,7 @@ Checked exact-artifact items in this section describe the fully exercised engine
 - [ ] Entrant personally confirms originality, sole ownership/contributor rights, third-party authorizations, no prohibited Sponsor/Administrator support, no malicious code, and accuracy of every claim.
 - [ ] Formal trademark and domain clearance for Agent SNR is complete.
 - [x] The former public demo-store candidate name is removed; site title, storefront lockup, policy copy, launchers, and reference captures use generic Agent SNR demo-store wording.
-- [ ] The known `AgentOps` technical-identifier screening item is cleared or removed from the final public repo/site/video.
+- [ ] The Agent SNR name, `webmcp-agentSNR` repository slug, and `wmcp-agentsnr` plugin slug have completed formal trademark/domain screening.
 - [x] Description covers WebMCP fit, UX improvement, human-agent collaboration, and implementation.
 - [x] Local reference screenshots contain only fictional demo data and original project assets.
 - [ ] Public source/license, live URL, test instructions, and any credentials are complete.

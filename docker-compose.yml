@@ -1,4 +1,4 @@
-name: wp-webmcp-agentops
+name: wp-webmcp-agentsnr
 
 services:
   database:
@@ -31,7 +31,7 @@ services:
       - "${WMCP_BIND_HOST:-127.0.0.1}:${WMCP_HTTP_PORT:-18080}:80"
     volumes:
       - wordpress_data:/var/www/html
-      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentops}:/var/www/html/wp-content/plugins/wmcp-agentops:ro
+      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentsnr}:/var/www/html/wp-content/plugins/wmcp-agentsnr:ro
 
   cli:
     image: ${WMCP_CLI_IMAGE:-wordpress:cli-2.12-php8.3}
@@ -48,7 +48,7 @@ services:
     user: "33:33"
     volumes:
       - wordpress_data:/var/www/html
-      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentops}:/var/www/html/wp-content/plugins/wmcp-agentops:ro
+      - ${WMCP_PLUGIN_DIR:-./plugin/wmcp-agentsnr}:/var/www/html/wp-content/plugins/wmcp-agentsnr:ro
       - ./bin:/workspace/bin:ro
     working_dir: /var/www/html
 

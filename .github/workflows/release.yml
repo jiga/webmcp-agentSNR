@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
+          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
           case "${GITHUB_REF_NAME}" in
             "v${version}"|"v${version}-"*) ;;
             *)
@@ -69,9 +69,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
+          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
           npx --yes @wp-playground/cli@3.1.51 run-blueprint \
-            --blueprint="dist/wmcp-agentops-playground-${version}.zip" \
+            --blueprint="dist/wmcp-agentsnr-playground-${version}.zip" \
             --verbosity=normal
 
       - name: Upload artifacts for acceptance
@@ -114,7 +114,7 @@ jobs:
       WMCP_WORDPRESS_IMAGE: ${{ matrix.wordpress_image }}
       WMCP_CLI_IMAGE: ${{ matrix.cli_image }}
       WMCP_WOOCOMMERCE_VERSION: ${{ matrix.woocommerce_version }}
-      WMCP_PLUGIN_DIR: ${{ github.workspace }}/.release-test/wmcp-agentops
+      WMCP_PLUGIN_DIR: ${{ github.workspace }}/.release-test/wmcp-agentsnr
     steps:
       - name: Check out the tagged source
         uses: actions/checkout@v7
@@ -131,11 +131,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
+          version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
           mkdir -p .release-test
-          unzip -q "dist/wmcp-agentops-${version}.zip" -d .release-test
-          test -f .release-test/wmcp-agentops/wmcp-agentops.php
-          test "$(unzip -Z1 "dist/wmcp-agentops-${version}.zip" | cut -d/ -f1 | sort -u)" = "wmcp-agentops"
+          unzip -q "dist/wmcp-agentsnr-${version}.zip" -d .release-test
+          test -f .release-test/wmcp-agentsnr/wmcp-agentsnr.php
+          test "$(unzip -Z1 "dist/wmcp-agentsnr-${version}.zip" | cut -d/ -f1 | sort -u)" = "wmcp-agentsnr"
 
       - name: Bootstrap a clean demo from the exact ZIP
         run: ./bin/start-demo.sh
@@ -159,7 +159,7 @@ jobs:
         run: |
           set -euo pipefail
           docker compose run --rm cli wp plugin is-active woocommerce
-          docker compose run --rm cli wp plugin is-active wmcp-agentops
+          docker compose run --rm cli wp plugin is-active wmcp-agentsnr
           before="$(docker compose run --rm cli wp post list --post_type=product --format=count | tr -d '\r')"
           test "${before}" = "12"
           docker compose run --rm cli wp eval-file /workspace/bin/seed-demo.php
@@ -170,7 +170,7 @@ jobs:
         if: matrix.name == 'primary'
         run: |
           docker compose run --rm cli wp plugin install plugin-check --activate
-          docker compose run --rm cli wp plugin check wmcp-agentops --format=table
+          docker compose run --rm cli wp plugin check wmcp-agentsnr --format=table
 
       - name: Use Node.js 22 for browser acceptance
         if: matrix.name == 'primary'
@@ -233,7 +233,7 @@ jobs:
       - name: Upload immutable workflow artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: wp-webmcp-agentops-${{ github.ref_name }}
+          name: wmcp-agentsnr-${{ github.ref_name }}
           path: |
             dist/*.zip
             dist/*.sha256
@@ -249,7 +249,7 @@ jobs:
           set -euo pipefail
           if ! gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
             release_flags=()
-            version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentops/wmcp-agentops.php | head -n 1)"
+            version="$(sed -n 's/^ \* Version:[[:space:]]*//p' plugin/wmcp-agentsnr/wmcp-agentsnr.php | head -n 1)"
             if [[ "${GITHUB_REF_NAME}" != "v${version}" ]]; then
               release_flags+=(--prerelease)
             fi

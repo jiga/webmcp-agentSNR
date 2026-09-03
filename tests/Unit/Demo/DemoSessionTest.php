@@ -3,15 +3,15 @@
 /**
  * Server-issued demo-session security tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Demo;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Demo;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Demo\DemoSession;
+use WPWebMCP\AgentSNR\Demo\DemoSession;
 
 final class DemoSessionTest extends TestCase
 {

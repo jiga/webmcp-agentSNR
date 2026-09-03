@@ -3,15 +3,15 @@
 /**
  * Request identity and replay-state tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WebMCP;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WebMCP;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\WebMCP\IdempotencyStore;
+use WPWebMCP\AgentSNR\WebMCP\IdempotencyStore;
 
 final class IdempotencyStoreTest extends TestCase
 {

@@ -50,7 +50,7 @@ The [API documentation](https://webmcp.com/api-docs) identifies `GET /api/v1/loo
 
 ```bash
 AGENT_SNR_STOREFRONT_URL='https://replace.example/storefront-demo/'
-AGENT_SNR_MONITOR_URL='https://replace.example/agentops-demo/'
+AGENT_SNR_MONITOR_URL='https://replace.example/agentsnr-demo/'
 
 curl --fail-with-body --silent --show-error --get \
   'https://webmcp.com/api/v1/lookup' \

@@ -42,7 +42,7 @@ const validStartupEnvironment = Object.fromEntries(
 validStartupEnvironment.WORDPRESS_DB_HOST = "database.internal:3306";
 validStartupEnvironment.WMCP_ADMIN_EMAIL = "admin@example.invalid";
 validStartupEnvironment.WMCP_PUBLIC_URL = "https://demo.example.invalid";
-validStartupEnvironment.WMCP_REPOSITORY_URL = "https://github.com/jiga/wp-webmcp";
+validStartupEnvironment.WMCP_REPOSITORY_URL = "https://github.com/jiga/webmcp-agentSNR";
 
 const runEntrypointValidation = ( environmentOverrides = {}, omittedKey = null ) => {
 	const childEnvironment = {
@@ -92,9 +92,9 @@ describe( "Render deployment", () => {
 
 	it( "uses the Agent SNR health route and Apache port", () => {
 		const webEnvironment = environment( webService );
-		assert.equal( webService.healthCheckPath, "/wp-json/wmcp-agentops/v1/health" );
+		assert.equal( webService.healthCheckPath, "/wp-json/wmcp-agentsnr/v1/health" );
 		assert.equal( webEnvironment.PORT.value, "80" );
-		assert.equal( webEnvironment.WMCP_REPOSITORY_URL.value, "https://github.com/jiga/wp-webmcp" );
+		assert.equal( webEnvironment.WMCP_REPOSITORY_URL.value, "https://github.com/jiga/webmcp-agentSNR" );
 		assert.equal( webEnvironment.WMCP_RELEASE_URL, undefined );
 		assert.equal( webService.dockerfilePath, "./deploy/render/Dockerfile" );
 		assert.equal( databaseService.dockerfilePath, "./deploy/render/mariadb.Dockerfile" );
@@ -164,7 +164,7 @@ describe( "Render deployment", () => {
 			"define('WP_SITEURL', $wmcp_public_url)",
 			"define('FORCE_SSL_ADMIN', true)",
 			"define('WP_ENVIRONMENT_TYPE', 'production')",
-			"define('WMCP_AGENTOPS_DEMO_MODE', true)",
+			"define('WMCP_AGENTSNR_DEMO_MODE', true)",
 			"define('DISALLOW_FILE_EDIT', true)",
 			"define('DISALLOW_FILE_MODS', true)",
 			"define('AUTOMATIC_UPDATER_DISABLED', true)",
@@ -201,7 +201,7 @@ describe( "Render deployment", () => {
 		assert.match( dockerfile, /org\.opencontainers\.image\.revision="\$\{RENDER_GIT_COMMIT\}"/ );
 		assert.match(
 			dockerfile,
-			/COPY --chown=www-data:www-data LICENSE THIRD_PARTY_NOTICES\.md \/usr\/src\/wordpress\/wp-content\/plugins\/wmcp-agentops\//
+			/COPY --chown=www-data:www-data LICENSE THIRD_PARTY_NOTICES\.md \/usr\/src\/wordpress\/wp-content\/plugins\/wmcp-agentsnr\//
 		);
 	} );
 
@@ -216,9 +216,9 @@ describe( "Render deployment", () => {
 			"WMCP_REPOSITORY_URL",
 			"wp_cli option update home",
 			"wp_cli option update siteurl",
-			"wp_cli option update wmcp_agentops_repository_url",
+			"wp_cli option update wmcp_agentsnr_repository_url",
 			"wp_cli plugin activate woocommerce",
-			"wp_cli plugin activate wmcp-agentops",
+			"wp_cli plugin activate wmcp-agentsnr",
 			"wp_cli eval-file /opt/agent-snr/bin/seed-demo.php",
 			"wp_cli option update woocommerce_coming_soon no",
 			"wp_cli rewrite structure '/%postname%/' --hard",
@@ -234,7 +234,7 @@ describe( "Render deployment", () => {
 		assert.match( entrypoint, /--title="Agent SNR Demo Store"/ );
 		assert.match( entrypoint, /attempt == DB_WAIT_ATTEMPTS/ );
 		assert.match( entrypoint, /MariaDB was not ready before the bounded startup deadline/ );
-		assert.equal( entrypoint.includes( "wmcp_agentops_release_url" ), false );
+		assert.equal( entrypoint.includes( "wmcp_agentsnr_release_url" ), false );
 	} );
 
 	it( "fails before touching WordPress when any required setting is absent", () => {
@@ -257,11 +257,11 @@ describe( "Render deployment", () => {
 		}
 
 		for ( const repositoryUrl of [
-			"http://github.com/jiga/wp-webmcp",
+			"http://github.com/jiga/webmcp-agentSNR",
 			"https://github.com/jiga",
-			"https://github.com/jiga/wp-webmcp/",
-			"https://github.com/jiga/wp-webmcp?tab=readme",
-			"https://user@github.com/jiga/wp-webmcp",
+			"https://github.com/jiga/webmcp-agentSNR/",
+			"https://github.com/jiga/webmcp-agentSNR?tab=readme",
+			"https://user@github.com/jiga/webmcp-agentSNR",
 		] ) {
 			const result = runEntrypointValidation( { WMCP_REPOSITORY_URL: repositoryUrl } );
 			assert.equal( result.status, 1 );
@@ -282,21 +282,21 @@ describe( "Render deployment", () => {
 			"!deploy/render/",
 			"!deploy/render/**",
 			"!plugin/",
-			"!plugin/wmcp-agentops/",
-			"!plugin/wmcp-agentops/**",
+			"!plugin/wmcp-agentsnr/",
+			"!plugin/wmcp-agentsnr/**",
 		];
 		assert.deepEqual(
 			dockerignore.split( "\n" ).filter( ( line ) => line.startsWith( "!" ) ),
 			allowed
 		);
 		for ( const excluded of [
-			"plugin/wmcp-agentops/node_modules",
-			"plugin/wmcp-agentops/tests",
-			"plugin/wmcp-agentops/vendor",
-			"plugin/wmcp-agentops/**/.env*",
-			"plugin/wmcp-agentops/**/*.log",
-			"plugin/wmcp-agentops/**/*.map",
-			"plugin/wmcp-agentops/**/*.zip",
+			"plugin/wmcp-agentsnr/node_modules",
+			"plugin/wmcp-agentsnr/tests",
+			"plugin/wmcp-agentsnr/vendor",
+			"plugin/wmcp-agentsnr/**/.env*",
+			"plugin/wmcp-agentsnr/**/*.log",
+			"plugin/wmcp-agentsnr/**/*.map",
+			"plugin/wmcp-agentsnr/**/*.zip",
 		] ) {
 			assert.match( dockerignore, new RegExp( `^${ excluded.replace( /[.*+?^${}()|[\]\\]/g, "\\$&" ) }$`, "m" ) );
 		}
@@ -316,7 +316,7 @@ describe( "Render deployment", () => {
 			"local-demo-root-password",
 			"local-demo-admin-password",
 			"WORDPRESS_DEBUG",
-			"WMCP_AGENTOPS_ALLOW_DESTRUCTIVE_RESET', true",
+			"WMCP_AGENTSNR_ALLOW_DESTRUCTIVE_RESET', true",
 		] ) {
 			assert.equal( combined.includes( forbidden ), false, `forbidden deployment value: ${ forbidden }` );
 		}

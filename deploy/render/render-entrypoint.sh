@@ -103,9 +103,9 @@ fi
 
 wp_cli option update home "${public_url}"
 wp_cli option update siteurl "${public_url}"
-wp_cli option update wmcp_agentops_repository_url "${WMCP_REPOSITORY_URL}"
+wp_cli option update wmcp_agentsnr_repository_url "${WMCP_REPOSITORY_URL}"
 wp_cli plugin activate woocommerce
-wp_cli plugin activate wmcp-agentops
+wp_cli plugin activate wmcp-agentsnr
 wp_cli eval-file /opt/agent-snr/bin/seed-demo.php
 wp_cli option update woocommerce_coming_soon no
 wp_cli option update woocommerce_store_pages_only no
@@ -124,9 +124,9 @@ verify_version() {
 
 verify_version "WordPress" "${WMCP_WORDPRESS_VERSION}" "$(wp_cli core version)"
 verify_version "WooCommerce" "${WMCP_WOOCOMMERCE_VERSION}" "$(wp_cli plugin get woocommerce --field=version)"
-verify_version "Agent SNR" "${WMCP_AGENTOPS_VERSION}" "$(wp_cli plugin get wmcp-agentops --field=version)"
+verify_version "Agent SNR" "${WMCP_AGENTSNR_VERSION}" "$(wp_cli plugin get wmcp-agentsnr --field=version)"
 wp_cli plugin is-active woocommerce
-wp_cli plugin is-active wmcp-agentops
+wp_cli plugin is-active wmcp-agentsnr
 
 echo "Agent SNR bootstrap completed; starting Apache."
 exec /usr/local/bin/docker-entrypoint.sh "$@"

@@ -15,7 +15,7 @@ const {
 	waitFor,
 } = require( "./dom-harness.js" );
 
-const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentops/assets/js/dashboard.js" );
+const SCRIPT = path.resolve( __dirname, "../../plugin/wmcp-agentsnr/assets/js/dashboard.js" );
 
 function attributionCard( document, attribution ) {
 	return element( document, "article", {
@@ -39,7 +39,7 @@ function dashboardFixture( options = {} ) {
 	} );
 	const root = element( document, "main", {
 		className: "wmcp-field",
-		dataset: { wmcpSurface: "agentops" },
+		dataset: { wmcpSurface: "agentsnr" },
 		children: [
 			element( document, "button", { dataset: { wmcpLoadDashboard: "" } } ),
 			element( document, "li", {
@@ -83,7 +83,7 @@ function dashboardFixture( options = {} ) {
 	const window = new MockWindow( document, {
 		fetch: options.fetch,
 		wmcpConfig: Object.assign( {
-			executionBaseUrl: "/wp-json/wmcp-agentops/v1",
+			executionBaseUrl: "/wp-json/wmcp-agentsnr/v1",
 			manifestUrl: "/manifest",
 		}, options.wmcpConfig || {} ),
 	} );

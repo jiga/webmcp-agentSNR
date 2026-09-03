@@ -23,7 +23,7 @@
       "step": "defineWpConfigConsts",
       "consts": {
         "WP_ENVIRONMENT_TYPE": "local",
-        "WMCP_AGENTOPS_DEMO_MODE": true
+        "WMCP_AGENTSNR_DEMO_MODE": true
       }
     },
     {
@@ -43,18 +43,18 @@
       "step": "installPlugin",
       "pluginData": {
         "resource": "bundled",
-        "path": "/wmcp-agentops.zip"
+        "path": "/wmcp-agentsnr.zip"
       },
       "options": {
         "activate": true,
         "onError": "throw",
-        "targetFolderName": "wmcp-agentops",
+        "targetFolderName": "wmcp-agentsnr",
         "humanReadableName": "Agent SNR"
       }
     },
     {
       "step": "writeFile",
-      "path": "/wordpress/wp-content/wmcp-agentops-seed.php",
+      "path": "/wordpress/wp-content/wmcp-agentsnr-seed.php",
       "data": {
         "resource": "bundled",
         "path": "/seed-demo.php"
@@ -62,7 +62,7 @@
     },
     {
       "step": "runPHP",
-      "code": "<?php require '/wordpress/wp-load.php'; require '/wordpress/wp-content/wmcp-agentops-seed.php'; wmcp_agentops_seed_playground_demo();"
+      "code": "<?php require '/wordpress/wp-load.php'; require '/wordpress/wp-content/wmcp-agentsnr-seed.php'; wmcp_agentsnr_seed_playground_demo();"
     },
     {
       "step": "login",

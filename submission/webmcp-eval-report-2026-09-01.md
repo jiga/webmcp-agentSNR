@@ -2,6 +2,8 @@
 
 Status: **PASS — strict model-backed release gate cleared after remediation**
 
+> **Historical evidence notice:** this report is bound to pre-public engineering commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` and its recorded artifact hashes. The later AgentSNR technical-identity rename did not change public tool names or workflow behavior, but protected model-backed suites have not yet been rerun against the renamed package. Mechanically updated current fixture labels below are navigation aids, not a claim that the 2026-09-02 raw reports were generated from the renamed filenames.
+
 The initial protected run exposed real harness, search, session-correlation, and journey-design defects. The fixes were implemented without allowing duplicate or state-changing calls to bypass the gate. The same fixed model now passes every authored storefront, Agent SNR, and live-browser requirement.
 
 ## Before and after
@@ -99,7 +101,7 @@ The final browser sequence was:
 | Final fixture or harness artifact | SHA-256 |
 |---|---|
 | `storefront-selection.json` | `775a7ec44618806c8d6eef5582397c8ea14f3c01edd458e1883d917acab59dd0` |
-| `agentops-selection.json` | `38cd64d1e48876cb209d173693ff48470e26003b1feac98a68b4e89c49358d87` |
+| `agentsnr-selection.json` | `38cd64d1e48876cb209d173693ff48470e26003b1feac98a68b4e89c49358d87` |
 | `browser-journeys.json` | `2729ca8034beda95eff2a24a74db2b639cf86045048929fc2f90d60f5fa71ea8` |
 | Storefront schema | `dd06b4b88c02061ca2bd5df53facd90a8e9bf4094a6efacd5b2023c98f20095c` |
 | Agent SNR schema | `2f0f54419f8cb9856126accc0f47c740275e4bbff54b65caa6d5b5d8d0d0ce4d` |

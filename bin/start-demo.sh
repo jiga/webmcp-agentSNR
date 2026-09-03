@@ -39,10 +39,10 @@ fi
 docker compose run --rm cli wp option update home "${SITE_URL}"
 docker compose run --rm cli wp option update siteurl "${SITE_URL}"
 docker compose run --rm cli wp config set WP_ENVIRONMENT_TYPE local --type=constant
-docker compose run --rm cli wp config set WMCP_AGENTOPS_DEMO_MODE true --raw --type=constant
-docker compose run --rm cli wp config set WMCP_AGENTOPS_ALLOW_DESTRUCTIVE_RESET true --raw --type=constant
+docker compose run --rm cli wp config set WMCP_AGENTSNR_DEMO_MODE true --raw --type=constant
+docker compose run --rm cli wp config set WMCP_AGENTSNR_ALLOW_DESTRUCTIVE_RESET true --raw --type=constant
 docker compose run --rm cli wp plugin install woocommerce --version="${WOO_VERSION}" --activate
-docker compose run --rm cli wp plugin activate wmcp-agentops
+docker compose run --rm cli wp plugin activate wmcp-agentsnr
 docker compose run --rm cli wp eval-file /workspace/bin/seed-demo.php
 docker compose run --rm cli wp option update woocommerce_coming_soon no
 docker compose run --rm cli wp option update woocommerce_store_pages_only no
@@ -52,7 +52,7 @@ echo
 echo "Agent SNR demo is ready:"
 echo "  Judge start: ${SITE_URL}/"
 echo "  Storefront:  ${SITE_URL}/storefront-demo/"
-echo "  Agent SNR:    ${SITE_URL}/agentops-demo/"
+echo "  Agent SNR:    ${SITE_URL}/agentsnr-demo/"
 echo "  Readiness:   ${SITE_URL}/webmcp-health/"
 echo "  Admin:       ${SITE_URL}/wp-admin/"
 echo "  User:        ${ADMIN_USER}"

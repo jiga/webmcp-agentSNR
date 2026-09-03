@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ final class WooIntegrationContractTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->source_directory = dirname(__DIR__, 2) . '/plugin/wmcp-agentops/src/WooCommerce';
+        $this->source_directory = dirname(__DIR__, 2) . '/plugin/wmcp-agentsnr/src/WooCommerce';
     }
 
     public function test_classic_and_store_api_provenance_hooks_are_registered(): void

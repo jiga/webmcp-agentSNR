@@ -3,12 +3,12 @@
 /**
  * Scripted wpdb-compatible query double.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
 final class ScriptedAnalyticsDatabase
 {

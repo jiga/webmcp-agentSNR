@@ -3,17 +3,17 @@
 /**
  * Tool catalog contract tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Abilities;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Abilities;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Abilities\ToolCatalog;
-use WPWebMCP\AgentOps\Contract\RiskClass;
-use WPWebMCP\AgentOps\Contract\ToolName;
+use WPWebMCP\AgentSNR\Abilities\ToolCatalog;
+use WPWebMCP\AgentSNR\Contract\RiskClass;
+use WPWebMCP\AgentSNR\Contract\ToolName;
 
 final class ToolCatalogTest extends TestCase
 {
@@ -51,8 +51,8 @@ final class ToolCatalogTest extends TestCase
             array_column($catalog->surface('storefront'), 'name')
         );
         self::assertSame(
-            ToolName::agentops(),
-            array_column($catalog->surface('agentops'), 'name')
+            ToolName::agentsnr(),
+            array_column($catalog->surface('agentsnr'), 'name')
         );
     }
 
@@ -62,8 +62,8 @@ final class ToolCatalogTest extends TestCase
 
         self::assertCount(13, $catalog->surface('storefront'));
         self::assertCount(12, $catalog->public_surface('storefront'));
-        self::assertCount(9, $catalog->surface('agentops'));
-        self::assertCount(8, $catalog->public_surface('agentops'));
+        self::assertCount(9, $catalog->surface('agentsnr'));
+        self::assertCount(8, $catalog->public_surface('agentsnr'));
 
         self::assertFalse($catalog->find(ToolName::REPORT_CAPABILITY_GAP)['discoverable']);
         self::assertFalse($catalog->find(ToolName::GET_CAPABILITY_GAPS)['discoverable']);
@@ -73,13 +73,13 @@ final class ToolCatalogTest extends TestCase
         );
         self::assertNotContains(
             ToolName::GET_CAPABILITY_GAPS,
-            array_column($catalog->public_surface('agentops'), 'name')
+            array_column($catalog->public_surface('agentsnr'), 'name')
         );
 
         foreach ($catalog->public_surface('storefront') as $definition) {
             self::assertTrue($definition['discoverable']);
         }
-        foreach ($catalog->public_surface('agentops') as $definition) {
+        foreach ($catalog->public_surface('agentsnr') as $definition) {
             self::assertTrue($definition['discoverable']);
         }
     }
@@ -154,7 +154,7 @@ final class ToolCatalogTest extends TestCase
         self::assertArrayNotHasKey('workflow_id', $feedback['input_schema']['properties']);
 
         self::assertNotNull($opportunities);
-        self::assertSame('agentops', $opportunities['surface']);
+        self::assertSame('agentsnr', $opportunities['surface']);
         self::assertSame(RiskClass::READ, $opportunities['risk_class']);
         self::assertTrue($opportunities['read_only']);
         self::assertFalse($opportunities['input_schema']['additionalProperties']);

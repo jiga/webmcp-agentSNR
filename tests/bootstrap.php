@@ -3,7 +3,7 @@
 /**
  * PHPUnit bootstrap for dependency-free core tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
@@ -183,5 +183,5 @@ if (is_readable($autoload)) {
     require_once $autoload;
 }
 
-require_once dirname(__DIR__) . '/plugin/wmcp-agentops/src/Autoloader.php';
-WPWebMCP\AgentOps\Autoloader::register(dirname(__DIR__) . '/plugin/wmcp-agentops/src');
+require_once dirname(__DIR__) . '/plugin/wmcp-agentsnr/src/Autoloader.php';
+WPWebMCP\AgentSNR\Autoloader::register(dirname(__DIR__) . '/plugin/wmcp-agentsnr/src');

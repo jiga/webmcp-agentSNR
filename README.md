@@ -12,7 +12,7 @@ The familiar investigation pattern combines journey replay, tool observability, 
 
 ### v0.1 scope
 
-This repository is the challenge-ready demo prototype. Public tool execution and session-scoped analytics require the explicit server-side `WMCP_AGENTOPS_DEMO_MODE` gate. A normal install starts disabled and provides the authenticated persistent policy/diagnostics shell, but site-wide authenticated WebMCP analytics execution is not claimed in v0.1.
+This repository is the challenge-ready demo prototype. Public tool execution and session-scoped analytics require the explicit server-side `WMCP_AGENTSNR_DEMO_MODE` gate. A normal install starts disabled and provides the authenticated persistent policy/diagnostics shell, but site-wide authenticated WebMCP analytics execution is not claimed in v0.1.
 
 | Submission resource | Status |
 |---|---|
@@ -22,8 +22,8 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 | Presentation | Editable 12-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
 | Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |
 | Captured proof | Ten real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |
-| Plugin artifact | Reproducibly built as `dist/wmcp-agentops-0.1.0.zip` with a SHA-256 sidecar |
-| Playground | Reproducibly built as `dist/wmcp-agentops-playground-0.1.0.zip` |
+| Plugin artifact | Reproducibly built as `dist/wmcp-agentsnr-0.1.0.zip` with a SHA-256 sidecar |
+| Playground | Reproducibly built as `dist/wmcp-agentsnr-playground-0.1.0.zip` |
 | License | [GPL-2.0-or-later](LICENSE) |
 | Devpost compliance | [Rule-by-rule checklist and pre-submission release record](submission/devpost-rules-checklist.md) |
 
@@ -44,7 +44,7 @@ flowchart LR
 
 The browser runtime uses the current imperative API, `document.modelContext.registerTool()`. WordPress Abilities remain the canonical server-side registry; a narrow same-origin REST gateway adds anonymous demo-session authorization, policy, idempotency, rate limiting, and the workflow ledger.
 
-A simplified excerpt makes the required browser contract easy to find; the production runtime registers every manifest tool dynamically in [`webmcp-runtime.js`](plugin/wmcp-agentops/assets/js/webmcp-runtime.js#L568):
+A simplified excerpt makes the required browser contract easy to find; the production runtime registers every manifest tool dynamically in [`webmcp-runtime.js`](plugin/wmcp-agentsnr/assets/js/webmcp-runtime.js#L568):
 
 ```js
 await document.modelContext.registerTool({
@@ -120,7 +120,7 @@ Stop without deleting data:
 
 ### Deploy on Render
 
-The production Blueprint creates a public WordPress service and a private MariaDB service from pinned images, with generated secrets, persistent uploads/database storage, HTTPS-aware configuration, disabled auto-deploys, and idempotent demo setup. Review the cost and credential steps in the [Render deployment runbook](submission/render-deployment.md), then [create the Blueprint from the public repository](https://render.com/deploy?repo=https://github.com/jiga/wp-webmcp).
+The production Blueprint creates a public WordPress service and a private MariaDB service from pinned images, with generated secrets, persistent uploads/database storage, HTTPS-aware configuration, disabled auto-deploys, and idempotent demo setup. Review the cost and credential steps in the [Render deployment runbook](submission/render-deployment.md), then [create the Blueprint from the public repository](https://render.com/deploy?repo=https://github.com/jiga/webmcp-agentSNR).
 
 Reset only this repository's named Docker volumes and rebuild:
 
@@ -153,7 +153,7 @@ npm run verify
 npm run build
 ```
 
-The release build produces a checksummed ZIP in `dist/`. The ZIP extracts to a single `wmcp-agentops/` plugin directory and contains no tests, local configuration, nested archives, or development dependencies.
+The release build produces a checksummed ZIP in `dist/`. The ZIP extracts to a single `wmcp-agentsnr/` plugin directory and contains no tests, local configuration, nested archives, or development dependencies.
 
 Build the reproducible WordPress Playground bundle as well:
 
@@ -163,7 +163,7 @@ npm run build:playground
 
 The bundle places `blueprint.json` at its root, installs the same plugin ZIP and pinned WooCommerce version, reuses the canonical seeder, and includes checksum/iframe-diagnostic notes.
 
-For a manual WordPress install, upload the ZIP under **Plugins → Add Plugin → Upload Plugin**. Clean installs remain disabled by default. The explicit demo seeder enables WebMCP only when `WMCP_AGENTOPS_DEMO_MODE` is set server-side.
+For a manual WordPress install, upload the ZIP under **Plugins → Add Plugin → Upload Plugin**. Clean installs remain disabled by default. The explicit demo seeder enables WebMCP only when `WMCP_AGENTSNR_DEMO_MODE` is set server-side.
 
 ## Compatibility targets
 
@@ -200,7 +200,7 @@ See [SECURITY.md](SECURITY.md) for threat boundaries and [TESTING.md](TESTING.md
 ## Project structure
 
 ```text
-plugin/wmcp-agentops/  Installable WordPress plugin source
+plugin/wmcp-agentsnr/  Installable WordPress plugin source
 tests/                 Unit, integration, browser, Woo, and security tests
 demo/                  Seed data and Playground package
 bin/                   Reproducible build/bootstrap/smoke scripts
@@ -230,7 +230,7 @@ PHP and WordPress integration suites run in containers so host PHP is not requir
 
 ### Verification snapshot
 
-The current checkout passes 125 JavaScript/configuration tests—including Render Blueprint/bootstrap guards and the refund-evidence capture regression—plus the submission-package static checks. The fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4 and 16 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, fresh-session correlation, real classic checkout, cross-tab cart synchronization, and bounded replay. Its REST/security smoke covered 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passed 11/11 calls; protected model-backed selection passed 54/54 storefront and 45/45 Agent SNR case-runs; and the live browser journey passed 8/8 with zero console errors and no new order. Its Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, Playground execution, and Plugin Check with zero errors also passed. The current brand-safe source and Render image pass PHP, package, cold-start, restart, health, and seeded-state checks; validation of the exact public deployed commit remains an unchecked owner gate in [submission/verification-report.md](submission/verification-report.md).
+The current renamed checkout passes 125 JavaScript/configuration tests—including Render Blueprint/bootstrap guards and the refund-evidence capture regression—111 PHP tests / 1,964 assertions, schema parity, JavaScript/CSS lint, Coding Standards with zero errors, and deterministic `wmcp-agentsnr` plugin/Playground builds. The renamed exact ZIP also passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the WordPress 6.9 / 7.0.4 / 7.1 cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, presentation QA, and two-start Render persistence/health verification. The earlier protected model-backed evidence at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed 54/54 storefront selections, 45/45 Agent SNR selections, and an 8/8 live browser journey with zero console errors and no new order. The remaining evidence gates are a protected model-backed rerun bound to the renamed commit and hosted HTTPS/official-client validation; see [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

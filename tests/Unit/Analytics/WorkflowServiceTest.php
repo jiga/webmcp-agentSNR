@@ -3,21 +3,21 @@
 /**
  * Workflow lifecycle tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
-use WPWebMCP\AgentOps\Analytics\WorkflowService;
-use WPWebMCP\AgentOps\Contract\EventName;
+use WPWebMCP\AgentSNR\Analytics\WorkflowService;
+use WPWebMCP\AgentSNR\Contract\EventName;
 
 require_once __DIR__ . '/AnalyticsTestCase.php';
 
 final class WorkflowServiceTest extends AnalyticsTestCase
 {
-    public function test_current_reuses_by_session_and_keeps_agentops_audit_separate(): void
+    public function test_current_reuses_by_session_and_keeps_agentsnr_audit_separate(): void
     {
         $database = new AnalyticsDatabaseDouble();
         $ids = array('01ARZ3NDEKTSV4RRFFQ69G5FAB', '01ARZ3NDEKTSV4RRFFQ69G5FAC');
@@ -35,13 +35,13 @@ final class WorkflowServiceTest extends AnalyticsTestCase
 
         $first = $service->current($session_hash, 'storefront');
         $reused = $service->current($session_hash, 'storefront');
-        $audit = $service->current($session_hash, 'agentops');
+        $audit = $service->current($session_hash, 'agentsnr');
 
         self::assertFalse($first['reused']);
         self::assertTrue($reused['reused']);
         self::assertSame($first['id'], $reused['id']);
         self::assertNotSame($first['id'], $audit['id']);
-        self::assertSame('agentops', $audit['surface']);
+        self::assertSame('agentsnr', $audit['surface']);
         self::assertArrayNotHasKey('demo_session_hash', $first);
         self::assertArrayNotHasKey('wc_session_hash', $first);
         self::assertCount(2, $database->workflows);

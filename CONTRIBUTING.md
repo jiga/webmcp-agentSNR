@@ -4,7 +4,7 @@ Thanks for helping make agent-operated WordPress workflows safer and more observ
 
 ## Before changing code
 
-1. Read `HACKATHON.md`, `SECURITY.md`, and the contract constants under `plugin/wmcp-agentops/src/Contract/`.
+1. Read `HACKATHON.md`, `SECURITY.md`, and the contract constants under `plugin/wmcp-agentsnr/src/Contract/`.
 2. Start from a focused branch; do not rewrite the public hackathon history.
 3. Keep one source of truth for tool names, schemas, risk, policy, rate limits, and callbacks in `ToolCatalog`.
 4. Do not add destructive or financial tools, remote SaaS dependencies, arbitrary Ability exposure, raw payload telemetry, or payment submission to the v0.1 scope.

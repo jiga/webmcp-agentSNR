@@ -16,7 +16,7 @@
   </testsuites>
   <source>
     <include>
-      <directory suffix=".php">plugin/wmcp-agentops/src</directory>
+      <directory suffix=".php">plugin/wmcp-agentsnr/src</directory>
     </include>
   </source>
 </phpunit>

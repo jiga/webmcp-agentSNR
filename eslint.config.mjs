@@ -7,7 +7,7 @@ export default [
   },
   js.configs.recommended,
   {
-    files: ['plugin/wmcp-agentops/assets/js/**/*.js'],
+    files: ['plugin/wmcp-agentsnr/assets/js/**/*.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'script',

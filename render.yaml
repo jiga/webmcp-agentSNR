@@ -11,7 +11,7 @@ services:
     autoDeployTrigger: off
     dockerContext: .
     dockerfilePath: ./deploy/render/Dockerfile
-    healthCheckPath: /wp-json/wmcp-agentops/v1/health
+    healthCheckPath: /wp-json/wmcp-agentsnr/v1/health
     disk:
       name: agent-snr-uploads
       mountPath: /var/www/html/wp-content/uploads
@@ -46,7 +46,7 @@ services:
       - key: WMCP_ADMIN_EMAIL
         value: demo-admin@example.invalid
       - key: WMCP_REPOSITORY_URL
-        value: https://github.com/jiga/wp-webmcp
+        value: https://github.com/jiga/webmcp-agentSNR
       - key: WORDPRESS_AUTH_KEY
         generateValue: true
       - key: WORDPRESS_SECURE_AUTH_KEY
@@ -82,7 +82,7 @@ services:
           define('WP_SITEURL', $wmcp_public_url);
           define('FORCE_SSL_ADMIN', true);
           define('WP_ENVIRONMENT_TYPE', 'production');
-          define('WMCP_AGENTOPS_DEMO_MODE', true);
+          define('WMCP_AGENTSNR_DEMO_MODE', true);
           define('DISALLOW_FILE_EDIT', true);
           define('DISALLOW_FILE_MODS', true);
           define('AUTOMATIC_UPDATER_DISABLED', true);

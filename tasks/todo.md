@@ -1,6 +1,6 @@
 # Submission-readiness plan
 
-Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon Engineering & Submission Handoff,” verified through August 29, 2026.
+Source of truth: the supplied full WordPress WebMCP hackathon engineering and submission handoff, verified through August 29, 2026.
 
 ## Phase 0 — Repository and contracts
 
@@ -36,10 +36,10 @@ Source of truth: the supplied “WordPress WebMCP AgentOps — Full Hackathon En
 - [x] Implement direct/assisted/influenced attribution and gross/refund/net calculations.
 - [x] Preserve evidence and prevent revenue double counting.
 
-## Phase 4 — AgentOps and governance
+## Phase 4 — Agent SNR and governance
 
 - [x] Implement overview, funnel, workflow explorer/explanation, tool health, and capability-gap queries.
-- [x] Build public current-session AgentOps and authenticated admin surfaces.
+- [x] Build public current-session Agent SNR and authenticated admin surfaces.
 - [x] Implement session-scoped `set_tool_enabled`, persistent admin policy, and global kill switch.
 - [x] Refresh registrations after manifest invalidation and enforce changes server-side immediately.
 
@@ -77,9 +77,9 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 
 - [x] Compare established session replay, digital experience monitoring, and agent observability products.
 - [x] Define the primary operator, category position, core monitoring objects, and explicit privacy boundary.
-- [x] Reframe the AgentOps surface around Monitor, Agent Sessions, Journey, Tools, Signals, and Controls.
+- [x] Reframe the monitoring surface around Monitor, Agent Sessions, Journey, Tools, Signals, and Controls.
 - [x] Add an agent journey model strip and a truthful loaded-snapshot Signals view using existing redacted evidence.
-- [x] Rename the public surface away from the existing AgentOps.ai market association without changing internal compatibility identifiers.
+- [x] Rename the public surface away from an existing market association while preserving the then-current pre-release technical identifiers.
 - [x] Update product positioning and judge-facing documentation.
 - [x] Run JavaScript/PHP/browser checks and complete independent review; commit the iteration.
 
@@ -87,7 +87,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 
 - [x] Select Agent SNR as the final public submission brand.
 - [x] Replace public product-name references across plugin UI, package metadata, documentation, and submission copy.
-- [x] Preserve internal `wmcp-agentops`, `WPWebMCP\AgentOps`, REST, option, database, route, shortcode, and tool compatibility identifiers.
+- [x] Preserve the then-current pre-release technical identifiers during that public-copy-only brand pass.
 - [x] Rebuild deterministic artifacts and refresh exact Plugin Check/checksum evidence.
 - [x] Run the full verification matrix and review the final diff.
 - [x] Commit the brand finalization.
@@ -267,7 +267,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Package: README, hackathon provenance, security/testing guidance, notices, Devpost story, marked testing-instructions copy, owner runbook, media plan, video script, presentation, optional external-evidence templates, and the rule-by-rule checklist agree on one submission contract.
 - Verification: 112/112 JavaScript/configuration tests, showcase launcher guards, schema parity, 45/45 local Markdown links, JSON parsing, diff hygiene, credential-pattern scan, and plugin/Playground package integrity pass. Two consecutive current pre-owner builds match (`24a6a9152f814433877a90fc6c82ac23f6d42787faae9df154b68854fbfef704` plugin; `75436495986664e96dcd9b50a73c1060a622628b6064aa6b1ded12538041c6cc` Playground).
 - Evidence boundary: those current hashes prove reproducible packaging only; the complete exact-ZIP/PHP/Woo/Chromium/native/model matrix remains bound to engineering candidate `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. The exact final deployed build must be revalidated after entrant metadata/name decisions.
-- Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, OCR, and template-fidelity review; after the brand-safe screenshot and 125-test proof update, SHA-256 is `976d9ed38a9d353c2cb2dc94911aea35e8ea1d57656cba1997c2358f5afa637b`.
+- Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, OCR, and template-fidelity review; after the post-rename screenshot, note-path, and 125-test proof updates, SHA-256 is `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`.
 - Independent review: compliance and deck reviewers approved with no remaining repository-local finding.
 - Honest blockers: no remote/tag, public repository, public HTTPS demo, real-client hosted result, public YouTube video, final form entry, entrant eligibility/authority/ownership attestation, contributor identity, or name/mark clearance is fabricated. These stay unchecked and must be completed before the deadline.
 
@@ -289,5 +289,22 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Bootstrap: Render-generated database/admin/salt secrets stay out of Git; proxy-aware HTTPS, same-origin URLs, production/demo constants, bounded DB wait, least-privilege WP-CLI, version checks, activation, and idempotent seeding all fail closed before Apache starts.
 - Public evidence: the unresolved contributor placeholder and former demo-store candidate name are removed. Ten 1440×900 screenshots were regenerated with zero console errors; the refund frame verifies one paid order, `$69.00` refunded, and `$0.00` net. The capture wait now rejects trimmed placeholder values.
 - Verification: official Blueprint schema, Bash syntax, build-context allowlist, npm audit, 125/125 JavaScript tests, 111 PHP tests / 1,964 assertions, deterministic plugin/Playground builds, both Docker builds, exact baked plugin contents, and two cold web starts against one persistent MariaDB pass. The second start preserves 12 products and 10 pages; health and storefront return HTTP 200.
-- Presentation: all 12 slides were re-rendered and inspected after replacing the stale screenshot and updating the proof count; theme/fidelity/notes/placeholders/overflow/package/OCR pass. SHA-256 is `976d9ed38a9d353c2cb2dc94911aea35e8ea1d57656cba1997c2358f5afa637b`.
+- Presentation: all 12 slides were re-rendered and inspected after replacing all four embedded screenshots, updating the source-note paths and proof count, and removing retired identifiers; theme/fidelity/notes/placeholders/overflow/package/OCR pass. SHA-256 is `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`.
 - Pending external gates: commit/push the public GitHub repository, add the user-managed Render payment method, review and explicitly approve the paid Blueprint creation, then complete public HTTPS and real-client validation before updating Devpost URLs.
+
+## Canonical Agent SNR technical-identity cleanup
+
+- [x] Inventory every retired branded identifier across source paths, PHP namespaces/classes, plugin slug, REST namespaces/routes, options, hooks, JavaScript handles, package/build names, Docker/Render configuration, tests, artifacts, documentation, screenshots, and presentation assets.
+- [x] Lock the canonical mapping: `Agent SNR` for display copy; `AgentSNR`, `agentSNR`, and `agentsnr` for code forms; and `wmcp-agentsnr`, `wmcp_agentsnr`, and `WMCP_AGENTSNR` for plugin/runtime forms. Keep neutral database, order metadata, demo-session, capability, and tool contracts unchanged.
+- [x] Rename tracked source directories/files with history-preserving moves and update PHP/JavaScript/runtime contracts while preserving neutral persistence and security behavior.
+- [x] Update tests, Docker/Render deployment, artifact builders, demo launchers, submission copy, package/checksum references, and the intended public repository URL to `https://github.com/jiga/webmcp-agentSNR`.
+- [x] Regenerate the exact renamed-build screenshots and presentation, including speaker-note source paths, before public release.
+- [x] Run case-insensitive residue checks, full source/PHP/browser/package/Render validation, two-start persistence tests, fresh screenshots/deck QA, and independent code/compliance review.
+- [ ] Commit the verified rename before creating or pushing the public repository; keep the Render deployment paused until the user approves the reviewed paid Blueprint.
+
+### Agent SNR identity-cleanup review
+
+- Source identity: tracked plugin, template/runtime/test, eval, package, CI-artifact, REST, option, hook, shortcode, surface, hash/log, Docker, and submission paths now use the locked Agent SNR forms. The Render repository URL and one-click deploy link target `https://github.com/jiga/webmcp-agentSNR`.
+- Persistence boundary: `wmcp_workflows`, `wmcp_events`, `wmcp_order_links`, `wmcp_capability_gaps`, neutral `_wmcp_*` metadata, `wmcp_demo_session`, `manage_wmcp_*` capabilities, and public tool names remain unchanged.
+- Focused verification: PHP syntax passes; PHPUnit passes 111 tests / 1,964 assertions; JavaScript/configuration passes 125 tests; JavaScript/CSS lint and Coding Standards pass with zero errors; schema parity and Render tests pass; two renamed plugin/Playground builds are byte-identical (`514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` and `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280`).
+- Evidence refresh: a clean exact-ZIP showcase reset and recapture, REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, four-image deck refresh, speaker-note path update, and full deck QA pass. The same renamed ZIP also passes the isolated WordPress 6.9 / WooCommerce 10.9.4 legacy, WordPress 7.0.4 / WooCommerce 11.0.1 legacy, and WordPress 7.1 / WooCommerce 11.0.1 HPOS matrix. Retired ignored ZIPs were quarantined outside `dist/`; only the protected model-backed rerun remains before the local rename is fully evidence-bound.

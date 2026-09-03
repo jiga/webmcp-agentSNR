@@ -3,15 +3,15 @@
 /**
  * Deterministic opportunity-detection tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Analytics\OpportunityDetector;
+use WPWebMCP\AgentSNR\Analytics\OpportunityDetector;
 
 final class OpportunityDetectorTest extends TestCase
 {

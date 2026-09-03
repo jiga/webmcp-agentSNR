@@ -3,15 +3,15 @@
 /**
  * Capability-gap privacy and replay tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Analytics;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Analytics;
 
-use WPWebMCP\AgentOps\Analytics\CapabilityGapService;
-use WPWebMCP\AgentOps\Contract\EventName;
+use WPWebMCP\AgentSNR\Analytics\CapabilityGapService;
+use WPWebMCP\AgentSNR\Contract\EventName;
 
 require_once __DIR__ . '/AnalyticsTestCase.php';
 

@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce;
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\WooCommerce\AttributionRules;
+use WPWebMCP\AgentSNR\WooCommerce\AttributionRules;
 
 final class AttributionRulesTest extends TestCase
 {

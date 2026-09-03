@@ -3,17 +3,17 @@
 /**
  * Generate or verify the static schemas consumed by webmcp-evals.
  *
- * @package WPWebMCP\AgentOps
+ * @package WPWebMCP\AgentSNR
  */
 
 declare(strict_types=1);
 
-use WPWebMCP\AgentOps\Abilities\ToolCatalog;
+use WPWebMCP\AgentSNR\Abilities\ToolCatalog;
 
 $repository_root = dirname(__DIR__);
 
-require_once $repository_root . '/plugin/wmcp-agentops/src/Autoloader.php';
-WPWebMCP\AgentOps\Autoloader::register($repository_root . '/plugin/wmcp-agentops/src');
+require_once $repository_root . '/plugin/wmcp-agentsnr/src/Autoloader.php';
+WPWebMCP\AgentSNR\Autoloader::register($repository_root . '/plugin/wmcp-agentsnr/src');
 
 $arguments = array_slice($argv, 1);
 $check     = in_array('--check', $arguments, true);
@@ -25,7 +25,7 @@ if (array() !== $unknown) {
 }
 
 $catalog  = new ToolCatalog();
-$surfaces = array('storefront', 'agentops');
+$surfaces = array('storefront', 'agentsnr');
 $changed  = array();
 
 foreach ($surfaces as $surface) {

@@ -19,7 +19,7 @@ The demo must remain available without charge or restriction through September 2
 
 These are useful project gates but are not separate Devpost submission requirements:
 
-- The deterministic, native Chrome, and protected model-backed eval ladder is complete; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- The renamed package's deterministic and native Chrome eval gates are complete. Protected model-backed evidence at commit `e4d9c86` is historical until the same suites are rerun against the rename commit; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 - [`workbench-validation.md`](workbench-validation.md) provides an optional deep browser-extension audit and replay sheet.
 - [`webmcp-directory-listing.md`](webmcp-directory-listing.md) provides optional scanner and public-directory evidence.
 
@@ -32,7 +32,7 @@ These are useful project gates but are not separate Devpost submission requireme
 5. Relax only the water rating. Confirm RainTrail and HarborLite appear, both show IPX4, then compare them, verify the published returns evidence, add HarborLite, and prepare checkout.
 6. Ask the agent to follow the guide's feedback instructions for the constraint. Confirm the receipt says **Agent reported**, evidence is linked, site measurements show two eligible products and highest IPX4, and checkout/order metrics are pending rather than zero.
 7. Confirm no order exists yet. Click the visible checkout link, review the fictional prefilled details, choose **Demo payment — no charge**, and have the human click **Place order**.
-8. Open **[AGENTOPS_URL]** (Agent SNR) and run the merchant prompt. Confirm Agent Sessions, Workflow Replay, Opportunity Signals, tool health, the paid order, attribution evidence, gross/refund/net, and separate Site observed / Agent reported / Site verified labels are visible.
+8. Open **[AGENTSNR_URL]** (Agent SNR) and run the merchant prompt. Confirm Agent Sessions, Workflow Replay, Opportunity Signals, tool health, the paid order, attribution evidence, gross/refund/net, and separate Site observed / Agent reported / Site verified labels are visible.
 9. Ask: “Disable product comparison for this demo session.” Confirm comparison disappears/fails immediately while a separate private browser session is unchanged.
 10. Use **Reset my demo** to rotate to a clean private scope.
 

@@ -3,7 +3,7 @@
 /**
  * Dependency-free support and privacy tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
@@ -32,12 +32,12 @@ namespace {
     }
 }
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Support {
+namespace WPWebMCP\AgentSNR\Tests\Unit\Support {
     use JsonException;
     use PHPUnit\Framework\TestCase;
-    use WPWebMCP\AgentOps\Privacy\Redactor;
-    use WPWebMCP\AgentOps\Support\IdGenerator;
-    use WPWebMCP\AgentOps\Support\Json;
+    use WPWebMCP\AgentSNR\Privacy\Redactor;
+    use WPWebMCP\AgentSNR\Support\IdGenerator;
+    use WPWebMCP\AgentSNR\Support\Json;
 
     final class SupportTest extends TestCase
     {

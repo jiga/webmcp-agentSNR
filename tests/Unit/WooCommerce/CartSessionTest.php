@@ -17,11 +17,11 @@ namespace {
     }
 }
 
-namespace WPWebMCP\AgentOps\Tests\Unit\WooCommerce {
+namespace WPWebMCP\AgentSNR\Tests\Unit\WooCommerce {
 
     use PHPUnit\Framework\Attributes\RunInSeparateProcess;
     use PHPUnit\Framework\TestCase;
-    use WPWebMCP\AgentOps\WooCommerce\CartSession;
+    use WPWebMCP\AgentSNR\WooCommerce\CartSession;
 
     final class CartSessionTest extends TestCase
     {

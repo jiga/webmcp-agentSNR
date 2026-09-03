@@ -3,14 +3,14 @@
 /**
  * WordPress Playground entry point for the canonical idempotent demo seeder.
  *
- * @package WPWebMCP\AgentOps
+ * @package WPWebMCP\AgentSNR
  */
 
 declare(strict_types=1);
 
-use WPWebMCP\AgentOps\Demo\Seeder;
+use WPWebMCP\AgentSNR\Demo\Seeder;
 
-if (! function_exists('wmcp_agentops_seed_playground_demo')) {
+if (! function_exists('wmcp_agentsnr_seed_playground_demo')) {
     /**
      * Seed and verify the disposable Playground site.
      *
@@ -19,7 +19,7 @@ if (! function_exists('wmcp_agentops_seed_playground_demo')) {
      *
      * @return array<string, mixed>
      */
-    function wmcp_agentops_seed_playground_demo(): array
+    function wmcp_agentsnr_seed_playground_demo(): array
     {
         if (! class_exists(Seeder::class)) {
             throw new RuntimeException('Agent SNR must be active before seeding.');
@@ -36,7 +36,7 @@ if (! function_exists('wmcp_agentops_seed_playground_demo')) {
         flush_rewrite_rules(false);
 
         $seeded_pages = is_array($result['pages'] ?? null) ? $result['pages'] : array();
-        foreach (array('landing', 'storefront', 'agentops', 'health', 'returns', 'cart', 'checkout') as $page_key) {
+        foreach (array('landing', 'storefront', 'agentsnr', 'health', 'returns', 'cart', 'checkout') as $page_key) {
             if (empty($seeded_pages[$page_key])) {
                 throw new RuntimeException('The demo page result is missing: ' . $page_key);
             }
@@ -59,7 +59,7 @@ if (! function_exists('wmcp_agentops_seed_playground_demo')) {
             throw new RuntimeException('The judge landing page was not set as the front page.');
         }
 
-        if (true !== (bool) get_option('wmcp_agentops_enabled', false)) {
+        if (true !== (bool) get_option('wmcp_agentsnr_enabled', false)) {
             throw new RuntimeException('The demo WebMCP layer was not enabled.');
         }
 

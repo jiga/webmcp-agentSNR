@@ -1,5 +1,5 @@
 {
-  "name": "wp-webmcp/agentops",
+  "name": "wp-webmcp/wmcp-agentsnr",
   "description": "Agent SNR provides WebMCP storefront workflows, agent outcome monitoring, and safe governance for WordPress.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "WPWebMCP\\AgentOps\\": "plugin/wmcp-agentops/src/"
+      "WPWebMCP\\AgentSNR\\": "plugin/wmcp-agentsnr/src/"
     }
   },
   "config": {

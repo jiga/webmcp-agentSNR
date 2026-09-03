@@ -3,18 +3,18 @@
 /**
  * Agent-guide discovery and feedback-trigger tests.
  *
- * @package WPWebMCP\AgentOps\Tests
+ * @package WPWebMCP\AgentSNR\Tests
  */
 
 declare(strict_types=1);
 
-namespace WPWebMCP\AgentOps\Tests\Unit\Guidance;
+namespace WPWebMCP\AgentSNR\Tests\Unit\Guidance;
 
 use PHPUnit\Framework\TestCase;
-use WPWebMCP\AgentOps\Abilities\ToolCatalog;
-use WPWebMCP\AgentOps\Contract\ToolName;
-use WPWebMCP\AgentOps\Contract\Versions;
-use WPWebMCP\AgentOps\Guidance\AgentGuide;
+use WPWebMCP\AgentSNR\Abilities\ToolCatalog;
+use WPWebMCP\AgentSNR\Contract\ToolName;
+use WPWebMCP\AgentSNR\Contract\Versions;
+use WPWebMCP\AgentSNR\Guidance\AgentGuide;
 
 final class AgentGuideTest extends TestCase
 {

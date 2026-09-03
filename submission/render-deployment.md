@@ -4,7 +4,7 @@ This runbook deploys the frozen Agent SNR repository as one public WordPress ser
 
 ## Before provisioning
 
-1. Push the exact release commit to `https://github.com/jiga/wp-webmcp` and confirm that repository is public. The Render Blueprint and Devpost source link must resolve without account access.
+1. Push the exact release commit to `https://github.com/jiga/webmcp-agentSNR` and confirm that repository is public. The Render Blueprint and Devpost source link must resolve without account access.
 2. Sign in to the intended Render workspace and redeem the hackathon credit under **Billing** before creating services. A credit or redemption code belongs only in Render's billing interface—never in Git, `render.yaml`, an environment variable, a build log, or a Devpost field.
 3. Confirm the credit appears in that workspace. Credits are applied to eligible charges at billing time; they do not change the service plan selected by the Blueprint.
 4. Confirm the workspace has an accepted payment method if Render requests one. The Blueprint selects two paid `1c-2g` services plus 11 GB of persistent storage. At prices checked September 3, 2026, that is approximately $52.75 for a full month before bandwidth or other usage, prorated for partial months. The amount Render shows before confirmation is authoritative, and any amount beyond the credit is the account owner's responsibility.
@@ -40,9 +40,9 @@ Use a signed-out browser first. Replace `<public-origin>` with the web service's
 
 - `<public-origin>/` loads the judge landing page without a login.
 - `<public-origin>/storefront-demo/` loads the agent-ready store.
-- `<public-origin>/agentops-demo/` loads the monitoring surface.
+- `<public-origin>/agentsnr-demo/` loads the monitoring surface.
 - `<public-origin>/webmcp-health/` loads the visible readiness report.
-- `<public-origin>/wp-json/wmcp-agentops/v1/health` returns HTTP 200 and JSON with `ok: true`, the expected WordPress/WooCommerce/plugin versions, a ready database, an enabled manifest, and an HTTPS-ready header check.
+- `<public-origin>/wp-json/wmcp-agentsnr/v1/health` returns HTTP 200 and JSON with `ok: true`, the expected WordPress/WooCommerce/plugin versions, a ready database, an enabled manifest, and an HTTPS-ready header check.
 - Response headers include `Origin-Agent-Cluster: ?1` and the expected same-origin WebMCP permissions policy.
 - The WordPress admin lists WordPress 7.1, WooCommerce 11.0.1, and Agent SNR 0.1.0; both plugins are active.
 - A second manual deploy succeeds without creating duplicate demo pages, products, or categories.
@@ -55,9 +55,10 @@ The Blueprint deliberately sets `autoDeployTrigger: off`, so a source-code push 
 
 1. Record the deployed commit SHA and public origin in the submission package.
 2. Submit the same public origin to Devpost.
-3. Do not sync the Blueprint, manually deploy, rotate salts, change the public URL, or mutate demo configuration during the judging freeze unless recovering from an outage.
+3. Do not sync the Blueprint, manually deploy, rotate salts, change the public URL, or mutate entrant-controlled demo code/configuration/seed content during the freeze unless recovering from an outage. Normal isolated judge-session data and bounded cleanup may continue as designed.
 4. Keep both paid services, both disks, the public repository, and unrestricted judge access available through at least September 21, 2026 at 5:00 p.m. Pacific Time.
-5. Make post-deadline development in a fork or separate branch that is not deployed to the submitted service.
+5. Keep entrant-controlled submitted repository, deployed code/configuration/seed content, video, and Devpost entry unchanged until winners are announced on or around September 23, 2026 at 2:00 p.m. Pacific Time.
+6. Make post-deadline development in a fork or separate branch that is not deployed to the submitted service.
 
 ## Recovery and shutdown
 
