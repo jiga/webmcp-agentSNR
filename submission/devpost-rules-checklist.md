@@ -49,7 +49,7 @@ Evidence: Official Rules Sections 3, 4, 7, and 8; [supported countries and terri
 
 - [x] Project is a non-trivial WebMCP-powered web application where people and browser agents collaborate on one website.
 - [x] Intended platform is documented: WordPress 6.9+, PHP 8.1+, optional WooCommerce 10.9+, and top-level WebMCP-capable desktop browser.
-- [x] Clean install, deterministic builds, exact-ZIP matrix, native smoke, model evals, browser tests, and Playground execution are documented and passing for the recorded engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`; final deployed-build validation remains required, while published release-artifact parity is a separate recommended gate if such an artifact is linked.
+- [x] Clean install, deterministic builds, exact-ZIP matrix, native smoke, model evals, browser tests, and Playground execution are documented and passing for the renamed package; protected model evidence is bound to commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Final deployed-build validation remains required, while published release-artifact parity is a separate recommended gate if such an artifact is linked.
 - [x] `HACKATHON.md` distinguishes pre-period research/specification from in-period executable code and retains timestamped history.
 - [x] `THIRD_PARTY_NOTICES.md`, lockfiles, and the GPL-2.0-or-later license document integrations and redistribution terms.
 - [ ] Entrant confirms no pre-period source code, artwork, media, or copy was incorporated contrary to the provenance disclosure.

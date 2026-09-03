@@ -6,7 +6,7 @@ The rule-by-rule source of truth is [`devpost-rules-checklist.md`](devpost-rules
 
 ## Code and artifacts
 
-Checked exact-artifact items in this section describe the current renamed pre-public package. Protected model-backed results are explicitly identified as historical until the same suites are rerun against the rename commit. Owner metadata changes future artifact bytes, so published-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
+Checked exact-artifact items in this section describe the current renamed pre-public package. Protected model-backed results are bound to rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`. Owner metadata changes future artifact bytes, so published-artifact parity remains an explicitly recommended, unchecked item below if a release artifact is linked.
 
 - [x] The renamed package's automated JavaScript, PHP, security, browser, WooCommerce, HPOS-on/off, and artifact tests pass from a clean checkout; current submission-copy static checks also pass.
 - [x] The renamed exact ZIP passes WordPress 6.9 / WooCommerce 10.9.4, WordPress 7.0.4 / WooCommerce 11.0.1, and WordPress 7.1 / WooCommerce 11.0.1 HPOS.
@@ -22,10 +22,10 @@ Checked exact-artifact items in this section describe the current renamed pre-pu
 ## WebMCP quality and external evidence
 
 - [x] The pinned GoogleChromeLabs WebMCP Evals keyless smoke passes 5/5 storefront and 6/6 Agent SNR calls on the renamed exact ZIP, including application-error-envelope enforcement.
-- [ ] Protected model-backed selection and browser evals must be rerun and strict-checked against the rename commit. Historical evidence at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- [x] Protected model-backed selection and browser evals pass all three strict provenance checks against rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`: storefront 54/54, Agent SNR 45/45, and the live browser journey 8/8 with zero console errors and no new order; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 - [ ] At least one official judge path—the latest ChatGPT desktop in-app browser or Chrome 149+ with the WebMCP flag—discovers exactly 12 storefront and 8 Agent SNR canonical tools on the frozen top-level HTTPS pages.
 - [ ] Optional quality evidence: the owner completed [`workbench-validation.md`](workbench-validation.md) with the actual installed version, exact release identity, manual calls, Audit findings, saved-call replay, repeated evals, approval/log review, and User Mode evidence.
-- [ ] Provider keys and raw `.evals/`/Workbench logs remain private; every linked excerpt or screenshot is sanitized.
+- [x] Provider keys and raw `.evals/` reports remain private and ignored; no Workbench log is included, and every linked excerpt or screenshot is sanitized.
 - [ ] Optional quality evidence: the WebMCP.com public scanner passes both frozen pages with expected catalogs and no API/load/blocking or unexplained Sensitive Action result.
 - [ ] Optional discovery evidence: the human directory request is approved, post-index API lookups return `supported: true` for the intended public representation, and the final directory URL is recorded using [`webmcp-directory-listing.md`](webmcp-directory-listing.md).
 

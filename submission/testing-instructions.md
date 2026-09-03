@@ -19,7 +19,7 @@ The demo must remain available without charge or restriction through September 2
 
 These are useful project gates but are not separate Devpost submission requirements:
 
-- The renamed package's deterministic and native Chrome eval gates are complete. Protected model-backed evidence at commit `e4d9c86` is historical until the same suites are rerun against the rename commit; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- The renamed package's deterministic, native Chrome, and protected model-backed eval gates are complete. The protected suites pass all three strict provenance checks at rename commit `410c198`; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 - [`workbench-validation.md`](workbench-validation.md) provides an optional deep browser-extension audit and replay sheet.
 - [`webmcp-directory-listing.md`](webmcp-directory-listing.md) provides optional scanner and public-directory evidence.
 

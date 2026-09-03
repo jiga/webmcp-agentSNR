@@ -8,6 +8,7 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 
 - [ ] Complete formal trademark and domain clearance for **Agent SNR**, including the intended repository slug and public-facing domains. The retired third-party-overlapping technical identifiers have been removed from the current tree.
 - [x] Replace the former public demo-store candidate name with the generic **Agent SNR Demo Store** site title and **Agent SNR / Demo Store** storefront lockup.
+- [ ] Choose the public-history policy before pushing: the current release tree and all post-rename commits contain no retired identifier, but 19 earlier commit trees and one earlier commit subject preserve the development codename. Keeping that unsquashed history is recommended for hackathon provenance; any history rewrite must be an explicit owner decision because it changes documented commit identities.
 - [ ] Confirm the current Git author name and email embedded in every commit are appropriate for public history; do not rewrite provenance casually.
 - [x] Remove the unresolved WordPress.org contributor placeholder from the plugin metadata; do not invent a contributor ID.
 - [ ] Record the entrant/team/organization's public copyright holder and contributor-rights basis.
@@ -24,7 +25,7 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 
 ## WebMCP external validation
 
-- [x] The remediated protected model-backed selection/browser evals pass the strict all-pass checker at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`; the initial failed run remains a superseded baseline in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md), and raw `.evals/` reports remain private.
+- [x] The protected model-backed selection/browser evals pass all three strict provenance checks against rename commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; the initial and first rename-bound failures remain superseded baselines in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md), and raw `.evals/` reports remain private.
 - [ ] Run at least one official judge path—the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP enabled—against both frozen top-level pages; record the exact client/browser version, discovery counts, prompt results, and sanitized evidence.
 - [ ] Optional: install and review **nekuda WebMCP Workbench** in a dedicated Chrome profile; record the actual version and re-review permissions/release notes.
 - [ ] Optional: complete the Tools, manual-call, Audit, Saved calls, repeated Evals, Logs/approvals, and User Mode evidence in [`workbench-validation.md`](workbench-validation.md).

@@ -65,7 +65,7 @@ Afterward, the merchant and agent work together on operations. They inspect the 
 - WooCommerce APIs and HPOS-safe CRUD handle catalog, cart, order, status, and refund state. Revenue is counted only from paid orders and always shows gross, refunds, and net by currency.
 - Public monitoring SQL is scoped to the current demo-session hash before rows are fetched. Persistent admin policy uses dedicated WordPress capabilities.
 - GPL-2.0-or-later source, original fictional products/artwork, checksummed plugin ZIP, Docker reproduction, and Playground portability bundle.
-- Pinned `webmcp-evals@0.0.4` schemas and natural-language fixtures, a keyless native Chrome smoke adapter that fails on application error envelopes, and provenance-bound historical model reports at engineering commit `e4d9c86`: 54/54 storefront selections, 45/45 Agent SNR selections, and an 8/8 live browser journey pass. The renamed package's protected rerun and real-client validation remain release-owner gates; Workbench, scanner, and directory evidence are optional additional checks.
+- Pinned `webmcp-evals@0.0.4` schemas and natural-language fixtures, a keyless native Chrome smoke adapter that fails on application error envelopes, and provenance-bound model reports at rename commit `410c198`: 54/54 storefront selections, 45/45 Agent SNR selections, and an 8/8 live browser journey pass. Hosted real-client validation remains a release-owner gate; Workbench, scanner, and directory evidence are optional additional checks.
 
 ## Impact, creativity, and ambition
 

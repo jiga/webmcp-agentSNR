@@ -11,7 +11,7 @@ Two consecutive post-rename builds produced byte-identical packages:
 | `wmcp-agentsnr-0.1.0.zip` | `514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` |
 | `wmcp-agentsnr-playground-0.1.0.zip` | `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280` |
 
-The renamed source passes PHP syntax, 111 PHPUnit tests / 1,964 assertions, 125 JavaScript/configuration tests, JavaScript/CSS lint, Coding Standards with zero errors, schema parity, Render configuration tests, showcase-launcher guards, and package ZIP integrity. The same renamed ZIP passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the isolated three-environment cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, and presentation QA. Protected model-backed evals and hosted HTTPS checks remain to be bound to the final renamed commit before publication.
+The renamed source passes PHP syntax, 111 PHPUnit tests / 1,964 assertions, 125 JavaScript/configuration tests, JavaScript/CSS lint, Coding Standards with zero errors, schema parity, Render configuration tests, showcase-launcher guards, and package ZIP integrity. The same renamed ZIP passes REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, the isolated three-environment cross-version matrix, Plugin Check with zero errors, fresh screenshot capture, and presentation QA. Protected model-backed evals also pass against rename-bound commit `410c198963ec649ed58e21fce7c80103db3d0ad8`; only hosted HTTPS and official-client checks remain external evidence gates.
 
 ## Retired exact engineering candidate
 
@@ -48,9 +48,9 @@ They are deliberately **not** labeled final-submission hashes or checksums for t
 
 ## Protected model-backed eval status
 
-The remediated protected selection and live-browser evals pass the strict all-pass gate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`: storefront selection passes 54/54 case-runs, Agent SNR selection passes 45/45, and the live shopper journey passes all 8/8 required rows with zero console errors and no new WooCommerce order. All three provenance checkers pass against the recorded fixed model, exact artifacts, schemas, fixtures, run counts, and execution policy. Complete before/after evidence and private-report hashes are in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+The protected selection and live-browser evals pass the strict all-pass gate against the renamed package at commit `410c198963ec649ed58e21fce7c80103db3d0ad8`: storefront selection passes 54/54 case-runs, Agent SNR selection passes 45/45, and the live shopper journey passes all 8/8 required rows with zero console errors and no new WooCommerce order. All three provenance checkers pass against the recorded fixed model, exact artifacts, schemas, fixtures, run counts, and execution policy. Complete before/after evidence and private-report hashes are in [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
 
-The initial 33/54 storefront, 31/45 Agent SNR, and 3/8 browser result is retained in that report and Git history as the superseded baseline that drove the remediation; it is no longer an active release blocker.
+The initial development failures and the first rename-bound 52/54 storefront result are retained in that report as superseded baselines that drove principled remediation; neither is an active release blocker.
 
 ## Local showcase and media verification
 
