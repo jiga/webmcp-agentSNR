@@ -2,6 +2,8 @@
 
 Status: **PENDING OWNER RUN**
 
+This is optional supplemental quality evidence, not a Devpost submission requirement or release blocker.
+
 Release baseline: **Workbench 1.2.1**
 
 Scope: the frozen, top-level HTTPS storefront and Agent SNR pages

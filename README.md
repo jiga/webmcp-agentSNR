@@ -6,7 +6,9 @@ Agent SNR separates trustworthy business signal from raw agent noise: browser ag
 
 > See what agents did. Hear what they experienced. Discover what your site is missing.
 
-The familiar investigation pattern resembles **LogRocket/Fullstory for website agents**, combined with Datadog-style tool health and Amplitude-style commerce outcomes. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model and MVP boundaries.
+> **Devpost status:** repository-local preparation is complete, but the entry still requires the entrant's public repository, frozen HTTPS demo, public sub-three-minute YouTube video, identity/eligibility/IP sign-off, and final submission before **September 3, 2026 at 1:00 p.m. PDT**. Follow the [official-rule checklist](submission/devpost-rules-checklist.md); unchecked items are not claimed complete.
+
+The familiar investigation pattern combines journey replay, tool observability, and product analytics for website agents. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model, comparative research, and MVP boundaries.
 
 ### v0.1 scope
 
@@ -17,12 +19,13 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 | Live HTTPS demo | Owner must deploy and add the public URL |
 | Public repository | Local Git history is ready; owner must create and push the public remote |
 | Video | Script and run sheet are included; owner must record and publish a sub-three-minute YouTube video |
-| Presentation | Editable 11-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
+| Presentation | Editable 12-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
 | Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |
 | Captured proof | Ten real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |
 | Plugin artifact | Reproducibly built as `dist/wmcp-agentops-0.1.0.zip` with a SHA-256 sidecar |
 | Playground | Reproducibly built as `dist/wmcp-agentops-playground-0.1.0.zip` |
 | License | [GPL-2.0-or-later](LICENSE) |
+| Devpost compliance | [Rule-by-rule checklist and pre-submission release record](submission/devpost-rules-checklist.md) |
 
 ## The closed loop
 
@@ -41,11 +44,23 @@ flowchart LR
 
 The browser runtime uses the current imperative API, `document.modelContext.registerTool()`. WordPress Abilities remain the canonical server-side registry; a narrow same-origin REST gateway adds anonymous demo-session authorization, policy, idempotency, rate limiting, and the workflow ledger.
 
+A simplified excerpt makes the required browser contract easy to find; the production runtime registers every manifest tool dynamically in [`webmcp-runtime.js`](plugin/wmcp-agentops/assets/js/webmcp-runtime.js#L568):
+
+```js
+await document.modelContext.registerTool({
+	name: "search_products",
+	description: "Search the public product catalog with structured constraints.",
+	inputSchema: manifestTool.inputSchema,
+	execute: ( input, options ) =>
+		runtime.executeTool( "search_products", input, options, manifest ),
+});
+```
+
 ## Standards status and external validation
 
 WebMCP is a proposed browser API and [W3C Community Group draft](https://webmachinelearning.github.io/webmcp/), not a W3C Recommendation. Agent SNR targets the current imperative API and follows the official Chrome guidance for [workflow design](https://developer.chrome.com/docs/ai/webmcp/build-tools), [evals](https://developer.chrome.com/docs/ai/webmcp/evals), and [tool security](https://developer.chrome.com/docs/ai/webmcp/secure-tools). The accepted journey, trust, failure, and evidence contract is in [submission/webmcp-readiness-design.md](submission/webmcp-readiness-design.md).
 
-Validation is intentionally layered: deterministic repository tests; pinned GoogleChromeLabs WebMCP Evals smoke and protected model-backed runs documented in [evals/README.md](evals/README.md); a real-client [Workbench 1.2.1 evidence sheet](submission/workbench-validation.md); then the [WebMCP.com scanner/API and human listing handoff](submission/webmcp-directory-listing.md) against the frozen public release. The external Workbench, hosted scanner, directory, and real ChatGPT/Chrome checks remain explicit owner gates until their templates contain actual results.
+Validation is intentionally layered: deterministic repository tests; pinned GoogleChromeLabs WebMCP Evals smoke and protected model-backed runs documented in [evals/README.md](evals/README.md); then required real-client confirmation of the frozen release in the latest ChatGPT in-app browser or Chrome 149+ with WebMCP enabled. The [Workbench evidence sheet](submission/workbench-validation.md) and [WebMCP.com scanner/directory handoff](submission/webmcp-directory-listing.md) are optional supplemental checks, not challenge submission requirements. Public-host and real-client confirmation remains an explicit owner gate until actual results are recorded.
 
 ## Judge prompts
 
@@ -155,13 +170,13 @@ For a manual WordPress install, upload the ZIP under **Plugins → Add Plugin �
 | WooCommerce | 10.9.4 | 11.0.1 |
 | Checkout | Classic shortcode | Classic shortcode |
 | Orders | Legacy storage | HPOS enabled |
-| Browser | Chrome 149+ test flag | Current ChatGPT desktop Site Tools / Chrome |
+| Browser | Chrome 149+ test flag | Latest ChatGPT in-app browser or Chrome 149+ |
 
 Checkout Block compatibility is intentionally not claimed in v0.1: a gateway needs a separate Blocks payment-method integration. The seeded demo uses classic checkout so the no-charge human confirmation path is real and testable.
 
-### ChatGPT availability caveat
+### WebMCP judging environment
 
-Site Tools currently require the latest ChatGPT desktop app, a ChatGPT Work or Codex workspace, Site Tools permission, and a supported model (GPT-5.6 Sol or Terra at the time of release preparation). Tools in iframes and declarative form tools are not discovered. The primary submitted demo must therefore be a normal top-level HTTPS WordPress page; Playground is a portability sandbox, not the judging baseline.
+The official challenge path is the latest ChatGPT desktop in-app browser, which supports WebMCP by default, or Google Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled. The submitted demo must be a normal top-level HTTPS WordPress page. Playground remains a portability sandbox because its iframe is not the judging baseline.
 
 ## Security and privacy model
 
@@ -170,7 +185,7 @@ Site Tools currently require the latest ChatGPT desktop app, a ChatGPT Work or C
 - Exact same-origin checks, schema validation, payload caps, fixed-window limits, and idempotency keys.
 - Permission callbacks fail closed unless the verified execution controller installs a request-scoped context.
 - Public analytics queries scope in SQL to the current demo-session hash.
-- No raw conversations, prompts, identities, addresses, cookies, nonces, authorization headers, payment fields, or arbitrary tool payloads are stored.
+- The Agent SNR workflow ledger does not store raw conversations, prompts, identities, addresses, cookies, nonces, authorization headers, payment fields, or arbitrary tool payloads. Ordinary WooCommerce remains the system of record for order details a human submits at checkout.
 - Search opportunities persist only canonical server-owned demand signatures; feedback accepts enums and evidence IDs, never free-form comments or caller-supplied metric values.
 - Agent testimony is labeled `agent_reported`; site observation and site-computed measurements remain separate evidence classes.
 - Tool content is structured, sanitized, bounded, and marked untrusted when it originates from merchant-authored catalog or policy data.
@@ -207,11 +222,11 @@ npm run showcase:capture
 
 The capture is intentionally stateful: it creates and fully refunds one no-charge local WooCommerce order and records a session-only comparison-tool restriction inside its disposable browser scope. It publishes the image/summary set only after the entire run succeeds. It defaults to localhost; remote capture requires HTTPS, an explicit opt-in, and explicit operator credentials.
 
-PHP and WordPress integration suites run in containers so host PHP is not required. Browser-native WebMCP is injected/mocked in CI; real ChatGPT desktop and Chrome tests remain release-blocking manual checks.
+PHP and WordPress integration suites run in containers so host PHP is not required. Browser-native WebMCP is injected/mocked in CI; verification in at least one official judging path—the latest ChatGPT in-app browser or Chrome 149+ with WebMCP enabled—remains a release-blocking manual check.
 
 ### Verification snapshot
 
-The prepared repository passes 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, and 15 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, real classic checkout, cross-tab cart synchronization, and bounded replay. The REST/security smoke covers 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passes 11/11 calls; the Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, and Playground execution also pass. Official Plugin Check reports zero errors; its reviewed warnings are documented in [submission/verification-report.md](submission/verification-report.md).
+The current checkout passes 112 JavaScript/configuration tests and the submission-package static checks. The fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a` passed 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4 and 16 Chromium scenarios—including guide discovery, automatic missed-demand recording, linked feedback, fresh-session correlation, real classic checkout, cross-tab cart synchronization, and bounded replay. Its REST/security smoke covered 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities; pinned native WebMCP smoke passed 11/11 calls; protected model-backed selection passed 54/54 storefront and 45/45 Agent SNR case-runs; and the live browser journey passed 8/8 with zero console errors and no new order. Its Woo order/refund lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, deterministic builds, Playground execution, and Plugin Check with zero errors also passed. Compliance copy and owner metadata change future artifact bytes, so validation of the exact final deployed build remains an unchecked owner gate in [submission/verification-report.md](submission/verification-report.md).
 
 ## Hackathon provenance
 

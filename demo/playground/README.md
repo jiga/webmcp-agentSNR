@@ -33,6 +33,6 @@ https://playground.wordpress.net/?blueprint-url=<URL-ENCODED-PUBLIC-BUNDLE-URL>
 
 ## Iframe diagnostic is intentional
 
-WordPress Playground normally embeds WordPress in an iframe. Current ChatGPT Site Tools do not discover WebMCP tools registered inside iframes. The plugin must therefore report `embedded-context` and skip direct tool registration in the ordinary Playground UI. This is not a failed install: Playground verifies the human storefront, WordPress admin, SQLite portability, packaging, activation, and seeding. Use the normal top-level HTTPS WordPress deployment for WebMCP judging.
+WordPress Playground normally embeds WordPress in an iframe, while this project intentionally registers tools only in a top-level browsing context. The plugin therefore reports `embedded-context` and skips direct tool registration in the ordinary Playground UI. This is not a failed install: Playground verifies the human storefront, WordPress admin, SQLite portability, packaging, activation, and seeding. Use the normal top-level HTTPS WordPress deployment for the official WebMCP judging path.
 
 The source `blueprint.json` references `/wmcp-agentops.zip`; that resource is injected only into the built bundle. CI validates the archive layout and executes the complete Blueprint with the official Playground CLI.

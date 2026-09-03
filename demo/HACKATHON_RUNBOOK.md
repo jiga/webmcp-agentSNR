@@ -23,7 +23,7 @@ export WMCP_SHOWCASE_PORT=18085
 ./bin/start-showcase.sh verify
 ```
 
-Use only the local URLs printed by the launcher. Before the audience arrives, open the judge landing page, the storefront, Agent SNR, and the readiness page once. Confirm that the readiness page reports the WordPress/WooCommerce foundation and that the browser exposes Site Tools. Do not claim this localhost setup as a hosted HTTPS demo.
+Use only the local URLs printed by the launcher. Before the audience arrives, open the judge landing page, the storefront, Agent SNR, and the readiness page once. Confirm that the readiness page reports the WordPress/WooCommerce foundation and that the browser exposes the WebMCP tools. Do not claim this localhost setup as a hosted HTTPS demo.
 
 The walkthrough URLs below assume the default port `18084`. If you override it, use the corresponding URLs printed by the launcher.
 
@@ -37,7 +37,7 @@ That reset removes only the `agent-snr-showcase` containers, network, and named 
 
 ## 2. Start with a fresh private session
 
-1. In the Site Tools-capable browser, open `http://localhost:18084/agentops-demo/`.
+1. In a WebMCP-capable top-level browser, open `http://localhost:18084/agentops-demo/`.
 2. Select **Start fresh session**. This rotates only the current browser scope and clears its demo cart and scoped evidence.
 3. Open `http://localhost:18084/storefront-demo/` in another tab in the same browser profile.
 4. Keep both tabs open for the entire demo. Do not switch to a private window or another browser midway.

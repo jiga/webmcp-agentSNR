@@ -1,16 +1,18 @@
 # Testing and release gates
 
+The tag/checksum workflow below is a stricter recommended project-provenance policy, not a Devpost submission requirement. The public source, working hosted project, license, description, and public video must be submitted before the official deadline even if optional release automation is delayed.
+
 ## Supported matrix
 
 | Purpose | WordPress | WooCommerce | PHP | Storage / checkout |
 |---|---:|---:|---:|---|
 | Minimum | 6.9 | 10.9.4 | 8.1 | Legacy orders + classic |
 | Primary | 7.1 | 11.0.1 | 8.3/8.4 | HPOS + classic |
-| Deadline rerun | 7.1 | 11.1 final, if available | 8.3/8.5 | HPOS + classic |
+| Optional newest-release compatibility | 7.1 | 11.1 final, if available | 8.3/8.5 | HPOS + classic |
 | Portability | latest | current stable | 8.3 | Playground SQLite |
 | Degraded mode | 6.9+ | absent | 8.1+ | Non-commerce tools only |
 
-WooCommerce has [tentatively delayed 11.1 final to September 3](https://developer.woocommerce.com/2026/09/01/woocommerce-11-1-delayed/). If it becomes available before the repository is tagged, run the complete suite against it. Checkout Block compatibility is not claimed for v0.1.
+WooCommerce has [tentatively delayed 11.1 final to September 3](https://developer.woocommerce.com/2026/09/01/woocommerce-11-1-delayed/). The declared and passing range already covers WooCommerce 10.9.4 and 11.0.1; if time permits and 11.1 becomes stable before final deployment, its matrix run is optional additional compatibility evidence. Checkout Block compatibility is not claimed for v0.1.
 
 ## Automated checks
 
@@ -36,7 +38,7 @@ npm run test:browser
 
 Run the complete host-independent static/unit/build slice with `./bin/verify.sh`. The REST, Woo lifecycle, and browser checks require the local demo started by `./bin/start-demo.sh`.
 
-The automated suites currently contain 108 JavaScript contract/configuration tests, 106 PHP tests with 1,940 assertions, and 15 isolated Chromium scenarios. The PHP suite covers guide/schema and effect-reference contracts, privacy-safe demand signatures, full-result and out-of-stock analysis, evidence scope, metric enrichment and sample provenance, semantic and transport idempotency, database-enforced feedback slots, output budgets, capability compatibility, plus mixed class-string/object WooCommerce gateways. The JavaScript suite covers provenance, single/latest/unavailable measurement labels, safe text rendering, stale opportunity clearing, eval schema/report/smoke correctness, and fail-closed showcase configuration. The REST smoke harness covers seven public routes, 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities, guide discovery, automatic opportunities, agent feedback, bounded workflow replay, private cart snapshots, Origin/CSRF denial, replay conflicts, policy denial/recovery, analytics, and reset.
+The automated suites currently contain 112 JavaScript contract/configuration tests, 111 PHP tests with 1,964 assertions, and 16 isolated Chromium scenarios. The PHP suite covers guide/schema and effect-reference contracts, privacy-safe demand signatures, full-result and out-of-stock analysis, conservative natural-language budget matching, evidence scope, metric enrichment and sample provenance, semantic and transport idempotency, database-enforced feedback slots, output budgets, capability compatibility, cookie-only guest-session priming, plus mixed class-string/object WooCommerce gateways. The JavaScript suite covers provenance, single/latest/unavailable measurement labels, safe text rendering, stale opportunity clearing, eval schema/report/smoke correctness, and fail-closed showcase configuration. The REST smoke harness covers seven public routes, 20 publicly discoverable tools plus two non-discoverable legacy compatibility abilities, guide discovery, automatic opportunities, agent feedback, bounded workflow replay, private cart snapshots, Origin/CSRF denial, replay conflicts, policy denial/recovery, analytics, and reset.
 
 The WooCommerce lifecycle gate uses public Woo CRUD APIs and explicit provenance fixtures in the configured storage mode. It proves unpaid exclusion, paid attribution, partial and full refund recomputation, cancellation removal, provenance-negative line handling, and human-only exclusion. Every fixture is tagged and deleted before the test exits.
 
@@ -51,8 +53,8 @@ No single harness proves tool quality or a complete agent journey. Run these gat
 1. **Deterministic repository checks** validate the canonical catalog, strict schemas, annotations, character/output budgets, privacy, idempotency, cart/order behavior, UI synchronization, and artifact parity.
 2. **Pinned GoogleChromeLabs WebMCP Evals smoke** validates native Chrome discovery and safe concrete calls on both top-level surfaces. It is keyless and runs only against the disposable localhost demo because the pinned CLI launches Chrome without its sandbox.
 3. **Protected model-backed selection and browser evals** test paraphrases, ambiguity, no-call safety, argument extraction, sequence, and result-aware recovery on one explicitly recorded model/version. Reports under `.evals/` are private evidence and require an explicit report check; a process exit alone is not proof of a passing probabilistic suite.
-4. **nekuda WebMCP Workbench 1.2.1** validates the frozen release as an end user: discovered tools/schemas, manual happy/error calls, Audit findings, saved-call replay, repeated evals, approvals/logs, and User Mode. Complete [submission/workbench-validation.md](submission/workbench-validation.md); this is an owner-run gate, not current repository evidence.
-5. **WebMCP.com scanner, API, and directory** validate the deployed top-level HTTPS surfaces and external discoverability. The scanner checks the live page; the read-only API confirms indexed directory state only after human listing review. Follow [submission/webmcp-directory-listing.md](submission/webmcp-directory-listing.md).
+4. **Optional: nekuda WebMCP Workbench** can supplement the required checks with discovered tools/schemas, manual happy/error calls, Audit findings, saved-call replay, repeated evals, approvals/logs, and User Mode. Use [submission/workbench-validation.md](submission/workbench-validation.md) if this evidence will be included.
+5. **Optional: WebMCP.com scanner, API, and directory** can supplement the required checks with external discovery evidence. The scanner checks the live page; the read-only API confirms indexed directory state only after human listing review. Follow [submission/webmcp-directory-listing.md](submission/webmcp-directory-listing.md) only if pursuing this evidence.
 
 The exact fixture layout, pinned CLI version, safe commands, thresholds, and report semantics live in [evals/README.md](evals/README.md). Model keys must remain outside prompts, reports, screenshots, logs, and Git. Probabilistic and external evidence supplements deterministic tests; it never replaces them.
 
@@ -72,17 +74,16 @@ The exact fixture layout, pinned CLI version, safe commands, thresholds, and rep
 
 ## Real-client release checks
 
-Record exact app/browser versions and results here before tagging:
+Record exact app/browser versions and results here before final submission:
 
 | Client | Required setup | Result |
 |---|---|---|
-| ChatGPT desktop | Latest app; Work or Codex workspace; Site Tools permission; GPT-5.6 Sol or Terra | PENDING OWNER TEST |
-| Chrome | 149+ with `chrome://flags/#enable-webmcp-testing`; top-level HTTPS/localhost | PENDING OWNER TEST |
-| nekuda WebMCP Workbench | Version 1.2.1 baseline; dedicated Chrome profile; frozen top-level HTTPS pages | PENDING OWNER TEST |
-| WebMCP.com scanner/API | Frozen public URLs; human directory review for post-index API verification | PENDING OWNER TEST |
+| Required official path | Latest ChatGPT desktop in-app browser **or** Chrome 149+ with `chrome://flags/#enable-webmcp-testing`; frozen top-level HTTPS pages | PENDING OWNER TEST |
+| Optional Workbench evidence | Actual installed version; dedicated Chrome profile; frozen top-level HTTPS pages | PENDING IF PURSUED |
+| Optional WebMCP.com evidence | Frozen public URLs; human directory review for post-index API verification | PENDING IF PURSUED |
 | Normal browser | WebMCP absent | Automated fallback and cache-neutral HTML pass; hosted manual check pending |
 
-ChatGPT currently does not discover tools in any iframe and does not expose declarative form tools as Site Tools. Playground therefore verifies portability and admin/human behavior, not the primary in-app-browser discovery path.
+The submitted judging path is deliberately a normal top-level page. Playground verifies portability and admin/human behavior in an iframe sandbox; it is not the primary in-app-browser discovery path.
 
 Client `AbortSignal` cancellation stops the browser fetch and UI wait. PHP/WooCommerce work that already began may still finish; the workflow ledger records that authoritative server outcome rather than falsely labeling a committed write cancelled.
 
@@ -111,6 +112,6 @@ Client `AbortSignal` cancellation stops the browser fetch and UI wait. PHP/WooCo
 4. Install and activate that exact ZIP on every matrix target.
 5. Run official WordPress Plugin Check against the extracted ZIP.
 6. Rebuild the artifact from the tag and document provenance.
-7. Deploy the same tag, run smoke tests against public logged-out URLs, then freeze repository/site/Devpost through judging.
+7. Deploy the same tag, run smoke tests against public logged-out URLs, keep the project free and unrestricted through September 21, 2026 at 5:00 p.m. PT, and keep entrant-controlled repository/deployed code and configuration/seed content/video/Devpost entry unchanged until winners are announced on or around September 23 at 2:00 p.m. PT. Normal isolated judge-session state and bounded cleanup may continue as designed.
 
 The current local verification record, including exact matrix versions, checksums, and remaining owner-only gates, is in [submission/verification-report.md](submission/verification-report.md).

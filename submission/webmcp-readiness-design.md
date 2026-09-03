@@ -115,7 +115,7 @@ Errors must name the failed prerequisite or constraint and tell the agent how to
 
 ## Evaluation architecture
 
-No single harness proves the product. The release uses complementary gates:
+No single harness proves the product. The release uses required gates plus optional supplemental evidence:
 
 | Gate | What it proves | Release behavior |
 |---|---|---|
@@ -124,8 +124,8 @@ No single harness proves the product. The release uses complementary gates:
 | `webmcp-evals` local selection | Natural-language selection, argument extraction, paraphrases, ambiguity, and no-call safety | Protected/manual; fixed model and three runs |
 | `webmcp-evals` browser journey | Live model trajectory and result-aware recovery | Protected/manual; JSON report is parsed because the CLI does not fail the process for ordinary mismatches |
 | Playwright and Woo lifecycle | Cart revisions, visible UI, cross-tab state, human checkpoint, order creation, attribution, and refund net | Blocking and deterministic |
-| Nekuda Workbench | Real-client schemas, manual happy/error calls, Audit findings, repeated evals, saved-call replay, logs, approvals, and User Mode co-browsing | Owner-run against the frozen public release |
-| WebMCP.com scanner/directory | Public registration, external classification, coverage, and discoverability | Owner-run after top-level HTTPS deployment |
+| Nekuda Workbench | Real-client schemas, manual happy/error calls, Audit findings, repeated evals, saved-call replay, logs, approvals, and User Mode co-browsing | Optional owner-run evidence against the frozen public release |
+| WebMCP.com scanner/directory | Public registration, external classification, coverage, and discoverability | Optional owner-run evidence after top-level HTTPS deployment |
 
 The pinned Evals CLI launches Chrome without its sandbox. Its smoke job is allowed only against the disposable localhost demo, with no provider secrets. Model-backed runs are never pointed at an arbitrary URL and their `.evals/` reports are private build evidence.
 
@@ -159,7 +159,7 @@ Extension installation, keys, and external account actions stay owner-controlled
 
 The [WebMCP.com methodology](https://webmcp.com/methodology) weights usability most heavily, then journey coverage and mechanical quality. The release therefore optimizes for one coherent journey, precise descriptions, strict schemas, and honest Answer/Action classification rather than tool count.
 
-After the exact release is deployed to stable top-level HTTPS URLs, the owner:
+If pursuing optional WebMCP.com evidence after the exact release is deployed to stable top-level HTTPS URLs, the owner:
 
 1. verifies both surfaces register on page load;
 2. runs the public scanner and resolves load, empty-API, classification, and schema findings;

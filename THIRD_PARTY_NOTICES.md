@@ -12,4 +12,6 @@ The project integrates with, but does not redistribute inside its source tree:
 
 Development-only packages are installed from the locked Composer and npm manifests and are not included in the plugin ZIP. Their copyright and license metadata remain in their distributed packages. Primary development tools include PHPUnit, PHP_CodeSniffer, WordPress Coding Standards, PHPCompatibility, ESLint, Stylelint, and Playwright.
 
-WordPress, WooCommerce, ChatGPT, Chrome, and WebMCP names are used only to describe technical compatibility. No third-party logo is bundled, and no affiliation or endorsement is implied.
+WordPress, WooCommerce, ChatGPT, Chrome, and WebMCP names are used only to describe technical compatibility. Comparative product research may refer nominatively to Fullstory, LogRocket, Datadog, Amplitude, and Sentry. No third-party logo, font, screenshot, music, or product asset is bundled, no integration with those comparative products is claimed, and no affiliation or endorsement is implied.
+
+The editable submission deck was produced with AI-assisted presentation tooling. Its embedded raster images are byte-identical to tracked project screenshots; it contains no external relationships or embedded fonts. Export-tool metadata identifies the file generator, not a separate copyright claimant or project contributor.

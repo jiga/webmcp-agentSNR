@@ -2,11 +2,11 @@
 
 ## Supported release
 
-Security fixes are prepared for the current `0.1.x` hackathon release line. The final submitted tag and hosted build must remain frozen during judging; any necessary security disclosure during that window should be handled privately and coordinated with the challenge organizer before changing submitted resources.
+Security fixes are prepared for the current `0.1.x` hackathon release line. The hosted build, submitted repository, video, Devpost entry, and any submitted tag must remain frozen until the winner announcement; any necessary security disclosure during that window should be handled privately and coordinated with the challenge organizer before changing submitted resources.
 
 ## Reporting a vulnerability
 
-Do not include secrets, personal data, or exploit details in a public issue. Before repository publication, the owner must configure a private security-reporting channel (for example, private repository security advisories) and replace this paragraph with the exact contact path.
+Do not include secrets, personal data, or exploit details in a public issue. As recommended public-launch hygiene—not a Devpost submission requirement—the owner should configure a private security-reporting channel (for example, private repository security advisories) and replace this paragraph with the exact contact path.
 
 Include:
 

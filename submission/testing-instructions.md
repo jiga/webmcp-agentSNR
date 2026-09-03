@@ -1,20 +1,31 @@
 # Judge testing instructions
 
-## Release-owner preflight
+This repository file includes owner preflight material and the finished Devpost field copy. Paste **only** the section headed **Devpost Testing Instructions — paste from here** after replacing its URL tokens; repository-relative links above that marker are not part of the form copy.
 
-These gates must be completed against the exact frozen release before the public judge path is advertised as verified:
+## Release-owner preflight for Devpost
 
-1. Run the deterministic and GoogleChromeLabs WebMCP Evals ladder in [`../evals/README.md`](../evals/README.md). Keep provider keys and `.evals/` reports private.
-2. Test both top-level HTTPS pages in real ChatGPT desktop Site Tools and Chrome; record exact versions, model, counts, and sanitized results.
-3. Complete [`workbench-validation.md`](workbench-validation.md) with nekuda WebMCP Workbench 1.2.1 (or a separately reviewed newer version), including manual error/recovery calls, Audit dispositions, saved-call replay, repeated evals, approvals/logs, and User Mode.
-4. Scan both frozen URLs on [WebMCP.com](https://webmcp.com/), then complete the human listing and post-index API checks in [`webmcp-directory-listing.md`](webmcp-directory-listing.md).
-5. Confirm every public URL works logged out and all linked evidence excludes keys, cookies, session material, customer data, and private logs.
+Complete these against one exact frozen release before placing the judge-start URL in Devpost:
 
-Until those fields are complete, the repository provides a prepared test contract—not a claim that external validation passed.
+1. Recheck the [Official Rules](https://webmcp.devpost.com/rules) and complete [`devpost-rules-checklist.md`](devpost-rules-checklist.md).
+2. Deploy the exact build from the frozen public-repository commit to stable, top-level HTTPS hosting and confirm every submitted URL works logged out, free of charge, with no local-build or iframe-only dependency.
+3. Test the storefront and Agent SNR pages through at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP testing enabled. Confirm the expected 12 and 8 tool catalogs and the complete judge path below.
+4. Verify the public repository contains the frozen source/assets/instructions and visible root license, and record the public commit. If using the project's optional tag/checksum provenance, verify those values too.
+5. Publish the narrated demo publicly on YouTube, verify its processed duration is below 3:00, and audit every frame/audio element for rights, privacy, credentials, and unrelated marks.
+6. Confirm all linked evidence excludes keys, cookies, session material, customer data, private logs, and mutable placeholder URLs.
 
-## Judge path
+The demo must remain available without charge or restriction through September 21, 2026 at 5:00 p.m. PT. If authentication is added, place working credentials only in Devpost's private Testing Instructions field.
 
-1. Open **[PRIMARY_DEMO_URL]** as a top-level page in the latest ChatGPT desktop app with Site Tools enabled, or Chrome 149+ with the WebMCP testing flag. Current ChatGPT Site Tools require a Work or Codex workspace and GPT-5.6 Sol or Terra.
+## Additional quality evidence
+
+These are useful project gates but are not separate Devpost submission requirements:
+
+- The deterministic, native Chrome, and protected model-backed eval ladder is complete; see [`webmcp-eval-report-2026-09-01.md`](webmcp-eval-report-2026-09-01.md).
+- [`workbench-validation.md`](workbench-validation.md) provides an optional deep browser-extension audit and replay sheet.
+- [`webmcp-directory-listing.md`](webmcp-directory-listing.md) provides optional scanner and public-directory evidence.
+
+## Devpost Testing Instructions — paste from here
+
+1. Open **[PRIMARY_DEMO_URL]** as a top-level page in the latest ChatGPT desktop in-app browser, or Chrome 149+ with `chrome://flags/#enable-webmcp-testing` enabled.
 2. Confirm the readiness card detects the browser, then click **Open storefront**. Tool registration occurs on that top-level storefront surface, where the shared workflow UI is present.
 3. Confirm **API detected** becomes **Tools ready**. Ask the agent to start with the site's Agent Guide; confirm the visible guide changes from **Start here** to **Read by agent** without advancing the commerce journey.
 4. Search for an in-stock waterproof backpack under $100 with `IPX5`. Confirm there are zero matches and a **Site observed** opportunity is recorded without any feedback call.
@@ -25,4 +36,6 @@ Until those fields are complete, the repository provides a prepared test contrac
 9. Ask: “Disable product comparison for this demo session.” Confirm comparison disappears/fails immediately while a separate private browser session is unchanged.
 10. Use **Reset my demo** to rotate to a clean private scope.
 
-No login is required for the judged path. The demo processes no payment and sends no email. WordPress Playground is provided for portability, but current ChatGPT does not discover tools inside its iframe; use the primary top-level demo for Site Tools judging.
+No login is required for the judged path. The demo processes no payment and sends no email. WordPress Playground is provided as a portability sandbox; use the primary top-level HTTPS demo for official in-app-browser or Chrome judging.
+
+## End of Devpost paste section

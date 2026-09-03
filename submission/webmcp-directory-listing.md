@@ -2,6 +2,8 @@
 
 Status: **PENDING FROZEN HTTPS DEPLOYMENT AND HUMAN SUBMISSION**
 
+This is optional supplemental discovery evidence, not a Devpost submission requirement or release blocker.
+
 This runbook distinguishes three different checks:
 
 1. the public **scanner** loads a live page and evaluates its registered tools;

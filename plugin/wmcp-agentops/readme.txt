@@ -34,13 +34,13 @@ The bundled public execution and analytics path requires an explicit server-side
 
 No. Checkout handoff returns the normal WooCommerce checkout URL. A human reviews the order and explicitly places it.
 
-= Does this store conversations or personal data? =
+= Does the Agent SNR ledger duplicate conversations or checkout data? =
 
-No raw prompts or search text, conversations, free-form feedback, identity, address, cookie, nonce, authorization, or payment fields are stored. The ledger contains allowlisted operational events, canonical demand signatures, structured feedback enums, and one-way session hashes.
+No. The Agent SNR workflow ledger contains allowlisted operational events, canonical demand signatures, structured feedback enums, and one-way session hashes; it does not duplicate raw prompts or search text, conversations, free-form feedback, identity, address, cookie, nonce, authorization, or payment fields. Ordinary WooCommerce remains the system of record for order details a human submits at checkout.
 
 = Does WebMCP work inside WordPress Playground? =
 
-Playground is normally embedded in an iframe. Current ChatGPT Site Tools do not discover iframe tools, so Playground is a portability sandbox rather than the primary judging path.
+Playground is normally embedded in an iframe. Use the normal top-level HTTPS site for the official ChatGPT in-app-browser or Chrome judging path; Playground is a portability sandbox.
 
 == Changelog ==
 

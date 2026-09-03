@@ -15,4 +15,4 @@ Capture from the frozen hosted release at a consistent 1440×900 viewport. Do no
 9. **Governance** — comparison disabled for current demo session and updated tool catalog/readiness state.
 10. **Refund outcome** — paid evidence retained, full refund appended, and net attributed value reduced to zero.
 
-Check every image for accidental admin email, local paths, cookies, tokens, nonces, browser profile data, private tabs, or unrelated trademarks before upload.
+Check every image for accidental admin email, local paths, cookies, tokens, nonces, browser profile data, private tabs, or unrelated trademarks before upload. Crop browser/app chrome and notifications, use only original or explicitly authorized assets, and resolve the Agent SNR, `AgentOps` compatibility-identifier, and TrailForge Lab screening items before capturing the frozen public set.

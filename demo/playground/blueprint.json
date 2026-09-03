@@ -2,7 +2,7 @@
   "$schema": "https://playground.wordpress.net/blueprint-schema.json",
   "meta": {
     "title": "Agent SNR — WordPress Playground Demo",
-    "description": "A disposable WooCommerce storefront and Agent SNR outcome-monitoring demo. WordPress Playground embeds WordPress in an iframe, so this package demonstrates portability and human/admin behavior; current ChatGPT Site Tools do not discover the embedded WebMCP tools.",
+    "description": "A disposable WooCommerce storefront and Agent SNR outcome-monitoring demo. This iframe-based package demonstrates portability and human/admin behavior; use the normal top-level HTTPS site for the official WebMCP judging path.",
     "author": "jignesh",
     "categories": [
       "demo",

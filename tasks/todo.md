@@ -71,7 +71,7 @@ Implementation and the definitive local verification matrix are complete. Indepe
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
 - Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and formal Agent SNR clearance action are documented.
 
-Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate real clients, rerun against WooCommerce 11.1 if released, capture media, replace URLs, submit, and freeze.
+Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, confirm author identity, create/push the public remote, deploy top-level HTTPS, validate an official real-client path, capture media, replace URLs, submit, and freeze. A WooCommerce 11.1 run is optional newest-release evidence if a stable build is available and time permits.
 
 ## Agent Experience Monitoring iteration
 
@@ -195,7 +195,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Presentation: the editable 11-slide deck is updated in place with the new architecture/demo/provenance story. Template/theme fidelity, speaker-note sources, package, placeholder, exported-render, and overflow checks pass.
 - Verification: 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 20 public + 2 legacy REST/security smoke, 11/11 native WebMCP smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Final deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are owner/external only: formal Agent SNR clearance, public remote/tag, hosted top-level HTTPS deployment, real ChatGPT/Chrome validation, final WooCommerce 11.1 rerun if released, hosted media/video, Devpost URLs/submission, and freeze.
+- Remaining gates are owner/external only: formal Agent SNR clearance, public remote/tag, hosted top-level HTTPS deployment, one official real-client validation path, hosted media/video, Devpost URLs/submission, and freeze. A final WooCommerce 11.1 rerun is optional newest-release evidence.
 
 ## X-post hackathon readiness alignment
 
@@ -217,7 +217,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
 - Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, real ChatGPT/Chrome, Workbench, scanner/directory review, final WooCommerce 11.1 if released, hosted media/video, Devpost submission, and freeze.
+- Remaining gates are external/owner actions for public remote/tag, formal Agent SNR clearance, frozen HTTPS deployment, one official real-client path, hosted media/video, Devpost submission, and freeze. Workbench, scanner/directory review, and a WooCommerce 11.1 rerun are optional evidence if pursued.
 
 ## Live model-backed WebMCP eval report
 
@@ -251,3 +251,22 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - The fixed-model protected gate passes storefront 54/54, Agent SNR 45/45, and live browser 8/8 with zero console errors and no new WooCommerce order; all three strict provenance checkers pass.
 - The complete deterministic matrix passes: 112 JavaScript tests, 111 PHP tests / 1,964 assertions on PHP 8.1 and 8.4, 16/16 Chromium scenarios, 11/11 adapted native smoke calls, and 21/21 eval fixture/patch/checker/smoke guards.
 - [`submission/webmcp-eval-report-2026-09-01.md`](../submission/webmcp-eval-report-2026-09-01.md) records the before/after results, remediation, safety evidence, limitations, and private evidence hashes. The initial failed run remains a superseded baseline rather than an active blocker.
+
+## Devpost final submission compliance
+
+- [x] Capture the September 2 official Rules, Requirements, FAQ, deadline, judging, testing-access, IP, and post-deadline freeze obligations without relying on the optional Devpost plugin.
+- [x] Create a rule-by-rule checklist that separates verified repository evidence from entrant declarations and external account actions.
+- [x] Audit the public-repository package for complete source/assets/instructions, visible open-source licensing, native `document.modelContext.registerTool()` evidence, English-language materials, third-party rights, and pre-existing-versus-new work disclosure.
+- [x] Reconcile the Devpost description, testing instructions, demo script, media plan, URLs, credentials guidance, and judging-criteria narrative with the official requirements.
+- [x] Add a final freeze procedure covering the public repository, deployed code/configuration and seed content, video, Devpost entry, frozen public commit, optional tag/release, free availability through September 21, 2026 at 5:00 p.m. PT, and no entrant-controlled submitted changes until the winner announcement around September 23.
+- [x] Run the complete local validation appropriate to changed artifacts, independently review the compliance package, and commit it without claiming unperformed owner actions.
+
+### Devpost final compliance review
+
+- Rules: the Official Rules, Overview, FAQ, and current Devpost form guidance were reviewed September 2 and rechecked September 3. The central checklist separates official requirements, project quality policy, optional evidence, and declarations/actions that only the entrant can complete.
+- Package: README, hackathon provenance, security/testing guidance, notices, Devpost story, marked testing-instructions copy, owner runbook, media plan, video script, presentation, optional external-evidence templates, and the rule-by-rule checklist agree on one submission contract.
+- Verification: 112/112 JavaScript/configuration tests, showcase launcher guards, schema parity, 45/45 local Markdown links, JSON parsing, diff hygiene, credential-pattern scan, and plugin/Playground package integrity pass. Two consecutive current pre-owner builds match (`24a6a9152f814433877a90fc6c82ac23f6d42787faae9df154b68854fbfef704` plugin; `75436495986664e96dcd9b50a73c1060a622628b6064aa6b1ded12538041c6cc` Playground).
+- Evidence boundary: those current hashes prove reproducible packaging only; the complete exact-ZIP/PHP/Woo/Chromium/native/model matrix remains bound to engineering candidate `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. The exact final deployed build must be revalidated after entrant metadata/name decisions.
+- Presentation: the 12-slide deck passed independent visual, overflow, package, theme, placeholder, notes/source, and template-fidelity review; SHA-256 is `84bcc14bebffc80186b63473a31f07361ef15788890012d19fcaba0ad4642071`.
+- Independent review: compliance and deck reviewers approved with no remaining repository-local finding.
+- Honest blockers: no remote/tag, public repository, public HTTPS demo, real-client hosted result, public YouTube video, final form entry, entrant eligibility/authority/ownership attestation, contributor identity, or name/mark clearance is fabricated. These stay unchecked and must be completed before the deadline.

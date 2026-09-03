@@ -1,8 +1,8 @@
 # Repository verification report
 
-Prepared locally on September 1–2, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, browser-extension installation, or formal trademark/domain clearance.
+Prepared locally on September 1–3, 2026. This report distinguishes reproducible repository evidence from actions that require the entrant's accounts, identity, infrastructure, or formal trademark/domain clearance.
 
-## Reproducible artifacts
+## Verified engineering candidate
 
 Two consecutive clean builds produced identical bytes:
 
@@ -11,7 +11,9 @@ Two consecutive clean builds produced identical bytes:
 | `wmcp-agentops-0.1.0.zip` | `38b1b8106f255b051ff07c953afb6db3be4504df85ac1c4f454c69ec82a416fa` |
 | `wmcp-agentops-playground-0.1.0.zip` | `96a9ec44596a76a07e5d549ff486d35acd8c0292cd5878db6e361321664d3f89` |
 
-The final Playground bundle executed successfully with `@wp-playground/cli` 3.1.51. The final plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 16-scenario Chromium, and Plugin Check acceptance passed against that exact artifact.
+These hashes identify the last fully exercised engineering candidate at commit `e4d9c86b2754c735094b1dc8437fbd007d3e557a`. Its Playground bundle executed successfully with `@wp-playground/cli` 3.1.51, and its plugin ZIP was re-extracted into clean matrix environments; REST, Woo lifecycle, 16-scenario Chromium, and Plugin Check acceptance passed against that exact candidate.
+
+They are deliberately **not** labeled final-submission hashes. This compliance pass changes root `THIRD_PARTY_NOTICES.md`, which the build copies into both release artifacts, and the entrant still needs to resolve public naming and plugin contributor metadata. After those owner changes, validate the exact deployed build from the frozen public commit. If publishing the optional `v0.1.0` release artifacts, rerun their exact-artifact gates before filling the optional hash fields in `devpost-rules-checklist.md`.
 
 ## Green automated gates
 
@@ -47,13 +49,13 @@ The following artifact-level checks were performed locally in addition to `npm r
 - Mixed class-string/object WooCommerce gateway compatibility remains covered by dedicated regression tests. The clean exact-ZIP showcase completed the full no-charge order/refund capture with zero console errors.
 - `npm run showcase:capture` completed one nine-call Guide → IPX5 zero-result → IPX4 recovery → linked feedback → HarborLite human order → full-refund workflow with zero console errors. Ten 1440×900 captures and machine-readable evidence are in `demo-screenshots/`.
 - Representative native-smoke response envelopes measured 455–1,132 characters for nine of eleven calls. The one-start Agent Guide (4,706) and nine-stage funnel (2,157) are documented exceptions to Chrome's current 1.5K recommendation; both remain below the enforced 8 KiB ceiling and are bounded structured results.
-- `agent-snr-hackathon-demo.pptx` rendered as 12 editable slides. All 12 speaker-note source blocks, imported theme fidelity, template fidelity, package integrity, zero-placeholder audit, and overflow checks passed; every exported slide was inspected individually.
+- `agent-snr-hackathon-demo.pptx` (SHA-256 `84bcc14bebffc80186b63473a31f07361ef15788890012d19fcaba0ad4642071`) rendered as 12 editable slides. Nonessential comparative product marks were replaced with generic workflow categories, and the proof slide now records 112 JavaScript tests, 111 PHP tests / 1,964 assertions, and 16/16 Chromium scenarios. All 12 speaker-note source blocks, imported theme fidelity, template fidelity, package integrity, zero-placeholder audit, and overflow checks passed; every exported slide was inspected individually.
 
 The runtime capture and presentation render are recorded local artifact checks, not hidden steps inside `npm run verify`. The hosted HTTPS capture and real-client checks remain owner gates.
 
-## Exact plugin ZIP matrix
+## Exact engineering-candidate ZIP matrix
 
-The same built `wmcp-agentops-0.1.0.zip` was extracted and mounted read-only in isolated clean environments.
+The same candidate `wmcp-agentops-0.1.0.zip` identified above was extracted and mounted read-only in isolated clean environments.
 
 | Environment | Order storage | Result |
 |---|---|---|
@@ -89,10 +91,12 @@ Pushes and pull requests run the static, unit, Playground, source-matrix, lifecy
 
 - Complete formal trademark/domain clearance for Agent SNR and confirm the public repository/product slug.
 - Confirm the Git author identity, create the public remote, and push the unsquashed history.
-- Deploy the release tag to stable top-level HTTPS WordPress hosting.
-- Validate the frozen public site in real ChatGPT desktop Site Tools and flag-enabled Chrome.
-- Complete the Workbench evidence sheet and WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.
-- Re-run the complete matrix against final WooCommerce 11.1 if it releases before tagging.
+- Supply/remove the unresolved plugin contributor placeholder and complete entrant/team ownership and third-party-rights declarations.
+- Clear or replace the Agent SNR, `AgentOps` compatibility-identifier, and TrailForge Lab screening items before public capture.
+- Deploy the exact build from the frozen public commit to stable top-level HTTPS WordPress hosting.
+- Validate both frozen top-level pages through at least one official judge path: the latest ChatGPT desktop in-app browser or Chrome 149+ with WebMCP enabled.
+- Optionally complete the Workbench evidence sheet and WebMCP.com scanner/API/human listing handoff against the frozen HTTPS release.
+- Optionally rerun the matrix against WooCommerce 11.1 if a stable build exists and time permits before final deployment; the declared 10.9.4/11.0.1 range already passes.
 - Capture original screenshots, record/publish the sub-three-minute YouTube video, replace URL placeholders, submit Devpost, and freeze all judged resources.
 
-The operational sequence and exact checkboxes are in [owner-actions.md](owner-actions.md) and [final-checklist.md](final-checklist.md).
+The official-rule mapping and pre-submission release record are in [devpost-rules-checklist.md](devpost-rules-checklist.md); operational steps are in [owner-actions.md](owner-actions.md) and [final-checklist.md](final-checklist.md).
