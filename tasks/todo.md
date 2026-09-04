@@ -464,3 +464,16 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Video lessons: context before evidence, causal story rather than feature tour, real prompt/tool/result/decision pairing, positive human boundaries, measured scene manifests, natural speech, content-addressed narration, rights/privacy audit, public-YouTube verification, and final-frame/listen checks are preserved generically.
 - Helper: `verify_demo_video.sh` passed Bash syntax and the final Agent SNR MP4; it reports 165.52 seconds, H.264 1920×1080 at 25 fps, AAC 48 kHz stereo, −19.1 dB mean / −1.3 dB peak, zero silence at least three seconds, and SHA-256 `bf0faf8744b4ef731c306b70724f9cdfc5fe071e1bf3b8fe7c778ddf4a3dc71c`. It correctly rejects a 100-second maximum.
 - Validation: the bundled skill validator passes and no scaffold placeholder remains. The repository-side handoff is `submission/reusable-hackathon-skill.md`.
+
+## GitHub Actions FFmpeg dependency
+
+- [x] Reproduce the CI-only `spawn ffmpeg ENOENT` failure from the JavaScript video-build test logs.
+- [x] Install the explicit FFmpeg/FFprobe runtime dependency in the JavaScript CI job before verification.
+- [x] Validate workflow syntax and run the complete local verification suite.
+- [ ] Push the fix and confirm the full GitHub Actions dependency chain completes successfully.
+
+### CI dependency review
+
+- Root cause: commit `8dc8471` introduced a JavaScript regression test that invokes the external `ffmpeg` executable, while the Ubuntu JavaScript job installed only npm dependencies. GitHub failed with `spawn ffmpeg ENOENT`; PHP passed and dependent Playground, Docker, and artifact jobs were skipped.
+- Fix: the JavaScript job now installs Ubuntu's `ffmpeg` package with `--no-install-recommends` before `npm run verify`; the package supplies both `ffmpeg` and `ffprobe` used by the video tests.
+- Local verification: workflow YAML parses, `git diff --check` is clean, showcase guards pass, and all 128 JavaScript/configuration tests pass with the local FFmpeg dependency present.
