@@ -330,3 +330,18 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Audio: original English Samantha system narration, no music, mean volume −18.9 dB, peak −4.1 dB, and no detected silence longer than three seconds at −45 dB.
 - Visual QA: ten-frame contact sheet and final-frame inspection show actual hosted pages, legible chapter overlays, fictional checkout data, verified $69 paid outcome, Workflow Replay, Signals, and the disabled comparison control; no admin, billing, credential, notification, or unrelated browser UI appears.
 - Publication gate: the owner must upload the MP4 as Public on YouTube, verify the processed duration/audio/captions logged out, and paste the final URL into Devpost before submission.
+
+## Natural narration remaster
+
+- [x] Generate nine conversational narration clips with scene-specific timing and delivery direction.
+- [x] Fit clips to the existing chapter boundaries without truncation or unnatural speed changes.
+- [x] Replace the system voice, normalize the mix, and preserve the verified video stream and sub-three-minute runtime.
+- [x] Verify scene timing, loudness, silence, encoding, and final playback artifact; retain the entrant's subjective listen as the upload gate.
+- [x] Update the video evidence and publish the reproducible remaster workflow.
+
+### Natural narration review
+
+- Preferred artifact: ignored release output `dist/agent-snr-devpost-demo-natural.mp4`; 149.64 seconds, 1920×1080 H.264 at 25 fps, stereo 48 kHz AAC, 10,308,584 bytes, SHA-256 `0d9da111b96ea8013c090cd05611a1a8dbb96a9dbe096c69fbb11bbde079edac`.
+- Voice workflow: `demo/remaster-natural-narration.mjs` uses OpenAI `gpt-4o-mini-tts` with the recommended `marin` voice and unique conversational direction for each of nine scenes. Raw scene deliveries ranged from 12.2 to 19.45 seconds; only four required acceleration, and the maximum adjustment was 1.082×.
+- Mastering: each clip begins with 300 ms of breathing room, is padded rather than stretched when short, normalized to −16 LUFS target, and fitted to the existing 14/15/16/17/19/15/17/20/16-second chapter boundaries. The original verified H.264 video stream is copied unchanged.
+- Technical QA: runtime remains 149.64 seconds; mean volume is −19.1 dB, peak −1.3 dB, and no silence longer than three seconds appears at −45 dB. The owner must listen once, disclose that the voice is AI-generated, and upload this preferred natural cut rather than the earlier system-voice cut.

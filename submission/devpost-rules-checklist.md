@@ -126,8 +126,9 @@ Devpost's standard form guidance lists name, tagline, thumbnail, story, Built Wi
 - [x] Script uses English narration and requires real calls/results rather than mockups.
 - [x] Recorder uses the exact hosted storefront and Agent SNR pages, registered tools, no-charge human checkout, and session control; no mock page or fabricated result is substituted.
 - [x] Local MP4 runtime is 149.64 seconds, leaving more than thirty seconds of margin; verify the processed YouTube runtime remains below 3:00.
-- [ ] Confirm narration is clear and audible throughout.
+- [x] Technical audio QA confirms stereo AAC, mean −19.1 dB, peak −1.3 dB, and no silence over three seconds; entrant still performs the final subjective listen before upload.
 - [x] Video contains narration only and no music.
+- [x] Natural narration is generated scene by scene with the OpenAI `gpt-4o-mini-tts` `marin` voice; publication instructions require clear AI-voice disclosure.
 - [x] Page-only recording excludes browser chrome, unrelated tabs, notifications, profiles, admin pages, and billing UI.
 - [x] Video uses only the hosted project UI, fictional demo catalog, and generated chapter overlays.
 - [x] Contact-sheet and final-frame review found no customer data, credential, cookie, token, unrelated content, or unapproved third-party media.

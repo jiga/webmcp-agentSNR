@@ -1,6 +1,6 @@
 # Sub-three-minute video script
 
-Rendered hosted take: **2:29.64**, English narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
+Rendered hosted take: **2:29.64**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
 
 | Time | Picture | Narration / action |
 |---:|---|---|
@@ -16,14 +16,18 @@ Rendered hosted take: **2:29.64**, English narration, public-YouTube ready, no m
 
 ## Rendered artifact
 
-- Video: `dist/agent-snr-devpost-demo.mp4`
+- Preferred video: `dist/agent-snr-devpost-demo-natural.mp4`
+- Original system-voice video: `dist/agent-snr-devpost-demo.mp4`
 - Narration transcript: `dist/agent-snr-devpost-narration.txt`
 - Recorder: `demo/record-hosted-demo.mjs`
+- Natural narration remaster: `demo/remaster-natural-narration.mjs`
 - Duration: `149.64` seconds
 - Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
-- Size: 10,288,726 bytes
-- SHA-256: `f9e2d89e586e2323a7e96c6d7623e0923cf69fd215fd511f631fc9a2c8f800d8`
-- Audio QA: mean −18.9 dB, peak −4.1 dB, no silence over three seconds at −45 dB
+- Preferred size: 10,308,584 bytes
+- Preferred SHA-256: `0d9da111b96ea8013c090cd05611a1a8dbb96a9dbe096c69fbb11bbde079edac`
+- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, nine separately directed scenes; maximum timing adjustment 1.082×
+- Audio QA: mean −19.1 dB, peak −1.3 dB, no silence over three seconds at −45 dB
+- Disclosure: identify the narration as AI-generated in the YouTube description and Devpost media notes.
 
 ## Recording checklist
 
