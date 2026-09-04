@@ -381,3 +381,23 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Preservation: the edit replaces the original opening footage instead of adding runtime. Every shopper-agent, human-checkpoint, and owner-agent scene from the verified v2 demonstration remains present.
 - QA: opening and full-video contact sheets confirm readable 16:9 cards, clean transition to the working product, complete visible tool/result pairing, and no unrelated UI or third-party logos. Audio measures −19.1 dB mean / −1.8 dB peak with no silence over three seconds.
 - Publication gate: upload `agent-snr-devpost-demo-v3.mp4`, not the earlier cuts; perform a subjective listen and compatibility-name clearance, disclose the AI narration, and verify public YouTube playback and runtime logged out.
+
+## Future-world narrative cut
+
+- [x] Lock one story arc from agentic-web context through shopper and owner outcomes before editing.
+- [x] Design a calm opening around the world where people delegate browsing and shopping to personal agents.
+- [x] State the site-owner visibility problem and introduce Agent SNR as the missing WordPress operations layer.
+- [x] Author opening narration and visual beats together with explicit holds, crossfades, and a natural handoff to the live demo.
+- [x] Preserve the real shopper-agent, human-checkpoint, and owner-agent WebMCP proof within a sub-three-minute runtime.
+- [x] Render and inspect opening frames, transition frames, full-video contact sheet, audio alignment, loudness, silence, and encoding.
+- [x] Replace the preferred submission artifact, update evidence, verify the repository, and publish the reproducible edit.
+
+### Future-world narrative review
+
+- Preferred artifact: ignored release output `dist/agent-snr-devpost-demo-final.mp4`; 167.00 seconds, 1920×1080 H.264 at 25 fps, stereo 48 kHz AAC, 13,922,187 bytes, SHA-256 `309fa6f26cb2b580342b3cd3166d51a50cfb95f749383d3388f934b6eaa030ae`.
+- Opening: a 5.5-second real zero-result WebMCP cold open leads into future-world, owner-blind-spot, and Agent SNR cards. All cards share one warm-white visual system and use 500 ms dissolves. The solution card embeds the exact first live storefront frame, producing a match dissolve instead of a reset.
+- Story: the final causal chain is shopper intent → WebMCP action → missed demand → controlled recovery → human order → owner-agent evidence → IPX5 inventory decision. Session governance is no longer the closing beat because it does not resolve the demonstrated shopper need.
+- Audio: twelve separately directed natural narration beats start after short visual holds and all run at natural 1.0× tempo. Loudness measures −19.3 dB mean / −1.5 dB peak, with no detected silence longer than three seconds.
+- Reproduction: `npm run video:build-final` now drives capture, measured timeline, cards, visual composition, and narration in one clean-output chain. TTS cache keys bind text, direction, model, and voice; the timing report binds the exact source/output hashes. Every generated target refuses overwrite by default.
+- Visual QA: the 35-frame focused opening review confirms that no dissolve cuts a thought, product evidence appears in the first frame, the cards remain readable, and the match dissolve lands on the same live storefront. Full and ending contact sheets confirm the complete shopper, human, owner, replay, and business-decision path with no admin, billing, credentials, browser chrome, third-party logos, or unrelated content.
+- Publication gate: the owner performs one subjective full listen, clears descriptive compatibility references, discloses AI narration, uploads `agent-snr-devpost-demo-final.mp4` publicly to YouTube, and verifies processed runtime, audio, captions, and Devpost embed logged out.

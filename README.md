@@ -18,7 +18,7 @@ This repository is the challenge-ready demo prototype. Public tool execution and
 |---|---|
 | Live HTTPS demo | [agent-snr.onrender.com](https://agent-snr.onrender.com/) — WordPress 7.1, WooCommerce 11.0.1, Agent SNR 0.1.0 |
 | Public repository | [jiga/webmcp-agentSNR](https://github.com/jiga/webmcp-agentSNR) — public `main`, unsquashed history, GPL-2.0 detected |
-| Video | Script and run sheet are included; owner must record and publish a sub-three-minute YouTube video |
+| Video | Final 2:47 pitch-and-demo MP4 is ready locally; owner must publish it publicly on YouTube and add the link to Devpost |
 | Presentation | Editable 12-slide deck: [`submission/agent-snr-hackathon-demo.pptx`](submission/agent-snr-hackathon-demo.pptx) |
 | Demo rehearsal | Isolated exact-ZIP launcher plus [`demo/HACKATHON_RUNBOOK.md`](demo/HACKATHON_RUNBOOK.md) |
 | Captured proof | Ten real local-flow screenshots and a run summary in [`submission/demo-screenshots/`](submission/demo-screenshots/); [capture notes](submission/demo-screenshots.md) |

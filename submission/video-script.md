@@ -1,25 +1,26 @@
 # Sub-three-minute video script
 
-Rendered pitch-and-demo take: **2:49.40**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
+Final future-world pitch and demo: **2:47.00**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
 
 | Time | Picture | Narration / action |
 |---:|---|---|
-| 0:00–0:03.5 | Title card | Agent SNR and its agent outcome monitoring promise. |
-| 0:03.5–0:07 | Problem card | A successful tool call can still hide missed demand and the agent's recovery. |
-| 0:07–0:10.5 | Architecture card | Browser agent, WebMCP runtime, plugin execution, human checkpoint, redacted signals ledger, and verified commerce. |
-| 0:10.5–0:17 | Working hosted product | Live Agent SNR page and Browser Agent panel appear before fifteen seconds. |
-| 0:17–0:33 | Shopper prompt, discovery, Agent Guide | Visible Browser Agent panel shows the natural-language request, twelve registered tools, `get_agent_guide`, and `get_cart`. |
-| 0:33–0:51 | IPX5 zero-result call | `search_products` shows real arguments, zero structured matches, and the agent's decision to relax only water rating. |
-| 0:51–1:15 | IPX4 recovery | Second search, `compare_products`, `get_store_policy`, structured results, and the evidence-backed compact recommendation. |
-| 1:15–1:37 | Cart, feedback, and handoff | `add_to_cart`, `prepare_checkout_handoff`, `report_agent_feedback`, result receipts, and explicit agent stop. |
-| 1:37–1:55 | Human checkout | Human-only review and click produces the fictional no-charge order and verified outcome. |
-| 1:55–2:13 | Owner prompt and operator tools | Owner asks what happened; agent calls analytics, funnel, health, workflows, and opportunity signals. |
-| 2:13–2:35 | Investigation and replay | Owner agent investigates IPX5 demand, calls `explain_agent_workflow`, and connects recovery to verified conversion. |
-| 2:35–2:49.36 | Bounded owner action | `set_tool_enabled` disables comparison for only the demo session and returns server enforcement evidence. |
+| 0:00–0:05.5 | Real WebMCP cold open | Successful `search_products` call, zero matches, and the decision to relax one constraint. “The search worked. Zero results. That is a business signal.” |
+| 0:05.5–0:11 | Future world | “A web where every person has an agent.” One complete narration thought finishes before the next dissolve. |
+| 0:11–0:17.5 | Owner blind spot | “The store sees the call. It misses the intent.” Three plain owner questions remain readable. |
+| 0:17.5–0:25 | Agent SNR | WordPress operations-layer card uses the exact live storefront frame and match-dissolves into the demo. |
+| 0:25–0:41 | Shopper prompt and guide | Full prompt, twelve registered tools, `get_agent_guide`, `get_cart`, and human-owned checkout boundary. |
+| 0:41–0:57 | IPX5 missed demand | Exact search arguments, successful call, zero structured matches, and privacy-safe opportunity evidence. |
+| 0:57–1:17 | Controlled recovery | IPX4 search, product comparison, return policy, and HarborLite recommendation with the original constraint still visible. |
+| 1:17–1:37 | Prepare and stop | Reversible cart, checkout handoff, handoff-linked agent feedback, and an explicit stop before commitment. |
+| 1:37–1:53 | Human outcome | The shopper places the fictional no-charge order; the resulting conversion is verified rather than inferred. |
+| 1:53–2:11 | Owner agent | L-cut from the receipt into eight owner tools, attributed order, and missed IPX5 demand. |
+| 2:11–2:31 | Evidence chain | Exact workflow replay links zero result, recovery, feedback, human checkpoint, and converted order while preserving evidence sources. |
+| 2:31–2:47 | Business decision | Stay on the live opportunity signal: add IPX5 coverage and keep the proven IPX4 recovery path until then. |
 
 ## Rendered artifact
 
-- Preferred submission video: `dist/agent-snr-devpost-demo-v3.mp4`
+- Preferred submission video: `dist/agent-snr-devpost-demo-final.mp4`
+- Superseded pitch-card cut: `dist/agent-snr-devpost-demo-v3.mp4`
 - Superseded demo-only cut: `dist/agent-snr-devpost-demo-v2.mp4`
 - Superseded walkthrough cut: `dist/agent-snr-devpost-demo-natural.mp4`
 - Original system-voice video: `dist/agent-snr-devpost-demo.mp4`
@@ -27,13 +28,15 @@ Rendered pitch-and-demo take: **2:49.40**, natural English AI narration, public-
 - Recorder: `demo/record-hosted-demo.mjs`
 - Natural narration remaster: `demo/remaster-natural-narration.mjs`
 - Pitch-card compositor: `demo/add-pitch-intro.mjs`
-- Duration: `169.40` seconds
+- Future-world cards: `demo/render-future-story-cards.mjs`
+- Story compositor: `demo/build-future-story-visual.mjs`
+- Duration: `167.00` seconds
 - Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
-- Preferred size: 12,899,034 bytes
-- Preferred SHA-256: `016a6d68c2ef03c1b03912e285e840d37b2e3bdbba5457cd4b68905f72d45aa3`
-- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, nine separately directed scenes; timing range 0.82×–0.984× in the final take
-- Audio QA: mean −19.1 dB, peak −1.8 dB, no silence over three seconds at −45 dB
-- Pitch QA: deck slides 1, 2, and 4 occupy 3.5 seconds each; the working hosted product appears at 10.5 seconds and the complete demo remains intact.
+- Preferred size: 13,922,187 bytes
+- Preferred SHA-256: `309fa6f26cb2b580342b3cd3166d51a50cfb95f749383d3388f934b6eaa030ae`
+- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, twelve separately directed beats, all rendered at natural 1.0× tempo
+- Audio QA: mean −19.3 dB, peak −1.5 dB, no silence over three seconds at −45 dB
+- Story QA: the real product appears in the first frame; warm-white cards use 500 ms dissolves and one spoken thought each; the solution card uses the exact live frame for a match dissolve at 25 seconds. The compositor consumes measured scene boundaries and fails if hosted timing drifts.
 - Interaction proof: the visible Browser Agent panel receives the prompt, arguments, and result summary from the same registered `definition.execute()` calls that update the hosted page.
 - Disclosure: identify the narration as AI-generated in the YouTube description and Devpost media notes.
 

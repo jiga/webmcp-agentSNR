@@ -15,6 +15,7 @@
 /dist/SHA256SUMS
 /dist/*.mp4
 /dist/*-narration*.txt
+/dist/*-timeline*.json
 /node_modules/
 /plugin/wmcp-agentsnr/vendor/
 /vendor/

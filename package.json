@@ -24,7 +24,10 @@
     "showcase:capture": "node demo/showcase-capture.mjs",
     "video:record-hosted": "node demo/record-hosted-demo.mjs",
     "video:remaster-natural": "node demo/remaster-natural-narration.mjs",
-    "video:add-pitch-intro": "node demo/add-pitch-intro.mjs"
+    "video:add-pitch-intro": "node demo/add-pitch-intro.mjs",
+    "video:render-story-cards": "node demo/render-future-story-cards.mjs",
+    "video:build-story-visual": "node demo/build-future-story-visual.mjs",
+    "video:build-final": "node demo/build-final-video.mjs"
   },
   "engines": {
     "node": "^22.13.0 || >=24.0.0"

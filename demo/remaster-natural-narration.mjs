@@ -1,66 +1,89 @@
 import { execFile } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 
 const execFileAsync = promisify( execFile );
 const root = path.resolve( import.meta.dirname, ".." );
-const source = path.resolve( process.env.AGENT_SNR_NARRATION_SOURCE || path.join( root, "dist/agent-snr-devpost-demo.mp4" ) );
-const output = path.resolve( process.env.AGENT_SNR_NARRATION_OUTPUT || path.join( root, "dist/agent-snr-devpost-demo-natural.mp4" ) );
-const work = path.join( root, ".release-test/natural-narration" );
+const source = path.resolve( process.env.AGENT_SNR_NARRATION_SOURCE || path.join( root, "dist/agent-snr-devpost-demo-v4-story-visual.mp4" ) );
+const output = path.resolve( process.env.AGENT_SNR_NARRATION_OUTPUT || path.join( root, "dist/agent-snr-devpost-demo-final.mp4" ) );
+const work = path.join( root, ".release-test/natural-narration-v4" );
 const model = "gpt-4o-mini-tts";
 const voice = process.env.AGENT_SNR_TTS_VOICE || "marin";
 const reuseGeneratedSpeech = process.env.AGENT_SNR_REUSE_TTS === "1";
+const regeneratedScenes = new Set(
+	( process.env.AGENT_SNR_REGENERATE_SCENES || "" )
+		.split( "," )
+		.map( ( value ) => Number.parseInt( value, 10 ) )
+		.filter( Number.isInteger )
+);
 
 const scenes = [
 	{
-		duration: 16,
-		text: "An agent can complete every tool call while the operator still misses what the shopper wanted, why the agent adapted, and whether the journey converted. Agent SNR is a WordPress plugin that adds WebMCP tools, a redacted signals ledger, and verified commerce outcomes.",
+		duration: 5.5,
+		text: "The search worked. Zero results. That is a business signal.",
+	},
+	{
+		duration: 5.5,
+		text: "Personal agents will browse, compare, and shop for us.",
+	},
+	{
+		duration: 6.5,
+		text: "Stores see calls and orders, but lose intent and missed demand.",
+	},
+	{
+		duration: 7.5,
+		text: "Agent SNR connects WebMCP journeys to verified outcomes in WordPress.",
 	},
 	{
 		duration: 16,
-		text: "A shopper asks their browser agent for an IPX5 backpack under one hundred dollars. The live panel shows its decisions: discover twelve tools, read the Agent Guide, and preserve checkout for the person.",
+		text: "A shopper asks for a compact backpack under one hundred dollars with IPX5 protection. Their agent discovers twelve storefront tools and reads the guide before acting. Search and cart stay reversible. Checkout stays human.",
+	},
+	{
+		duration: 16,
+		text: "It calls search products with the exact constraints. The call succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the shopper's raw prompt. A success log would miss that demand.",
+	},
+	{
+		duration: 20,
+		text: "The agent explains the constraint and relaxes only the water rating. A second search finds two compact IPX4 options. It compares product facts and checks returns before recommending HarborLite. Missing facts stay missing, and the unmet IPX5 requirement remains visible.",
+	},
+	{
+		duration: 20,
+		text: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout, reports the missing IPX5 requirement with linked evidence, and stops. The handoff itself remains linked evidence. No WebMCP tool can place the order. The commitment stays human.",
+	},
+	{
+		duration: 16,
+		text: "The shopper reviews checkout and places this no-charge demo order. That click verifies the outcome for the same journey. The order verifies the outcome for this workflow. Agent SNR stores neither address nor payment details.",
 	},
 	{
 		duration: 18,
-		text: "The agent calls search products with the budget, stock requirement, and IPX5 rating. The structured result has zero matches. Agent SNR records the unmet constraint as a site-observed opportunity—without storing the raw prompt.",
+		text: "The shopper is done. Now the owner's agent asks what the site learned. It discovers eight Agent SNR tools. Analytics show the attributed order and the missed IPX5 opportunity. The owner sees both the conversion and the unmet demand behind it.",
 	},
 	{
-		duration: 24,
-		text: "The agent explains the constraint and relaxes only the water rating. A second call finds two compact IPX4 alternatives. It compares stored product facts and checks the published returns policy. The shopper sees the real evidence and the agent's next decision—without invented specifications.",
+		duration: 20,
+		text: "Replay connects the zero result, recovery, feedback, human checkpoint, and order. Each claim keeps its source: site observed, agent reported, or site verified. The owner sees this without raw customer data. Agent opinion never becomes business fact. Lost revenue is never invented.",
 	},
 	{
-		duration: 22,
-		text: "The agent adds HarborLite to the cart, reports the constraint with linked evidence, and prepares checkout. Feedback stays agent-reported; catalog counts stay site-verified. The handoff validates the cart and stops. No tool can place the order, accept terms, or process payment.",
-	},
-	{
-		duration: 18,
-		text: "Now the shopper takes over. They review the ordinary checkout and the fictional demo details. Only the person clicks Place order. That no-charge order becomes a verified outcome for the same agent journey.",
-	},
-	{
-		duration: 18,
-		text: "Next, the owner asks their agent what happened. It discovers eight Agent SNR tools and calls analytics, conversion, health, workflows, and opportunity signals. The paid order is attributed to the exact shopper workflow—without exposing addresses or payment data.",
-	},
-	{
-		duration: 22,
-		text: "The owner agent opens the missed IPX5 opportunity and explains the converted workflow. Replay shows tool outcomes, recovery, feedback, and attribution. Agent SNR separates site-observed demand, agent-reported experience, and site-verified catalog and order facts. It never invents lost revenue.",
-	},
-	{
-		duration: 14,
-		text: "Finally, the owner agent disables comparison for this session. The server enforces it without affecting another judge. Agent SNR turns agent journeys into trustworthy business action.",
+		duration: 16,
+		text: "Now the owner has a decision: add IPX5 inventory and keep the proven IPX4 recovery. Agent SNR turns silent journeys into evidence the store can trust and improve.",
 	},
 ];
 
 const direction = [
-	"Speak like a thoughtful founder opening a live product demo. Natural, warm, confident, and conversational. Use varied intonation and brief meaningful pauses. Never sound like an announcer or read a list. Pronounce S N R as individual letters.",
-	"Continue the same warm founder voice. Sound genuinely engaged as the shopper request appears and the agent begins acting. Emphasize that the visible panel contains real decisions.",
-	"Sound engaged and matter-of-fact. Let the zero result feel like an interesting discovery, not a failure. Pause naturally after 'No product matches.' Pronounce I P X five as letters followed by five.",
-	"Sound optimistic and clear, as if walking through a smart recovery. Keep technical terms light. Pronounce I P X four as letters followed by four.",
-	"Sound reassuring and trustworthy. Give a subtle pause before explaining that no tool can place an order. Pronounce Web M C P as 'Web M C P'.",
-	"Sound human and grounded, with a calm emphasis on the person making the final decision. Avoid sales energy.",
-	"Shift clearly into the store-owner story. Sound quietly impressed as the agent discovers the operator tools and the attributed outcome becomes visible. Pronounce S N R as individual letters.",
-	"Speak with analytical clarity and natural rhythm. Slightly emphasize the three trust classes. End the final sentence firmly, without melodrama.",
-	"Close with warm confidence and a small lift of energy. Make the last sentence memorable but sincere, like the end of a strong live demo. Pronounce S N R as individual letters.",
+	"Open with calm curiosity and a short pause between the first two sentences. Sound like a founder revealing an overlooked fact, not an announcer.",
+	"Speak warmly and with a sense of an approaching, believable future. Keep the sentence simple and unhurried.",
+	"Turn slightly more serious. Emphasize intent and missed demand. Finish cleanly before the next idea.",
+	"Introduce the product with quiet confidence. Pronounce S N R as individual letters and WebMCP as Web M C P.",
+	"Begin the live demonstration conversationally. Pronounce I P X five as letters followed by five. Make the human boundary clear without sounding legalistic.",
+	"Sound matter-of-fact and let zero matches land as useful evidence. Pronounce I P X five as letters followed by five.",
+	"Sound optimistic as the agent recovers. Pronounce I P X four as letters followed by four and HarborLite naturally.",
+	"Sound reassuring. Give a brief pause before explaining that the commitment stays human. Pronounce WebMCP as Web M C P.",
+	"Sound grounded and human. Slightly emphasize that the shopper explicitly places the order.",
+	"Use an audio handoff into the owner perspective. Sound curious on the question about what the site learned. Pronounce S N R as individual letters.",
+	"Speak with analytical clarity. Slightly emphasize the three evidence sources and finish the lost-revenue sentence firmly.",
+	"Close with measured confidence. Make the inventory decision concrete, then land the final sentence sincerely. Pronounce S N R as individual letters.",
 ];
 
 async function readKey() {
@@ -82,7 +105,23 @@ async function duration( file ) {
 	return Number.parseFloat( result.stdout.trim() );
 }
 
-async function generateSpeech( key, scene, index ) {
+async function sha256( file ) {
+	return createHash( "sha256" ).update( await fs.readFile( file ) ).digest( "hex" );
+}
+
+export function sceneCacheKey( scene, index ) {
+	return createHash( "sha256" )
+		.update( JSON.stringify( {
+			direction: direction[ index ],
+			duration: scene.duration,
+			model,
+			text: scene.text,
+			voice,
+		} ) )
+		.digest( "hex" );
+}
+
+async function generateSpeech( key, scene, index, file ) {
 	const response = await fetch( "https://api.openai.com/v1/audio/speech", {
 		method: "POST",
 		headers: {
@@ -100,17 +139,16 @@ async function generateSpeech( key, scene, index ) {
 	if ( ! response.ok ) {
 		throw new Error( `Speech generation failed for scene ${ index + 1 }: ${ response.status } ${ await response.text() }` );
 	}
-	const file = path.join( work, `scene-${ String( index + 1 ).padStart( 2, "0" ) }-raw.wav` );
 	await fs.writeFile( file, Buffer.from( await response.arrayBuffer() ) );
 	return file;
 }
 
 async function fitScene( raw, scene, index ) {
 	const rawDuration = await duration( raw );
-	const speakingBudget = scene.duration - 0.8;
+	const speakingBudget = scene.duration - 0.6;
 	const naturalTempo = rawDuration / speakingBudget;
-	const tempo = naturalTempo > 1 ? naturalTempo : Math.max( naturalTempo, 0.82 );
-	if ( tempo > 1.18 ) {
+	const tempo = naturalTempo > 1 ? naturalTempo : 1;
+	if ( tempo > 1.03 ) {
 		throw new Error( `Scene ${ index + 1 } requires unnatural ${ tempo.toFixed( 3 ) }x acceleration.` );
 	}
 	const fitted = path.join( work, `scene-${ String( index + 1 ).padStart( 2, "0" ) }.wav` );
@@ -124,24 +162,39 @@ async function fitScene( raw, scene, index ) {
 
 async function main() {
 	await fs.access( source );
+	await fs.access( output ).then(
+		() => {
+			throw new Error( `Refusing to overwrite existing output: ${ output }` );
+		},
+		( error ) => {
+			if ( error.code !== "ENOENT" ) {
+				throw error;
+			}
+		}
+	);
 	const sourceDuration = await duration( source );
 	if ( ! reuseGeneratedSpeech ) {
 		await fs.rm( work, { force: true, recursive: true } );
 	}
 	await fs.mkdir( work, { recursive: true } );
-	const key = await readKey();
+	let key;
 	const fitted = [];
 	const report = [];
 	for ( const [ index, scene ] of scenes.entries() ) {
-		const cached = path.join( work, `scene-${ String( index + 1 ).padStart( 2, "0" ) }-raw.wav` );
-		const raw = reuseGeneratedSpeech && await fs.access( cached ).then( () => true, () => false )
+		const cacheKey = sceneCacheKey( scene, index );
+		const cached = path.join(
+			work,
+			`scene-${ String( index + 1 ).padStart( 2, "0" ) }-${ cacheKey.slice( 0, 16 ) }-raw.wav`
+		);
+		const raw = reuseGeneratedSpeech && ! regeneratedScenes.has( index + 1 ) && await fs.access( cached ).then( () => true, () => false )
 			? cached
-			: await generateSpeech( key, scene, index );
+			: await generateSpeech( key ||= await readKey(), scene, index, cached );
 		const result = await fitScene( raw, scene, index );
 		fitted.push( result.fitted );
 		report.push( {
 			scene: index + 1,
 			budgetSeconds: scene.duration,
+			cacheKey,
 			rawSeconds: Number( result.rawDuration.toFixed( 3 ) ),
 			tempo: Number( result.tempo.toFixed( 3 ) ),
 		} );
@@ -150,22 +203,31 @@ async function main() {
 	await fs.writeFile( concat, fitted.map( ( file ) => `file '${ file.replaceAll( "'", "'\\''" ) }'` ).join( "\n" ) );
 	const narration = path.join( work, "narration.wav" );
 	const totalDuration = scenes.reduce( ( total, scene ) => total + scene.duration, 0 );
-	const startupDelay = Math.max( 0, sourceDuration - totalDuration );
-	if ( startupDelay > 8 ) {
-		throw new Error( `Unexpected ${ startupDelay.toFixed( 3 ) } second startup delay in source video.` );
+	const sourceDrift = sourceDuration - totalDuration;
+	if ( Math.abs( sourceDrift ) > 0.1 ) {
+		throw new Error( `Source video differs from the narration timeline by ${ sourceDrift.toFixed( 3 ) } seconds.` );
 	}
+	const startupDelay = Math.max( 0, sourceDrift );
 	await execFileAsync( "ffmpeg", [
 		"-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", concat,
 		"-af", `loudnorm=I=-16:TP=-1.5:LRA=11,adelay=${ Math.round( startupDelay * 1000 ) }|${ Math.round( startupDelay * 1000 ) },apad,atrim=0:${ sourceDuration }`, "-ar", "48000", "-ac", "2", narration,
 	] );
-	await fs.rm( output, { force: true } );
 	await execFileAsync( "ffmpeg", [
 		"-hide_banner", "-loglevel", "error", "-y", "-i", source, "-i", narration,
 		"-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
 		"-t", String( sourceDuration ), "-movflags", "+faststart", output,
 	] );
-	await fs.writeFile( path.join( work, "timing-report.json" ), `${ JSON.stringify( { model, voice, scenes: report }, null, 2 ) }\n` );
-	console.log( JSON.stringify( { output, model, voice, scenes: report }, null, 2 ) );
+	const provenance = {
+		model,
+		outputSha256: await sha256( output ),
+		scenes: report,
+		sourceSha256: await sha256( source ),
+		voice,
+	};
+	await fs.writeFile( path.join( work, "timing-report.json" ), `${ JSON.stringify( provenance, null, 2 ) }\n` );
+	console.log( JSON.stringify( { output, ...provenance }, null, 2 ) );
 }
 
-await main();
+if ( process.argv[ 1 ] && import.meta.url === pathToFileURL( path.resolve( process.argv[ 1 ] ) ).href ) {
+	await main();
+}

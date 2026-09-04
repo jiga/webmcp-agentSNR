@@ -37,7 +37,7 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 ## Media, publication, and freeze
 
 - [x] Verify the original 3:2 `submission/agent-snr-devpost-thumbnail.png` accurately represents the frozen release and contains no third-party logo, screenshot, secret, or private data.
-- [ ] Narrate/record the actual workflow, publish the audio-enabled video as Public on YouTube, and confirm its processed duration is strictly below three minutes.
+- [ ] Listen to `dist/agent-snr-devpost-demo-final.mp4`, publish it as Public on YouTube, disclose the AI narration, and confirm its processed duration remains strictly below three minutes.
 - [ ] Audit every final frame and audio element for original/authorized media, third-party marks, PII, credentials, notifications, and unrelated browser content.
 - [ ] Replace required URL tokens in README, the Devpost story, the marked Devpost testing-instructions section, and every public/video field; replace or remove optional release/Playground rows, then verify each submitted link logged out. Clearly optional Workbench/directory evidence sheets may remain unfilled templates when not pursued.
 - [ ] Recommended launch hygiene: configure a private security-reporting contact.

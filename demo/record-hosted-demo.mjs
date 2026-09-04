@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
@@ -9,11 +9,15 @@ const execFileAsync = promisify( execFile );
 const REPO_ROOT = path.resolve( import.meta.dirname, ".." );
 const BASE_URL = new URL( process.env.AGENT_SNR_DEMO_URL || "https://agent-snr.onrender.com/" );
 const OUTPUT_PATH = path.resolve(
-	process.env.AGENT_SNR_VIDEO_OUTPUT || path.join( REPO_ROOT, "dist/agent-snr-devpost-demo.mp4" )
+	process.env.AGENT_SNR_VIDEO_OUTPUT || path.join( REPO_ROOT, "dist/agent-snr-devpost-demo-v4-system.mp4" )
 );
 const TRANSCRIPT_PATH = path.resolve(
 	process.env.AGENT_SNR_TRANSCRIPT_OUTPUT ||
-		path.join( REPO_ROOT, "dist/agent-snr-devpost-narration.txt" )
+		path.join( REPO_ROOT, "dist/agent-snr-devpost-narration-v4.txt" )
+);
+const TIMELINE_PATH = path.resolve(
+	process.env.AGENT_SNR_TIMELINE_OUTPUT ||
+		path.join( REPO_ROOT, "dist/agent-snr-devpost-timeline-v4.json" )
 );
 const WORK_ROOT = path.resolve( REPO_ROOT, ".release-test" );
 const VIDEO_SIZE = { height: 900, width: 1600 };
@@ -28,67 +32,67 @@ if ( BASE_URL.protocol !== "https:" || BASE_URL.hostname !== "agent-snr.onrender
 
 const scenes = [
 	{
-		duration: 16,
+		duration: 4,
 		id: "intro",
-		title: "AGENT SNR · WORDPRESS PLUGIN",
-		subtitle: "WebMCP tools → same-origin PHP → verified commerce outcomes",
-		narration: "An agent can complete every tool call while the operator still misses what the shopper wanted, why the agent adapted, and whether the journey converted. Agent SNR is a WordPress plugin that adds WebMCP tools, a redacted signals ledger, and verified commerce outcomes.",
+		title: "AGENT SNR",
+		subtitle: "Future-world story intro replaces this capture scene",
+		narration: "Agent SNR.",
 	},
 	{
 		duration: 16,
 		id: "guide",
 		title: "SHOPPER + AGENT",
 		subtitle: "Natural-language request → tool discovery → Agent Guide",
-		narration: "A shopper asks their browser agent for an IPX5 backpack under one hundred dollars. The live panel shows its decisions: discover twelve tools, read the Agent Guide, and preserve checkout for the person.",
+		narration: "A shopper asks for a compact backpack under one hundred dollars with IPX5 protection. Their agent discovers twelve storefront tools and reads the guide before acting. Search and cart stay reversible. Checkout stays human.",
 	},
 	{
-		duration: 18,
+		duration: 16,
 		id: "zero-result",
 		title: "REAL WEBMCP CALL · ZERO RESULTS",
 		subtitle: "search_products → structured evidence → missed-demand signal",
-		narration: "The agent calls search products with the budget, stock requirement, and IPX5 rating. The structured result has zero matches. Agent SNR records the unmet constraint as a site-observed opportunity—without storing the raw prompt.",
+		narration: "It calls search products with the exact constraints. The call succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the shopper's raw prompt. A success log would miss that demand.",
 	},
 	{
-		duration: 24,
+		duration: 20,
 		id: "recovery",
 		title: "THE AGENT RECOVERS",
 		subtitle: "IPX4 alternatives → comparison → returns evidence",
-		narration: "The agent explains the constraint and relaxes only the water rating. A second call finds two compact IPX4 alternatives. It compares stored product facts and checks the published returns policy. The shopper sees the real evidence and the agent's next decision—without invented specifications.",
+		narration: "The agent explains the constraint and relaxes only the water rating. A second search finds two compact IPX4 options. It compares product facts and checks returns before recommending HarborLite. Missing facts stay missing.",
 	},
 	{
-		duration: 22,
+		duration: 20,
 		id: "handoff",
 		title: "PREPARE · REPORT · STOP",
 		subtitle: "Cart mutation → agent feedback → human checkout boundary",
-		narration: "The agent adds HarborLite to the cart, reports the constraint with linked evidence, and prepares checkout. Feedback stays agent-reported; catalog counts stay site-verified. The handoff validates the cart and stops. No tool can place the order, accept terms, or process payment.",
+		narration: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout, reports the missing IPX5 requirement with linked evidence, and stops. The handoff itself remains linked evidence. No WebMCP tool can place the order. The commitment stays human.",
 	},
 	{
-		duration: 18,
+		duration: 16,
 		id: "checkout",
 		title: "THE SHOPPER COMMITS",
 		subtitle: "Explicit human review · fictional data · no-charge order",
-		narration: "Now the shopper takes over. They review the ordinary checkout and the fictional demo details. Only the person clicks Place order. That no-charge order becomes a verified outcome for the same agent journey.",
+		narration: "The shopper reviews checkout and places this no-charge demo order. That click verifies the outcome for the same journey. The order verifies the outcome for this workflow. Agent SNR stores neither address nor payment details.",
 	},
 	{
 		duration: 18,
 		id: "monitor",
 		title: "OWNER + AGENT",
 		subtitle: "Natural-language question → Agent SNR operator tools",
-		narration: "Next, the owner asks their agent what happened. It discovers eight Agent SNR tools and calls analytics, conversion, health, workflows, and opportunity signals. The paid order is attributed to the exact shopper workflow—without exposing addresses or payment data.",
+		narration: "The shopper is done. Now the owner's agent asks what the site learned. It discovers eight Agent SNR tools. Analytics show the attributed order and the missed IPX5 opportunity behind the conversion.",
 	},
 	{
-		duration: 22,
+		duration: 20,
 		id: "replay",
 		title: "INVESTIGATE THE SIGNAL",
 		subtitle: "Missed demand + replay + verified conversion",
-		narration: "The owner agent opens the missed IPX5 opportunity and explains the converted workflow. Replay shows tool outcomes, recovery, feedback, and attribution. Agent SNR separates site-observed demand, agent-reported experience, and site-verified catalog and order facts. It never invents lost revenue.",
+		narration: "Replay connects the zero result, recovery, feedback, human checkpoint, and order. Each claim keeps its source: site observed, agent reported, or site verified. The owner sees this without raw customer data. Agent opinion never becomes business fact. Lost revenue is never invented.",
 	},
 	{
-		duration: 14,
-		id: "control",
-		title: "OWNER ACTION · CLOSE THE LOOP",
-		subtitle: "set_tool_enabled → session-only enforcement",
-		narration: "Finally, the owner agent disables comparison for this session. The server enforces it without affecting another judge. Agent SNR turns agent journeys into trustworthy business action.",
+		duration: 16,
+		id: "decision",
+		title: "ONE JOURNEY · A BUSINESS DECISION",
+		subtitle: "Improve IPX5 coverage · preserve the proven recovery path",
+		narration: "Now the owner has a decision: add IPX5 inventory and keep the proven IPX4 recovery. Agent SNR turns silent journeys into evidence the store can trust and improve.",
 	},
 ];
 
@@ -119,6 +123,23 @@ async function probeDuration( filePath ) {
 		throw new Error( `Could not read audio/video duration for ${ filePath }.` );
 	}
 	return duration;
+}
+
+async function assertPathAbsent( filePath ) {
+	await fs.access( filePath ).then(
+		() => {
+			throw new Error( `Refusing to overwrite existing output: ${ filePath }` );
+		},
+		( error ) => {
+			if ( error.code !== "ENOENT" ) {
+				throw error;
+			}
+		}
+	);
+}
+
+async function sha256( filePath ) {
+	return createHash( "sha256" ).update( await fs.readFile( filePath ) ).digest( "hex" );
 }
 
 async function generateNarration( workDirectory ) {
@@ -411,13 +432,23 @@ async function scrollTo( page, selector, offset = 0 ) {
 	await page.waitForTimeout( 450 );
 }
 
-async function runScene( page, scene, action ) {
+async function runScene( page, scene, action, timeline, recordingOrigin ) {
 	const startedAt = Date.now();
 	await action();
-	const remaining = scene.duration * 1000 - ( Date.now() - startedAt );
+	const actionCompletedAt = Date.now();
+	const remaining = scene.duration * 1000 - ( actionCompletedAt - startedAt );
 	if ( remaining > 0 ) {
 		await page.waitForTimeout( remaining );
 	}
+	const endedAt = Date.now();
+	timeline.push( {
+		actionCompletedSeconds: ( actionCompletedAt - recordingOrigin ) / 1000,
+		actualDurationSeconds: ( endedAt - startedAt ) / 1000,
+		endSeconds: ( endedAt - recordingOrigin ) / 1000,
+		id: scene.id,
+		plannedDurationSeconds: scene.duration,
+		startSeconds: ( startedAt - recordingOrigin ) / 1000,
+	} );
 }
 
 async function recordVideo( workDirectory ) {
@@ -432,6 +463,7 @@ async function recordVideo( workDirectory ) {
 	const video = page.video();
 	try {
 	const recordingStartedAt = Date.now();
+	const sceneTimeline = [];
 	const consoleErrors = [];
 	page.on( "console", ( message ) => {
 		if (
@@ -458,7 +490,7 @@ async function recordVideo( workDirectory ) {
 		);
 		await appendAgentEvent( page, "reasoning", "PLUGIN FLOW", "Top-level page tools → same-origin PHP → commerce record + redacted outcome ledger" );
 		await showOverlay( page, scenes[ 0 ].title, scenes[ 0 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 1 ], async () => {
 		await page.goto( "/storefront-demo/", { waitUntil: "domcontentloaded" } );
@@ -473,7 +505,7 @@ async function recordVideo( workDirectory ) {
 		state.initialCart = await callTool( page, "get_cart" );
 		await scrollTo( page, "#wmcp-agent-guide", -25 );
 		await showOverlay( page, scenes[ 1 ].title, scenes[ 1 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 2 ], async () => {
 		state.zeroSearch = await callTool( page, "search_products", {
@@ -489,7 +521,7 @@ async function recordVideo( workDirectory ) {
 		await appendAgentEvent( page, "reasoning", "DECISION", "No exact IPX5 match. Preserve budget and compact size; relax only water rating to IPX4." );
 		await scrollTo( page, '[data-wmcp-panel="search"]', -80 );
 		await showOverlay( page, scenes[ 2 ].title, scenes[ 2 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 3 ], async () => {
 		state.search = await callTool( page, "search_products", {
@@ -519,7 +551,7 @@ async function recordVideo( workDirectory ) {
 		await appendAgentEvent( page, "reasoning", "RECOMMENDATION", "HarborLite is the compact choice under budget; disclose the IPX4 versus IPX5 constraint." );
 		await scrollTo( page, '[data-wmcp-panel="comparison"]', -60 );
 		await showOverlay( page, scenes[ 3 ].title, scenes[ 3 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 4 ], async () => {
 		state.add = await callTool( page, "add_to_cart", {
@@ -557,7 +589,7 @@ async function recordVideo( workDirectory ) {
 		await appendAgentEvent( page, "reasoning", "HUMAN HANDOFF", "Cart is ready and feedback is recorded. Stop before customer data, terms, and order placement." );
 		await scrollTo( page, '[data-wmcp-panel="feedback"]', -60 );
 		await showOverlay( page, scenes[ 4 ].title, scenes[ 4 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 5 ], async () => {
 		await page.goto( state.handoff.result.checkout_url, { waitUntil: "domcontentloaded" } );
@@ -578,7 +610,7 @@ async function recordVideo( workDirectory ) {
 		await page.locator( "body" ).waitFor( { state: "visible", timeout: 30_000 } );
 		await page.waitForTimeout( 1_000 );
 		await showOverlay( page, "ORDER VERIFIED", "Human-confirmed · paid · no-charge demo" );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 6 ], async () => {
 		await page.goto( "/agentsnr-demo/", { waitUntil: "domcontentloaded" } );
@@ -597,7 +629,7 @@ async function recordVideo( workDirectory ) {
 		await page.locator( "[data-wmcp-load-dashboard]" ).click();
 		await scrollTo( page, "#wmcp-overview", -10 );
 		await showOverlay( page, scenes[ 6 ].title, scenes[ 6 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 7 ], async () => {
 		await appendAgentEvent( page, "reasoning", "INVESTIGATION", "Open the IPX5 missed-demand signal, then explain the exact converted workflow." );
@@ -610,24 +642,19 @@ async function recordVideo( workDirectory ) {
 		await appendAgentEvent( page, "reasoning", "OWNER INSIGHT", "Demand was real, recovery converted, and product coverage—not tool reliability—is the opportunity." );
 		await scrollTo( page, "#wmcp-workflows", -70 );
 		await page.waitForTimeout( 5_000 );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	await runScene( page, scenes[ 8 ], async () => {
 		await setAgentPrompt(
 			page,
-			"STORE OWNER ACTION",
-			"Disable product comparison for only this demo session while I review the experience."
+			"STORE OWNER DECISION",
+			"What should I change for shoppers who need IPX5 protection under this budget?"
 		);
-		await callTool( page, "set_tool_enabled", {
-			enabled: false,
-			reason: "Devpost demo session governance",
-			scope: "demo_session",
-			tool_name: "compare_products",
-		} );
-		await appendAgentEvent( page, "reasoning", "ENFORCED", "The server refreshed this session's tool catalog. Other judge sessions remain unchanged." );
-		await scrollTo( page, "#wmcp-governance", -40 );
+		await callTool( page, "get_opportunity_signals", { limit: 8 } );
+		await appendAgentEvent( page, "reasoning", "OWNER DECISION", "Add IPX5 inventory. Keep the proven IPX4 recovery path until product coverage improves." );
+		await scrollTo( page, "#wmcp-gaps", -70 );
 		await showOverlay( page, scenes[ 8 ].title, scenes[ 8 ].subtitle );
-	} );
+	}, sceneTimeline, recordingStartedAt );
 
 	if ( consoleErrors.length ) {
 		throw new Error( `Unexpected browser console errors: ${ consoleErrors.join( " | " ) }` );
@@ -639,6 +666,7 @@ async function recordVideo( workDirectory ) {
 	await browser.close();
 	return {
 		rawVideoPath,
+		sceneTimeline,
 		startupDuration,
 		workflowId: state.handoff.workflow_id,
 	};
@@ -708,14 +736,6 @@ async function buildAudioTrack( workDirectory, startupDuration ) {
 
 async function renderFinalVideo( rawVideoPath, audioPath ) {
 	await fs.mkdir( path.dirname( OUTPUT_PATH ), { recursive: true } );
-	try {
-		await fs.access( OUTPUT_PATH );
-		throw new Error( `Refusing to overwrite existing output: ${ OUTPUT_PATH }` );
-	} catch ( error ) {
-		if ( error.code !== "ENOENT" ) {
-			throw error;
-		}
-	}
 	await runCommand( "ffmpeg", [
 		"-y",
 		"-i",
@@ -745,6 +765,27 @@ async function renderFinalVideo( rawVideoPath, audioPath ) {
 	] );
 }
 
+async function writeTimeline( recording, renderedDuration ) {
+	const guide = recording.sceneTimeline.find( ( scene ) => scene.id === "guide" );
+	const zeroResult = recording.sceneTimeline.find( ( scene ) => scene.id === "zero-result" );
+	if ( ! guide || ! zeroResult ) {
+		throw new Error( "Required guide and zero-result scene boundaries were not recorded." );
+	}
+	await fs.mkdir( path.dirname( TIMELINE_PATH ), { recursive: true } );
+	await fs.writeFile(
+		TIMELINE_PATH,
+		`${ JSON.stringify( {
+			coldOpenStartSeconds: zeroResult.startSeconds,
+			liveDemoEndSeconds: recording.sceneTimeline.at( -1 ).endSeconds,
+			liveDemoStartSeconds: guide.startSeconds,
+			renderedDurationSeconds: renderedDuration,
+			renderedSha256: await sha256( OUTPUT_PATH ),
+			scenes: recording.sceneTimeline,
+			workflowId: recording.workflowId,
+		}, null, 2 ) }\n`
+	);
+}
+
 async function writeTranscript() {
 	await fs.mkdir( path.dirname( TRANSCRIPT_PATH ), { recursive: true } );
 	await fs.writeFile(
@@ -759,6 +800,7 @@ async function writeTranscript() {
 }
 
 async function main() {
+	await Promise.all( [ OUTPUT_PATH, TRANSCRIPT_PATH, TIMELINE_PATH ].map( assertPathAbsent ) );
 	await fs.mkdir( WORK_ROOT, { recursive: true } );
 	const workDirectory = await fs.mkdtemp(
 		path.join( WORK_ROOT, `hosted-demo-video-${ randomUUID() }-` )
@@ -769,6 +811,7 @@ async function main() {
 	await renderFinalVideo( recording.rawVideoPath, audioPath );
 	await writeTranscript();
 	const duration = await probeDuration( OUTPUT_PATH );
+	await writeTimeline( recording, duration );
 	console.log(
 		JSON.stringify(
 			{
@@ -780,6 +823,7 @@ async function main() {
 					id: scene.id,
 				} ) ),
 				transcriptPath: TRANSCRIPT_PATH,
+				timelinePath: TIMELINE_PATH,
 				workflowId: recording.workflowId,
 				workDirectory,
 			},
