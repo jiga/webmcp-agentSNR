@@ -1,32 +1,34 @@
 # Sub-three-minute video script
 
-Rendered hosted take: **2:29.64**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
+Rendered judge-facing take: **2:49.36**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
 
 | Time | Picture | Narration / action |
 |---:|---|---|
-| 0:00–0:14 | Hosted judge landing and Agent SNR promise | “Most websites can expose actions to agents. Agent SNR shows what happened after those actions: the evidence used, the human checkpoint, the business outcome, and what the site should improve next.” |
-| 0:14–0:29 | Agent Guide 1.1 and twelve-tool storefront | “The live storefront publishes twelve WebMCP tools and a plain-language Agent Guide. It tells the browser agent which journeys are supported, which actions are reversible, what data is excluded, and exactly where checkout returns to a person.” |
-| 0:29–0:45 | IPX5 under-$100 search and zero-result opportunity | “The shopper wants an in-stock waterproof backpack under one hundred dollars with IPX5 protection. No product matches. Instead of hiding that failure, the site records a privacy-safe, site-observed opportunity without storing the shopper's raw prompt.” |
-| 0:45–1:02 | IPX4 recovery, comparison, and policy evidence | “The agent relaxes only the water rating and finds two compact IPX4 options. It compares stored product facts and checks the published returns policy. Missing information stays missing; the tool never invents a recommendation or a final total.” |
-| 1:02–1:21 | HarborLite cart, feedback, and checkout handoff | “HarborLite is added to the session cart. The agent reports the constraint using linked site evidence, while Agent SNR keeps testimony separate from verified measurements. Checkout preparation validates the cart and stops. No WebMCP tool can place an order or process payment.” |
-| 1:21–1:36 | Human no-charge WooCommerce checkout | “The person reviews the normal WooCommerce checkout, accepts the fictional demo details, and explicitly places the no-charge order. The human remains responsible for customer data, terms, and the final commitment.” |
-| 1:36–1:53 | Agent SNR operating picture and verified order | “On the separate Agent SNR surface, eight operator tools read the same browser scope. The monitor connects the original tool journey to the paid WooCommerce order, while keeping raw prompts, addresses, payment details, cookies, and payloads out of the ledger.” |
-| 1:53–2:13 | Signals and Workflow Replay | “Workflow Replay shows terminal tool outcomes, latency, recovery, product evidence, feedback, and commerce attribution. Signals preserve three trust classes: what the site observed, what the agent reported, and what the catalog and WooCommerce verified. Lost revenue is never invented.” |
-| 2:13–2:30 | Session-only comparison control and close | “Finally, the merchant disables comparison for only this demo session. The server enforces the restriction and refreshes the browser's tool catalog without affecting another judge. Agent SNR turns agent activity into evidence, decisions, and a safer next journey.” |
+| 0:00–0:17 | Working hosted product and plugin architecture | Explain WordPress plugin → top-level WebMCP tools → same-origin PHP → redacted ledger → verified commerce outcome. |
+| 0:17–0:33 | Shopper prompt, discovery, Agent Guide | Visible Browser Agent panel shows the natural-language request, twelve registered tools, `get_agent_guide`, and `get_cart`. |
+| 0:33–0:51 | IPX5 zero-result call | `search_products` shows real arguments, zero structured matches, and the agent's decision to relax only water rating. |
+| 0:51–1:15 | IPX4 recovery | Second search, `compare_products`, `get_store_policy`, structured results, and the evidence-backed compact recommendation. |
+| 1:15–1:37 | Cart, feedback, and handoff | `add_to_cart`, `prepare_checkout_handoff`, `report_agent_feedback`, result receipts, and explicit agent stop. |
+| 1:37–1:55 | Human checkout | Human-only review and click produces the fictional no-charge order and verified outcome. |
+| 1:55–2:13 | Owner prompt and operator tools | Owner asks what happened; agent calls analytics, funnel, health, workflows, and opportunity signals. |
+| 2:13–2:35 | Investigation and replay | Owner agent investigates IPX5 demand, calls `explain_agent_workflow`, and connects recovery to verified conversion. |
+| 2:35–2:49.36 | Bounded owner action | `set_tool_enabled` disables comparison for only the demo session and returns server enforcement evidence. |
 
 ## Rendered artifact
 
-- Preferred video: `dist/agent-snr-devpost-demo-natural.mp4`
+- Preferred submission video: `dist/agent-snr-devpost-demo-v2.mp4`
+- Superseded walkthrough cut: `dist/agent-snr-devpost-demo-natural.mp4`
 - Original system-voice video: `dist/agent-snr-devpost-demo.mp4`
 - Narration transcript: `dist/agent-snr-devpost-narration.txt`
 - Recorder: `demo/record-hosted-demo.mjs`
 - Natural narration remaster: `demo/remaster-natural-narration.mjs`
-- Duration: `149.64` seconds
+- Duration: `169.36` seconds
 - Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
-- Preferred size: 10,308,584 bytes
-- Preferred SHA-256: `0d9da111b96ea8013c090cd05611a1a8dbb96a9dbe096c69fbb11bbde079edac`
-- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, nine separately directed scenes; maximum timing adjustment 1.082×
-- Audio QA: mean −19.1 dB, peak −1.3 dB, no silence over three seconds at −45 dB
+- Preferred size: 13,596,313 bytes
+- Preferred SHA-256: `7bcce14360a2238568854f5f455487215a3e2129a812413838d43cac04a528aa`
+- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, nine separately directed scenes; timing range 0.88×–1.092×
+- Audio QA: mean −19.2 dB, peak −1.5 dB, no silence over three seconds at −45 dB
+- Interaction proof: the visible Browser Agent panel receives the prompt, arguments, and result summary from the same registered `definition.execute()` calls that update the hosted page.
 - Disclosure: identify the narration as AI-generated in the YouTube description and Devpost media notes.
 
 ## Recording checklist

@@ -5,59 +5,59 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify( execFile );
 const root = path.resolve( import.meta.dirname, ".." );
-const source = path.join( root, "dist/agent-snr-devpost-demo.mp4" );
-const output = path.join( root, "dist/agent-snr-devpost-demo-natural.mp4" );
+const source = path.resolve( process.env.AGENT_SNR_NARRATION_SOURCE || path.join( root, "dist/agent-snr-devpost-demo.mp4" ) );
+const output = path.resolve( process.env.AGENT_SNR_NARRATION_OUTPUT || path.join( root, "dist/agent-snr-devpost-demo-natural.mp4" ) );
 const work = path.join( root, ".release-test/natural-narration" );
 const model = "gpt-4o-mini-tts";
 const voice = process.env.AGENT_SNR_TTS_VOICE || "marin";
 
 const scenes = [
 	{
+		duration: 16,
+		text: "Agent SNR is a WordPress plugin for agent outcome monitoring. It registers WebMCP tools on shopper and owner pages. Calls run through same-origin PHP, while a redacted ledger connects tool activity to verified WooCommerce outcomes.",
+	},
+	{
+		duration: 16,
+		text: "A shopper asks their browser agent for an IPX5 backpack under one hundred dollars. The live panel shows its decisions: discover twelve tools, read the Agent Guide, and preserve checkout for the person.",
+	},
+	{
+		duration: 18,
+		text: "The agent calls search products with the budget, stock requirement, and IPX5 rating. The structured result has zero matches. Agent SNR records the unmet constraint as a site-observed opportunity—without storing the raw prompt.",
+	},
+	{
+		duration: 24,
+		text: "The agent explains the constraint and relaxes only the water rating. A second call finds two compact IPX4 alternatives. It compares stored product facts and checks the published returns policy. The shopper sees the real evidence and the agent's next decision—without invented specifications.",
+	},
+	{
+		duration: 22,
+		text: "The agent adds HarborLite to the cart, reports the constraint with linked evidence, and prepares checkout. Feedback stays agent-reported; catalog counts stay site-verified. The handoff validates the cart and stops. No tool can place the order, accept terms, or process payment.",
+	},
+	{
+		duration: 18,
+		text: "Now the shopper takes over. They review the ordinary checkout and the fictional demo details. Only the person clicks Place order. That no-charge order becomes a verified outcome for the same agent journey.",
+	},
+	{
+		duration: 18,
+		text: "Next, the owner asks their agent what happened. It discovers eight Agent SNR tools and calls analytics, conversion, health, workflows, and opportunity signals. The paid order is attributed to the exact shopper workflow—without exposing addresses or payment data.",
+	},
+	{
+		duration: 22,
+		text: "The owner agent opens the missed IPX5 opportunity and explains the converted workflow. Replay shows tool outcomes, recovery, feedback, and attribution. Agent SNR separates site-observed demand, agent-reported experience, and site-verified catalog and order facts. It never invents lost revenue.",
+	},
+	{
 		duration: 14,
-		text: "Most websites can expose actions to agents. Agent SNR shows what happened after those actions: the evidence used, the human checkpoint, the business outcome, and what the site should improve next.",
-	},
-	{
-		duration: 15,
-		text: "The live storefront publishes twelve WebMCP tools and a plain-language Agent Guide. It tells the browser agent which journeys are supported, which actions are reversible, what data is excluded, and exactly where checkout returns to a person.",
-	},
-	{
-		duration: 16,
-		text: "The shopper wants an in-stock waterproof backpack under one hundred dollars with IPX5 protection. No product matches. Instead of hiding that failure, the site records a privacy-safe, site-observed opportunity without storing the shopper's raw prompt.",
-	},
-	{
-		duration: 17,
-		text: "The agent relaxes only the water rating and finds two compact IPX4 options. It compares stored product facts and checks the published returns policy. Missing information stays missing; the tool never invents a recommendation or a final total.",
-	},
-	{
-		duration: 19,
-		text: "HarborLite is added to the session cart. The agent reports the constraint using linked site evidence, while Agent SNR keeps testimony separate from verified measurements. Checkout preparation validates the cart and stops. No WebMCP tool can place an order or process payment.",
-	},
-	{
-		duration: 15,
-		text: "The person reviews the normal WooCommerce checkout, accepts the fictional demo details, and explicitly places the no-charge order. The human remains responsible for customer data, terms, and the final commitment.",
-	},
-	{
-		duration: 17,
-		text: "On the separate Agent SNR surface, eight operator tools read the same browser scope. The monitor connects the original tool journey to the paid WooCommerce order, while keeping raw prompts, addresses, payment details, cookies, and payloads out of the ledger.",
-	},
-	{
-		duration: 20,
-		text: "Workflow Replay shows terminal tool outcomes, latency, recovery, product evidence, feedback, and commerce attribution. Signals preserve three trust classes: what the site observed, what the agent reported, and what the catalog and WooCommerce verified. Lost revenue is never invented.",
-	},
-	{
-		duration: 16,
-		text: "Finally, the merchant disables comparison for only this demo session. The server enforces the restriction and refreshes the browser's tool catalog without affecting another judge. Agent SNR turns agent activity into evidence, decisions, and a safer next journey.",
+		text: "Finally, the owner agent disables comparison for this session. The server enforces it and refreshes the tool catalog without affecting another judge. Agent SNR turns real agent journeys into trustworthy business action.",
 	},
 ];
 
 const direction = [
 	"Speak like a thoughtful founder opening a live product demo. Natural, warm, confident, and conversational. Use varied intonation and brief meaningful pauses. Never sound like an announcer or read a list. Pronounce S N R as individual letters.",
-	"Continue the same warm founder voice. Sound genuinely helpful and slightly curious, as if showing a colleague an elegant feature. Emphasize the human checkout boundary without becoming dramatic.",
+	"Continue the same warm founder voice. Sound genuinely engaged as the shopper request appears and the agent begins acting. Emphasize that the visible panel contains real decisions.",
 	"Sound engaged and matter-of-fact. Let the zero result feel like an interesting discovery, not a failure. Pause naturally after 'No product matches.' Pronounce I P X five as letters followed by five.",
 	"Sound optimistic and clear, as if walking through a smart recovery. Keep technical terms light. Pronounce I P X four as letters followed by four.",
 	"Sound reassuring and trustworthy. Give a subtle pause before explaining that no tool can place an order. Pronounce Web M C P as 'Web M C P'.",
 	"Sound human and grounded, with a calm emphasis on the person making the final decision. Avoid sales energy.",
-	"Sound quietly impressed as the outcome becomes visible. Keep the privacy exclusions conversational rather than list-like. Pronounce S N R as individual letters.",
+	"Shift clearly into the store-owner story. Sound quietly impressed as the agent discovers the operator tools and the attributed outcome becomes visible. Pronounce S N R as individual letters.",
 	"Speak with analytical clarity and natural rhythm. Slightly emphasize the three trust classes. End the final sentence firmly, without melodrama.",
 	"Close with warm confidence and a small lift of energy. Make the last sentence memorable but sincere, like the end of a strong live demo. Pronounce S N R as individual letters.",
 ];
@@ -107,12 +107,13 @@ async function generateSpeech( key, scene, index ) {
 async function fitScene( raw, scene, index ) {
 	const rawDuration = await duration( raw );
 	const speakingBudget = scene.duration - 0.8;
-	const tempo = rawDuration > speakingBudget ? rawDuration / speakingBudget : 1;
+	const naturalTempo = rawDuration / speakingBudget;
+	const tempo = naturalTempo > 1 ? naturalTempo : Math.max( naturalTempo, 0.88 );
 	if ( tempo > 1.18 ) {
 		throw new Error( `Scene ${ index + 1 } requires unnatural ${ tempo.toFixed( 3 ) }x acceleration.` );
 	}
 	const fitted = path.join( work, `scene-${ String( index + 1 ).padStart( 2, "0" ) }.wav` );
-	const filter = `${ tempo > 1 ? `atempo=${ tempo.toFixed( 6 ) },` : "" }adelay=300|300,apad,atrim=0:${ scene.duration }`;
+	const filter = `${ Math.abs( tempo - 1 ) > 0.001 ? `atempo=${ tempo.toFixed( 6 ) },` : "" }adelay=300|300,apad,atrim=0:${ scene.duration }`;
 	await execFileAsync( "ffmpeg", [
 		"-hide_banner", "-loglevel", "error", "-y", "-i", raw,
 		"-af", filter, "-ar", "48000", "-ac", "2", fitted,
@@ -122,6 +123,7 @@ async function fitScene( raw, scene, index ) {
 
 async function main() {
 	await fs.access( source );
+	const sourceDuration = await duration( source );
 	await fs.rm( work, { force: true, recursive: true } );
 	await fs.mkdir( work, { recursive: true } );
 	const key = await readKey();
@@ -141,15 +143,20 @@ async function main() {
 	const concat = path.join( work, "concat.txt" );
 	await fs.writeFile( concat, fitted.map( ( file ) => `file '${ file.replaceAll( "'", "'\\''" ) }'` ).join( "\n" ) );
 	const narration = path.join( work, "narration.wav" );
+	const totalDuration = scenes.reduce( ( total, scene ) => total + scene.duration, 0 );
+	const startupDelay = Math.max( 0, sourceDuration - totalDuration );
+	if ( startupDelay > 8 ) {
+		throw new Error( `Unexpected ${ startupDelay.toFixed( 3 ) } second startup delay in source video.` );
+	}
 	await execFileAsync( "ffmpeg", [
 		"-hide_banner", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", concat,
-		"-af", "loudnorm=I=-16:TP=-1.5:LRA=11,apad,atrim=0:149.64", "-ar", "48000", "-ac", "2", narration,
+		"-af", `loudnorm=I=-16:TP=-1.5:LRA=11,adelay=${ Math.round( startupDelay * 1000 ) }|${ Math.round( startupDelay * 1000 ) },apad,atrim=0:${ sourceDuration }`, "-ar", "48000", "-ac", "2", narration,
 	] );
 	await fs.rm( output, { force: true } );
 	await execFileAsync( "ffmpeg", [
 		"-hide_banner", "-loglevel", "error", "-y", "-i", source, "-i", narration,
 		"-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-		"-t", "149.64", "-movflags", "+faststart", output,
+		"-t", String( sourceDuration ), "-movflags", "+faststart", output,
 	] );
 	await fs.writeFile( path.join( work, "timing-report.json" ), `${ JSON.stringify( { model, voice, scenes: report }, null, 2 ) }\n` );
 	console.log( JSON.stringify( { output, model, voice, scenes: report }, null, 2 ) );

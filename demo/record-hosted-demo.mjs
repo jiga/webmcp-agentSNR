@@ -28,76 +28,67 @@ if ( BASE_URL.protocol !== "https:" || BASE_URL.hostname !== "agent-snr.onrender
 
 const scenes = [
 	{
+		duration: 16,
 		id: "intro",
-		minimumSeconds: 11,
-		title: "AGENT SNR",
-		subtitle: "Verified outcomes over raw agent noise",
-		narration:
-			"Most websites can expose actions to agents. Agent SNR shows what happened after those actions: the evidence used, the human checkpoint, the business outcome, and what the site should improve next.",
+		title: "AGENT SNR · WORDPRESS PLUGIN",
+		subtitle: "WebMCP tools → same-origin PHP → verified commerce outcomes",
+		narration: "Agent SNR is a WordPress plugin for agent outcome monitoring. It registers WebMCP tools on shopper and owner pages. Calls run through same-origin PHP, while a redacted ledger connects tool activity to verified WooCommerce outcomes.",
 	},
 	{
+		duration: 16,
 		id: "guide",
-		minimumSeconds: 14,
-		title: "1 · THE SITE TEACHES THE AGENT",
-		subtitle: "Guide 1.1 · reversible actions · human-owned checkout",
-		narration:
-			"The live storefront publishes twelve WebMCP tools and a plain-language Agent Guide. It tells the browser agent which journeys are supported, which actions are reversible, what data is excluded, and exactly where checkout returns to a person.",
+		title: "SHOPPER + AGENT",
+		subtitle: "Natural-language request → tool discovery → Agent Guide",
+		narration: "A shopper asks their browser agent for an IPX5 backpack under one hundred dollars. The live panel shows its decisions: discover twelve tools, read the Agent Guide, and preserve checkout for the person.",
 	},
 	{
+		duration: 18,
 		id: "zero-result",
-		minimumSeconds: 15,
-		title: "2 · MISSED DEMAND BECOMES A SIGNAL",
-		subtitle: "IPX5 under $100 · zero matches · no raw prompt stored",
-		narration:
-			"The shopper wants an in-stock waterproof backpack under one hundred dollars with IPX5 protection. No product matches. Instead of hiding that failure, the site records a privacy-safe, site-observed opportunity without storing the shopper's raw prompt.",
+		title: "REAL WEBMCP CALL · ZERO RESULTS",
+		subtitle: "search_products → structured evidence → missed-demand signal",
+		narration: "The agent calls search products with the budget, stock requirement, and IPX5 rating. The structured result has zero matches. Agent SNR records the unmet constraint as a site-observed opportunity—without storing the raw prompt.",
 	},
 	{
+		duration: 24,
 		id: "recovery",
-		minimumSeconds: 17,
-		title: "3 · RECOVER WITH EVIDENCE",
-		subtitle: "Relax one constraint · compare stored facts · verify policy",
-		narration:
-			"The agent relaxes only the water rating and finds two compact IPX4 options. It compares stored product facts and checks the published returns policy. Missing information stays missing; the tool never invents a recommendation or a final total.",
+		title: "THE AGENT RECOVERS",
+		subtitle: "IPX4 alternatives → comparison → returns evidence",
+		narration: "The agent explains the constraint and relaxes only the water rating. A second call finds two compact IPX4 alternatives. It compares stored product facts and checks the published returns policy. The shopper sees the real evidence and the agent's next decision—without invented specifications.",
 	},
 	{
+		duration: 22,
 		id: "handoff",
-		minimumSeconds: 19,
-		title: "4 · PREPARE, REPORT, HAND OFF",
-		subtitle: "Reversible cart · structured feedback · no order yet",
-		narration:
-			"HarborLite is added to the session cart. The agent reports the constraint using linked site evidence, while Agent SNR keeps testimony separate from verified measurements. Checkout preparation validates the cart and stops. No WebMCP tool can place an order or process payment.",
+		title: "PREPARE · REPORT · STOP",
+		subtitle: "Cart mutation → agent feedback → human checkout boundary",
+		narration: "The agent adds HarborLite to the cart, reports the constraint with linked evidence, and prepares checkout. Feedback stays agent-reported; catalog counts stay site-verified. The handoff validates the cart and stops. No tool can place the order, accept terms, or process payment.",
 	},
 	{
+		duration: 18,
 		id: "checkout",
-		minimumSeconds: 15,
-		title: "5 · THE PERSON COMMITS",
-		subtitle: "Normal WooCommerce checkout · fictional data · no charge",
-		narration:
-			"The person reviews the normal WooCommerce checkout, accepts the fictional demo details, and explicitly places the no-charge order. The human remains responsible for customer data, terms, and the final commitment.",
+		title: "THE SHOPPER COMMITS",
+		subtitle: "Explicit human review · fictional data · no-charge order",
+		narration: "Now the shopper takes over. They review the ordinary checkout and the fictional demo details. Only the person clicks Place order. That no-charge order becomes a verified outcome for the same agent journey.",
 	},
 	{
+		duration: 18,
 		id: "monitor",
-		minimumSeconds: 17,
-		title: "6 · VERIFY THE BUSINESS OUTCOME",
-		subtitle: "Same browser scope · paid order · deterministic attribution",
-		narration:
-			"On the separate Agent SNR surface, eight operator tools read the same browser scope. The monitor connects the original tool journey to the paid WooCommerce order, while keeping raw prompts, addresses, payment details, cookies, and payloads out of the ledger.",
+		title: "OWNER + AGENT",
+		subtitle: "Natural-language question → Agent SNR operator tools",
+		narration: "Next, the owner asks their agent what happened. It discovers eight Agent SNR tools and calls analytics, conversion, health, workflows, and opportunity signals. The paid order is attributed to the exact shopper workflow—without exposing addresses or payment data.",
 	},
 	{
+		duration: 22,
 		id: "replay",
-		minimumSeconds: 20,
-		title: "7 · REPLAY, SIGNALS, AND RECOVERY",
-		subtitle: "Site observed · Agent reported · Site verified",
-		narration:
-			"Workflow Replay shows terminal tool outcomes, latency, recovery, product evidence, feedback, and commerce attribution. Signals preserve three trust classes: what the site observed, what the agent reported, and what the catalog and WooCommerce verified. Lost revenue is never invented.",
+		title: "INVESTIGATE THE SIGNAL",
+		subtitle: "Missed demand + replay + verified conversion",
+		narration: "The owner agent opens the missed IPX5 opportunity and explains the converted workflow. Replay shows tool outcomes, recovery, feedback, and attribution. Agent SNR separates site-observed demand, agent-reported experience, and site-verified catalog and order facts. It never invents lost revenue.",
 	},
 	{
+		duration: 14,
 		id: "control",
-		minimumSeconds: 15,
-		title: "8 · CLOSE THE LOOP",
-		subtitle: "Session-safe governance · reproducible evidence · open source",
-		narration:
-			"Finally, the merchant disables comparison for only this demo session. The server enforces the restriction and refreshes the browser's tool catalog without affecting another judge. Agent SNR turns agent activity into evidence, decisions, and a safer next journey.",
+		title: "OWNER ACTION · CLOSE THE LOOP",
+		subtitle: "set_tool_enabled → session-only enforcement",
+		narration: "Finally, the owner agent disables comparison for this session. The server enforces it and refreshes the tool catalog without affecting another judge. Agent SNR turns real agent journeys into trustworthy business action.",
 	},
 ];
 
@@ -144,7 +135,9 @@ async function generateNarration( workDirectory ) {
 			scene.narration,
 		] );
 		scene.audioDuration = await probeDuration( scene.audioPath );
-		scene.duration = Math.max( scene.minimumSeconds, scene.audioDuration + 0.9 );
+		if ( scene.audioDuration > scene.duration - 0.5 ) {
+			throw new Error( `${ scene.id } narration exceeds its ${ scene.duration } second scene.` );
+		}
 	}
 }
 
@@ -183,7 +176,165 @@ async function waitForTools( page, count ) {
 	);
 }
 
+async function setAgentPrompt( page, persona, prompt ) {
+	await page.evaluate(
+		( content ) => {
+			let panel = document.querySelector( "#agent-snr-live-agent" );
+			if ( ! panel ) {
+				panel = document.createElement( "aside" );
+				panel.id = "agent-snr-live-agent";
+				panel.innerHTML = `
+					<div data-agent-header><span data-agent-dot></span><strong>Browser Agent · WebMCP</strong><small>LIVE</small></div>
+					<div data-agent-persona></div>
+					<div data-agent-prompt></div>
+					<div data-agent-events></div>
+				`;
+				Object.assign( panel.style, {
+					background: "rgba(3, 14, 25, 0.97)",
+					border: "1px solid rgba(65, 238, 154, 0.72)",
+					borderRadius: "14px",
+					bottom: "20px",
+					boxShadow: "0 20px 60px rgba(0, 0, 0, 0.46)",
+					color: "#f5f8f6",
+					display: "grid",
+					fontFamily: "Inter, ui-sans-serif, system-ui, sans-serif",
+					gridTemplateRows: "auto auto auto 1fr",
+					overflow: "hidden",
+					pointerEvents: "none",
+					position: "fixed",
+					right: "20px",
+					top: "20px",
+					width: "500px",
+					zIndex: "2147483646",
+				} );
+				const header = panel.querySelector( "[data-agent-header]" );
+				Object.assign( header.style, {
+					alignItems: "center",
+					background: "#071f2f",
+					borderBottom: "1px solid rgba(255,255,255,.1)",
+					display: "flex",
+					fontSize: "15px",
+					gap: "9px",
+					padding: "14px 16px",
+				} );
+				Object.assign( panel.querySelector( "[data-agent-dot]" ).style, {
+					background: "#41ee9a",
+					borderRadius: "999px",
+					boxShadow: "0 0 12px rgba(65,238,154,.85)",
+					height: "9px",
+					width: "9px",
+				} );
+				Object.assign( header.querySelector( "small" ).style, {
+					color: "#41ee9a",
+					fontSize: "11px",
+					fontWeight: "800",
+					letterSpacing: ".12em",
+					marginLeft: "auto",
+				} );
+				Object.assign( panel.querySelector( "[data-agent-persona]" ).style, {
+					color: "#8bd9ff",
+					fontSize: "12px",
+					fontWeight: "800",
+					letterSpacing: ".1em",
+					padding: "14px 16px 4px",
+					textTransform: "uppercase",
+				} );
+				Object.assign( panel.querySelector( "[data-agent-prompt]" ).style, {
+					background: "rgba(139,217,255,.09)",
+					border: "1px solid rgba(139,217,255,.24)",
+					borderRadius: "9px",
+					fontSize: "15px",
+					lineHeight: "1.42",
+					margin: "8px 16px 12px",
+					padding: "12px 13px",
+				} );
+				Object.assign( panel.querySelector( "[data-agent-events]" ).style, {
+					display: "grid",
+					gap: "9px",
+					overflow: "hidden",
+					padding: "0 16px 16px",
+				} );
+				document.body.append( panel );
+			}
+			panel.querySelector( "[data-agent-persona]" ).textContent = content.persona;
+			panel.querySelector( "[data-agent-prompt]" ).textContent = `“${ content.prompt }”`;
+			panel.querySelector( "[data-agent-events]" ).replaceChildren();
+		},
+		{ persona, prompt }
+	);
+}
+
+async function appendAgentEvent( page, kind, title, detail ) {
+	await page.evaluate(
+		( event ) => {
+			const events = document.querySelector( "#agent-snr-live-agent [data-agent-events]" );
+			if ( ! events ) {
+				return;
+			}
+			const card = document.createElement( "div" );
+			card.dataset.kind = event.kind;
+			Object.assign( card.style, {
+				background: event.kind === "result" ? "rgba(65,238,154,.09)" : "rgba(255,255,255,.055)",
+				border: `1px solid ${ event.kind === "result" ? "rgba(65,238,154,.28)" : "rgba(255,255,255,.13)" }`,
+				borderRadius: "9px",
+				display: "grid",
+				gap: "4px",
+				padding: "10px 12px",
+			} );
+			const label = document.createElement( "strong" );
+			label.textContent = `${ event.kind === "result" ? "✓ RESULT" : event.kind === "reasoning" ? "AGENT" : "→ TOOL" } · ${ event.title }`;
+			Object.assign( label.style, {
+				color: event.kind === "result" ? "#74f0ad" : event.kind === "reasoning" ? "#ffd27a" : "#8bd9ff",
+				fontSize: "12px",
+				letterSpacing: ".05em",
+			} );
+			const copy = document.createElement( "span" );
+			copy.textContent = event.detail;
+			Object.assign( copy.style, {
+				color: "#dce7e2",
+				fontFamily: event.kind === "reasoning" ? "inherit" : "ui-monospace, SFMono-Regular, Menlo, monospace",
+				fontSize: "12px",
+				lineHeight: "1.38",
+			} );
+			card.append( label, copy );
+			events.append( card );
+			while ( events.children.length > 4 ) {
+				events.firstElementChild.remove();
+			}
+		},
+		{ detail, kind, title }
+	);
+	await page.waitForTimeout( kind === "tool" ? 350 : 500 );
+}
+
+function compactToolInput( input ) {
+	return JSON.stringify( input ).replaceAll( '"', "" ).slice( 0, 180 );
+}
+
+function summarizeToolResult( name, response ) {
+	const result = response?.result || {};
+	const summaries = {
+		add_to_cart: () => `${ result.cart?.item_count ?? 1 } item in cart · reversible`,
+		compare_products: () => `${ result.products?.length ?? result.comparison?.length ?? 2 } products compared from stored facts`,
+		explain_agent_workflow: () => `${ result.events?.length ?? result.event_count ?? "Recorded" } workflow events · outcome ${ result.outcome || "verified" }`,
+		get_agent_analytics_overview: () => `${ result.total_workflows ?? result.workflow_count ?? "Live" } workflows · ${ result.attributed_orders ?? result.order_count ?? 1 } attributed order`,
+		get_agent_conversion_funnel: () => "Journey stages and verified conversion loaded",
+		get_agent_guide: () => `Guide ${ result.version || "1.1" } · checkout is human-owned`,
+		get_cart: () => `${ result.item_count ?? 0 } items · cart revision captured`,
+		get_opportunity_signals: () => `${ result.items?.length ?? result.signals?.length ?? "Active" } evidence-backed signals`,
+		get_store_policy: () => "Published returns evidence loaded",
+		get_tool_health: () => `${ result.items?.length ?? result.tools?.length ?? "All" } tool-health records loaded`,
+		prepare_checkout_handoff: () => "Cart validated · human checkout URL prepared · no order placed",
+		query_agent_workflows: () => `${ result.items?.length ?? result.workflows?.length ?? "Recent" } workflows returned`,
+		report_agent_feedback: () => "Bounded feedback receipt recorded and linked to site evidence",
+		search_products: () => `${ result.result_count ?? result.products?.length ?? 0 } matching products · structured result`,
+		set_tool_enabled: () => `${ result.tool_name || "compare_products" } disabled for this demo session`,
+	};
+	return ( summaries[ name ] || ( () => "Successful structured response" ) )();
+}
+
 async function callTool( page, name, input = {} ) {
+	await appendAgentEvent( page, "tool", name, compactToolInput( input ) || "{}" );
 	const response = await page.evaluate(
 		async ( invocation ) => {
 			const definition = globalThis.__agentSnrRecording.activeTools.get( invocation.name );
@@ -197,6 +348,7 @@ async function callTool( page, name, input = {} ) {
 	if ( response?.ok !== true ) {
 		throw new Error( `${ name } failed: ${ JSON.stringify( response ) }` );
 	}
+	await appendAgentEvent( page, "result", name, summarizeToolResult( name, response ) );
 	return response;
 }
 
@@ -299,12 +451,24 @@ async function recordVideo( workDirectory ) {
 
 	await runScene( page, scenes[ 0 ], async () => {
 		await page.evaluate( () => window.scrollTo( 0, 0 ) );
+		await setAgentPrompt(
+			page,
+			"PROJECT ARCHITECTURE",
+			"How does this WordPress plugin use WebMCP and connect agent activity to business outcomes?"
+		);
+		await appendAgentEvent( page, "reasoning", "PLUGIN FLOW", "Top-level page tools → same-origin PHP → commerce record + redacted outcome ledger" );
 		await showOverlay( page, scenes[ 0 ].title, scenes[ 0 ].subtitle );
 	} );
 
 	await runScene( page, scenes[ 1 ], async () => {
 		await page.goto( "/storefront-demo/", { waitUntil: "domcontentloaded" } );
 		await waitForTools( page, STOREFRONT_TOOL_COUNT );
+		await setAgentPrompt(
+			page,
+			"SHOPPER REQUEST",
+			"Find a compact waterproof backpack under $100 with IPX5 protection. If none match, show the closest options, prepare checkout, and follow the guide's feedback instructions."
+		);
+		await appendAgentEvent( page, "reasoning", "DISCOVERY", "12 registered storefront tools found. Read the site guide before acting." );
 		state.guide = await callTool( page, "get_agent_guide" );
 		state.initialCart = await callTool( page, "get_cart" );
 		await scrollTo( page, "#wmcp-agent-guide", -25 );
@@ -322,6 +486,7 @@ async function recordVideo( workDirectory ) {
 		if ( state.zeroSearch.result.result_count !== 0 ) {
 			throw new Error( "The hosted IPX5 search did not return the expected zero result." );
 		}
+		await appendAgentEvent( page, "reasoning", "DECISION", "No exact IPX5 match. Preserve budget and compact size; relax only water rating to IPX4." );
 		await scrollTo( page, '[data-wmcp-panel="search"]', -80 );
 		await showOverlay( page, scenes[ 2 ].title, scenes[ 2 ].subtitle );
 	} );
@@ -342,6 +507,7 @@ async function recordVideo( workDirectory ) {
 		if ( ! state.harborLite || ! state.rainTrail ) {
 			throw new Error( "The two expected IPX4 products were not returned." );
 		}
+		await appendAgentEvent( page, "reasoning", "RECOVERY", "Two eligible IPX4 alternatives found. Compare the decision-relevant facts and verify returns." );
 		await callTool( page, "compare_products", {
 			criteria: [ "price", "capacity", "water_rating", "weight", "return_days" ],
 			product_ids: [ state.harborLite.id, state.rainTrail.id ],
@@ -350,6 +516,7 @@ async function recordVideo( workDirectory ) {
 			policy_type: "returns",
 			product_id: state.harborLite.id,
 		} );
+		await appendAgentEvent( page, "reasoning", "RECOMMENDATION", "HarborLite is the compact choice under budget; disclose the IPX4 versus IPX5 constraint." );
 		await scrollTo( page, '[data-wmcp-panel="comparison"]', -60 );
 		await showOverlay( page, scenes[ 3 ].title, scenes[ 3 ].subtitle );
 	} );
@@ -387,6 +554,7 @@ async function recordVideo( workDirectory ) {
 			step: "checkout_handoff",
 			suggested_owner_action: "improve_product_coverage",
 		} );
+		await appendAgentEvent( page, "reasoning", "HUMAN HANDOFF", "Cart is ready and feedback is recorded. Stop before customer data, terms, and order placement." );
 		await scrollTo( page, '[data-wmcp-panel="feedback"]', -60 );
 		await showOverlay( page, scenes[ 4 ].title, scenes[ 4 ].subtitle );
 	} );
@@ -394,6 +562,12 @@ async function recordVideo( workDirectory ) {
 	await runScene( page, scenes[ 5 ], async () => {
 		await page.goto( state.handoff.result.checkout_url, { waitUntil: "domcontentloaded" } );
 		await page.locator( "form.checkout" ).waitFor( { state: "visible", timeout: 30_000 } );
+		await setAgentPrompt(
+			page,
+			"HUMAN CHECKPOINT",
+			"Review the prepared cart and explicitly place this fictional, no-charge demo order."
+		);
+		await appendAgentEvent( page, "reasoning", "AGENT STOPPED", "No WebMCP checkout or payment tool exists. The shopper now controls the final commitment." );
 		await page.locator( "#payment_method_wmcp_agentsnr_demo" ).check();
 		await showOverlay( page, scenes[ 5 ].title, scenes[ 5 ].subtitle );
 		await page.waitForTimeout( 4_000 );
@@ -409,6 +583,12 @@ async function recordVideo( workDirectory ) {
 	await runScene( page, scenes[ 6 ], async () => {
 		await page.goto( "/agentsnr-demo/", { waitUntil: "domcontentloaded" } );
 		await waitForTools( page, AGENT_SNR_TOOL_COUNT );
+		await setAgentPrompt(
+			page,
+			"STORE OWNER REQUEST",
+			"Show orders attributed to agents, surface missed product demand, and explain the shopper journey that just converted."
+		);
+		await appendAgentEvent( page, "reasoning", "DISCOVERY", "8 registered Agent SNR operator tools found. Start with outcomes, then investigate evidence." );
 		await callTool( page, "get_agent_analytics_overview" );
 		await callTool( page, "get_agent_conversion_funnel" );
 		await callTool( page, "get_tool_health" );
@@ -420,23 +600,31 @@ async function recordVideo( workDirectory ) {
 	} );
 
 	await runScene( page, scenes[ 7 ], async () => {
+		await appendAgentEvent( page, "reasoning", "INVESTIGATION", "Open the IPX5 missed-demand signal, then explain the exact converted workflow." );
 		await scrollTo( page, "#wmcp-gaps", -80 );
 		await showOverlay( page, scenes[ 7 ].title, scenes[ 7 ].subtitle );
 		await page.waitForTimeout( 5_000 );
 		await callTool( page, "explain_agent_workflow", {
 			workflow_id: state.handoff.workflow_id,
 		} );
+		await appendAgentEvent( page, "reasoning", "OWNER INSIGHT", "Demand was real, recovery converted, and product coverage—not tool reliability—is the opportunity." );
 		await scrollTo( page, "#wmcp-workflows", -70 );
 		await page.waitForTimeout( 5_000 );
 	} );
 
 	await runScene( page, scenes[ 8 ], async () => {
+		await setAgentPrompt(
+			page,
+			"STORE OWNER ACTION",
+			"Disable product comparison for only this demo session while I review the experience."
+		);
 		await callTool( page, "set_tool_enabled", {
 			enabled: false,
 			reason: "Devpost demo session governance",
 			scope: "demo_session",
 			tool_name: "compare_products",
 		} );
+		await appendAgentEvent( page, "reasoning", "ENFORCED", "The server refreshed this session's tool catalog. Other judge sessions remain unchanged." );
 		await scrollTo( page, "#wmcp-governance", -40 );
 		await showOverlay( page, scenes[ 8 ].title, scenes[ 8 ].subtitle );
 	} );

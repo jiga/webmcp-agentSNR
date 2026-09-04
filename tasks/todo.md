@@ -345,3 +345,22 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Voice workflow: `demo/remaster-natural-narration.mjs` uses OpenAI `gpt-4o-mini-tts` with the recommended `marin` voice and unique conversational direction for each of nine scenes. Raw scene deliveries ranged from 12.2 to 19.45 seconds; only four required acceleration, and the maximum adjustment was 1.082×.
 - Mastering: each clip begins with 300 ms of breathing room, is padded rather than stretched when short, normalized to −16 LUFS target, and fitted to the existing 14/15/16/17/19/15/17/20/16-second chapter boundaries. The original verified H.264 video stream is copied unchanged.
 - Technical QA: runtime remains 149.64 seconds; mean volume is −19.1 dB, peak −1.3 dB, and no silence longer than three seconds appears at −45 dB. The owner must listen once, disclose that the voice is AI-generated, and upload this preferred natural cut rather than the earlier system-voice cut.
+
+## Judge-facing two-persona WebMCP demo
+
+- [x] Diagnose the walkthrough-vs-demo gap and lock a two-persona judging story before implementation.
+- [x] Add a truthful live agent panel driven by the same registered tool invocations as the hosted page.
+- [x] Record the shopper-agent journey with discovery, recovery, evidence, feedback, and human checkout.
+- [x] Record the owner-agent journey with analytics, attribution, opportunity investigation, replay, and bounded governance.
+- [x] Add the concise WordPress-plugin/WebMCP architecture explanation and natural timed narration.
+- [x] Verify runtime, tool/result truthfulness, visual legibility, audio, third-party-media hygiene, and all repository checks.
+- [x] Replace the preferred submission artifact and update the Devpost evidence record.
+
+### Two-persona demo review
+
+- Preferred artifact: ignored release output `dist/agent-snr-devpost-demo-v2.mp4`; 169.36 seconds, 1920×1080 H.264 at 25 fps, stereo 48 kHz AAC, 13,596,313 bytes, SHA-256 `7bcce14360a2238568854f5f455487215a3e2129a812413838d43cac04a528aa`.
+- Shopper proof: the visible agent panel shows the full shopper request, discovery, `get_agent_guide`, cart state, IPX5 zero-result search, recovery search, comparison, policy, cart mutation, checkout handoff, bounded feedback, structured results, and agent decisions. The human alone clicks Place order.
+- Owner proof: the panel switches to the store-owner request and shows analytics, conversion, health, workflow, opportunity, explanation, and session-control tool calls against Agent SNR, including actual result summaries and the linked converted workflow.
+- Architecture proof: the first sixteen seconds explain the WordPress plugin, top-level WebMCP registration, same-origin PHP execution, WooCommerce outcome source, and redacted ledger while the hosted product is already working.
+- QA: ten-frame inspection shows legible prompt/call/result/decision pairing with corresponding live UI state; no browser chrome, admin, billing, credential, notification, third-party logo, or unrelated content appears. Audio measures −19.2 dB mean / −1.5 dB peak with no silence longer than three seconds. Runtime leaves 10.64 seconds below the limit.
+- Publication gate: entrant performs a subjective full listen, clears necessary descriptive compatibility references, discloses AI narration, uploads this v2 cut publicly to YouTube, and verifies the processed runtime and embed logged out.
