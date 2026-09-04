@@ -6,7 +6,7 @@ Agent SNR separates trustworthy business signal from raw agent noise: browser ag
 
 > See what agents did. Hear what they experienced. Discover what your site is missing.
 
-> **Devpost status:** the [public repository](https://github.com/jiga/webmcp-agentSNR) and [hosted HTTPS demo](https://agent-snr.onrender.com/) are live and anonymously accessible. The entry still requires a public sub-three-minute YouTube video, identity/eligibility/IP sign-off, and final submission before **September 3, 2026 at 1:00 p.m. PDT**. Follow the [official-rule checklist](submission/devpost-rules-checklist.md); unchecked items are not claimed complete.
+> **Devpost status:** the [public repository](https://github.com/jiga/webmcp-agentSNR) and [hosted HTTPS demo](https://agent-snr.onrender.com/) are live and anonymously accessible. The entry still requires the finished video to be uploaded publicly to YouTube, identity/eligibility/IP sign-off, and final submission before the live Devpost deadline of **September 4, 2026 at 1:00 a.m. PDT**. Follow the [official-rule checklist](submission/devpost-rules-checklist.md); unchecked items are not claimed complete.
 
 The familiar investigation pattern combines journey replay, tool observability, and product analytics for website agents. Here, “replay” means a redacted event-sourced workflow timeline—not DOM capture, video, or pixel reconstruction. See [PRODUCT.md](PRODUCT.md) for the monitoring model, comparative research, and MVP boundaries.
 

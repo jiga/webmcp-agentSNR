@@ -21,7 +21,8 @@
     "verify": "npm run lint:js && npm run lint:css && npm run test:showcase && npm run test:js",
     "build": "./bin/build-plugin.sh",
     "build:playground": "./bin/build-playground-bundle.sh",
-    "showcase:capture": "node demo/showcase-capture.mjs"
+    "showcase:capture": "node demo/showcase-capture.mjs",
+    "video:record-hosted": "node demo/record-hosted-demo.mjs"
   },
   "engines": {
     "node": "^22.13.0 || >=24.0.0"

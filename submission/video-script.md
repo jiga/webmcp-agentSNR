@@ -1,19 +1,29 @@
 # Sub-three-minute video script
 
-Target: **2:40**, English narration, public YouTube, no music, and no third-party mark or material without documented permission.
+Rendered hosted take: **2:29.64**, English narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
 
 | Time | Picture | Narration / action |
 |---:|---|---|
-| 0:00–0:12 | Judge landing and readiness signal | “Websites are beginning to expose tools to browser agents. But merchants still cannot see the whole path from agent intent to a real business outcome—or safely improve that tool layer.” |
-| 0:12–0:22 | Closed-loop rail; click **Open storefront** | “This is Agent SNR—agent outcome monitoring for WordPress. SNR means signal-to-noise ratio: verified outcomes over raw agent noise. The top-level storefront owns the shopper tools and shared state.” |
-| 0:22–0:38 | Agent Guide ribbon; agent reads guide | “The storefront publishes a plain-language Agent Guide. It declares top-level co-browsing, reversible effects, optional feedback, zero sensitive tools, and the point where checkout belongs to the person.” |
-| 0:38–0:58 | IPX5 under-$100 search returns zero; then relax to two IPX4 results | “This real constraint has no match. The site records the missed opportunity immediately without storing my prompt. Relaxing only the water rating yields two evidence-backed IPX4 alternatives.” |
-| 0:58–1:18 | Compare, policy, HarborLite cart, feedback receipt | “The agent compares stored facts, verifies returns, prepares the cart, and reports the waterproofing tradeoff. Its opinion stays Agent reported; two eligible products and highest IPX4 are computed by the site.” |
-| 1:18–1:35 | Checkout handoff, click CTA, review and place demo order | “Checkout handoff validates the cart and stops. Conversion is still pending until I review normal WooCommerce checkout and place this no-charge order myself.” |
-| 1:35–2:03 | Agent SNR, Workflow Replay, Opportunity Signals, outcomes | “Agent SNR replays the same workflow and keeps three evidence classes visible: Site observed demand, Agent reported feedback, and Site verified catalog and WooCommerce outcomes. Its monitoring ledger excludes raw prompts, addresses, and payment details.” |
-| 2:03–2:16 | Signals card and server measurements | “The merchant sees what users asked for but could not get—IPX5 protection under this budget—and a concrete product-coverage action, never invented lost revenue.” |
-| 2:16–2:30 | Disable comparison; manifest/tool list changes | “Now I disable comparison for only this demo session. The server blocks it immediately and the browser refreshes the catalog. Another judge is unaffected.” |
-| 2:30–2:40 | Eval fixtures, repo, ZIP, Docker/Playground artifacts, closing rail | “The exact release ships with pinned native WebMCP smoke, strict model-backed evals, and reproducible Docker and Playground artifacts—so this journey can be tested, published, and improved.” |
+| 0:00–0:14 | Hosted judge landing and Agent SNR promise | “Most websites can expose actions to agents. Agent SNR shows what happened after those actions: the evidence used, the human checkpoint, the business outcome, and what the site should improve next.” |
+| 0:14–0:29 | Agent Guide 1.1 and twelve-tool storefront | “The live storefront publishes twelve WebMCP tools and a plain-language Agent Guide. It tells the browser agent which journeys are supported, which actions are reversible, what data is excluded, and exactly where checkout returns to a person.” |
+| 0:29–0:45 | IPX5 under-$100 search and zero-result opportunity | “The shopper wants an in-stock waterproof backpack under one hundred dollars with IPX5 protection. No product matches. Instead of hiding that failure, the site records a privacy-safe, site-observed opportunity without storing the shopper's raw prompt.” |
+| 0:45–1:02 | IPX4 recovery, comparison, and policy evidence | “The agent relaxes only the water rating and finds two compact IPX4 options. It compares stored product facts and checks the published returns policy. Missing information stays missing; the tool never invents a recommendation or a final total.” |
+| 1:02–1:21 | HarborLite cart, feedback, and checkout handoff | “HarborLite is added to the session cart. The agent reports the constraint using linked site evidence, while Agent SNR keeps testimony separate from verified measurements. Checkout preparation validates the cart and stops. No WebMCP tool can place an order or process payment.” |
+| 1:21–1:36 | Human no-charge WooCommerce checkout | “The person reviews the normal WooCommerce checkout, accepts the fictional demo details, and explicitly places the no-charge order. The human remains responsible for customer data, terms, and the final commitment.” |
+| 1:36–1:53 | Agent SNR operating picture and verified order | “On the separate Agent SNR surface, eight operator tools read the same browser scope. The monitor connects the original tool journey to the paid WooCommerce order, while keeping raw prompts, addresses, payment details, cookies, and payloads out of the ledger.” |
+| 1:53–2:13 | Signals and Workflow Replay | “Workflow Replay shows terminal tool outcomes, latency, recovery, product evidence, feedback, and commerce attribution. Signals preserve three trust classes: what the site observed, what the agent reported, and what the catalog and WooCommerce verified. Lost revenue is never invented.” |
+| 2:13–2:30 | Session-only comparison control and close | “Finally, the merchant disables comparison for only this demo session. The server enforces the restriction and refreshes the browser's tool catalog without affecting another judge. Agent SNR turns agent activity into evidence, decisions, and a safer next journey.” |
+
+## Rendered artifact
+
+- Video: `dist/agent-snr-devpost-demo.mp4`
+- Narration transcript: `dist/agent-snr-devpost-narration.txt`
+- Recorder: `demo/record-hosted-demo.mjs`
+- Duration: `149.64` seconds
+- Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
+- Size: 10,288,726 bytes
+- SHA-256: `f9e2d89e586e2323a7e96c6d7623e0923cf69fd215fd511f631fc9a2c8f800d8`
+- Audio QA: mean −18.9 dB, peak −4.1 dB, no silence over three seconds at −45 dB
 
 ## Recording checklist
 
@@ -29,4 +39,4 @@ Target: **2:40**, English narration, public YouTube, no music, and no third-part
 - Audit necessary descriptive compatibility references against the applicable brand terms and record the entrant's approval.
 - Publish as **Public**, verify playback and audio logged out, and confirm the video embeds on the Devpost project page.
 - Open all public links logged out before and immediately after publishing.
-- Freeze the uploaded video at final submission and make no changes after the September 3, 2026 1:00 p.m. PDT deadline without explicit Sponsor/Devpost permission.
+- Freeze the uploaded video at final submission and make no changes after the live Devpost deadline of September 4, 2026 at 1:00 a.m. PDT without explicit Sponsor/Devpost permission; retain evidence of the displayed extension because the earlier rules copy shows the original deadline.

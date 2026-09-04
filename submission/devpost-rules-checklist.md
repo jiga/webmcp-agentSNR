@@ -2,7 +2,7 @@
 
 Reviewed September 2, 2026 and rechecked September 3 against the [Official Rules](https://webmcp.devpost.com/rules), [challenge Overview](https://webmcp.devpost.com/), [Resources and FAQ](https://webmcp.devpost.com/resources), and Devpost's current [submission-step guide](https://help.devpost.com/article/126-know-your-submission-steps). The Official Rules control if another page conflicts and may be amended, so the entrant must recheck them again immediately before submitting.
 
-**Submission deadline: September 3, 2026 at 1:00 p.m. PDT / 20:00 UTC.**
+**Displayed submission deadline: September 4, 2026 at 1:00 a.m. PDT.** The live challenge overview shows this extension; the earlier Official Rules copy still shows September 3 at 1:00 p.m. PDT. Retain a screenshot of the live extension and submission receipt.
 
 Repository-local preparation is complete or explicitly tracked below. The entry is **not yet submit-ready** until every unchecked hard blocker and entrant declaration is completed. Automation must never mark a personal/legal declaration complete on the entrant's behalf.
 
@@ -21,7 +21,7 @@ Repository-local preparation is complete or explicitly tracked below. The entry 
 
 - [x] Repository history begins inside the submission period: August 29, 2026, after the August 25, 2026 11:00 a.m. PDT opening.
 - [ ] Re-open the live Official Rules on submission day and record the review time; resolve any amendment before submitting.
-- [ ] Submit before **September 3, 2026 at 1:00 p.m. PDT**; do not rely on proof of sending as proof of receipt.
+- [ ] Submit before the live Devpost deadline of **September 4, 2026 at 1:00 a.m. PDT**; save evidence of the displayed extension and do not rely on proof of sending as proof of receipt.
 - [ ] Keep the working project free and unrestricted for judging through **September 21, 2026 at 5:00 p.m. PT**.
 - [ ] Keep entrant-controlled submitted repo/deployed code and configuration/seed content/video unchanged until winners are announced on or around **September 23, 2026 at 2:00 p.m. PT**; normal isolated judge-session data and bounded cleanup may continue, and later development uses a separate fork.
 - [ ] Permit a post-deadline correction only after explicit Sponsor/Devpost approval and only for the narrow IP, PII, or inappropriate-material reasons allowed by the Rules.
@@ -122,15 +122,15 @@ Devpost's standard form guidance lists name, tagline, thumbnail, story, Built Wi
 
 ## 8. Public YouTube video
 
-- [x] Script target is 2:40 and includes a functioning end-to-end demo with narration explaining the product and WebMCP implementation.
+- [x] The rendered hosted demo is 2:29.64 and includes the functioning storefront, Agent SNR monitor, human checkout boundary, verified outcome, and narration explaining WebMCP.
 - [x] Script uses English narration and requires real calls/results rather than mockups.
-- [ ] Record only the exact frozen hosted behavior submitted to judges.
-- [ ] Keep the final processed runtime strictly below 3:00; target 2:40–2:50 for margin.
+- [x] Recorder uses the exact hosted storefront and Agent SNR pages, registered tools, no-charge human checkout, and session control; no mock page or fabricated result is substituted.
+- [x] Local MP4 runtime is 149.64 seconds, leaving more than thirty seconds of margin; verify the processed YouTube runtime remains below 3:00.
 - [ ] Confirm narration is clear and audible throughout.
-- [ ] Use no music unless it is original or explicitly licensed for this use.
-- [ ] Crop browser chrome, unrelated tabs, notifications, profiles, and nonessential third-party marks from every frame.
-- [ ] Use only original project artwork/screenshots or material with documented permission.
-- [ ] Audit the final upload for trademarks, copyright, privacy, publicity, customer data, credentials, cookies, tokens, and unrelated content.
+- [x] Video contains narration only and no music.
+- [x] Page-only recording excludes browser chrome, unrelated tabs, notifications, profiles, admin pages, and billing UI.
+- [x] Video uses only the hosted project UI, fictional demo catalog, and generated chapter overlays.
+- [x] Contact-sheet and final-frame review found no customer data, credential, cookie, token, unrelated content, or unapproved third-party media.
 - [ ] Publish on YouTube as Public—not Private, Unlisted, scheduled, age-restricted, or region-restricted—and verify playback logged out.
 - [ ] Verify the YouTube embed on the Devpost project page before submission.
 
@@ -161,7 +161,7 @@ Evidence: Official Rules Stage One and Stage Two. Tie-breaking begins with WebMC
 
 ## 11. Pre-submission release record
 
-Complete this table after the final owner decisions—and after the artifact build if publishing one—then commit it before final Submit. The tag/checksum fields are recommended project provenance, not Devpost requirements, and must never delay submission past 1:00 p.m. PDT. The table deliberately excludes the commit SHA, because a commit cannot contain its own identifier, and excludes facts that exist only after submission.
+Complete this table after the final owner decisions—and after the artifact build if publishing one—then commit it before final Submit. The tag/checksum fields are recommended project provenance, not Devpost requirements, and must never delay submission past the live 1:00 a.m. PDT deadline. The table deliberately excludes the commit SHA, because a commit cannot contain its own identifier, and excludes facts that exist only after submission.
 
 | Field | Final value |
 |---|---|

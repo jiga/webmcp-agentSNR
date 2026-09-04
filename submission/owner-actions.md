@@ -2,7 +2,7 @@
 
 These actions need human identity, accounts, infrastructure, or judgment and are intentionally not fabricated by the repository.
 
-Complete the hard blockers and entrant declarations in [`devpost-rules-checklist.md`](devpost-rules-checklist.md) before the **September 3, 2026 at 1:00 p.m. PDT** deadline. Recheck the live Official Rules immediately before submitting.
+Complete the hard blockers and entrant declarations in [`devpost-rules-checklist.md`](devpost-rules-checklist.md) before the live Devpost deadline of **September 4, 2026 at 1:00 a.m. PDT**. Retain evidence of the displayed extension because the earlier Official Rules copy shows the original deadline.
 
 ## Identity, release, and hosting
 
@@ -42,6 +42,6 @@ Complete the hard blockers and entrant declarations in [`devpost-rules-checklist
 - [ ] Replace required URL tokens in README, the Devpost story, the marked Devpost testing-instructions section, and every public/video field; replace or remove optional release/Playground rows, then verify each submitted link logged out. Clearly optional Workbench/directory evidence sheets may remain unfilled templates when not pursued.
 - [ ] Recommended launch hygiene: configure a private security-reporting contact.
 - [ ] Recommended project provenance—not a Devpost requirement: tag the approved commit as `v0.1.0`, publish checksummed ZIP/Playground artifacts, wait for the release workflow to pass, and verify hosted provenance matches the immutable tag. Do not miss the Devpost deadline for optional release automation.
-- [ ] Complete every Devpost standard and challenge-specific field in English, preview the page, accept the Official Rules, submit before September 3, 2026 at 1:00 p.m. PDT, save the receipt, and name the freeze/operations owner.
+- [ ] Complete every Devpost standard and challenge-specific field in English, preview the page, accept the Official Rules, submit before the live September 4, 2026 1:00 a.m. PDT deadline, save the extension evidence and receipt, and name the freeze/operations owner.
 - [ ] Freeze entrant-controlled repository/default branch/tag, release assets, deployed code/configuration, seed catalog/policies, video, and Devpost entry immediately after final submission and no later than the deadline. Normal isolated judge-session workflows, carts, orders, resets, and bounded cleanup may continue as designed. Continue development only in a separate fork; make a permitted IP/PII correction only after explicit Sponsor/Devpost approval.
 - [ ] Keep the project free and unrestricted through September 21, 2026 at 5:00 p.m. PT and keep entrant-controlled submitted materials unchanged until winners are announced on or around September 23 at 2:00 p.m. PT.

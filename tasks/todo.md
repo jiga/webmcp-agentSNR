@@ -71,7 +71,7 @@ Implementation and the definitive local verification matrix are complete. Indepe
 - Security/REST: 19-tool manifests, session fixation, Origin/CSRF, stale cart, replay conflict, policy enforcement, cross-session isolation, cache neutrality, and reset pass.
 - Packaging: Plugin Check has zero errors and zero trademark findings; the remaining direct-query/template warnings and formal Agent SNR clearance action are documented.
 
-Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, capture hosted media/video, finish the Devpost form and personal declarations, submit, and freeze. The public repository, HTTPS deployment, official real-client validation, and public URLs are complete. A WooCommerce 11.1 run is optional newest-release evidence if a stable build is available and time permits.
+Remaining work is exclusively owner/external: complete formal Agent SNR trademark/domain clearance, upload the finished demo video to public YouTube, finish the remaining Devpost fields and personal declarations, submit, and freeze. The public repository, HTTPS deployment, official real-client validation, public URLs, and local video artifact are complete. A WooCommerce 11.1 run is optional newest-release evidence if a stable build is available and time permits.
 
 ## Agent Experience Monitoring iteration
 
@@ -195,7 +195,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Presentation: the editable 11-slide deck is updated in place with the new architecture/demo/provenance story. Template/theme fidelity, speaker-note sources, package, placeholder, exported-render, and overflow checks pass.
 - Verification: 108 JavaScript tests, 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4, 15/15 Chromium scenarios, 20 public + 2 legacy REST/security smoke, 11/11 native WebMCP smoke, Woo lifecycle, exact-ZIP WordPress 6.9/7.0.4/7.1 matrix, legacy/HPOS, Playground execution, dependency audit, and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Final deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are owner/external only: formal Agent SNR clearance, hosted media/video, remaining Devpost form fields/submission, and freeze. The public repository, HTTPS deployment, and official real-client path are complete; a release tag and final WooCommerce 11.1 rerun are optional evidence.
+- Remaining gates are owner/external only: formal Agent SNR clearance, public YouTube upload, remaining Devpost form fields/submission, and freeze. The public repository, HTTPS deployment, official real-client path, gallery, thumbnail asset, and local demo video are complete; a release tag and final WooCommerce 11.1 rerun are optional evidence.
 
 ## X-post hackathon readiness alignment
 
@@ -217,7 +217,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Demo/media: ten fresh 1440×900 screenshots record Guide 1.1, 12/8 discovery, IPX5 missed demand, IPX4 recovery, feedback, human order, provenance, control, and refund with zero console errors. The editable 12-slide deck adds the WebMCP quality loop; theme fidelity, sources, placeholders, overflow, and every slide were verified.
 - Verification: 108 JavaScript tests; 106 PHP tests / 1,940 assertions on PHP 8.1 and 8.4; 15/15 HPOS Chromium scenarios; 20-public + 2-legacy REST/security smoke; 11/11 adapted native WebMCP smoke; legacy/HPOS Woo lifecycle; exact-ZIP WordPress 6.9/7.0.4/7.1 matrix; Playground execution; zero npm vulnerabilities; and Plugin Check `0 errors / 73 reviewed warnings / 0 trademark findings` pass.
 - Deterministic artifacts: plugin `7cd4e74ca39c3a9dd4729a0deca3916585c87e2330cb6a65db4194d912a8ba5a`; Playground `3b5189dc558dddb6d87d323543e8bde02a6eab36240886874d4794dce76d398d`.
-- Remaining gates are external/owner actions for formal Agent SNR clearance, hosted media/video, Devpost submission, and freeze. The public repository, frozen HTTPS deployment, and official real-client path are complete; a tag, Workbench, scanner/directory review, and a WooCommerce 11.1 rerun are optional evidence if pursued.
+- Remaining gates are external/owner actions for formal Agent SNR clearance, public YouTube upload, Devpost submission, and freeze. The public repository, frozen HTTPS deployment, official real-client path, and local hosted-demo video are complete; a tag, Workbench, scanner/directory review, and a WooCommerce 11.1 rerun are optional evidence if pursued.
 
 ## Live model-backed WebMCP eval report
 
@@ -293,7 +293,7 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Presentation: all 12 slides were re-rendered and inspected after replacing all four embedded screenshots, updating the source-note paths and proof count, and removing retired identifiers; theme/fidelity/notes/placeholders/overflow/package/OCR pass. SHA-256 is `1b0a1b95d18908c1d1f712b8ba35cca752a035f1f898cbd6470d0de214b49c1a`.
 - Hosted result: `agent-snr-production` deployed commit `e46c9c5` to `https://agent-snr.onrender.com/`. Both `1c-2g` services reached Live. A manual second web deploy preserved 12 products and 13 pages, created zero duplicate products, updated the 12 deterministic records, and returned the identical health-response SHA-256 before and after restart.
 - Official-client result: the ChatGPT in-app browser discovered 12 storefront and 8 Agent SNR tools. Safe guide/context/overview/diagnostics/workflow calls returned `ok: true`, and the monitor correlated the same storefront workflow with two successful calls.
-- Pending external gates: complete formal name/rights/entrant declarations, hosted media/video, Devpost form submission, and freeze. Optional Workbench/scanner/directory/tag evidence remains non-blocking.
+- Pending external gates: complete formal name/rights/entrant declarations, upload and review the finished MP4 on public YouTube, finish the Devpost form, submit, and freeze. Optional Workbench/scanner/directory/tag evidence remains non-blocking.
 
 ## Canonical Agent SNR technical-identity cleanup
 
@@ -313,3 +313,20 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Focused verification: PHP syntax passes; PHPUnit passes 111 tests / 1,964 assertions; JavaScript/configuration passes 125 tests; JavaScript/CSS lint and Coding Standards pass with zero errors; schema parity and Render tests pass; two renamed plugin/Playground builds are byte-identical (`514a7f86fe4fadb0d3786ded3a58017a4be0c26546f5925533bd8e1d31a58943` and `fc260b06107aa040e8875ec94f8850a4c207720b75d38e326ef3b29aa80de280`).
 - Evidence refresh: a clean exact-ZIP showcase reset and recapture, REST/security smoke, 16/16 Chromium scenarios, 11/11 native WebMCP calls, legacy and HPOS Woo lifecycle, four-image deck refresh, speaker-note path update, and full deck QA pass. The same renamed ZIP also passes the isolated WordPress 6.9 / WooCommerce 10.9.4 legacy, WordPress 7.0.4 / WooCommerce 11.0.1 legacy, and WordPress 7.1 / WooCommerce 11.0.1 HPOS matrix. Retired ignored ZIPs were quarantined outside `dist/`.
 - Protected evals: the first rename-bound storefront run stopped at 52/54 after exposing inconsistent authored cart state and an unresolved-pronoun selection. Commit `410c198963ec649ed58e21fce7c80103db3d0ad8` supplies coherent optimistic state without relaxing expected calls; the final fixed-model gate passes storefront 54/54, Agent SNR 45/45, and browser 8/8 with all three strict checkers, zero console errors, and no new order.
+
+## Hosted Devpost demo video
+
+- [x] Lock a sub-three-minute storyboard that shows the hosted project working in the first 15 seconds, explains WebMCP, preserves the human checkout boundary, and closes on verified Agent SNR outcomes.
+- [x] Build a deterministic hosted-site recording script with no credentials, customer data, admin UI, billing UI, live typing, or third-party media.
+- [x] Record the actual storefront and monitoring surfaces at a legible 16:9 viewport, using visible live state transitions and concise chapter cards.
+- [x] Generate original English narration, synchronize it to the recorded flow, and mix it into one public-upload-ready MP4.
+- [x] Verify duration under three minutes, audible narration, video/audio streams, resolution, frame cadence, public-URL legibility, console cleanliness, and final-frame branding.
+- [x] Update the video script/evidence record, commit the reproducible source and final artifact metadata, and provide the MP4 for YouTube upload.
+
+### Hosted video review
+
+- Source: `demo/record-hosted-demo.mjs` records a fresh private session against `https://agent-snr.onrender.com/`, invokes the registered page tools, uses the no-charge human checkout, and captures the storefront, monitoring, replay, signals, verified outcome, and session-control surfaces.
+- Output: ignored release artifact `dist/agent-snr-devpost-demo.mp4`; duration 149.64 seconds, 1920×1080 progressive H.264 High, 25 fps, stereo AAC narration, 10.29 MB, SHA-256 `f9e2d89e586e2323a7e96c6d7623e0923cf69fd215fd511f631fc9a2c8f800d8`.
+- Audio: original English Samantha system narration, no music, mean volume −18.9 dB, peak −4.1 dB, and no detected silence longer than three seconds at −45 dB.
+- Visual QA: ten-frame contact sheet and final-frame inspection show actual hosted pages, legible chapter overlays, fictional checkout data, verified $69 paid outcome, Workflow Replay, Signals, and the disabled comparison control; no admin, billing, credential, notification, or unrelated browser UI appears.
+- Publication gate: the owner must upload the MP4 as Public on YouTube, verify the processed duration/audio/captions logged out, and paste the final URL into Devpost before submission.

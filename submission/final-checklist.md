@@ -2,7 +2,7 @@
 
 Checked items are complete in the prepared repository. Unchecked items require the entrant's accounts, public infrastructure, formal trademark/domain clearance, or media; items explicitly labeled optional or recommended are non-blocking.
 
-The rule-by-rule source of truth is [`devpost-rules-checklist.md`](devpost-rules-checklist.md). The entry is not ready to submit until every hard blocker and entrant declaration there is complete. Deadline: **September 3, 2026 at 1:00 p.m. PDT / 20:00 UTC**.
+The rule-by-rule source of truth is [`devpost-rules-checklist.md`](devpost-rules-checklist.md). The entry is not ready to submit until every hard blocker and entrant declaration there is complete. The live Devpost overview now displays an extended deadline of **September 4, 2026 at 1:00 a.m. PDT**; retain evidence because the earlier rules copy still shows the original deadline.
 
 ## Code and artifacts
 
@@ -70,5 +70,5 @@ Checked exact-artifact items in this section describe the current renamed packag
 - [ ] Every link is verified from a logged-out external device.
 - [ ] Required Devpost name, tagline, thumbnail, story, Built With tags, Try It Out URL, YouTube link, public-repository URL, team, country/category/custom answers, and terms checkbox are complete in English.
 - [ ] Recommended gallery images, if used, are uploaded, legible, rights-cleared, and consistent with the frozen release.
-- [ ] Submission is accepted before September 3, 2026 at 1:00 p.m. PDT; receipt is saved and all submitted resources are frozen immediately.
+- [ ] Submission is accepted before the live Devpost deadline of September 4, 2026 at 1:00 a.m. PDT; the extension display and receipt are saved and all submitted resources are frozen immediately.
 - [ ] Live project remains free and unrestricted through September 21, 2026 at 5:00 p.m. PT; entrant-controlled repo/deployed code and configuration/seed content/video remain unchanged until winner announcement, while normal isolated judge-session data and bounded cleanup continue as designed; later work stays in a fork.
