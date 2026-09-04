@@ -1,21 +1,21 @@
 # Sub-three-minute video script
 
-Final future-world pitch and demo: **2:47.00**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
+Final context-first pitch and demo: **2:45.52**, natural English AI narration, public-YouTube ready, no music, and no third-party mark or material without documented permission.
 
 | Time | Picture | Narration / action |
 |---:|---|---|
-| 0:00–0:05.5 | Real WebMCP cold open | Successful `search_products` call, zero matches, and the decision to relax one constraint. “The search worked. Zero results. That is a business signal.” |
-| 0:05.5–0:11 | Future world | “A web where every person has an agent.” One complete narration thought finishes before the next dissolve. |
-| 0:11–0:17.5 | Owner blind spot | “The store sees the call. It misses the intent.” Three plain owner questions remain readable. |
-| 0:17.5–0:25 | Agent SNR | WordPress operations-layer card uses the exact live storefront frame and match-dissolves into the demo. |
-| 0:25–0:41 | Shopper prompt and guide | Full prompt, twelve registered tools, `get_agent_guide`, `get_cart`, and human-owned checkout boundary. |
-| 0:41–0:57 | IPX5 missed demand | Exact search arguments, successful call, zero structured matches, and privacy-safe opportunity evidence. |
-| 0:57–1:17 | Controlled recovery | IPX4 search, product comparison, return policy, and HarborLite recommendation with the original constraint still visible. |
-| 1:17–1:37 | Prepare and stop | Reversible cart, checkout handoff, handoff-linked agent feedback, and an explicit stop before commitment. |
-| 1:37–1:53 | Human outcome | The shopper places the fictional no-charge order; the resulting conversion is verified rather than inferred. |
-| 1:53–2:11 | Owner agent | L-cut from the receipt into eight owner tools, attributed order, and missed IPX5 demand. |
-| 2:11–2:31 | Evidence chain | Exact workflow replay links zero result, recovery, feedback, human checkpoint, and converted order while preserving evidence sources. |
-| 2:31–2:47 | Business decision | Stay on the live opportunity signal: add IPX5 coverage and keep the proven IPX4 recovery path until then. |
+| 0:00–0:04.5 | Agent SNR title | Establish the product and its outcome-monitoring purpose before showing any telemetry. |
+| 0:04.5–0:10 | Future world | Explain the world where everyone delegates browsing and shopping to an agent. |
+| 0:10–0:16.5 | Owner blind spot | Explain that successful calls can still hide shopper intent, recovery, and unmet demand. |
+| 0:16.5–0:23.5 | Agent SNR solution | Introduce the WordPress/WebMCP operations layer and match-dissolve into its exact live frame. |
+| 0:23.5–0:39.5 | Shopper prompt and guide | Full prompt, twelve registered tools, `get_agent_guide`, `get_cart`, and human-owned checkout boundary. |
+| 0:39.5–0:55.5 | IPX5 missed demand | Exact search arguments, successful call, zero structured matches, and privacy-safe opportunity evidence. |
+| 0:55.5–1:15.5 | Controlled recovery | IPX4 search, product comparison, return policy, and HarborLite recommendation with the original constraint still visible. |
+| 1:15.5–1:35.5 | Prepare and stop | Reversible cart, checkout handoff, handoff-linked agent feedback, and an explicit stop before commitment. |
+| 1:35.5–1:51.5 | Human outcome | The shopper places the fictional no-charge order; the resulting conversion is verified rather than inferred. |
+| 1:51.5–2:09.5 | Owner agent | L-cut from the receipt into eight owner tools, attributed order, and missed IPX5 demand. |
+| 2:09.5–2:29.5 | Evidence chain | Exact workflow replay links zero result, recovery, feedback, human checkpoint, and converted order while preserving evidence sources. |
+| 2:29.5–2:45.52 | Business decision | Stay on the live opportunity signal: add IPX5 coverage and keep the proven IPX4 recovery path until then. |
 
 ## Rendered artifact
 
@@ -30,13 +30,13 @@ Final future-world pitch and demo: **2:47.00**, natural English AI narration, pu
 - Pitch-card compositor: `demo/add-pitch-intro.mjs`
 - Future-world cards: `demo/render-future-story-cards.mjs`
 - Story compositor: `demo/build-future-story-visual.mjs`
-- Duration: `167.00` seconds
+- Duration: `165.52` seconds
 - Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
-- Preferred size: 13,922,187 bytes
-- Preferred SHA-256: `309fa6f26cb2b580342b3cd3166d51a50cfb95f749383d3388f934b6eaa030ae`
-- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, twelve separately directed beats, all rendered at natural 1.0× tempo
-- Audio QA: mean −19.3 dB, peak −1.5 dB, no silence over three seconds at −45 dB
-- Story QA: the real product appears in the first frame; warm-white cards use 500 ms dissolves and one spoken thought each; the solution card uses the exact live frame for a match dissolve at 25 seconds. The compositor consumes measured scene boundaries and fails if hosted timing drifts.
+- Preferred size: 13,783,232 bytes
+- Preferred SHA-256: `a01396b39444a1b44051e7de83dc4661c470f87f3a3b57309f24f3f81e118ccc`
+- Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, twelve separately directed beats; eleven run at natural 1.0× and the 4.5-second title uses 1.013×
+- Audio QA: mean −19.1 dB, peak −1.4 dB, no silence over three seconds at −45 dB
+- Story QA: four warm-white presentation cards establish product, world, problem, and solution before the demo. Each uses one spoken thought and 500 ms dissolves; the solution card uses the exact live frame for a match dissolve at 23.5 seconds. The compositor consumes measured scene boundaries and fails if hosted timing drifts.
 - Interaction proof: the visible Browser Agent panel receives the prompt, arguments, and result summary from the same registered `definition.execute()` calls that update the hosted page.
 - Disclosure: identify the narration as AI-generated in the YouTube description and Devpost media notes.
 

@@ -13,13 +13,19 @@ const outputDirectory = path.resolve( process.env.AGENT_SNR_STORY_CARDS_DIR || p
 function cardMarkup( number, liveFrameUrl ) {
 	const cards = {
 		1: `
+			<section class="copy title-card">
+				<p class="eyebrow">AGENT OUTCOME MONITORING FOR WORDPRESS</p>
+				<h1>Agent<br>SNR</h1>
+				<p class="title-promise">See what agents did.<br>Hear what they experienced.<br>Discover what your site is missing.</p>
+			</section>`,
+		2: `
 			<section class="copy future">
 				<p class="eyebrow">THE AGENTIC WEB</p>
 				<h1>A web where every person has an agent</h1>
 				<p class="support">People delegate the goal. Their agents browse and act.</p>
 			</section>
 			<div class="ghost">AGENT</div>`,
-		2: `
+		3: `
 			<section class="copy problem">
 				<p class="eyebrow">THE OWNER BLIND SPOT</p>
 				<h1>The store sees the call.<br>It misses the intent.</h1>
@@ -29,7 +35,7 @@ function cardMarkup( number, liveFrameUrl ) {
 					<span>Did the journey convert?</span>
 				</div>
 			</section>`,
-		3: `
+		4: `
 			<img class="live-frame" src="${ liveFrameUrl }" alt="">
 			<div class="veil"></div>
 			<section class="copy solution">
@@ -48,6 +54,8 @@ function cardMarkup( number, liveFrameUrl ) {
 		.eyebrow { color: #2167f3; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 24px; font-weight: 800; letter-spacing: .08em; margin: 0 0 54px; }
 		h1 { font-size: 112px; letter-spacing: -.045em; line-height: .98; margin: 0; max-width: 1450px; }
 		.support { color: #566069; font-size: 38px; font-weight: 600; line-height: 1.28; margin: 58px 0 0; max-width: 1050px; }
+		.title-card h1 { font-size: 170px; line-height: .88; }
+		.title-promise { font-size: 52px; font-weight: 750; line-height: 1.18; margin: 0; position: absolute; left: 850px; top: 250px; width: 850px; }
 		.ghost { bottom: -90px; color: rgba(33,103,243,.09); font-size: 430px; font-weight: 900; letter-spacing: -.08em; position: absolute; right: 60px; }
 		.problem h1 { font-size: 104px; }
 		.questions { border-top: 2px solid #aeb6bd; display: grid; font-size: 31px; font-weight: 700; gap: 23px; margin-top: 72px; padding-top: 34px; width: 920px; }
@@ -68,7 +76,7 @@ if ( ! Number.isFinite( liveStart ) || liveStart < 0 ) {
 	throw new Error( "Timeline manifest does not contain a valid live-demo boundary." );
 }
 const liveFrame = path.join( outputDirectory, "live-frame.png" );
-const cardPaths = [ 1, 2, 3 ].map( ( number ) => path.join( outputDirectory, `card-${ number }.png` ) );
+const cardPaths = [ 1, 2, 3, 4 ].map( ( number ) => path.join( outputDirectory, `card-${ number }.png` ) );
 await Promise.all( [ liveFrame, ...cardPaths ].map( async ( file ) => {
 	await fs.access( file ).then(
 		() => {
@@ -89,7 +97,7 @@ await execFileAsync( "ffmpeg", [
 const browser = await chromium.launch( { headless: true } );
 const page = await browser.newPage( { viewport: { height: 1080, width: 1920 } } );
 const liveFrameUrl = `data:image/png;base64,${ ( await fs.readFile( liveFrame ) ).toString( "base64" ) }`;
-for ( const number of [ 1, 2, 3 ] ) {
+for ( const number of [ 1, 2, 3, 4 ] ) {
 	await page.setContent( cardMarkup( number, liveFrameUrl ), { waitUntil: "load" } );
 	await page.screenshot( { path: cardPaths[ number - 1 ] } );
 }

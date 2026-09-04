@@ -22,20 +22,20 @@ const regeneratedScenes = new Set(
 
 const scenes = [
 	{
-		duration: 5.5,
-		text: "The search worked. Zero results. That is a business signal.",
+		duration: 4.5,
+		text: "Agent SNR is outcome monitoring for the agentic web.",
 	},
 	{
 		duration: 5.5,
-		text: "Personal agents will browse, compare, and shop for us.",
+		text: "Everyone will have an agent to browse and shop for them.",
 	},
 	{
 		duration: 6.5,
-		text: "Stores see calls and orders, but lose intent and missed demand.",
+		text: "Successful calls can hide shopper intent, recovery, and unmet demand.",
 	},
 	{
-		duration: 7.5,
-		text: "Agent SNR connects WebMCP journeys to verified outcomes in WordPress.",
+		duration: 7,
+		text: "Agent SNR connects WebMCP journeys to verified outcomes.",
 	},
 	{
 		duration: 16,
@@ -72,10 +72,10 @@ const scenes = [
 ];
 
 const direction = [
-	"Open with calm curiosity and a short pause between the first two sentences. Sound like a founder revealing an overlooked fact, not an announcer.",
-	"Speak warmly and with a sense of an approaching, believable future. Keep the sentence simple and unhurried.",
-	"Turn slightly more serious. Emphasize intent and missed demand. Finish cleanly before the next idea.",
-	"Introduce the product with quiet confidence. Pronounce S N R as individual letters and WebMCP as Web M C P.",
+	"Open like a thoughtful hackathon founder introducing the project. Warm, clear, and confident, never like an announcer. Pronounce S N R as individual letters.",
+	"Describe the future as believable and near. Keep the sentence simple and unhurried.",
+	"Turn slightly more serious. Emphasize shopper intent and unmet demand. Finish cleanly before the next slide.",
+	"Explain the solution with quiet confidence. Pronounce S N R as individual letters and WebMCP as Web M C P.",
 	"Begin the live demonstration conversationally. Pronounce I P X five as letters followed by five. Make the human boundary clear without sounding legalistic.",
 	"Sound matter-of-fact and let zero matches land as useful evidence. Pronounce I P X five as letters followed by five.",
 	"Sound optimistic as the agent recovers. Pronounce I P X four as letters followed by four and HarborLite naturally.",

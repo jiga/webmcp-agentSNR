@@ -122,11 +122,11 @@ Devpost's standard form guidance lists name, tagline, thumbnail, story, Built Wi
 
 ## 8. Public YouTube video
 
-- [x] The final future-world pitch and demo is 2:47.00 and begins with a real WebMCP result, explains the agent-operated future and owner blind spot, then shows visible shopper-agent and owner-agent calls/results, WordPress-plugin architecture, human checkout, verified outcome, and a product-coverage decision.
+- [x] The final context-first pitch and demo is 2:45.52 and establishes Agent SNR, the agent-operated future, owner blind spot, and WordPress/WebMCP solution before showing shopper-agent and owner-agent calls/results, human checkout, verified outcome, and a product-coverage decision.
 - [x] Script uses English narration and requires real calls/results rather than mockups.
 - [x] Recorder uses the exact hosted storefront and Agent SNR pages, registered tools, no-charge human checkout, workflow evidence, and product-coverage signal; no mock page or fabricated result is substituted.
-- [x] Local MP4 runtime is 167.00 seconds, leaving 13.00 seconds of margin; verify the processed YouTube runtime remains below 3:00.
-- [x] Technical audio QA confirms stereo AAC, mean −19.3 dB, peak −1.5 dB, natural 1.0× delivery throughout, and no silence over three seconds; entrant still performs the final subjective listen before upload.
+- [x] Local MP4 runtime is 165.52 seconds, leaving 14.48 seconds of margin; verify the processed YouTube runtime remains below 3:00.
+- [x] Technical audio QA confirms stereo AAC, mean −19.1 dB, peak −1.4 dB, natural delivery, and no silence over three seconds; entrant still performs the final subjective listen before upload.
 - [x] Video contains narration only and no music.
 - [x] Natural narration is generated scene by scene with the OpenAI `gpt-4o-mini-tts` `marin` voice; publication instructions require clear AI-voice disclosure.
 - [x] Page-only recording excludes browser chrome, unrelated tabs, notifications, profiles, admin pages, and billing UI.

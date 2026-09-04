@@ -401,3 +401,20 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Reproduction: `npm run video:build-final` now drives capture, measured timeline, cards, visual composition, and narration in one clean-output chain. TTS cache keys bind text, direction, model, and voice; the timing report binds the exact source/output hashes. Every generated target refuses overwrite by default.
 - Visual QA: the 35-frame focused opening review confirms that no dissolve cuts a thought, product evidence appears in the first frame, the cards remain readable, and the match dissolve lands on the same live storefront. Full and ending contact sheets confirm the complete shopper, human, owner, replay, and business-decision path with no admin, billing, credentials, browser chrome, third-party logos, or unrelated content.
 - Publication gate: the owner performs one subjective full listen, clears descriptive compatibility references, discloses AI narration, uploads `agent-snr-devpost-demo-final.mp4` publicly to YouTube, and verifies processed runtime, audio, captions, and Devpost embed logged out.
+
+## Context-first presentation cut
+
+- [x] Remove the unexplained zero-result cold open from the locked story.
+- [x] Restore a deliberate Agent SNR title slide before any product evidence.
+- [x] Present the agent-operated future, owner visibility problem, and WordPress/WebMCP solution in that order.
+- [x] Match-dissolve the solution slide into the complete shopper and owner demonstration.
+- [x] Regenerate narration around the presentation beats at natural tempo and verify synchronization.
+- [x] Re-run visual, audio, runtime, provenance, and repository checks; replace the preferred artifact and publish the reproducible edit.
+
+### Context-first presentation review
+
+- Preferred artifact: ignored release output `dist/agent-snr-devpost-demo-final.mp4`; 165.52 seconds, 1920×1080 H.264 at 25 fps, stereo 48 kHz AAC, 13,783,232 bytes, SHA-256 `a01396b39444a1b44051e7de83dc4661c470f87f3a3b57309f24f3f81e118ccc`.
+- Presentation order: Agent SNR title → a web where every person has an agent → the site-owner blind spot → Agent SNR as the WordPress operations layer → live shopper and owner proof. No telemetry or unexplained result appears before the problem and solution are established.
+- Synchronization: the title, future, problem, and solution narration occupy their own 4.5/5.5/6.5/7-second budgets. Each sentence ends before its dissolve; the solution card uses the exact live frame and hands narration to the shopper scene at 23.5 seconds.
+- QA: 32 focused opening frames confirm readable holds, 500 ms dissolves, no context jump, and a natural transition into the shopper prompt. Audio measures −19.1 dB mean / −1.4 dB peak with no detected silence longer than three seconds. Runtime leaves 14.48 seconds of margin.
+- Publication gate: the owner performs one subjective full listen, clears descriptive compatibility references, discloses AI narration, uploads the context-first final MP4 publicly to YouTube, and verifies processed runtime, audio, captions, and Devpost embed logged out.

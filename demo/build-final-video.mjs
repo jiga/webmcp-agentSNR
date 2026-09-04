@@ -38,6 +38,7 @@ await Promise.all( [
 	path.join( targets.cards, "card-1.png" ),
 	path.join( targets.cards, "card-2.png" ),
 	path.join( targets.cards, "card-3.png" ),
+	path.join( targets.cards, "card-4.png" ),
 ].map( assertAbsent ) );
 
 async function run( script, env = {} ) {
