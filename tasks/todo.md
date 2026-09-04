@@ -2,15 +2,15 @@
 
 ## Live purchase — waterproof backpack under $90
 
-- [ ] Inspect the live catalog and verify waterproofing, price, and stock.
-- [ ] Select the strongest eligible backpack without exceeding the budget.
-- [ ] Add the item to the cart and verify the cart contents and total.
+- [x] Inspect the live catalog and verify waterproofing, price, and stock.
+- [x] Select the strongest eligible backpack without exceeding the budget.
+- [x] Add the item to the cart and verify the cart contents and total.
 - [ ] Complete the available checkout flow, stopping only for missing personal or payment details.
 - [ ] Record the final outcome and evidence in this section's review.
 
 ### Live purchase review
 
-Pending.
+HarborLite 16 Pack selected at $69: in stock, IPX4, 16 L, 0.62 kg, 13-inch laptop fit, and a 30-day return window. The normal cart visibly contains one unit at a $69 subtotal. Checkout is prepared with the site's demo identity and a non-personal demo email; the page shows a $69 total and the no-charge demo payment method. Final order placement is paused at the required human confirmation boundary.
 
 Source of truth: the supplied full WordPress WebMCP hackathon engineering and submission handoff, verified through August 29, 2026.
 
@@ -445,3 +445,22 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - The 0:39 transition is now one continuous thought: the guide scene ends with “With those boundaries clear, the agent begins searching,” followed by “The request uses the shopper's exact constraints and succeeds, but returns zero matches.”
 - The handoff story now says: “Checkout sits outside the WebMCP toolset, so the shopper reviews and confirms the order.” It presents human verification as an intentional trust boundary rather than a missing tool.
 - All affected narration renders at natural 1.0× tempo. Final audio measures −19.1 dB mean / −1.3 dB peak with no detected silence longer than three seconds.
+
+## Reusable hackathon submission skill
+
+- [x] Extract stable, generic lessons from product design, rules compliance, repository preparation, deployment, evals, Devpost copy, media, and submission freeze.
+- [x] Verify current official Devpost overview, rules, resources, and submission-help links; keep event-specific facts out of reusable requirements.
+- [x] Create a discoverable personal skill with concise routing and detailed conditional references.
+- [x] Add reusable readiness checklists, owner-only declaration boundaries, evidence/provenance guidance, and a video pitch-and-demo workflow.
+- [x] Add and test a deterministic video-validation helper for runtime, streams, loudness, silence, size, and checksum.
+- [x] Validate the skill structure and conduct a realistic forward-read for clarity, scope, and actionability.
+- [x] Document the reusable artifact in this project and publish the repository-side record.
+
+### Reusable skill review
+
+- Installation: `/Users/jignesh/.codex/skills/hackathon-submission-readiness`, with automatic discovery enabled through a discriminating description.
+- Structure: a 163-line entrypoint routes to five focused references covering rules/Devpost, product/repository/deployment, verification/evidence, video production, and final submission/freeze. Event-specific facts are examples rather than inherited requirements.
+- Safety: the skill separates repository work from identity, eligibility, rights, billing, public publication, terms acceptance, and final submission. It explicitly prevents marking owner attestations complete or inferring submit authority from earlier saves/deployments.
+- Video lessons: context before evidence, causal story rather than feature tour, real prompt/tool/result/decision pairing, positive human boundaries, measured scene manifests, natural speech, content-addressed narration, rights/privacy audit, public-YouTube verification, and final-frame/listen checks are preserved generically.
+- Helper: `verify_demo_video.sh` passed Bash syntax and the final Agent SNR MP4; it reports 165.52 seconds, H.264 1920×1080 at 25 fps, AAC 48 kHz stereo, −19.1 dB mean / −1.3 dB peak, zero silence at least three seconds, and SHA-256 `bf0faf8744b4ef731c306b70724f9cdfc5fe071e1bf3b8fe7c778ddf4a3dc71c`. It correctly rejects a 100-second maximum.
+- Validation: the bundled skill validator passes and no scaffold placeholder remains. The repository-side handoff is `submission/reusable-hackathon-skill.md`.
