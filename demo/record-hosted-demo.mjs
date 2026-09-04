@@ -43,14 +43,14 @@ const scenes = [
 		id: "guide",
 		title: "SHOPPER + AGENT",
 		subtitle: "Natural-language request → tool discovery → Agent Guide",
-		narration: "A shopper asks for a compact backpack under one hundred dollars with IPX5 protection. Their agent discovers twelve storefront tools and reads the guide before acting. Search and cart stay reversible. Checkout stays human.",
+		narration: "A shopper asks for a compact IPX5 backpack under one hundred dollars. Their agent discovers twelve tools and reads the guide first. Search and cart stay reversible, while checkout remains human-reviewed. With those boundaries clear, the agent begins searching.",
 	},
 	{
 		duration: 16,
 		id: "zero-result",
 		title: "REAL WEBMCP CALL · ZERO RESULTS",
 		subtitle: "search_products → structured evidence → missed-demand signal",
-		narration: "It calls search products with the exact constraints. The call succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the shopper's raw prompt. A success log would miss that demand.",
+		narration: "The request uses the shopper's exact constraints and succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the raw prompt. A normal success log would miss it.",
 	},
 	{
 		duration: 20,
@@ -64,7 +64,7 @@ const scenes = [
 		id: "handoff",
 		title: "PREPARE · REPORT · STOP",
 		subtitle: "Cart mutation → agent feedback → human checkout boundary",
-		narration: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout, reports the missing IPX5 requirement with linked evidence, and stops. The handoff itself remains linked evidence. No WebMCP tool can place the order. The commitment stays human.",
+		narration: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout and reports the missing IPX5 requirement with linked evidence. The handoff remains linked to the workflow. Checkout sits outside the WebMCP toolset, so the shopper reviews and confirms the order.",
 	},
 	{
 		duration: 16,

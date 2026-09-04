@@ -39,11 +39,11 @@ const scenes = [
 	},
 	{
 		duration: 16,
-		text: "A shopper asks for a compact backpack under one hundred dollars with IPX5 protection. Their agent discovers twelve storefront tools and reads the guide before acting. Search and cart stay reversible. Checkout stays human.",
+		text: "A shopper asks for a compact IPX5 backpack under one hundred dollars. Their agent discovers twelve tools and reads the guide first. Search and cart stay reversible, while checkout remains human-reviewed. With those boundaries clear, the agent begins searching.",
 	},
 	{
 		duration: 16,
-		text: "It calls search products with the exact constraints. The call succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the shopper's raw prompt. A success log would miss that demand.",
+		text: "The request uses the shopper's exact constraints and succeeds, but returns zero matches. Agent SNR records the missed IPX5 demand without storing the raw prompt. A normal success log would miss it.",
 	},
 	{
 		duration: 20,
@@ -51,7 +51,7 @@ const scenes = [
 	},
 	{
 		duration: 20,
-		text: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout, reports the missing IPX5 requirement with linked evidence, and stops. The handoff itself remains linked evidence. No WebMCP tool can place the order. The commitment stays human.",
+		text: "With the shopper's choice, the agent adds HarborLite to a reversible cart. It prepares checkout and reports the missing IPX5 requirement with linked evidence. The handoff remains linked to the workflow. Checkout sits outside the WebMCP toolset, so the shopper reviews and confirms the order.",
 	},
 	{
 		duration: 16,

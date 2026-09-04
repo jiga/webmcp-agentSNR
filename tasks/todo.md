@@ -1,5 +1,17 @@
 # Submission-readiness plan
 
+## Live purchase — waterproof backpack under $90
+
+- [ ] Inspect the live catalog and verify waterproofing, price, and stock.
+- [ ] Select the strongest eligible backpack without exceeding the budget.
+- [ ] Add the item to the cart and verify the cart contents and total.
+- [ ] Complete the available checkout flow, stopping only for missing personal or payment details.
+- [ ] Record the final outcome and evidence in this section's review.
+
+### Live purchase review
+
+Pending.
+
 Source of truth: the supplied full WordPress WebMCP hackathon engineering and submission handoff, verified through August 29, 2026.
 
 ## Phase 0 — Repository and contracts
@@ -418,3 +430,18 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Synchronization: the title, future, problem, and solution narration occupy their own 4.5/5.5/6.5/7-second budgets. Each sentence ends before its dissolve; the solution card uses the exact live frame and hands narration to the shopper scene at 23.5 seconds.
 - QA: 32 focused opening frames confirm readable holds, 500 ms dissolves, no context jump, and a natural transition into the shopper prompt. Audio measures −19.1 dB mean / −1.4 dB peak with no detected silence longer than three seconds. Runtime leaves 14.48 seconds of margin.
 - Publication gate: the owner performs one subjective full listen, clears descriptive compatibility references, discloses AI narration, uploads the context-first final MP4 publicly to YouTube, and verifies processed runtime, audio, captions, and Devpost embed logged out.
+
+## Narration continuity polish
+
+- [x] Replace the abrupt “It calls search products” scene opening with a context-carrying sentence.
+- [x] End the preceding guide scene by naturally cueing the catalog search.
+- [x] Reframe checkout as intentionally outside the WebMCP toolset for human review and confirmation.
+- [x] Regenerate only the affected narration, preserve natural 1.0× delivery, and verify no silence longer than three seconds.
+- [x] Replace the preferred MP4 and refresh its metadata and submission evidence.
+
+### Narration continuity review
+
+- Preferred artifact remains `dist/agent-snr-devpost-demo-final.mp4` at 165.52 seconds; size 13,791,177 bytes; SHA-256 `bf0faf8744b4ef731c306b70724f9cdfc5fe071e1bf3b8fe7c778ddf4a3dc71c`.
+- The 0:39 transition is now one continuous thought: the guide scene ends with “With those boundaries clear, the agent begins searching,” followed by “The request uses the shopper's exact constraints and succeeds, but returns zero matches.”
+- The handoff story now says: “Checkout sits outside the WebMCP toolset, so the shopper reviews and confirms the order.” It presents human verification as an intentional trust boundary rather than a missing tool.
+- All affected narration renders at natural 1.0× tempo. Final audio measures −19.1 dB mean / −1.3 dB peak with no detected silence longer than three seconds.

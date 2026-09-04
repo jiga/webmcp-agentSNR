@@ -32,10 +32,11 @@ Final context-first pitch and demo: **2:45.52**, natural English AI narration, p
 - Story compositor: `demo/build-future-story-visual.mjs`
 - Duration: `165.52` seconds
 - Encoding: 1920×1080 progressive H.264 High, 25 fps, stereo AAC
-- Preferred size: 13,783,232 bytes
-- Preferred SHA-256: `a01396b39444a1b44051e7de83dc4661c470f87f3a3b57309f24f3f81e118ccc`
+- Preferred size: 13,791,177 bytes
+- Preferred SHA-256: `bf0faf8744b4ef731c306b70724f9cdfc5fe071e1bf3b8fe7c778ddf4a3dc71c`
 - Natural voice: OpenAI `gpt-4o-mini-tts`, `marin`, twelve separately directed beats; eleven run at natural 1.0× and the 4.5-second title uses 1.013×
-- Audio QA: mean −19.1 dB, peak −1.4 dB, no silence over three seconds at −45 dB
+- Audio QA: mean −19.1 dB, peak −1.3 dB, no silence over three seconds at −45 dB
+- Flow QA: the guide now ends with “With those boundaries clear, the agent begins searching.” The search scene continues with “The request uses the shopper's exact constraints,” eliminating the clipped pronoun at 0:39. Checkout is described positively as outside the WebMCP toolset so the shopper reviews and confirms the order.
 - Story QA: four warm-white presentation cards establish product, world, problem, and solution before the demo. Each uses one spoken thought and 500 ms dissolves; the solution card uses the exact live frame for a match dissolve at 23.5 seconds. The compositor consumes measured scene boundaries and fails if hosted timing drifts.
 - Interaction proof: the visible Browser Agent panel receives the prompt, arguments, and result summary from the same registered `definition.execute()` calls that update the hosted page.
 - Disclosure: identify the narration as AI-generated in the YouTube description and Devpost media notes.
