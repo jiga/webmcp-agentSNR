@@ -10,11 +10,12 @@ const output = path.resolve( process.env.AGENT_SNR_NARRATION_OUTPUT || path.join
 const work = path.join( root, ".release-test/natural-narration" );
 const model = "gpt-4o-mini-tts";
 const voice = process.env.AGENT_SNR_TTS_VOICE || "marin";
+const reuseGeneratedSpeech = process.env.AGENT_SNR_REUSE_TTS === "1";
 
 const scenes = [
 	{
 		duration: 16,
-		text: "Agent SNR is a WordPress plugin for agent outcome monitoring. It registers WebMCP tools on shopper and owner pages. Calls run through same-origin PHP, while a redacted ledger connects tool activity to verified WooCommerce outcomes.",
+		text: "An agent can complete every tool call while the operator still misses what the shopper wanted, why the agent adapted, and whether the journey converted. Agent SNR is a WordPress plugin that adds WebMCP tools, a redacted signals ledger, and verified commerce outcomes.",
 	},
 	{
 		duration: 16,
@@ -46,7 +47,7 @@ const scenes = [
 	},
 	{
 		duration: 14,
-		text: "Finally, the owner agent disables comparison for this session. The server enforces it and refreshes the tool catalog without affecting another judge. Agent SNR turns real agent journeys into trustworthy business action.",
+		text: "Finally, the owner agent disables comparison for this session. The server enforces it without affecting another judge. Agent SNR turns agent journeys into trustworthy business action.",
 	},
 ];
 
@@ -108,7 +109,7 @@ async function fitScene( raw, scene, index ) {
 	const rawDuration = await duration( raw );
 	const speakingBudget = scene.duration - 0.8;
 	const naturalTempo = rawDuration / speakingBudget;
-	const tempo = naturalTempo > 1 ? naturalTempo : Math.max( naturalTempo, 0.88 );
+	const tempo = naturalTempo > 1 ? naturalTempo : Math.max( naturalTempo, 0.82 );
 	if ( tempo > 1.18 ) {
 		throw new Error( `Scene ${ index + 1 } requires unnatural ${ tempo.toFixed( 3 ) }x acceleration.` );
 	}
@@ -124,13 +125,18 @@ async function fitScene( raw, scene, index ) {
 async function main() {
 	await fs.access( source );
 	const sourceDuration = await duration( source );
-	await fs.rm( work, { force: true, recursive: true } );
+	if ( ! reuseGeneratedSpeech ) {
+		await fs.rm( work, { force: true, recursive: true } );
+	}
 	await fs.mkdir( work, { recursive: true } );
 	const key = await readKey();
 	const fitted = [];
 	const report = [];
 	for ( const [ index, scene ] of scenes.entries() ) {
-		const raw = await generateSpeech( key, scene, index );
+		const cached = path.join( work, `scene-${ String( index + 1 ).padStart( 2, "0" ) }-raw.wav` );
+		const raw = reuseGeneratedSpeech && await fs.access( cached ).then( () => true, () => false )
+			? cached
+			: await generateSpeech( key, scene, index );
 		const result = await fitScene( raw, scene, index );
 		fitted.push( result.fitted );
 		report.push( {

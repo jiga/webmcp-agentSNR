@@ -364,3 +364,20 @@ Remaining work is exclusively owner/external: complete formal Agent SNR trademar
 - Architecture proof: the first sixteen seconds explain the WordPress plugin, top-level WebMCP registration, same-origin PHP execution, WooCommerce outcome source, and redacted ledger while the hosted product is already working.
 - QA: ten-frame inspection shows legible prompt/call/result/decision pairing with corresponding live UI state; no browser chrome, admin, billing, credential, notification, third-party logo, or unrelated content appears. Audio measures −19.2 dB mean / −1.5 dB peak with no silence longer than three seconds. Runtime leaves 10.64 seconds below the limit.
 - Publication gate: entrant performs a subjective full listen, clears necessary descriptive compatibility references, discloses AI narration, uploads this v2 cut publicly to YouTube, and verifies the processed runtime and embed logged out.
+
+## Pitch-card opening
+
+- [x] Inspect the existing hackathon deck and select only the title, problem, and architecture frames.
+- [x] Replace the first 10.5 seconds of the v2 cut with the selected deck frames without increasing runtime.
+- [x] Rewrite and regenerate the opening narration so the problem, product, and architecture align with the cards.
+- [x] Reveal the working hosted demo before 15 seconds and preserve the complete two-persona WebMCP demonstration.
+- [x] Verify slide legibility, audio synchronization, runtime, encoding, and final full-video contact sheet.
+- [x] Update the preferred artifact evidence and publish the reproducible edit.
+
+### Pitch-card review
+
+- Preferred artifact: ignored release output `dist/agent-snr-devpost-demo-v3.mp4`; 169.40 seconds, 1920×1080 H.264 at 25 fps, stereo 48 kHz AAC, 12,899,034 bytes, SHA-256 `016a6d68c2ef03c1b03912e285e840d37b2e3bdbba5457cd4b68905f72d45aa3`.
+- Opening: deck slides 1, 2, and 4 run for 3.5 seconds each. They establish the name, the missing-signal problem, and the plugin/WebMCP architecture. The live hosted Agent SNR product appears at 10.5 seconds.
+- Preservation: the edit replaces the original opening footage instead of adding runtime. Every shopper-agent, human-checkpoint, and owner-agent scene from the verified v2 demonstration remains present.
+- QA: opening and full-video contact sheets confirm readable 16:9 cards, clean transition to the working product, complete visible tool/result pairing, and no unrelated UI or third-party logos. Audio measures −19.1 dB mean / −1.8 dB peak with no silence over three seconds.
+- Publication gate: upload `agent-snr-devpost-demo-v3.mp4`, not the earlier cuts; perform a subjective listen and compatibility-name clearance, disclose the AI narration, and verify public YouTube playback and runtime logged out.

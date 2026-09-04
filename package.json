@@ -23,7 +23,8 @@
     "build:playground": "./bin/build-playground-bundle.sh",
     "showcase:capture": "node demo/showcase-capture.mjs",
     "video:record-hosted": "node demo/record-hosted-demo.mjs",
-    "video:remaster-natural": "node demo/remaster-natural-narration.mjs"
+    "video:remaster-natural": "node demo/remaster-natural-narration.mjs",
+    "video:add-pitch-intro": "node demo/add-pitch-intro.mjs"
   },
   "engines": {
     "node": "^22.13.0 || >=24.0.0"

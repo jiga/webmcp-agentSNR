@@ -122,11 +122,11 @@ Devpost's standard form guidance lists name, tagline, thumbnail, story, Built Wi
 
 ## 8. Public YouTube video
 
-- [x] The rendered judge-facing demo is 2:49.36 and includes the functioning storefront, visible shopper-agent and owner-agent WebMCP calls/results, WordPress-plugin architecture, human checkout boundary, verified outcome, and bounded owner action.
+- [x] The rendered pitch-and-demo video is 2:49.40 and includes three concise context cards, the functioning product before fifteen seconds, visible shopper-agent and owner-agent WebMCP calls/results, WordPress-plugin architecture, human checkout boundary, verified outcome, and bounded owner action.
 - [x] Script uses English narration and requires real calls/results rather than mockups.
 - [x] Recorder uses the exact hosted storefront and Agent SNR pages, registered tools, no-charge human checkout, and session control; no mock page or fabricated result is substituted.
-- [x] Local MP4 runtime is 169.36 seconds, leaving 10.64 seconds of margin; verify the processed YouTube runtime remains below 3:00.
-- [x] Technical audio QA confirms stereo AAC, mean −19.2 dB, peak −1.5 dB, and no silence over three seconds; entrant still performs the final subjective listen before upload.
+- [x] Local MP4 runtime is 169.40 seconds, leaving 10.60 seconds of margin; verify the processed YouTube runtime remains below 3:00.
+- [x] Technical audio QA confirms stereo AAC, mean −19.1 dB, peak −1.8 dB, and no silence over three seconds; entrant still performs the final subjective listen before upload.
 - [x] Video contains narration only and no music.
 - [x] Natural narration is generated scene by scene with the OpenAI `gpt-4o-mini-tts` `marin` voice; publication instructions require clear AI-voice disclosure.
 - [x] Page-only recording excludes browser chrome, unrelated tabs, notifications, profiles, admin pages, and billing UI.

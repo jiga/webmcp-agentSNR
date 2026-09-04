@@ -32,7 +32,7 @@ const scenes = [
 		id: "intro",
 		title: "AGENT SNR · WORDPRESS PLUGIN",
 		subtitle: "WebMCP tools → same-origin PHP → verified commerce outcomes",
-		narration: "Agent SNR is a WordPress plugin for agent outcome monitoring. It registers WebMCP tools on shopper and owner pages. Calls run through same-origin PHP, while a redacted ledger connects tool activity to verified WooCommerce outcomes.",
+		narration: "An agent can complete every tool call while the operator still misses what the shopper wanted, why the agent adapted, and whether the journey converted. Agent SNR is a WordPress plugin that adds WebMCP tools, a redacted signals ledger, and verified commerce outcomes.",
 	},
 	{
 		duration: 16,
@@ -88,7 +88,7 @@ const scenes = [
 		id: "control",
 		title: "OWNER ACTION · CLOSE THE LOOP",
 		subtitle: "set_tool_enabled → session-only enforcement",
-		narration: "Finally, the owner agent disables comparison for this session. The server enforces it and refreshes the tool catalog without affecting another judge. Agent SNR turns real agent journeys into trustworthy business action.",
+		narration: "Finally, the owner agent disables comparison for this session. The server enforces it without affecting another judge. Agent SNR turns agent journeys into trustworthy business action.",
 	},
 ];
 
